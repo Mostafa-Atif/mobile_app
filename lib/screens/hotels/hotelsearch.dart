@@ -10,16 +10,15 @@ class HotelSearch extends StatefulWidget {
 }
 
 class _HotelSearchState extends State<HotelSearch> {
-  
   String selectedDestination = 'Dubai';
 
   DateTime checkInDate = DateTime(2026, 2, 8);
   DateTime checkOutDate = DateTime(2026, 2, 9);
 
   List<RoomData> roomsList = [
-  RoomData(adults: 2, children: 0),
-];
-  
+    RoomData(adults: 2, children: 0),
+  ];
+
   List<String> destinations = [
     'Dubai',
     'Paris',
@@ -28,7 +27,7 @@ class _HotelSearchState extends State<HotelSearch> {
     'Tokyo',
     'Cairo',
   ];
-  
+
   void showDestinationPicker() {
     showDialog(
       context: context,
@@ -59,64 +58,76 @@ class _HotelSearchState extends State<HotelSearch> {
   }
 
   Future<void> selectDate(BuildContext context, bool isCheckIn) async {
-  final DateTime? picked = await showDatePicker(
-    context: context,
-    initialDate: isCheckIn ? checkInDate : checkOutDate,
-    firstDate: DateTime(2020),
-    lastDate: DateTime(2030),
-  );
-  
-  if (picked != null) {
-    setState(() {
-      if (isCheckIn) {
-        checkInDate = picked;
-        // Make sure check-out is after check-in
-        if (checkOutDate.isBefore(checkInDate) || checkOutDate.isAtSameMomentAs(checkInDate)) {
-          checkOutDate = checkInDate.add(Duration(days: 1));
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: isCheckIn ? checkInDate : checkOutDate,
+      firstDate: DateTime(2020),
+      lastDate: DateTime(2030),
+    );
+
+    if (picked != null) {
+      setState(() {
+        if (isCheckIn) {
+          checkInDate = picked;
+          // Make sure check-out is after check-in
+          if (checkOutDate.isBefore(checkInDate) ||
+              checkOutDate.isAtSameMomentAs(checkInDate)) {
+            checkOutDate = checkInDate.add(Duration(days: 1));
+          }
+        } else {
+          checkOutDate = picked;
         }
-      } else {
-        checkOutDate = picked;
-      }
-    });
+      });
+    }
   }
-}
-  
+
   String formatDate(DateTime date) {
     List<String> months = [
-      'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-      'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec'
     ];
     return '${date.day} ${months[date.month - 1]}, ${date.year}';
   }
-  
-String formatGuests() {
-  int totalAdults = 0;
-  int totalChildren = 0;
-  
-  for (var room in roomsList) {
-    totalAdults += room.adults;
-    totalChildren += room.children;
+
+  String formatGuests() {
+    int totalAdults = 0;
+    int totalChildren = 0;
+
+    for (var room in roomsList) {
+      totalAdults += room.adults;
+      totalChildren += room.children;
+    }
+
+    return '${roomsList.length} Room${roomsList.length > 1 ? 's' : ''}, $totalAdults Adult${totalAdults > 1 ? 's' : ''}, $totalChildren Children';
   }
-  
-  return '${roomsList.length} Room${roomsList.length > 1 ? 's' : ''}, $totalAdults Adult${totalAdults > 1 ? 's' : ''}, $totalChildren Children';
-}
+
   void showGuestsPicker() {
-  showModalBottomSheet(
-    context: context,
-    isScrollControlled: true,
-    backgroundColor: Colors.transparent,
-    builder: (BuildContext context) {
-      return GuestsPicker(
-        initialRooms: roomsList,
-        onDone: (newRooms) {
-          setState(() {
-            roomsList = newRooms;
-          });
-        },
-      );
-    },
-  );
-}
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (BuildContext context) {
+        return GuestsPicker(
+          initialRooms: roomsList,
+          onDone: (newRooms) {
+            setState(() {
+              roomsList = newRooms;
+            });
+          },
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -218,12 +229,12 @@ String formatGuests() {
                         ],
                       ),
                     ),
-                    
+
                     // Divider
                     SizedBox(height: 16),
                     Divider(color: Colors.grey[300], thickness: 1),
                     SizedBox(height: 16),
-                    
+
                     // Check-in and Check-out
                     Row(
                       children: [
@@ -233,8 +244,8 @@ String formatGuests() {
                           size: 28,
                         ),
                         SizedBox(width: 16),
-                        
-                        // Check-in 
+
+                        // Check-in
                         Expanded(
                           child: GestureDetector(
                             onTap: () => selectDate(context, true),
@@ -261,15 +272,15 @@ String formatGuests() {
                             ),
                           ),
                         ),
-                        
+
                         Icon(
                           Icons.arrow_forward,
                           color: Colors.grey,
                           size: 20,
                         ),
                         SizedBox(width: 16),
-                        
-                        // Check-out 
+
+                        // Check-out
                         Expanded(
                           child: GestureDetector(
                             onTap: () => selectDate(context, false),
@@ -298,12 +309,12 @@ String formatGuests() {
                         ),
                       ],
                     ),
-                    
+
                     // Divider
                     SizedBox(height: 16),
                     Divider(color: Colors.grey[300], thickness: 1),
                     SizedBox(height: 16),
-                    
+
                     // Guests
                     GestureDetector(
                       onTap: showGuestsPicker,
@@ -339,37 +350,40 @@ String formatGuests() {
                         ],
                       ),
                     ),
-                    // Search button
-                    ElevatedButton(
-                       onPressed: () {
-                      Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => FlightSearch()),
-                        );
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.red,
-                        foregroundColor: Colors.white,
-                        minimumSize: Size(double.infinity, 56),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        elevation: 0,
-                      ),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(Icons.search, size: 24),
-                          SizedBox(width: 8),
-                          Text(
-                            'Search properties',
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
+                  ],
+                ),
+              ),
+            ),
+            // Search button
+            Padding(
+              padding: const EdgeInsets.all(16),
+              child: ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => FlightSearch()),
+                  );
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.red,
+                  foregroundColor: Colors.white,
+                  minimumSize: Size(double.infinity, 56),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  elevation: 0,
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(Icons.search, size: 24),
+                    SizedBox(width: 8),
+                    Text(
+                      'Search properties',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
                   ],

@@ -2,6 +2,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:mobile_app/screens/hotels/hotel_details.dart';
+import 'package:mobile_app/screens/onboarding/onboarding_screen_2.dart';
+import 'package:mobile_app/screens/onboarding/onboarding_screen_3.dart';
 
 class OnboardingScreen1 extends StatelessWidget {
   const OnboardingScreen1({super.key});
@@ -17,7 +19,7 @@ class OnboardingScreen1 extends StatelessWidget {
             child: Container(
               color: Colors.blue,
               child: Image.asset(
-                'assets/images/onboarding1.png',
+                'images/onboarding/onboarding1.png',
                 // width: 200,
                 // height: 200,
               ),
@@ -71,7 +73,7 @@ class OnboardingScreen1 extends StatelessWidget {
                             onPressed: () {
                               Navigator.push(
                                 context,
-                                MaterialPageRoute(builder: (context) => HotelDetails()),
+                                MaterialPageRoute(builder: (context) => OnboardingScreen2()),
                               );
                             },
                             style: ElevatedButton.styleFrom(
