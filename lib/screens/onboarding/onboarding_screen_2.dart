@@ -2,7 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:mobile_app/screens/hotels/hotel_details.dart';
-import 'package:mobile_app/screens/hotels/hotelsearch.dart';
+import 'package:mobile_app/screens/hotels/hotel_search.dart';
 import 'package:mobile_app/screens/onboarding/onboarding_screen_3.dart';
 
 class OnboardingScreen2 extends StatelessWidget {
