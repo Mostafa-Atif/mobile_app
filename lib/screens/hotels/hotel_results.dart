@@ -72,7 +72,10 @@ class _HotelResultsState extends State<HotelResults> {
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0.5,
-        leading: const Icon(Icons.arrow_back, color: Colors.cyan),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.cyan),
+          onPressed: () => Navigator.pop(context),
+        ),
         title: Column(
           children: [
             Text(widget.destination,
@@ -217,7 +220,11 @@ class _HotelResultsState extends State<HotelResults> {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => HotelDetails(hotel: hotels[index]),
+              builder: (context) => HotelDetails(
+                hotel: hotels[index],
+                checkIn: widget.checkIn,
+                checkOut: widget.checkOut,
+              ),
             ),
           );
         },
