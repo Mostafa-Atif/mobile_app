@@ -1,89 +1,136 @@
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:mobile_app/screens/hotels/hotel_details.dart';
 import 'package:mobile_app/screens/hotels/hotel_search.dart';
+import 'package:mobile_app/screens/onboarding/onboarding_screen_3.dart';
 
 class OnboardingScreen3 extends StatelessWidget {
   const OnboardingScreen3({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xFF2196F3),
-      body: SafeArea(
+    return Scaffold(body: Builder(builder: (BuildContext context) {
+      return Container(
+        width: double.infinity,
+        height: double.infinity,
+        color: Colors.blue,
         child: Column(
           children: [
+            // First half - Image
             Expanded(
               flex: 1,
-              child: Center(
+              child: Container(
                 child: Image.asset(
-                  "images/onboarding/onboarding3.png",
-                  // width: 220,
+                  'images/onboarding/onboarding3.png',
+                  fit: BoxFit.contain,
                 ),
               ),
             ),
 
+            // Second half - Welcome message with rounded corners
             Expanded(
               flex: 1,
               child: Container(
-                width: double.infinity,
-                // padding: EdgeInsets.all(60),
                 decoration: BoxDecoration(
-                  color: Color(0xffFFFFFF),
+                  color: Colors.white,
                   borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(30),
                     topRight: Radius.circular(30),
                   ),
                 ),
+                padding: EdgeInsets.all(30),
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center, 
                   children: [
                     Text(
-                      "Explore Local\nAttractions",
+                      'Explore Locel Atrractions',
                       style: TextStyle(
+                        fontSize: 28,
                         fontWeight: FontWeight.bold,
-                        fontSize: 32,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                    SizedBox(height: 14),
-                    Text(
-                      "Discover the beauty of local places you\nmay never have visited. Experience local\nlife and enjoy authentic experiences in\neach destination.",
-                      style: TextStyle(fontSize: 16),
-                      textAlign: TextAlign.center,
-                    ),
-                    SizedBox(height: 30),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 30),
-                      child: SizedBox(
-                        width: double.infinity,
-                        height: 59,
-                        child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              foregroundColor: Colors.white,
-                              backgroundColor: Colors.black,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(30),
-                            )
-                            ),
-                            onPressed: () {Navigator.push(
-                                context,
-                                MaterialPageRoute(builder: (context) => HotelSearch()),
-                              );},
-                            child: Text("Finish")
-                        ),
+                        color: Colors.black,
                       ),
                     ),
                     SizedBox(height: 20),
-                    SvgPicture.asset("assets/images/Frame 3.svg"),
+                    Text(
+                      "Discover the beauty of local places you may never have visited. Experience local life and enjoy authentic experiences in each destination.",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.grey[700],
+                        height: 1.5,
+                      ),
+                    ),
+
+                    SizedBox(height: 50),
+
+                    // Next Button
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => OnboardingScreen3(),
+                            ));
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.black,
+                        foregroundColor: Colors.white,
+                        minimumSize: Size(double.infinity, 60),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                      ),
+                      child: Text(
+                        'Next',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+
+                    SizedBox(height: 20),
+
+                    // Page indicators (dots)
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Container(
+                          width: 10,
+                          height: 10,
+                          decoration: BoxDecoration(
+                            color: Colors.grey,
+                            shape: BoxShape.circle,
+                          ),
+                        ),
+                        SizedBox(width: 10),
+                        Container(
+                          width:10,
+                          height:10,
+                          decoration: BoxDecoration(
+                            color: Colors.grey,
+                            shape: BoxShape.circle,
+                          ),
+                        ),
+                        SizedBox(width: 10),
+                        Container(
+                          width: 10,
+                          height: 10,
+                          decoration: BoxDecoration(
+                            color: Colors.blue,
+                            shape: BoxShape.circle,
+                          ),
+                        ),
+                      ],
+                    ),
                   ],
                 ),
               ),
             ),
           ],
         ),
-      ),
-    );
+      );
+    }));
   }
 }

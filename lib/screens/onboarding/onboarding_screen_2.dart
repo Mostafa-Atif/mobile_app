@@ -62,7 +62,7 @@ class OnboardingScreen2 extends StatelessWidget {
                       ),
                     ),
 
-                    Spacer(),
+                    SizedBox(height: 50),
 
                     // Next Button
                     ElevatedButton(
@@ -97,26 +97,26 @@ class OnboardingScreen2 extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Container(
-                          width: 8,
-                          height: 8,
+                          width: 10,
+                          height: 10,
                           decoration: BoxDecoration(
                             color: Colors.grey,
                             shape: BoxShape.circle,
                           ),
                         ),
-                        SizedBox(width: 8),
+                        SizedBox(width: 10),
                         Container(
-                          width: 8,
-                          height: 8,
+                          width:10,
+                          height:10,
                           decoration: BoxDecoration(
                             color: Colors.blue,
                             shape: BoxShape.circle,
                           ),
                         ),
-                        SizedBox(width: 8),
+                        SizedBox(width: 10),
                         Container(
-                          width: 8,
-                          height: 8,
+                          width: 10,
+                          height: 10,
                           decoration: BoxDecoration(
                             color: Colors.grey,
                             shape: BoxShape.circle,

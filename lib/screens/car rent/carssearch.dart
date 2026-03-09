@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
+
 import 'package:flutter/material.dart';
 
 class CarsSearch extends StatefulWidget {
@@ -20,7 +22,7 @@ class _CarsSearchState extends State<CarsSearch> {
           },
         ),
             title: Text(
-              'Almosafer',
+              'Car Rent',
         style: TextStyle(
           color: Colors.black,
           fontSize: 26,

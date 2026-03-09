@@ -41,7 +41,7 @@ class OnboardingScreen1 extends StatelessWidget {
               // clipBehavior: Clip.antiAlias,
               child: Padding(
                 padding: EdgeInsets.symmetric(
-                  horizontal: 70,
+                  horizontal: 30,
                   vertical: 40,
                 ),
                 child: Center(
@@ -59,9 +59,10 @@ class OnboardingScreen1 extends StatelessWidget {
                       Text(
                         "Create your dream trip with ease. Choose a destination, find the perfect place to stay, and create an itinerary that suits your preferences.",
                           style: TextStyle(
-                            fontSize: 15,
+                            fontSize: 16,
                             // fontWeight: FontWeight.bold,
-                            color: Colors.black,
+                            color: Colors.grey[700],
+                            height: 1.5,
                           ),
                           textAlign: TextAlign.center,
                         ),

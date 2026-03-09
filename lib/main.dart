@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:mobile_app/screens/car%20rent/carssearch.dart';
 import 'package:mobile_app/screens/hotels/hotel_search.dart';
 import 'package:mobile_app/screens/onboarding/onboarding_screen_2.dart';
 import 'package:mobile_app/screens/onboarding/onboarding_screen_3.dart';
@@ -39,7 +40,7 @@ class MyApp extends StatelessWidget {
         textTheme: GoogleFonts.dmSansTextTheme(),
       ),
 
-      home: HotelSearch(),
+      home: OnboardingScreen1(),
     );
   }
 }
