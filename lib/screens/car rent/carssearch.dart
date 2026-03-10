@@ -403,8 +403,8 @@ class _CarsSearchState extends State<CarsSearch> {
                                     Text('*The prices are inclusive of VAT',
                                         style: TextStyle(
                                             fontSize: 11, color: Colors.grey)),
-                                    SizedBox(height: 16),
-                                    Divider(color: Colors.grey[300]),
+                                    // SizedBox(height: 16),
+                                    // Divider(color: Colors.grey[300]),
                                   ],
                                 ),
                               ),

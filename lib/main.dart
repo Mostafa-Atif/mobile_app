@@ -43,7 +43,7 @@ class MyApp extends StatelessWidget {
         textTheme: GoogleFonts.dmSansTextTheme(),
       ),
 
-      home: SignIn(),
+      home: FlightSearch(),
     );
   }
 }

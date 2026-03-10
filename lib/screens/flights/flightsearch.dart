@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors, sized_box_for_whitespace
 
 import 'package:flutter/material.dart';
+import 'package:mobile_app/screens/flights/flight_results.dart';
 
 class FlightSearch extends StatefulWidget {
   @override
@@ -12,8 +13,8 @@ class _FlightSearchState extends State<FlightSearch> {
   String selectedTripType = 'Round trip';
 
   // Regular flight data
-  String fromCity = 'Cairo';
-  String toCity = 'Dubai';
+  String fromCity = 'القاهرة';
+  String toCity = 'دبي';
   DateTime departureDate = DateTime.now().add(Duration(days: 1));
   DateTime? returnDate = DateTime.now().add(Duration(days: 3));
 
@@ -47,12 +48,12 @@ class _FlightSearchState extends State<FlightSearch> {
 
   // Data lists
   List<String> cities = [
-    'Cairo',
-    'Dubai',
-    'Paris',
-    'London',
-    'New York',
-    'Tokyo',
+    'القاهرة',
+    'دبي',
+    'الرياض',
+    'جدة',
+    'بيروت',
+    'عمّان',
   ];
 
   List<String> cabinClasses = [
@@ -207,11 +208,15 @@ class _FlightSearchState extends State<FlightSearch> {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('From', style: TextStyle(fontSize: 14, color: Colors.grey)),
+                Text('From',
+                    style: TextStyle(fontSize: 14, color: Colors.grey)),
                 SizedBox(height: 4),
                 Text(
                   fromCity,
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black),
+                  style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black),
                 ),
               ],
             ),
@@ -237,7 +242,10 @@ class _FlightSearchState extends State<FlightSearch> {
                 SizedBox(height: 4),
                 Text(
                   toCity,
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black),
+                  style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black),
                 ),
               ],
             ),
@@ -254,7 +262,7 @@ class _FlightSearchState extends State<FlightSearch> {
         children: [
           Icon(Icons.calendar_today_outlined, color: Colors.grey, size: 28),
           SizedBox(width: 16),
-          
+
           // Departure
           Expanded(
             child: GestureDetector(
@@ -269,7 +277,10 @@ class _FlightSearchState extends State<FlightSearch> {
                   SizedBox(height: 4),
                   Text(
                     formatDate(departureDate),
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black),
+                    style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black),
                   ),
                 ],
               ),
@@ -291,8 +302,13 @@ class _FlightSearchState extends State<FlightSearch> {
                     ),
                     SizedBox(height: 4),
                     Text(
-                      returnDate != null ? formatDate(returnDate!) : 'Select date',
-                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black),
+                      returnDate != null
+                          ? formatDate(returnDate!)
+                          : 'Select date',
+                      style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black),
                     ),
                   ],
                 ),
@@ -324,7 +340,10 @@ class _FlightSearchState extends State<FlightSearch> {
                   SizedBox(height: 4),
                   Text(
                     '${adults + children + infants} Passenger${(adults + children + infants) > 1 ? 's' : ''}, $cabinClass',
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black),
+                    style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black),
                   ),
                 ],
               ),
@@ -357,7 +376,8 @@ class _FlightSearchState extends State<FlightSearch> {
               multiCityFlights.add({
                 'from': 'Cairo',
                 'to': 'Dubai',
-                'date': DateTime.now().add(Duration(days: multiCityFlights.length)),
+                'date':
+                    DateTime.now().add(Duration(days: multiCityFlights.length)),
                 'adults': 1,
                 'children': 0,
                 'infants': 0,
@@ -404,7 +424,7 @@ class _FlightSearchState extends State<FlightSearch> {
               ),
           ],
         ),
-        
+
         SizedBox(height: 12),
 
         // From
@@ -417,7 +437,8 @@ class _FlightSearchState extends State<FlightSearch> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('From', style: TextStyle(fontSize: 12, color: Colors.grey)),
+                  Text('From',
+                      style: TextStyle(fontSize: 12, color: Colors.grey)),
                   Text(
                     multiCityFlights[index]['from'],
                     style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
@@ -427,7 +448,7 @@ class _FlightSearchState extends State<FlightSearch> {
             ],
           ),
         ),
-        
+
         SizedBox(height: 12),
 
         // To
@@ -440,7 +461,8 @@ class _FlightSearchState extends State<FlightSearch> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('To', style: TextStyle(fontSize: 12, color: Colors.grey)),
+                  Text('To',
+                      style: TextStyle(fontSize: 12, color: Colors.grey)),
                   Text(
                     multiCityFlights[index]['to'],
                     style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
@@ -450,7 +472,7 @@ class _FlightSearchState extends State<FlightSearch> {
             ],
           ),
         ),
-        
+
         SizedBox(height: 12),
 
         // Date - EXACTLY like hotel search format
@@ -463,7 +485,8 @@ class _FlightSearchState extends State<FlightSearch> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('Date', style: TextStyle(fontSize: 12, color: Colors.grey)),
+                  Text('Date',
+                      style: TextStyle(fontSize: 12, color: Colors.grey)),
                   Text(
                     formatDate(multiCityFlights[index]['date']),
                     style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
@@ -473,7 +496,7 @@ class _FlightSearchState extends State<FlightSearch> {
             ],
           ),
         ),
-        
+
         SizedBox(height: 12),
 
         // Passengers for THIS specific flight
@@ -493,7 +516,8 @@ class _FlightSearchState extends State<FlightSearch> {
                     ),
                     Text(
                       '${multiCityFlights[index]['adults'] + multiCityFlights[index]['children'] + multiCityFlights[index]['infants']} Passenger${(multiCityFlights[index]['adults'] + multiCityFlights[index]['children'] + multiCityFlights[index]['infants']) > 1 ? 's' : ''}, ${multiCityFlights[index]['cabinClass']}',
-                      style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                      style:
+                          TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
                     ),
                   ],
                 ),
@@ -564,14 +588,15 @@ class _FlightSearchState extends State<FlightSearch> {
   }
 
   Future<void> selectFlightDate(bool isDeparture) async {
-    DateTime initialDate = isDeparture ? departureDate : (returnDate ?? departureDate);
+    DateTime initialDate =
+        isDeparture ? departureDate : (returnDate ?? departureDate);
     DateTime firstDate = DateTime.now();
-    
+
     // Make sure initialDate is not before firstDate
     if (initialDate.isBefore(firstDate)) {
       initialDate = firstDate;
     }
-    
+
     final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: initialDate,
@@ -596,12 +621,12 @@ class _FlightSearchState extends State<FlightSearch> {
   Future<void> selectMultiCityDate(int index) async {
     DateTime initialDate = multiCityFlights[index]['date'];
     DateTime firstDate = DateTime.now();
-    
+
     // Make sure initialDate is not before firstDate
     if (initialDate.isBefore(firstDate)) {
       initialDate = firstDate;
     }
-    
+
     final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: initialDate,
@@ -763,7 +788,8 @@ class _FlightSearchState extends State<FlightSearch> {
                 'Children',
                 'Age 2-11',
                 tempChildren,
-                () => setModalState(() => tempChildren > 0 ? tempChildren-- : null),
+                () => setModalState(
+                    () => tempChildren > 0 ? tempChildren-- : null),
                 () => setModalState(() => tempChildren++),
               ),
               Divider(height: 30),
@@ -771,8 +797,10 @@ class _FlightSearchState extends State<FlightSearch> {
                 'Infants',
                 'Under 2',
                 tempInfants,
-                () => setModalState(() => tempInfants > 0 ? tempInfants-- : null),
-                () => setModalState(() => tempInfants < tempAdults ? tempInfants++ : null),
+                () =>
+                    setModalState(() => tempInfants > 0 ? tempInfants-- : null),
+                () => setModalState(
+                    () => tempInfants < tempAdults ? tempInfants++ : null),
               ),
               SizedBox(height: 20),
               Text(
@@ -883,31 +911,35 @@ class _FlightSearchState extends State<FlightSearch> {
   // Date format EXACTLY like hotel search: "8 Feb, 2026"
   String formatDate(DateTime date) {
     List<String> months = [
-      'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-      'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec'
     ];
     return '${date.day} ${months[date.month - 1]}, ${date.year}';
   }
 
   void _handleSearch() {
-    print('=== FLIGHT SEARCH ===');
-    print('Trip Type: $selectedTripType');
-    if (selectedTripType == 'Multi-city') {
-      for (int i = 0; i < multiCityFlights.length; i++) {
-        print('Flight ${i + 1}: ${multiCityFlights[i]['from']} → ${multiCityFlights[i]['to']}');
-        print('  Date: ${formatDate(multiCityFlights[i]['date'])}');
-        print('  Passengers: ${multiCityFlights[i]['adults']} adults, ${multiCityFlights[i]['children']} children, ${multiCityFlights[i]['infants']} infants');
-        print('  Class: ${multiCityFlights[i]['cabinClass']}');
-      }
-    } else {
-      print('From: $fromCity → To: $toCity');
-      print('Departure: ${formatDate(departureDate)}');
-      if (selectedTripType == 'Round trip' && returnDate != null) {
-        print('Return: ${formatDate(returnDate!)}');
-      }
-      print('Passengers: $adults adults, $children children, $infants infants');
-      print('Class: $cabinClass');
-    }
-    print('=====================');
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => FlightResults(
+          fromCity: fromCity,
+          toCity: toCity,
+          tripType: selectedTripType,
+          departureDate: departureDate,
+          passengers: adults + children + infants,
+          cabinClass: cabinClass,
+        ),
+      ),
+    );
   }
 }
