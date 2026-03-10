@@ -10,6 +10,7 @@ import 'package:mobile_app/screens/flights/flightsearch.dart';
 import 'package:mobile_app/screens/hotels/hotel_search.dart';
 import 'package:mobile_app/screens/onboarding/onboarding_screen_2.dart';
 import 'package:mobile_app/screens/onboarding/onboarding_screen_3.dart';
+import 'package:mobile_app/screens/temp_home.dart';
 import 'package:mobile_app/test.dart';
 import 'screens/onboarding/onboarding_screen_1.dart';
 import 'screens/hotels/hotel_details.dart';
@@ -43,7 +44,7 @@ class MyApp extends StatelessWidget {
         textTheme: GoogleFonts.dmSansTextTheme(),
       ),
 
-      home: FlightSearch(),
+      home: TempHome(),
     );
   }
 }
