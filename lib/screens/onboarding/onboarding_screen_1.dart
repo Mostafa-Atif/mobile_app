@@ -66,7 +66,7 @@ class OnboardingScreen1 extends StatelessWidget {
                           ),
                           textAlign: TextAlign.center,
                         ),
-                        SizedBox(height: 50),
+                        SizedBox(height: 40),
                         SizedBox(
                           width: double.infinity,  // full width
                           height: 56,              // height

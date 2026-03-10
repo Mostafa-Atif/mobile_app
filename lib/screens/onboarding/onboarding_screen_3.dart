@@ -44,7 +44,7 @@ class OnboardingScreen3 extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center, 
                   children: [
                     Text(
-                      'Explore Locel Atrractions',
+                      'Explore Local Atrractions',
                       style: TextStyle(
                         fontSize: 28,
                         fontWeight: FontWeight.bold,
@@ -70,7 +70,7 @@ class OnboardingScreen3 extends StatelessWidget {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => OnboardingScreen3(),
+                              builder: (context) => HotelSearch(),
                             ));
                       },
                       style: ElevatedButton.styleFrom(
