@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'sign_in.dart';
+import '../../config.dart';
 
 class SignUp extends StatefulWidget {
   const SignUp({super.key});
@@ -62,7 +63,7 @@ class _SignUpState extends State<SignUp> {
 
     try {
       final response = await http.post(
-        Uri.parse('http://localhost:5000/api/auth/signup'),
+        Uri.parse('${Config.baseUrl}/api/auth/signup'),
         headers: {'Content-Type': 'application/json'},
         body: json.encode({
           'firstName': _firstNameController.text.trim(),

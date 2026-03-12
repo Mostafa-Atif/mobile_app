@@ -2,8 +2,10 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:mobile_app/screens/car%20rent/carssearch.dart';
+import 'package:mobile_app/screens/temp_home.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'sign_up.dart';
+import '../../config.dart';
 
 class SignIn extends StatefulWidget {
   const SignIn({Key? key}) : super(key: key);
@@ -37,7 +39,7 @@ class _SignInState extends State<SignIn> {
 
     try {
       final response = await http.post(
-        Uri.parse('http://localhost:5000/api/auth/login'),
+        Uri.parse('${Config.baseUrl}/api/auth/login'),
         headers: {'Content-Type': 'application/json'},
         body: json.encode({
           'email': _emailController.text.trim(),
@@ -56,10 +58,11 @@ class _SignInState extends State<SignIn> {
         await prefs.setString('email', data['user']['email']);
         await prefs.setString('phone', data['user']['phone']);
         await prefs.setString('userId', data['user']['id']);
+        await prefs.setString('gender', data['user']['gender'] ?? '');
 
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => CarsSearch()),
+          MaterialPageRoute(builder: (context) => TempHome()),
         );
       } else {
         ScaffoldMessenger.of(context).showSnackBar(

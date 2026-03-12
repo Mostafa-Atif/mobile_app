@@ -1,17 +1,25 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, curly_braces_in_flow_control_structures
 
 import 'package:flutter/material.dart';
+import 'hotel_booking.dart';
 
 class HotelDetails extends StatefulWidget {
   final Map<String, dynamic> hotel;
   final DateTime checkIn;
   final DateTime checkOut;
+  final int numRooms;
+  final int numAdults;
+  final int numChildren;
 
-  const HotelDetails(
-      {super.key,
-      required this.hotel,
-      required this.checkIn,
-      required this.checkOut});
+  const HotelDetails({
+    super.key,
+    required this.hotel,
+    required this.checkIn,
+    required this.checkOut,
+    required this.numRooms,
+    required this.numAdults,
+    required this.numChildren,
+  });
 
   @override
   State<HotelDetails> createState() => _HotelDetailsState();
@@ -22,18 +30,26 @@ class _HotelDetailsState extends State<HotelDetails> {
   static const Color _red = Color(0xFFE84545);
 
   bool isFavorite = false;
-
   late DateTime checkInDate;
   late DateTime checkOutDate;
+  late int numRooms;
+  late int numAdults;
+  late int numChildren;
 
   @override
   void initState() {
     super.initState();
-    checkInDate = widget.checkIn;
-    checkOutDate = widget.checkOut;
+    checkInDate =
+        DateTime(widget.checkIn.year, widget.checkIn.month, widget.checkIn.day);
+    checkOutDate = DateTime(
+        widget.checkOut.year, widget.checkOut.month, widget.checkOut.day);
+    numRooms = widget.numRooms;
+    numAdults = widget.numAdults;
+    numChildren = widget.numChildren;
   }
 
   int get nightCount => checkOutDate.difference(checkInDate).inDays;
+  int get numPeople => numAdults + numChildren;
 
   String formatDate(DateTime date) {
     List<String> months = [
@@ -76,9 +92,8 @@ class _HotelDetailsState extends State<HotelDetails> {
     }
   }
 
-  String _viewLabel(String view) {
-    return view[0].toUpperCase() + view.substring(1) + ' View';
-  }
+  String _viewLabel(String view) =>
+      view[0].toUpperCase() + view.substring(1) + ' View';
 
   String _ratingLabel(int rating) {
     switch (rating) {
@@ -95,6 +110,34 @@ class _HotelDetailsState extends State<HotelDetails> {
     }
   }
 
+  Widget _counter(
+      String label, int value, VoidCallback onDec, VoidCallback onInc) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(label, style: TextStyle(fontSize: 15)),
+        Row(
+          children: [
+            IconButton(
+              icon: Icon(Icons.remove_circle_outline, color: _teal),
+              onPressed: onDec,
+            ),
+            SizedBox(
+              width: 32,
+              child: Text('$value',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+            ),
+            IconButton(
+              icon: Icon(Icons.add_circle_outline, color: _teal),
+              onPressed: onInc,
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final hotel = widget.hotel;
@@ -104,12 +147,12 @@ class _HotelDetailsState extends State<HotelDetails> {
     final int price = int.tryParse(hotel['price'].toString()) ?? 0;
     final String imgUrl = hotel['imgUrl'] ?? '';
     final List<dynamic> views = hotel['views'] ?? [];
+    final int totalPrice = price * nightCount * numRooms;
 
     return Scaffold(
       backgroundColor: Colors.white,
       body: CustomScrollView(
         slivers: [
-          // ── Hero image app bar ──
           SliverAppBar(
             expandedHeight: 280,
             pinned: true,
@@ -131,9 +174,8 @@ class _HotelDetailsState extends State<HotelDetails> {
                     BoxDecoration(color: Colors.white, shape: BoxShape.circle),
                 child: IconButton(
                   icon: Icon(
-                    isFavorite ? Icons.favorite : Icons.favorite_border,
-                    color: isFavorite ? Colors.red : Colors.black,
-                  ),
+                      isFavorite ? Icons.favorite : Icons.favorite_border,
+                      color: isFavorite ? Colors.red : Colors.black),
                   onPressed: () => setState(() => isFavorite = !isFavorite),
                 ),
               ),
@@ -150,46 +192,38 @@ class _HotelDetailsState extends State<HotelDetails> {
               ),
             ),
           ),
-
           SliverToBoxAdapter(
             child: Padding(
               padding: EdgeInsets.all(16),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // ── Name + Rating badge ──
+                  // Name + rating badge
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Expanded(
-                        child: Text(
-                          name,
-                          style: TextStyle(
-                              fontSize: 22, fontWeight: FontWeight.bold),
-                        ),
+                        child: Text(name,
+                            style: TextStyle(
+                                fontSize: 22, fontWeight: FontWeight.bold)),
                       ),
                       SizedBox(width: 12),
                       Container(
                         padding:
                             EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                         decoration: BoxDecoration(
-                          color: _teal,
-                          borderRadius: BorderRadius.circular(8),
-                        ),
+                            color: _teal,
+                            borderRadius: BorderRadius.circular(8)),
                         child: Column(
                           children: [
-                            Text(
-                              rating.toString(),
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 18),
-                            ),
-                            Text(
-                              _ratingLabel(rating),
-                              style: TextStyle(
-                                  color: Colors.white70, fontSize: 11),
-                            ),
+                            Text(rating.toString(),
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 18)),
+                            Text(_ratingLabel(rating),
+                                style: TextStyle(
+                                    color: Colors.white70, fontSize: 11)),
                           ],
                         ),
                       ),
@@ -197,18 +231,14 @@ class _HotelDetailsState extends State<HotelDetails> {
                   ),
 
                   SizedBox(height: 8),
-
-                  // ── Stars ──
                   Row(
-                    children: List.generate(
-                      rating,
-                      (i) => Icon(Icons.star, color: Colors.amber, size: 18),
-                    ),
-                  ),
-
+                      children: List.generate(
+                          rating,
+                          (i) =>
+                              Icon(Icons.star, color: Colors.amber, size: 18))),
                   SizedBox(height: 12),
 
-                  // ── Location ──
+                  // Location
                   Container(
                     padding: EdgeInsets.all(14),
                     decoration: BoxDecoration(
@@ -221,15 +251,9 @@ class _HotelDetailsState extends State<HotelDetails> {
                         Icon(Icons.location_on, color: _teal, size: 22),
                         SizedBox(width: 10),
                         Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(subTitle,
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 15)),
-                            ],
-                          ),
+                          child: Text(subTitle,
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 15)),
                         ),
                       ],
                     ),
@@ -237,7 +261,7 @@ class _HotelDetailsState extends State<HotelDetails> {
 
                   SizedBox(height: 16),
 
-                  // ── Views ──
+                  // Views
                   if (views.isNotEmpty) ...[
                     Text('Views',
                         style: TextStyle(
@@ -246,41 +270,38 @@ class _HotelDetailsState extends State<HotelDetails> {
                     Wrap(
                       spacing: 10,
                       runSpacing: 10,
-                      children: views.map((view) {
-                        return Container(
-                          padding:
-                              EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-                          decoration: BoxDecoration(
-                            color: Color(0xFFE0F5F7),
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Icon(_viewIcon(view.toString()),
-                                  size: 16, color: _teal),
-                              SizedBox(width: 6),
-                              Text(
-                                _viewLabel(view.toString()),
-                                style: TextStyle(
-                                    color: _teal,
-                                    fontSize: 13,
-                                    fontWeight: FontWeight.w500),
-                              ),
-                            ],
-                          ),
-                        );
-                      }).toList(),
+                      children: views
+                          .map((view) => Container(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 14, vertical: 8),
+                                decoration: BoxDecoration(
+                                  color: Color(0xFFE0F5F7),
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Icon(_viewIcon(view.toString()),
+                                        size: 16, color: _teal),
+                                    SizedBox(width: 6),
+                                    Text(_viewLabel(view.toString()),
+                                        style: TextStyle(
+                                            color: _teal,
+                                            fontSize: 13,
+                                            fontWeight: FontWeight.w500)),
+                                  ],
+                                ),
+                              ))
+                          .toList(),
                     ),
                     SizedBox(height: 16),
                   ],
 
-                  // ── Check-in / Check-out ──
+                  // Your Stay
                   Text('Your Stay',
                       style:
                           TextStyle(fontSize: 17, fontWeight: FontWeight.bold)),
                   SizedBox(height: 10),
-
                   Row(
                     children: [
                       Expanded(
@@ -296,11 +317,9 @@ class _HotelDetailsState extends State<HotelDetails> {
                               setState(() {
                                 checkInDate = picked;
                                 if (checkOutDate.isBefore(checkInDate) ||
-                                    checkOutDate
-                                        .isAtSameMomentAs(checkInDate)) {
+                                    checkOutDate.isAtSameMomentAs(checkInDate))
                                   checkOutDate =
                                       checkInDate.add(Duration(days: 1));
-                                }
                               });
                           },
                           style: OutlinedButton.styleFrom(
@@ -367,26 +386,67 @@ class _HotelDetailsState extends State<HotelDetails> {
                       ),
                     ],
                   ),
-
                   SizedBox(height: 10),
-
-                  // Night count info
                   Center(
                     child: Text(
-                      '$nightCount night${nightCount != 1 ? 's' : ''}',
-                      style: TextStyle(color: Colors.grey[600], fontSize: 13),
+                        '$nightCount night${nightCount != 1 ? 's' : ''}',
+                        style:
+                            TextStyle(color: Colors.grey[600], fontSize: 13)),
+                  ),
+
+                  SizedBox(height: 20),
+
+                  // Rooms & Guests
+                  Text('Rooms & Guests',
+                      style:
+                          TextStyle(fontSize: 17, fontWeight: FontWeight.bold)),
+                  SizedBox(height: 10),
+                  Container(
+                    padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    decoration: BoxDecoration(
+                      color: Colors.grey[50],
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(color: Colors.grey[200]!),
+                    ),
+                    child: Column(
+                      children: [
+                        _counter(
+                          'Rooms',
+                          numRooms,
+                          () {
+                            if (numRooms > 1) setState(() => numRooms--);
+                          },
+                          () => setState(() => numRooms++),
+                        ),
+                        Divider(height: 16),
+                        _counter(
+                          'Adults (12+)',
+                          numAdults,
+                          () {
+                            if (numAdults > 1) setState(() => numAdults--);
+                          },
+                          () => setState(() => numAdults++),
+                        ),
+                        Divider(height: 16),
+                        _counter(
+                          'Children (0-11)',
+                          numChildren,
+                          () {
+                            if (numChildren > 0) setState(() => numChildren--);
+                          },
+                          () => setState(() => numChildren++),
+                        ),
+                      ],
                     ),
                   ),
 
-                  SizedBox(height: 100), // space for bottom bar
+                  SizedBox(height: 100),
                 ],
               ),
             ),
           ),
         ],
       ),
-
-      // ── Bottom Book Now bar ──
       bottomNavigationBar: Container(
         padding: EdgeInsets.symmetric(horizontal: 20, vertical: 14),
         decoration: BoxDecoration(
@@ -399,22 +459,33 @@ class _HotelDetailsState extends State<HotelDetails> {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                Text('SAR $price / night',
+                    style:
+                        TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
                 Text(
-                  'SAR $price / night',
-                  style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black),
-                ),
-                Text(
-                  'SAR ${price * nightCount} total ($nightCount nights)',
-                  style: TextStyle(color: Colors.grey, fontSize: 12),
-                ),
+                    'SAR $totalPrice total ($nightCount nights, $numRooms room${numRooms != 1 ? 's' : ''})',
+                    style: TextStyle(color: Colors.grey, fontSize: 12)),
               ],
             ),
             Spacer(),
             ElevatedButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => HotelBooking(
+                      hotelName: name,
+                      checkIn: checkInDate,
+                      checkOut: checkOutDate,
+                      numRooms: numRooms,
+                      numAdults: numAdults,
+                      numChildren: numChildren,
+                      pricePerNight: price,
+                      nights: nightCount,
+                    ),
+                  ),
+                );
+              },
               style: ElevatedButton.styleFrom(
                 backgroundColor: _red,
                 foregroundColor: Colors.white,

@@ -3,21 +3,26 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'dart:convert';
-
 import 'package:mobile_app/screens/hotels/hotel_details.dart';
 
 class HotelResults extends StatefulWidget {
   final String destination;
   final DateTime checkIn;
   final DateTime checkOut;
-  final String guests;
+  final int numRooms;
+  final int numAdults;
+  final int numChildren;
+  final String searchType;
 
   const HotelResults({
     super.key,
     required this.destination,
     required this.checkIn,
     required this.checkOut,
-    required this.guests,
+    required this.numRooms,
+    required this.numAdults,
+    required this.numChildren,
+    required this.searchType,
   });
 
   @override
@@ -25,8 +30,18 @@ class HotelResults extends StatefulWidget {
 }
 
 class _HotelResultsState extends State<HotelResults> {
-  List<Map<String, dynamic>> hotels = [];
+  static const Color _teal = Color(0xFF1f93a0);
+
+  List<Map<String, dynamic>> allHotels = [];
+  List<Map<String, dynamic>> filteredHotels = [];
   bool isLoading = true;
+
+  String searchQuery = '';
+  String? selectedRating;
+  String? selectedView;
+  String? sortOption;
+
+  final TextEditingController searchController = TextEditingController();
 
   @override
   void initState() {
@@ -38,36 +53,240 @@ class _HotelResultsState extends State<HotelResults> {
     final String jsonString = await rootBundle.loadString('assets/hotels.json');
     final List<dynamic> jsonData = json.decode(jsonString);
 
+    final loaded = jsonData
+        .where((hotel) {
+          if (widget.searchType == 'country') {
+            return hotel["country"]["en"].toString().toLowerCase() ==
+                widget.destination.toLowerCase();
+          } else {
+            return hotel["city"]["en"].toString().toLowerCase() ==
+                widget.destination.toLowerCase();
+          }
+        })
+        .map((hotel) => {
+              "title": hotel["name"]["en"],
+              "subTitle": "${hotel["city"]["en"]}, ${hotel["country"]["en"]}",
+              "rating": hotel["rating"].toString(),
+              "reviews": "See reviews",
+              "price": hotel["price"].toString(),
+              "views": hotel["views"] as List<dynamic>,
+              "imgUrl": hotel["image"],
+              "isFavorite": false,
+            })
+        .toList();
+
     setState(() {
-      hotels = jsonData
-          .where((hotel) =>
-              hotel["city"]["en"].toString().toLowerCase() ==
-              widget.destination.toLowerCase())
-          .map((hotel) => {
-                "title": hotel["name"]["en"],
-                "subTitle": "${hotel["city"]["en"]}, ${hotel["country"]["en"]}",
-                "rating": hotel["rating"].toString(),
-                "reviews": "See reviews",
-                "price": hotel["price"].toString(),
-                "imgUrl": hotel["image"],
-                "isFavorite": false,
-              })
-          .toList();
+      allHotels = loaded;
+      filteredHotels = loaded;
       isLoading = false;
     });
   }
 
+  void applyFilters() {
+    List<Map<String, dynamic>> result = List.from(allHotels);
+
+    if (searchQuery.isNotEmpty) {
+      result = result
+          .where((h) => h['title']
+              .toString()
+              .toLowerCase()
+              .contains(searchQuery.toLowerCase()))
+          .toList();
+    }
+
+    if (selectedRating != null) {
+      result =
+          result.where((h) => h['rating'].toString() == selectedRating).toList();
+    }
+
+    if (selectedView != null) {
+      result = result
+          .where((h) => (h['views'] as List).contains(selectedView))
+          .toList();
+    }
+
+    if (sortOption == 'Price: Low to High') {
+      result.sort(
+          (a, b) => int.parse(a['price']).compareTo(int.parse(b['price'])));
+    } else if (sortOption == 'Price: High to Low') {
+      result.sort(
+          (a, b) => int.parse(b['price']).compareTo(int.parse(a['price'])));
+    } else if (sortOption == 'Rating') {
+      result.sort(
+          (a, b) => int.parse(b['rating']).compareTo(int.parse(a['rating'])));
+    }
+
+    setState(() => filteredHotels = result);
+  }
+
+  void showSortSheet() {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.white,
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(top: Radius.circular(16))),
+      builder: (_) {
+        return Padding(
+          padding: EdgeInsets.all(20),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text('Sort by',
+                  style:
+                      TextStyle(fontSize: 17, fontWeight: FontWeight.bold)),
+              SizedBox(height: 12),
+              ...['Price: Low to High', 'Price: High to Low', 'Rating']
+                  .map((opt) {
+                final selected = sortOption == opt;
+                return ListTile(
+                  contentPadding: EdgeInsets.zero,
+                  title: Text(opt),
+                  trailing:
+                      selected ? Icon(Icons.check, color: _teal) : null,
+                  onTap: () {
+                    setState(() => sortOption = selected ? null : opt);
+                    applyFilters();
+                    Navigator.pop(context);
+                  },
+                );
+              }),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  void showFilterSheet() {
+    final views = allHotels
+        .expand((h) => h['views'] as List)
+        .toSet()
+        .cast<String>()
+        .toList()
+      ..sort();
+
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.white,
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(top: Radius.circular(16))),
+      builder: (_) {
+        String? tempRating = selectedRating;
+        String? tempView = selectedView;
+
+        return StatefulBuilder(
+          builder: (ctx, setSheet) {
+            return Padding(
+              padding: EdgeInsets.all(20),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('Filter',
+                      style: TextStyle(
+                          fontSize: 17, fontWeight: FontWeight.bold)),
+                  SizedBox(height: 16),
+
+                  Text('Property Rating',
+                      style: TextStyle(fontWeight: FontWeight.w600)),
+                  SizedBox(height: 8),
+                  Wrap(
+                    spacing: 8,
+                    children: ['5', '4'].map((r) {
+                      final selected = tempRating == r;
+                      return ChoiceChip(
+                        label: Text('$r ★'),
+                        selected: selected,
+                        selectedColor: _teal,
+                        labelStyle: TextStyle(
+                            color:
+                                selected ? Colors.white : Colors.black),
+                        onSelected: (_) => setSheet(
+                            () => tempRating = selected ? null : r),
+                      );
+                    }).toList(),
+                  ),
+
+                  SizedBox(height: 16),
+                  Text('View',
+                      style: TextStyle(fontWeight: FontWeight.w600)),
+                  SizedBox(height: 8),
+                  Wrap(
+                    spacing: 8,
+                    children: views.map((v) {
+                      final selected = tempView == v;
+                      return ChoiceChip(
+                        label: Text(
+                            v[0].toUpperCase() + v.substring(1)),
+                        selected: selected,
+                        selectedColor: _teal,
+                        labelStyle: TextStyle(
+                            color:
+                                selected ? Colors.white : Colors.black),
+                        onSelected: (_) => setSheet(
+                            () => tempView = selected ? null : v),
+                      );
+                    }).toList(),
+                  ),
+
+                  SizedBox(height: 20),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: OutlinedButton(
+                          onPressed: () {
+                            setState(() {
+                              selectedRating = null;
+                              selectedView = null;
+                            });
+                            applyFilters();
+                            Navigator.pop(context);
+                          },
+                          child: Text('Clear all'),
+                        ),
+                      ),
+                      SizedBox(width: 12),
+                      Expanded(
+                        child: ElevatedButton(
+                          onPressed: () {
+                            setState(() {
+                              selectedRating = tempRating;
+                              selectedView = tempView;
+                            });
+                            applyFilters();
+                            Navigator.pop(context);
+                          },
+                          style: ElevatedButton.styleFrom(
+                              backgroundColor: _teal,
+                              foregroundColor: Colors.white),
+                          child: Text('Apply'),
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 8),
+                ],
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
+  bool get hasActiveFilters =>
+      selectedRating != null || selectedView != null;
+
   @override
   Widget build(BuildContext context) {
-    // if still loading, show a spinner
     if (isLoading) {
       return const Scaffold(
-        body: Center(child: CircularProgressIndicator()),
-      );
+          body: Center(child: CircularProgressIndicator()));
     }
 
     return Scaffold(
-      // ... rest of your build method stays EXACTLY the same
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -84,7 +303,7 @@ class _HotelResultsState extends State<HotelResults> {
                     fontSize: 16,
                     fontWeight: FontWeight.bold)),
             Text(
-                "${widget.checkIn.day}/${widget.checkIn.month} - ${widget.checkOut.day}/${widget.checkOut.month}, ${widget.guests}",
+                "${widget.checkIn.day}/${widget.checkIn.month} - ${widget.checkOut.day}/${widget.checkOut.month} · ${widget.numRooms} room${widget.numRooms != 1 ? 's' : ''}, ${widget.numAdults} adult${widget.numAdults != 1 ? 's' : ''}, ${widget.numChildren} children",
                 style: TextStyle(color: Colors.grey[600], fontSize: 12)),
           ],
         ),
@@ -92,229 +311,273 @@ class _HotelResultsState extends State<HotelResults> {
       ),
       body: Column(
         children: [
-          /* ================= SEARCH ================= */
+          // Search bar
           Padding(
             padding: const EdgeInsets.all(12.0),
             child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 4),
               decoration: BoxDecoration(
                 color: Colors.grey[100],
                 borderRadius: BorderRadius.circular(10),
               ),
-              child: const TextField(
+              child: TextField(
+                controller: searchController,
+                onChanged: (val) {
+                  searchQuery = val;
+                  applyFilters();
+                },
                 decoration: InputDecoration(
-                  hintText: "Search for accommodations",
+                  hintText: "Search by hotel name",
                   border: InputBorder.none,
                   prefixIcon: Icon(Icons.search, color: Colors.grey),
+                  contentPadding:
+                      EdgeInsets.symmetric(horizontal: 8, vertical: 14),
+                  suffixIcon: searchQuery.isNotEmpty
+                      ? IconButton(
+                          icon: Icon(Icons.clear, color: Colors.grey),
+                          onPressed: () {
+                            searchController.clear();
+                            searchQuery = '';
+                            applyFilters();
+                          },
+                        )
+                      : null,
                 ),
               ),
             ),
           ),
 
-          /* ================= ACTION ROW ================= */
-          const Padding(
-            padding: EdgeInsets.symmetric(vertical: 8.0),
+          // Sort & Filter
+          Padding(
+            padding:
+                const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                _ActionItem(icon: Icons.swap_vert, label: "Sort by"),
-                _ActionItem(icon: Icons.tune, label: "Filter"),
-                _ActionItem(icon: Icons.map_outlined, label: "Map"),
+                _actionChip(Icons.swap_vert, 'Sort by',
+                    sortOption != null, showSortSheet),
+                SizedBox(width: 10),
+                _actionChip(
+                    Icons.tune, 'Filter', hasActiveFilters, showFilterSheet),
               ],
             ),
           ),
+
           const Divider(height: 1),
 
-          /* ================= FILTER DROPDOWNS ================= */
-          SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 8),
-            child: Row(
-              children: [
-                _filterDropdown(
-                    "Popular Locations", ["Deira", "Marina", "Downtown"]),
-                _filterDropdown("Top Categories in Dubai",
-                    ["Luxury", "Family", "Business"]),
-                _filterDropdown(
-                    "Property Rating", ["5 Stars", "4 Stars", "All"]),
-              ],
-            ),
-          ),
-
-          /* ================= RESULT COUNT (المرتجع) ================= */
+          // Result count
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 8),
             child: Center(
               child: Text(
-                "${hotels.length} properties found in Dubai",
+                "${filteredHotels.length} properties found in ${widget.destination}",
                 style: const TextStyle(color: Colors.grey, fontSize: 12),
               ),
             ),
           ),
 
-          /* ================= HOTEL LIST ================= */
+          // Hotel list
           Expanded(
-            child: ListView.builder(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              itemCount: hotels.length,
-              itemBuilder: (context, index) {
-                final hotel = hotels[index];
-                return _buildHotelCard(
-                  index,
-                  hotel["title"],
-                  hotel["subTitle"],
-                  hotel["rating"],
-                  hotel["reviews"],
-                  hotel["price"],
-                  hotel["imgUrl"],
-                  hotel["isFavorite"],
-                );
-              },
-            ),
+            child: filteredHotels.isEmpty
+                ? Center(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(Icons.search_off,
+                            size: 48, color: Colors.grey[300]),
+                        SizedBox(height: 12),
+                        Text('No properties match your filters',
+                            style: TextStyle(color: Colors.grey)),
+                      ],
+                    ),
+                  )
+                : ListView.builder(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 16),
+                    itemCount: filteredHotels.length,
+                    itemBuilder: (context, index) {
+                      return _buildHotelCard(filteredHotels[index]);
+                    },
+                  ),
           ),
         ],
       ),
     );
   }
 
-  /* ================= DROP DOWN FILTER ================= */
-  Widget _filterDropdown(String label, List<String> options) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 4),
-      child: PopupMenuButton<String>(
-        onSelected: (value) {},
-        itemBuilder: (context) => options
-            .map((opt) => PopupMenuItem(value: opt, child: Text(opt)))
-            .toList(),
-        child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-          decoration: BoxDecoration(
-            border: Border.all(color: Colors.grey[300]!),
-            borderRadius: BorderRadius.circular(20),
-          ),
-          child: Row(
-            children: [
-              Text(label, style: const TextStyle(fontSize: 12)),
-              const SizedBox(width: 4),
-              const Icon(Icons.keyboard_arrow_down,
-                  size: 18, color: Colors.grey),
-            ],
-          ),
+  Widget _actionChip(
+      IconData icon, String label, bool active, VoidCallback onTap) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+        decoration: BoxDecoration(
+          color: active ? Color(0xFFE0F5F7) : Colors.white,
+          border:
+              Border.all(color: active ? _teal : Colors.grey[300]!),
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: Row(
+          children: [
+            Icon(icon,
+                size: 16, color: active ? _teal : Colors.grey[700]),
+            SizedBox(width: 6),
+            Text(label,
+                style: TextStyle(
+                    fontSize: 13,
+                    color: active ? _teal : Colors.grey[700],
+                    fontWeight: active
+                        ? FontWeight.w600
+                        : FontWeight.normal)),
+          ],
         ),
       ),
     );
   }
 
-  /* ================= HOTEL CARD ================= */
-  Widget _buildHotelCard(
-      int index,
-      String title,
-      String subTitle,
-      String rating,
-      String reviews,
-      String price,
-      String imgUrl,
-      bool isFavorite) {
+  Widget _buildHotelCard(Map<String, dynamic> hotel) {
+    final title = hotel["title"];
+    final subTitle = hotel["subTitle"];
+    final rating = hotel["rating"];
+    final price = hotel["price"];
+    final imgUrl = hotel["imgUrl"];
+    final isFavorite = hotel["isFavorite"] as bool;
+    final allIndex = allHotels.indexOf(hotel);
+
     return GestureDetector(
-        onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => HotelDetails(
-                hotel: hotels[index],
-                checkIn: widget.checkIn,
-                checkOut: widget.checkOut,
-              ),
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => HotelDetails(
+              hotel: hotel,
+              checkIn: widget.checkIn,
+              checkOut: widget.checkOut,
+              numRooms: widget.numRooms,
+              numAdults: widget.numAdults,
+              numChildren: widget.numChildren,
             ),
-          );
-        },
-        child: Container(
-          margin: const EdgeInsets.only(bottom: 20),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(15),
-            border: Border.all(color: Colors.grey[200]!),
-            boxShadow: [
-              BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 10)
-            ],
           ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Stack(
-                children: [
-                  ClipRRect(
-                    borderRadius:
-                        const BorderRadius.vertical(top: Radius.circular(15)),
-                    child: Image.network(imgUrl,
-                        height: 200, width: double.infinity, fit: BoxFit.cover),
-                  ),
-                  Positioned(
-                    top: 10,
-                    right: 10,
-                    child: IconButton(
-                      icon: Icon(
-                          isFavorite ? Icons.favorite : Icons.favorite_border,
-                          color: isFavorite ? Colors.red : Colors.white,
-                          size: 28),
-                      onPressed: () => setState(
-                          () => hotels[index]["isFavorite"] = !isFavorite),
+        );
+      },
+      child: Container(
+        margin: const EdgeInsets.only(bottom: 20),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(15),
+          border: Border.all(color: Colors.grey[200]!),
+          boxShadow: [
+            BoxShadow(
+                color: Colors.black.withOpacity(0.05), blurRadius: 10)
+          ],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Stack(
+              children: [
+                ClipRRect(
+                  borderRadius: const BorderRadius.vertical(
+                      top: Radius.circular(15)),
+                  child: Image.network(
+                    imgUrl,
+                    height: 200,
+                    width: double.infinity,
+                    fit: BoxFit.cover,
+                    errorBuilder: (_, __, ___) => Container(
+                      height: 200,
+                      width: double.infinity,
+                      color: Color(0xFFE0F5F7),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(Icons.hotel, size: 48, color: _teal),
+                          SizedBox(height: 8),
+                          Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 16),
+                            child: Text(title,
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    color: _teal,
+                                    fontWeight: FontWeight.w500)),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
+                ),
+                Positioned(
+                  top: 10,
+                  right: 10,
+                  child: IconButton(
+                    icon: Icon(
+                        isFavorite
+                            ? Icons.favorite
+                            : Icons.favorite_border,
+                        color: isFavorite ? Colors.red : Colors.white,
+                        size: 28),
+                    onPressed: () {
+                      setState(() {
+                        if (allIndex != -1)
+                          allHotels[allIndex]["isFavorite"] = !isFavorite;
+                        hotel["isFavorite"] = !isFavorite;
+                      });
+                    },
+                  ),
+                ),
+              ],
+            ),
+            Padding(
+              padding: const EdgeInsets.all(12.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Expanded(
+                        child: Text(title,
+                            style: const TextStyle(
+                                fontSize: 17,
+                                fontWeight: FontWeight.bold)),
+                      ),
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 6, vertical: 2),
+                        decoration: BoxDecoration(
+                            color: Colors.cyan[50],
+                            borderRadius: BorderRadius.circular(5)),
+                        child: Row(
+                          children: [
+                            Text(rating,
+                                style: const TextStyle(
+                                    color: Colors.cyan,
+                                    fontWeight: FontWeight.bold)),
+                            const SizedBox(width: 4),
+                            const Icon(Icons.star,
+                                color: Colors.cyan, size: 14),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                  Text(subTitle,
+                      style: const TextStyle(
+                          color: Colors.black54, fontSize: 13)),
+                  const SizedBox(height: 12),
+                  Text("SAR $price",
+                      style: const TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.cyan)),
+                  const Text("Total price for 1 night (including taxes)",
+                      style:
+                          TextStyle(color: Colors.grey, fontSize: 11)),
                 ],
               ),
-              Padding(
-                padding: const EdgeInsets.all(12.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(title,
-                            style: const TextStyle(
-                                fontSize: 17, fontWeight: FontWeight.bold)),
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 6, vertical: 2),
-                          decoration: BoxDecoration(
-                              color: Colors.cyan[50],
-                              borderRadius: BorderRadius.circular(5)),
-                          child: Row(
-                            children: [
-                              Text(rating,
-                                  style: const TextStyle(
-                                      color: Colors.cyan,
-                                      fontWeight: FontWeight.bold)),
-                              const SizedBox(width: 4),
-                              const Icon(Icons.star,
-                                  color: Colors.cyan, size: 14),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                    Text(subTitle,
-                        style: const TextStyle(
-                            color: Colors.black54, fontSize: 13)),
-                    const SizedBox(height: 8),
-                    Text(reviews,
-                        style: const TextStyle(
-                            color: Colors.black87, fontSize: 12)),
-                    const SizedBox(height: 12),
-                    Text("SAR $price",
-                        style: const TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.cyan)),
-                    const Text("Total price for 1 night (including taxes)",
-                        style: TextStyle(color: Colors.grey, fontSize: 11)),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ));
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }
 

@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:mobile_app/screens/flights/review.dart';
+import '../../config.dart';
 
 class FlightResults extends StatefulWidget {
   final String fromCity;
@@ -40,7 +41,7 @@ class _FlightResultsState extends State<FlightResults> {
 
   Future<void> fetchFlights() async {
     try {
-      final uri = Uri.parse('http://localhost:5000/api/flights').replace(
+      final uri = Uri.parse('${Config.baseUrl}/api/flights').replace(
         queryParameters: {
           'from': widget.fromCity,
           'to': widget.toCity,
@@ -168,7 +169,7 @@ class _FlightResultsState extends State<FlightResults> {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => Review(flight: flight),
+            builder: (context) => Review(flight: flight, passengers: widget.passengers),
           ),
         );
       },

@@ -1,11 +1,14 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
+import 'package:mobile_app/screens/flights/flight_booking.dart';
+import '../../config.dart';
 
 class Review extends StatelessWidget {
   final Map<String, dynamic> flight;
+  final int passengers;
 
-  const Review({super.key, required this.flight});
+  const Review({super.key, required this.flight, required this.passengers});
 
   @override
   Widget build(BuildContext context) {
@@ -30,9 +33,23 @@ class Review extends StatelessWidget {
     if (departDateStr != null) {
       final date = DateTime.tryParse(departDateStr);
       if (date != null) {
-        List<String> months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+        List<String> months = [
+          'Jan',
+          'Feb',
+          'Mar',
+          'Apr',
+          'May',
+          'Jun',
+          'Jul',
+          'Aug',
+          'Sep',
+          'Oct',
+          'Nov',
+          'Dec'
+        ];
         List<String> days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
-        formattedDate = '${days[date.weekday - 1]}, ${date.day} ${months[date.month - 1]} ${date.year}';
+        formattedDate =
+            '${days[date.weekday - 1]}, ${date.day} ${months[date.month - 1]} ${date.year}';
       }
     }
 
@@ -47,7 +64,8 @@ class Review extends StatelessWidget {
         ),
         title: Text(
           'Review your trip',
-          style: TextStyle(fontSize: 17, fontWeight: FontWeight.w500, color: Colors.black87),
+          style: TextStyle(
+              fontSize: 17, fontWeight: FontWeight.w500, color: Colors.black87),
         ),
         centerTitle: true,
       ),
@@ -70,15 +88,20 @@ class Review extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(duration, style: TextStyle(fontSize: 13, color: Colors.black54)),
-                      Text(formattedDate, style: TextStyle(fontSize: 13, color: Colors.black54)),
+                      Text(duration,
+                          style:
+                              TextStyle(fontSize: 13, color: Colors.black54)),
+                      Text(formattedDate,
+                          style:
+                              TextStyle(fontSize: 13, color: Colors.black54)),
                     ],
                   ),
 
                   SizedBox(height: 24),
 
                   // Timeline
-                  _buildTimeline(fromCity, toCity, fromCode, toCode, departTime, arrivalTime, airline, stops),
+                  _buildTimeline(fromCity, toCity, fromCode, toCode, departTime,
+                      arrivalTime, airline, stops),
 
                   SizedBox(height: 24),
 
@@ -93,16 +116,23 @@ class Review extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text('Flight Details', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                        Text('Flight Details',
+                            style: TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.bold)),
                         SizedBox(height: 12),
-                        _infoRow(Icons.airline_seat_recline_normal, 'Class', flightClass),
+                        _infoRow(Icons.airline_seat_recline_normal, 'Class',
+                            flightClass),
                         SizedBox(height: 10),
-                        _infoRow(Icons.swap_calls, 'Trip Type', tripType == 'roundtrip' ? 'Round Trip' : 'One Way'),
+                        _infoRow(Icons.swap_calls, 'Trip Type',
+                            tripType == 'roundtrip' ? 'Round Trip' : 'One Way'),
                         SizedBox(height: 10),
-                        _infoRow(Icons.luggage, 'Checked Baggage', hasLuggage ? 'Included' : 'Not included'),
-                        if (tripType == 'roundtrip' && returnTime.isNotEmpty) ...[
+                        _infoRow(Icons.luggage, 'Checked Baggage',
+                            hasLuggage ? 'Included' : 'Not included'),
+                        if (tripType == 'roundtrip' &&
+                            returnTime.isNotEmpty) ...[
                           SizedBox(height: 10),
-                          _infoRow(Icons.flight_land, 'Return Flight', returnTime),
+                          _infoRow(
+                              Icons.flight_land, 'Return Flight', returnTime),
                         ],
                       ],
                     ),
@@ -120,29 +150,47 @@ class Review extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text('Price Summary', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Color(0xFF1565C0))),
+                        Text('Price Summary',
+                            style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: Color(0xFF1565C0))),
                         SizedBox(height: 12),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text('Base fare', style: TextStyle(color: Color(0xFF1565C0))),
-                            Text('$currency $price', style: TextStyle(color: Color(0xFF1565C0), fontWeight: FontWeight.w600)),
+                            Text('Base fare',
+                                style: TextStyle(color: Color(0xFF1565C0))),
+                            Text('$currency $price',
+                                style: TextStyle(
+                                    color: Color(0xFF1565C0),
+                                    fontWeight: FontWeight.w600)),
                           ],
                         ),
                         SizedBox(height: 8),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text('Taxes & fees', style: TextStyle(color: Color(0xFF1565C0))),
-                            Text('Included', style: TextStyle(color: Color(0xFF1565C0))),
+                            Text('Taxes & fees',
+                                style: TextStyle(color: Color(0xFF1565C0))),
+                            Text('Included',
+                                style: TextStyle(color: Color(0xFF1565C0))),
                           ],
                         ),
                         Divider(color: Color(0xFF1565C0).withOpacity(0.3)),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text('Total', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color: Color(0xFF1565C0))),
-                            Text('$currency $price', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color: Color(0xFF1565C0))),
+                            Text('Total',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 15,
+                                    color: Color(0xFF1565C0))),
+                            Text('$currency $price',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 15,
+                                    color: Color(0xFF1565C0))),
                           ],
                         ),
                       ],
@@ -171,7 +219,9 @@ class Review extends StatelessWidget {
                                 ? 'This flight includes checked baggage at no extra cost.'
                                 : 'This flight does not include checked baggage. Additional fees may apply.',
                             style: TextStyle(
-                              color: hasLuggage ? Colors.green[800] : Colors.orange[800],
+                              color: hasLuggage
+                                  ? Colors.green[800]
+                                  : Colors.orange[800],
                               fontSize: 13,
                             ),
                           ),
@@ -191,7 +241,10 @@ class Review extends StatelessWidget {
             padding: EdgeInsets.symmetric(horizontal: 20, vertical: 14),
             decoration: BoxDecoration(
               color: Colors.white,
-              boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 8, offset: Offset(0, -2))],
+              boxShadow: [
+                BoxShadow(
+                    color: Colors.black12, blurRadius: 8, offset: Offset(0, -2))
+              ],
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -200,23 +253,56 @@ class Review extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('Total price', style: TextStyle(fontSize: 12, color: Colors.grey)),
+                    Text('Total price',
+                        style: TextStyle(fontSize: 12, color: Colors.grey)),
                     Text(
                       '$currency $price',
-                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black),
+                      style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black),
                     ),
                   ],
                 ),
                 ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => FlightBooking(
+                          fromCity: fromCity,
+                          toCity: toCity,
+                          departureDate:
+                              DateTime.tryParse(flight['departDate'] ?? '') ??
+                                  DateTime.now(),
+                          returnDate: flight['returnDate'] != null
+                              ? DateTime.tryParse(flight['returnDate'])
+                              : null,
+                          tripType: flight['tripType'] == 'oneway'
+                              ? 'One-way'
+                              : 'Round trip',
+                          passengers: passengers,
+                          price: flight['price'] ?? 0,
+                          currency: flight['currency'] ?? '',
+                          airline: flight['airline'] ?? '',
+                          duration: flight['duration'] ?? '',
+                          stops: flight['stops'] ?? '',
+                          flightClass: flight['flightClass'] ?? '',
+                        ),
+                      ),
+                    );
+                  },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Color(0xFFE84560),
                     foregroundColor: Colors.white,
                     padding: EdgeInsets.symmetric(horizontal: 36, vertical: 14),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30)),
                     elevation: 0,
                   ),
-                  child: Text('Continue', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+                  child: Text('Continue',
+                      style:
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
                 ),
               ],
             ),
@@ -226,8 +312,15 @@ class Review extends StatelessWidget {
     );
   }
 
-  Widget _buildTimeline(String fromCity, String toCity, String fromCode, String toCode,
-      String departTime, String arrivalTime, String airline, String stops) {
+  Widget _buildTimeline(
+      String fromCity,
+      String toCity,
+      String fromCode,
+      String toCode,
+      String departTime,
+      String arrivalTime,
+      String airline,
+      String stops) {
     return IntrinsicHeight(
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -269,8 +362,11 @@ class Review extends StatelessWidget {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(fromCity, style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600)),
-                    Text(fromCode, style: TextStyle(fontSize: 12, color: Colors.black54)),
+                    Text(fromCity,
+                        style: TextStyle(
+                            fontSize: 13, fontWeight: FontWeight.w600)),
+                    Text(fromCode,
+                        style: TextStyle(fontSize: 12, color: Colors.black54)),
                   ],
                 ),
 
@@ -282,15 +378,22 @@ class Review extends StatelessWidget {
                     Container(
                       width: 36,
                       height: 36,
-                      decoration: BoxDecoration(color: Color(0xFF1B2A4A), borderRadius: BorderRadius.circular(6)),
-                      child: Icon(Icons.flight_takeoff, color: Colors.white, size: 20),
+                      decoration: BoxDecoration(
+                          color: Color(0xFF1B2A4A),
+                          borderRadius: BorderRadius.circular(6)),
+                      child: Icon(Icons.flight_takeoff,
+                          color: Colors.white, size: 20),
                     ),
                     SizedBox(width: 10),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(airline, style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600)),
-                        Text(stops, style: TextStyle(fontSize: 12, color: Colors.black54)),
+                        Text(airline,
+                            style: TextStyle(
+                                fontSize: 13, fontWeight: FontWeight.w600)),
+                        Text(stops,
+                            style:
+                                TextStyle(fontSize: 12, color: Colors.black54)),
                       ],
                     ),
                   ],
@@ -302,8 +405,11 @@ class Review extends StatelessWidget {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(toCity, style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600)),
-                    Text(toCode, style: TextStyle(fontSize: 12, color: Colors.black54)),
+                    Text(toCity,
+                        style: TextStyle(
+                            fontSize: 13, fontWeight: FontWeight.w600)),
+                    Text(toCode,
+                        style: TextStyle(fontSize: 12, color: Colors.black54)),
                   ],
                 ),
               ],
@@ -315,14 +421,17 @@ class Review extends StatelessWidget {
   }
 
   Widget _timeLabel(String time) {
-    return Text(time, style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: Colors.black87));
+    return Text(time,
+        style: TextStyle(
+            fontSize: 13, fontWeight: FontWeight.w600, color: Colors.black87));
   }
 
   Widget _dot() {
     return Container(
       width: 10,
       height: 10,
-      decoration: BoxDecoration(color: Color(0xFF2979FF), shape: BoxShape.circle),
+      decoration:
+          BoxDecoration(color: Color(0xFF2979FF), shape: BoxShape.circle),
     );
   }
 
@@ -335,8 +444,10 @@ class Review extends StatelessWidget {
       children: [
         Icon(icon, size: 18, color: Colors.grey[600]),
         SizedBox(width: 10),
-        Text('$label: ', style: TextStyle(color: Colors.grey[600], fontSize: 13)),
-        Text(value, style: TextStyle(fontWeight: FontWeight.w600, fontSize: 13)),
+        Text('$label: ',
+            style: TextStyle(color: Colors.grey[600], fontSize: 13)),
+        Text(value,
+            style: TextStyle(fontWeight: FontWeight.w600, fontSize: 13)),
       ],
     );
   }

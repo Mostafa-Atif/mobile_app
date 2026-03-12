@@ -1,12 +1,10 @@
-
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables/
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'dart:convert';
 import 'package:mobile_app/screens/hotels/hotel_results.dart';
 import 'guests_picker.dart';
-import '../flights/flightsearch.dart';
 
 class HotelSearch extends StatefulWidget {
   @override
@@ -15,14 +13,14 @@ class HotelSearch extends StatefulWidget {
 
 class _HotelSearchState extends State<HotelSearch> {
   String selectedDestination = '';
-  DateTime checkInDate = DateTime(2026, 2, 8);
-  DateTime checkOutDate = DateTime(2026, 2, 9);
+  String searchType = 'country';
+  DateTime checkInDate = DateTime.now();
+  DateTime checkOutDate = DateTime.now().add(Duration(days: 1));
+  Map<String, List<String>> countryCityMap = {};
 
   List<RoomData> roomsList = [
     RoomData(adults: 2, children: 0),
   ];
-
-  List<String> destinations = [];
 
   @override
   void initState() {
@@ -34,38 +32,59 @@ class _HotelSearchState extends State<HotelSearch> {
     final String jsonString = await rootBundle.loadString('assets/hotels.json');
     final List<dynamic> jsonData = json.decode(jsonString);
 
+    Map<String, List<String>> map = {};
+    for (var hotel in jsonData) {
+      final country = hotel["country"]["en"].toString();
+      final city = hotel["city"]["en"].toString();
+      if (!map.containsKey(country)) map[country] = [];
+      if (!map[country]!.contains(city)) map[country]!.add(city);
+    }
+
     setState(() {
-      destinations = jsonData
-          .map((hotel) => hotel["city"]["en"].toString())
-          .toSet()
-          .toList()
-        ..sort();
-      selectedDestination = destinations.first;
+      countryCityMap = map;
+      selectedDestination = map.keys.first;
+      searchType = 'country';
     });
   }
 
   void showDestinationPicker() {
     showDialog(
       context: context,
-      builder: (BuildContext context) {
+      builder: (context) {
         return AlertDialog(
           title: Text('Select Destination'),
           content: Container(
             width: double.maxFinite,
-            child: ListView.builder(
+            child: ListView(
               shrinkWrap: true,
-              itemCount: destinations.length,
-              itemBuilder: (context, index) {
-                return ListTile(
-                  title: Text(destinations[index]),
-                  onTap: () {
-                    setState(() {
-                      selectedDestination = destinations[index];
-                    });
-                    Navigator.pop(context);
-                  },
-                );
-              },
+              children: countryCityMap.entries.expand((entry) {
+                return [
+                  ListTile(
+                    title: Text(entry.key,
+                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+                    leading: Icon(Icons.public, color: Color(0xFF1f93a0)),
+                    onTap: () {
+                      setState(() {
+                        selectedDestination = entry.key;
+                        searchType = 'country';
+                      });
+                      Navigator.pop(context);
+                    },
+                  ),
+                  ...entry.value.map((city) => ListTile(
+                    contentPadding: EdgeInsets.only(left: 32),
+                    title: Text(city, style: TextStyle(fontSize: 15)),
+                    leading: Icon(Icons.location_city, color: Colors.grey, size: 20),
+                    onTap: () {
+                      setState(() {
+                        selectedDestination = city;
+                        searchType = 'city';
+                      });
+                      Navigator.pop(context);
+                    },
+                  )),
+                ];
+              }).toList(),
             ),
           ),
         );
@@ -77,7 +96,7 @@ class _HotelSearchState extends State<HotelSearch> {
     final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: isCheckIn ? checkInDate : checkOutDate,
-      firstDate: DateTime(2020),
+      firstDate: DateTime.now(),
       lastDate: DateTime(2030),
     );
 
@@ -85,7 +104,6 @@ class _HotelSearchState extends State<HotelSearch> {
       setState(() {
         if (isCheckIn) {
           checkInDate = picked;
-          // Make sure check-out is after check-in
           if (checkOutDate.isBefore(checkInDate) ||
               checkOutDate.isAtSameMomentAs(checkInDate)) {
             checkOutDate = checkInDate.add(Duration(days: 1));
@@ -98,32 +116,13 @@ class _HotelSearchState extends State<HotelSearch> {
   }
 
   String formatDate(DateTime date) {
-    List<String> months = [
-      'Jan',
-      'Feb',
-      'Mar',
-      'Apr',
-      'May',
-      'Jun',
-      'Jul',
-      'Aug',
-      'Sep',
-      'Oct',
-      'Nov',
-      'Dec'
-    ];
+    List<String> months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
     return '${date.day} ${months[date.month - 1]}, ${date.year}';
   }
 
   String formatGuests() {
-    int totalAdults = 0;
-    int totalChildren = 0;
-
-    for (var room in roomsList) {
-      totalAdults += room.adults;
-      totalChildren += room.children;
-    }
-
+    int totalAdults = roomsList.fold(0, (sum, r) => sum + r.adults);
+    int totalChildren = roomsList.fold(0, (sum, r) => sum + r.children);
     return '${roomsList.length} Room${roomsList.length > 1 ? 's' : ''}, $totalAdults Adult${totalAdults > 1 ? 's' : ''}, $totalChildren Children';
   }
 
@@ -152,7 +151,6 @@ class _HotelSearchState extends State<HotelSearch> {
       body: SafeArea(
         child: Column(
           children: [
-            // Header
             Padding(
               padding: EdgeInsets.all(16),
               child: Stack(
@@ -161,29 +159,16 @@ class _HotelSearchState extends State<HotelSearch> {
                     alignment: Alignment.centerLeft,
                     child: IconButton(
                       icon: Icon(Icons.arrow_back),
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
+                      onPressed: () => Navigator.pop(context),
                     ),
                   ),
                   Center(
                     child: Column(
                       children: [
-                        Text(
-                          'Search stays',
-                          style: TextStyle(
-                            fontSize: 25,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black,
-                          ),
-                        ),
-                        Text(
-                          'Over 1M properties at your fingertips',
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: Colors.grey,
-                          ),
-                        ),
+                        Text('Search stays',
+                            style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold)),
+                        Text('Over 1M properties at your fingertips',
+                            style: TextStyle(fontSize: 14, color: Colors.grey)),
                       ],
                     ),
                   ),
@@ -191,7 +176,6 @@ class _HotelSearchState extends State<HotelSearch> {
               ),
             ),
 
-            // Search Card
             Padding(
               padding: EdgeInsets.all(16),
               child: Container(
@@ -210,115 +194,69 @@ class _HotelSearchState extends State<HotelSearch> {
                 padding: EdgeInsets.all(20),
                 child: Column(
                   children: [
-                    // Destination field - CLICKABLE
                     GestureDetector(
                       onTap: showDestinationPicker,
                       child: Row(
                         children: [
-                          Icon(
-                            Icons.location_on_outlined,
-                            color: Colors.grey,
-                            size: 28,
-                          ),
+                          Icon(Icons.location_on_outlined, color: Colors.grey, size: 28),
                           SizedBox(width: 16),
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(
-                                'Destination',
-                                style: TextStyle(
-                                  color: Colors.grey,
-                                  fontSize: 14,
-                                ),
-                              ),
+                              Text('Destination',
+                                  style: TextStyle(color: Colors.grey, fontSize: 14)),
                               SizedBox(height: 4),
                               Text(
-                                selectedDestination,
-                                style: TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.black,
-                                ),
+                                selectedDestination.isEmpty ? 'Loading...' : selectedDestination,
+                                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                               ),
+                              if (selectedDestination.isNotEmpty)
+                                Text(
+                                  searchType == 'country' ? 'Entire country' : 'City only',
+                                  style: TextStyle(fontSize: 12, color: Color(0xFF1f93a0)),
+                                ),
                             ],
                           ),
                         ],
                       ),
                     ),
 
-                    // Divider
                     SizedBox(height: 16),
                     Divider(color: Colors.grey[300], thickness: 1),
                     SizedBox(height: 16),
 
-                    // Check-in and Check-out
                     Row(
                       children: [
-                        Icon(
-                          Icons.calendar_today_outlined,
-                          color: Colors.grey,
-                          size: 28,
-                        ),
+                        Icon(Icons.calendar_today_outlined, color: Colors.grey, size: 28),
                         SizedBox(width: 16),
-
-                        // Check-in
                         Expanded(
                           child: GestureDetector(
                             onTap: () => selectDate(context, true),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(
-                                  'Check in',
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                    color: Colors.grey,
-                                  ),
-                                ),
+                                Text('Check in',
+                                    style: TextStyle(fontSize: 14, color: Colors.grey)),
                                 SizedBox(height: 4),
-                                Text(
-                                  formatDate(checkInDate),
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black,
-                                  ),
-                                ),
+                                Text(formatDate(checkInDate),
+                                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
                               ],
                             ),
                           ),
                         ),
-
-                        Icon(
-                          Icons.arrow_forward,
-                          color: Colors.grey,
-                          size: 20,
-                        ),
+                        Icon(Icons.arrow_forward, color: Colors.grey, size: 20),
                         SizedBox(width: 16),
-
-                        // Check-out
                         Expanded(
                           child: GestureDetector(
                             onTap: () => selectDate(context, false),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(
-                                  'Check out',
-                                  style: TextStyle(
-                                    color: Colors.grey,
-                                    fontSize: 14,
-                                  ),
-                                ),
+                                Text('Check out',
+                                    style: TextStyle(color: Colors.grey, fontSize: 14)),
                                 SizedBox(height: 4),
-                                Text(
-                                  formatDate(checkOutDate),
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black,
-                                  ),
-                                ),
+                                Text(formatDate(checkOutDate),
+                                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
                               ],
                             ),
                           ),
@@ -326,41 +264,24 @@ class _HotelSearchState extends State<HotelSearch> {
                       ],
                     ),
 
-                    // Divider
                     SizedBox(height: 16),
                     Divider(color: Colors.grey[300], thickness: 1),
                     SizedBox(height: 16),
 
-                    // Guests
                     GestureDetector(
                       onTap: showGuestsPicker,
                       child: Row(
                         children: [
-                          Icon(
-                            Icons.people_outline,
-                            color: Colors.grey,
-                            size: 28,
-                          ),
+                          Icon(Icons.people_outline, color: Colors.grey, size: 28),
                           SizedBox(width: 16),
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(
-                                'Guests',
-                                style: TextStyle(
-                                  color: Colors.grey,
-                                  fontSize: 14,
-                                ),
-                              ),
+                              Text('Guests',
+                                  style: TextStyle(color: Colors.grey, fontSize: 14)),
                               SizedBox(height: 4),
-                              Text(
-                                formatGuests(),
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.black,
-                                ),
-                              ),
+                              Text(formatGuests(),
+                                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
                             ],
                           ),
                         ],
@@ -370,7 +291,7 @@ class _HotelSearchState extends State<HotelSearch> {
                 ),
               ),
             ),
-            // Search button
+
             Padding(
               padding: const EdgeInsets.all(16),
               child: ElevatedButton(
@@ -380,9 +301,12 @@ class _HotelSearchState extends State<HotelSearch> {
                     MaterialPageRoute(
                       builder: (context) => HotelResults(
                         destination: selectedDestination,
+                        searchType: searchType,
                         checkIn: checkInDate,
                         checkOut: checkOutDate,
-                        guests: formatGuests(),
+                        numRooms: roomsList.length,
+                        numAdults: roomsList.fold(0, (sum, r) => sum + r.adults),
+                        numChildren: roomsList.fold(0, (sum, r) => sum + r.children),
                       ),
                     ),
                   );
@@ -391,9 +315,7 @@ class _HotelSearchState extends State<HotelSearch> {
                   backgroundColor: Colors.red,
                   foregroundColor: Colors.white,
                   minimumSize: Size(double.infinity, 56),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                   elevation: 0,
                 ),
                 child: Row(
@@ -402,13 +324,8 @@ class _HotelSearchState extends State<HotelSearch> {
                   children: [
                     Icon(Icons.search, size: 24),
                     SizedBox(width: 8),
-                    Text(
-                      'Search properties',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
+                    Text('Search properties',
+                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
                   ],
                 ),
               ),

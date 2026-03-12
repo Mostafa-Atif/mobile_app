@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+import '../../config.dart';
 
 class CarsSearch extends StatefulWidget {
   @override
@@ -16,23 +17,21 @@ class _CarsSearchState extends State<CarsSearch> {
   bool isSubmitting = false;
   int visibleCount = 3;
 
-  // Selected car
   Map<String, dynamic>? selectedCar;
 
-  // Form fields
   String? pickupLocation;
   String? dropoffLocation;
   DateTime? pickupDateTime;
   DateTime? dropoffDateTime;
   bool privateDriver = false;
 
-  // User info from shared prefs
-  String firstName = '';
-  String lastName = '';
-  String email = '';
-  String phone = '';
   String userId = '';
   String token = '';
+
+  final TextEditingController firstNameCtrl = TextEditingController();
+  final TextEditingController lastNameCtrl = TextEditingController();
+  final TextEditingController emailCtrl = TextEditingController();
+  final TextEditingController phoneCtrl = TextEditingController();
 
   final List<String> locations = [
     'Dubai',
@@ -52,19 +51,28 @@ class _CarsSearchState extends State<CarsSearch> {
   Future<void> loadUserInfo() async {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
-      firstName = prefs.getString('firstName') ?? '';
-      lastName = prefs.getString('lastName') ?? '';
-      email = prefs.getString('email') ?? '';
-      phone = prefs.getString('phone') ?? '';
       userId = prefs.getString('userId') ?? '';
       token = prefs.getString('token') ?? '';
     });
+    firstNameCtrl.text = prefs.getString('firstName') ?? '';
+    lastNameCtrl.text = prefs.getString('lastName') ?? '';
+    emailCtrl.text = prefs.getString('email') ?? '';
+    phoneCtrl.text = prefs.getString('phone') ?? '';
+  }
+
+  @override
+  void dispose() {
+    firstNameCtrl.dispose();
+    lastNameCtrl.dispose();
+    emailCtrl.dispose();
+    phoneCtrl.dispose();
+    super.dispose();
   }
 
   Future<void> fetchCars() async {
     try {
       final response =
-          await http.get(Uri.parse('http://localhost:5000/api/cars'));
+          await http.get(Uri.parse('${Config.baseUrl}/api/cars'));
       if (response.statusCode == 200) {
         setState(() {
           cars = json.decode(response.body);
@@ -114,8 +122,14 @@ class _CarsSearchState extends State<CarsSearch> {
 
   Future<void> _submitBooking() async {
     if (selectedCar == null) {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text('Please select a car first')));
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Please select a car first')));
+      return;
+    }
+    if (firstNameCtrl.text.isEmpty || lastNameCtrl.text.isEmpty ||
+        emailCtrl.text.isEmpty || phoneCtrl.text.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Please fill in your personal details')));
       return;
     }
     if (pickupLocation == null || dropoffLocation == null) {
@@ -134,20 +148,16 @@ class _CarsSearchState extends State<CarsSearch> {
       return;
     }
     if (token.isEmpty) {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text('Please sign in first')));
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Please sign in first')));
       return;
     }
 
     setState(() => isSubmitting = true);
 
     try {
-      final pricePerDay = (selectedCar!['pricePerDay'] ?? 0).toDouble();
-      final driverCost = privateDriver ? totalDays * 100.0 : 0.0;
-      final totalPrice = (pricePerDay * totalDays) + driverCost;
-
       final response = await http.post(
-        Uri.parse('http://localhost:5000/api/car-bookings'),
+        Uri.parse('${Config.baseUrl}/api/car-bookings'),
         headers: {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer $token',
@@ -171,7 +181,6 @@ class _CarsSearchState extends State<CarsSearch> {
               content: Text('Booking confirmed! 🎉'),
               backgroundColor: Colors.green),
         );
-        // Reset form
         setState(() {
           selectedCar = null;
           pickupLocation = null;
@@ -186,12 +195,34 @@ class _CarsSearchState extends State<CarsSearch> {
         );
       }
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error: $e')),
-      );
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text('Error: $e')));
     }
 
     setState(() => isSubmitting = false);
+  }
+
+  Widget _formField(TextEditingController ctrl, String label,
+      {TextInputType keyboardType = TextInputType.text}) {
+    return TextField(
+      controller: ctrl,
+      keyboardType: keyboardType,
+      decoration: InputDecoration(
+        labelText: label,
+        labelStyle: TextStyle(color: Colors.grey.shade600, fontSize: 14),
+        border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(8),
+            borderSide: BorderSide(color: Colors.grey.shade400)),
+        enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(8),
+            borderSide: BorderSide(color: Colors.grey.shade400)),
+        focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(8),
+            borderSide: BorderSide(color: Colors.red, width: 1.5)),
+        contentPadding:
+            EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+      ),
+    );
   }
 
   @override
@@ -220,19 +251,19 @@ class _CarsSearchState extends State<CarsSearch> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            // Header
             Padding(
               padding: EdgeInsets.all(20),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text('Rent a car at the best rates',
-                      style:
-                          TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+                      style: TextStyle(
+                          fontSize: 24, fontWeight: FontWeight.bold)),
                   SizedBox(height: 8),
                   Text(
                       'Tap a car to select it, then fill in the booking details below',
-                      style: TextStyle(fontSize: 14, color: Colors.grey[600])),
+                      style:
+                          TextStyle(fontSize: 14, color: Colors.grey[600])),
                 ],
               ),
             ),
@@ -257,7 +288,8 @@ class _CarsSearchState extends State<CarsSearch> {
                           final isSelected = selectedCar != null &&
                               selectedCar!['_id'] == car['_id'];
                           return GestureDetector(
-                            onTap: () => setState(() => selectedCar = car),
+                            onTap: () =>
+                                setState(() => selectedCar = car),
                             child: Padding(
                               padding: EdgeInsets.symmetric(
                                   horizontal: 16, vertical: 8),
@@ -276,7 +308,8 @@ class _CarsSearchState extends State<CarsSearch> {
                                 ),
                                 padding: EdgeInsets.all(20),
                                 child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.start,
                                   children: [
                                     Row(
                                       children: [
@@ -284,16 +317,19 @@ class _CarsSearchState extends State<CarsSearch> {
                                           child: Text(car['name'] ?? '',
                                               style: TextStyle(
                                                   fontSize: 18,
-                                                  fontWeight: FontWeight.bold)),
+                                                  fontWeight:
+                                                      FontWeight.bold)),
                                         ),
                                         if (isSelected)
                                           Container(
                                             padding: EdgeInsets.symmetric(
-                                                horizontal: 10, vertical: 4),
+                                                horizontal: 10,
+                                                vertical: 4),
                                             decoration: BoxDecoration(
                                                 color: Colors.green,
                                                 borderRadius:
-                                                    BorderRadius.circular(20)),
+                                                    BorderRadius.circular(
+                                                        20)),
                                             child: Text('Selected',
                                                 style: TextStyle(
                                                     color: Colors.white,
@@ -307,63 +343,73 @@ class _CarsSearchState extends State<CarsSearch> {
                                     Row(
                                       children: [
                                         Icon(Icons.person_outline,
-                                            size: 24, color: Colors.grey[700]),
+                                            size: 24,
+                                            color: Colors.grey[700]),
                                         SizedBox(width: 8),
                                         Text('${car['seats'] ?? '-'}',
-                                            style: TextStyle(fontSize: 16)),
+                                            style:
+                                                TextStyle(fontSize: 16)),
                                         SizedBox(width: 24),
                                         Icon(Icons.work_outline,
-                                            size: 24, color: Colors.grey[700]),
+                                            size: 24,
+                                            color: Colors.grey[700]),
                                         SizedBox(width: 8),
                                         Text('${car['bags'] ?? '-'}',
-                                            style: TextStyle(fontSize: 16)),
+                                            style:
+                                                TextStyle(fontSize: 16)),
                                         SizedBox(width: 24),
                                         Icon(Icons.settings,
-                                            size: 24, color: Colors.grey[700]),
+                                            size: 24,
+                                            color: Colors.grey[700]),
                                         SizedBox(width: 8),
-                                        Text(car['transmission'] ?? '-',
-                                            style: TextStyle(fontSize: 16)),
+                                        Text(
+                                            car['transmission'] ?? '-',
+                                            style:
+                                                TextStyle(fontSize: 16)),
                                         Spacer(),
                                         car['image'] != null
                                             ? ClipRRect(
                                                 borderRadius:
-                                                    BorderRadius.circular(8),
+                                                    BorderRadius.circular(
+                                                        8),
                                                 child: Image.network(
-                                                    car['image'],
+                                                  car['image'],
+                                                  width: 100,
+                                                  height: 60,
+                                                  fit: BoxFit.cover,
+                                                  errorBuilder: (_,
+                                                          __, ___) =>
+                                                      Container(
                                                     width: 100,
                                                     height: 60,
-                                                    fit: BoxFit.cover,
-                                                    errorBuilder: (_, __,
-                                                            ___) =>
-                                                        Container(
-                                                          width: 100,
-                                                          height: 60,
-                                                          decoration: BoxDecoration(
-                                                              color: Colors
-                                                                  .blue[50],
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          8)),
-                                                          child: Icon(
-                                                              Icons
-                                                                  .directions_car,
-                                                              size: 45,
-                                                              color: Colors
-                                                                  .blue[400]),
-                                                        )))
+                                                    decoration: BoxDecoration(
+                                                        color: Colors
+                                                            .blue[50],
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(
+                                                                    8)),
+                                                    child: Icon(
+                                                        Icons
+                                                            .directions_car,
+                                                        size: 45,
+                                                        color: Colors
+                                                            .blue[400]),
+                                                  ),
+                                                ))
                                             : Container(
                                                 width: 100,
                                                 height: 60,
                                                 decoration: BoxDecoration(
                                                     color: Colors.blue[50],
                                                     borderRadius:
-                                                        BorderRadius.circular(
-                                                            8)),
+                                                        BorderRadius
+                                                            .circular(8)),
                                                 child: Icon(
                                                     Icons.directions_car,
                                                     size: 45,
-                                                    color: Colors.blue[400]),
+                                                    color:
+                                                        Colors.blue[400]),
                                               ),
                                       ],
                                     ),
@@ -380,10 +426,12 @@ class _CarsSearchState extends State<CarsSearch> {
                                               style: TextStyle(
                                                   fontSize: 12,
                                                   color: Colors.grey)),
-                                          Text('﷼ ${car['pricePerDay']}',
+                                          Text(
+                                              '﷼ ${car['pricePerDay']}',
                                               style: TextStyle(
                                                   fontSize: 18,
-                                                  fontWeight: FontWeight.bold)),
+                                                  fontWeight:
+                                                      FontWeight.bold)),
                                         ]),
                                         SizedBox(width: 32),
                                         Column(children: [
@@ -395,16 +443,17 @@ class _CarsSearchState extends State<CarsSearch> {
                                               '﷼ ${(car['pricePerDay'] * 7).toStringAsFixed(0)}',
                                               style: TextStyle(
                                                   fontSize: 18,
-                                                  fontWeight: FontWeight.bold)),
+                                                  fontWeight:
+                                                      FontWeight.bold)),
                                         ]),
                                       ],
                                     ),
                                     SizedBox(height: 8),
-                                    Text('*The prices are inclusive of VAT',
+                                    Text(
+                                        '*The prices are inclusive of VAT',
                                         style: TextStyle(
-                                            fontSize: 11, color: Colors.grey)),
-                                    // SizedBox(height: 16),
-                                    // Divider(color: Colors.grey[300]),
+                                            fontSize: 11,
+                                            color: Colors.grey)),
                                   ],
                                 ),
                               ),
@@ -418,7 +467,8 @@ class _CarsSearchState extends State<CarsSearch> {
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                 child: OutlinedButton(
-                  onPressed: () => setState(() => visibleCount += 7),
+                  onPressed: () =>
+                      setState(() => visibleCount += 7),
                   style: OutlinedButton.styleFrom(
                     minimumSize: Size(double.infinity, 50),
                     shape: RoundedRectangleBorder(
@@ -427,28 +477,40 @@ class _CarsSearchState extends State<CarsSearch> {
                     foregroundColor: Colors.red,
                   ),
                   child: Text('Show more',
-                      style:
-                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                      style: TextStyle(
+                          fontSize: 16, fontWeight: FontWeight.bold)),
                 ),
               ),
 
             SizedBox(height: 24),
 
-            // ── Booking Form ──
+            // Booking Form
             Padding(
               padding: EdgeInsets.all(16),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text('Booking Details',
-                      style:
-                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-                  SizedBox(height: 4),
+                      style: TextStyle(
+                          fontSize: 20, fontWeight: FontWeight.bold)),
+                  SizedBox(height: 16),
+
+                  // Personal details
+                  _formField(firstNameCtrl, 'First name'),
+                  SizedBox(height: 12),
+                  _formField(lastNameCtrl, 'Last name'),
+                  SizedBox(height: 12),
+                  _formField(emailCtrl, 'Email',
+                      keyboardType: TextInputType.emailAddress),
+                  SizedBox(height: 12),
+                  _formField(phoneCtrl, 'Phone',
+                      keyboardType: TextInputType.phone),
+                  SizedBox(height: 20),
 
                   // Selected car indicator
                   if (selectedCar != null)
                     Container(
-                      margin: EdgeInsets.only(top: 8, bottom: 16),
+                      margin: EdgeInsets.only(bottom: 16),
                       padding: EdgeInsets.all(12),
                       decoration: BoxDecoration(
                         color: Color(0xFFE8F5E9),
@@ -466,7 +528,8 @@ class _CarsSearchState extends State<CarsSearch> {
                                   color: Colors.green[800])),
                           Spacer(),
                           GestureDetector(
-                            onTap: () => setState(() => selectedCar = null),
+                            onTap: () =>
+                                setState(() => selectedCar = null),
                             child: Icon(Icons.close,
                                 color: Colors.green, size: 18),
                           ),
@@ -474,16 +537,18 @@ class _CarsSearchState extends State<CarsSearch> {
                       ),
                     )
                   else
-                    Padding(
-                      padding: EdgeInsets.only(top: 8, bottom: 16),
-                      child: Text('↑ Select a car from the list above',
-                          style: TextStyle(color: Colors.grey, fontSize: 13)),
-                    ),
+                    // Padding(
+                    //   padding: EdgeInsets.only(bottom: 16),
+                    //   child: Text(
+                    //       '↑ Select a car from the list above',
+                    //       style: TextStyle(
+                    //           color: Colors.grey, fontSize: 13)),
+                    // ),
 
                   // Pickup location
                   Text('Pickup location',
-                      style:
-                          TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+                      style: TextStyle(
+                          fontSize: 16, fontWeight: FontWeight.w600)),
                   SizedBox(height: 8),
                   Container(
                     decoration: BoxDecoration(
@@ -497,10 +562,11 @@ class _CarsSearchState extends State<CarsSearch> {
                               horizontal: 16, vertical: 12)),
                       hint: Text('Select location'),
                       items: locations
-                          .map(
-                              (l) => DropdownMenuItem(value: l, child: Text(l)))
+                          .map((l) =>
+                              DropdownMenuItem(value: l, child: Text(l)))
                           .toList(),
-                      onChanged: (val) => setState(() => pickupLocation = val),
+                      onChanged: (val) =>
+                          setState(() => pickupLocation = val),
                     ),
                   ),
 
@@ -508,8 +574,8 @@ class _CarsSearchState extends State<CarsSearch> {
 
                   // Dropoff location
                   Text('Dropoff location',
-                      style:
-                          TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+                      style: TextStyle(
+                          fontSize: 16, fontWeight: FontWeight.w600)),
                   SizedBox(height: 8),
                   Container(
                     decoration: BoxDecoration(
@@ -523,10 +589,11 @@ class _CarsSearchState extends State<CarsSearch> {
                               horizontal: 16, vertical: 12)),
                       hint: Text('Select location'),
                       items: locations
-                          .map(
-                              (l) => DropdownMenuItem(value: l, child: Text(l)))
+                          .map((l) =>
+                              DropdownMenuItem(value: l, child: Text(l)))
                           .toList(),
-                      onChanged: (val) => setState(() => dropoffLocation = val),
+                      onChanged: (val) =>
+                          setState(() => dropoffLocation = val),
                     ),
                   ),
 
@@ -534,8 +601,8 @@ class _CarsSearchState extends State<CarsSearch> {
 
                   // Pickup date & time
                   Text('Pickup date & time',
-                      style:
-                          TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+                      style: TextStyle(
+                          fontSize: 16, fontWeight: FontWeight.w600)),
                   SizedBox(height: 8),
                   OutlinedButton(
                     onPressed: () => _pickDateTime(true),
@@ -544,8 +611,9 @@ class _CarsSearchState extends State<CarsSearch> {
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(8)),
                       side: BorderSide(color: Colors.grey[300]!),
-                      foregroundColor:
-                          pickupDateTime != null ? Colors.black : Colors.grey,
+                      foregroundColor: pickupDateTime != null
+                          ? Colors.black
+                          : Colors.grey,
                     ),
                     child: Align(
                       alignment: Alignment.centerLeft,
@@ -557,8 +625,8 @@ class _CarsSearchState extends State<CarsSearch> {
 
                   // Dropoff date & time
                   Text('Dropoff date & time',
-                      style:
-                          TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+                      style: TextStyle(
+                          fontSize: 16, fontWeight: FontWeight.w600)),
                   SizedBox(height: 8),
                   OutlinedButton(
                     onPressed: () => _pickDateTime(false),
@@ -567,8 +635,9 @@ class _CarsSearchState extends State<CarsSearch> {
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(8)),
                       side: BorderSide(color: Colors.grey[300]!),
-                      foregroundColor:
-                          dropoffDateTime != null ? Colors.black : Colors.grey,
+                      foregroundColor: dropoffDateTime != null
+                          ? Colors.black
+                          : Colors.grey,
                     ),
                     child: Align(
                       alignment: Alignment.centerLeft,
@@ -578,11 +647,11 @@ class _CarsSearchState extends State<CarsSearch> {
 
                   SizedBox(height: 20),
 
-                  // Total days
                   if (totalDays > 0)
-                    Text('Total: $totalDays day${totalDays != 1 ? 's' : ''}',
-                        style:
-                            TextStyle(color: Colors.grey[600], fontSize: 13)),
+                    Text(
+                        'Total: $totalDays day${totalDays != 1 ? 's' : ''}',
+                        style: TextStyle(
+                            color: Colors.grey[600], fontSize: 13)),
 
                   SizedBox(height: 20),
 
@@ -594,11 +663,14 @@ class _CarsSearchState extends State<CarsSearch> {
                     child: SwitchListTile(
                       title: Text('Private driver',
                           style: TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.w600)),
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600)),
                       subtitle: Text('Extra ﷼100/day',
-                          style: TextStyle(fontSize: 12, color: Colors.grey)),
+                          style: TextStyle(
+                              fontSize: 12, color: Colors.grey)),
                       value: privateDriver,
-                      onChanged: (val) => setState(() => privateDriver = val),
+                      onChanged: (val) =>
+                          setState(() => privateDriver = val),
                       activeColor: Colors.red,
                     ),
                   ),
@@ -616,9 +688,10 @@ class _CarsSearchState extends State<CarsSearch> {
                       child: Column(
                         children: [
                           Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              mainAxisAlignment:
+                                  MainAxisAlignment.spaceBetween,
                               children: [
-                                Text('Car rental (${totalDays} days)'),
+                                Text('Car rental ($totalDays days)'),
                                 Text(
                                     '﷼ ${(selectedCar!['pricePerDay'] * totalDays).toStringAsFixed(0)}'),
                               ]),
@@ -635,7 +708,8 @@ class _CarsSearchState extends State<CarsSearch> {
                           ],
                           Divider(),
                           Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              mainAxisAlignment:
+                                  MainAxisAlignment.spaceBetween,
                               children: [
                                 Text('Total',
                                     style: TextStyle(
@@ -654,7 +728,6 @@ class _CarsSearchState extends State<CarsSearch> {
 
                   SizedBox(height: 24),
 
-                  // Submit button
                   ElevatedButton(
                     onPressed: isSubmitting ? null : _submitBooking,
                     style: ElevatedButton.styleFrom(
@@ -669,7 +742,8 @@ class _CarsSearchState extends State<CarsSearch> {
                         ? CircularProgressIndicator(color: Colors.white)
                         : Text('Confirm Booking',
                             style: TextStyle(
-                                fontSize: 18, fontWeight: FontWeight.bold)),
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold)),
                   ),
 
                   SizedBox(height: 40),
