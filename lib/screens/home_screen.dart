@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:mobile_app/l10n/app_localizations.dart';
 import 'package:mobile_app/theme.dart';
@@ -18,53 +19,64 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   String firstName = '';
 
-  // Hardcoded destinations for now
   final List<Map<String, String>> destinations = [
     {
       'name': 'Dubai',
       'nameAr': 'دبي',
-      'img': 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=400&q=80',
+      'img': 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=800&q=80',
     },
     {
       'name': 'Paris',
       'nameAr': 'باريس',
-      'img': 'https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=400&q=80',
+      'img': 'https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=800&q=80',
     },
     {
       'name': 'London',
       'nameAr': 'لندن',
-      'img': 'https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?w=400&q=80',
+      'img': 'https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?w=800&q=80',
     },
     {
       'name': 'Tokyo',
       'nameAr': 'طوكيو',
-      'img': 'https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=400&q=80',
+      'img': 'https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=800&q=80',
     },
   ];
+
+  late final PageController _heroPageController;
+  int _currentHeroPage = 0;
+  Timer? _heroTimer;
 
   @override
   void initState() {
     super.initState();
     _loadUser();
+    _heroPageController = PageController();
+    _startHeroAutoScroll();
+  }
+
+  void _startHeroAutoScroll() {
+    _heroTimer = Timer.periodic(const Duration(seconds: 4), (_) {
+      if (!mounted) return;
+      final next = (_currentHeroPage + 1) % destinations.length;
+      _heroPageController.animateToPage(
+        next,
+        duration: const Duration(milliseconds: 800),
+        curve: Curves.easeInOut,
+      );
+      setState(() => _currentHeroPage = next);
+    });
+  }
+
+  @override
+  void dispose() {
+    _heroTimer?.cancel();
+    _heroPageController.dispose();
+    super.dispose();
   }
 
   Future<void> _loadUser() async {
     final prefs = await SharedPreferences.getInstance();
     setState(() => firstName = prefs.getString('firstName') ?? '');
-  }
-
-  String _greeting() {
-    final hour = DateTime.now().hour;
-    if (hour < 12) return 'Good morning';
-    if (hour < 17) return 'Good afternoon';
-    return 'Good evening';
-  }
-
-  String _greetingAr() {
-    final hour = DateTime.now().hour;
-    if (hour < 12) return 'صباح الخير';
-    if (hour < 17) return 'مساء الخير';
-    return 'مساء الخير';
   }
 
   @override
@@ -78,24 +90,17 @@ class _HomeScreenState extends State<HomeScreen> {
       backgroundColor: t.bg,
       body: CustomScrollView(
         slivers: [
-          // ── Hero ──
           SliverToBoxAdapter(
             child: _buildHero(context, t, l, isDark, isAr),
           ),
-
-          // ── Body ──
           SliverToBoxAdapter(
             child: Padding(
               padding: const EdgeInsets.fromLTRB(20, 28, 20, 0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Categories
                   _buildCategories(context, t, l),
-
                   const SizedBox(height: 32),
-
-                  // Destinations
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -114,11 +119,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ],
                   ),
-
                   const SizedBox(height: 16),
-
                   _buildDestinations(t, isAr),
-
                   const SizedBox(height: 32),
                 ],
               ),
@@ -130,23 +132,30 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _buildHero(BuildContext context, AppThemeExtension t, AppLocalizations l, bool isDark, bool isAr) {
-    final heroFilter = isDark ? 0.45 : 0.25;
+    final heroFilter = isDark ? 0.45 : 0.30;
 
     return SizedBox(
-      height: 300,
+      height: 320,
       child: Stack(
         fit: StackFit.expand,
         children: [
-          // Background image
-          Image.network(
-            'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=800&q=80',
-            fit: BoxFit.cover,
-            color: Colors.black.withOpacity(heroFilter),
-            colorBlendMode: BlendMode.darken,
-            errorBuilder: (_, __, ___) => Container(color: t.card),
+          // ── Auto-scrolling background images ──
+          PageView.builder(
+            controller: _heroPageController,
+            onPageChanged: (i) => setState(() => _currentHeroPage = i),
+            itemCount: destinations.length,
+            itemBuilder: (context, i) {
+              return Image.network(
+                destinations[i]['img']!,
+                fit: BoxFit.cover,
+                color: Colors.black.withOpacity(heroFilter),
+                colorBlendMode: BlendMode.darken,
+                errorBuilder: (_, __, ___) => Container(color: t.card),
+              );
+            },
           ),
 
-          // Gradient overlay
+          // ── Gradient overlay ──
           Container(
             decoration: BoxDecoration(
               gradient: LinearGradient(
@@ -161,7 +170,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
 
-          // Content
+          // ── Content ──
           SafeArea(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -183,13 +192,11 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                       Row(
                         children: [
-                          // Dark mode toggle
                           _heroIconBtn(
                             isDark ? Icons.light_mode_outlined : Icons.dark_mode_outlined,
                             () => context.read<ThemeProvider>().toggle(),
                           ),
                           const SizedBox(width: 8),
-                          // Language toggle
                           _heroIconBtn(
                             Icons.language,
                             () {
@@ -207,24 +214,31 @@ class _HomeScreenState extends State<HomeScreen> {
 
                   // Greeting
                   Text(
-                    '${isAr ? _greetingAr() : _greeting()}${firstName.isNotEmpty ? ', $firstName' : ''}',
+                    isAr
+                        ? '${firstName.isNotEmpty ? '$firstName، ' : ''}جاهز للإقلاع؟'
+                        : 'Ready for takeoff${firstName.isNotEmpty ? ', $firstName' : ''}',
                     style: TextStyle(
-                      color: Colors.white.withOpacity(0.7),
+                      color: Colors.white.withOpacity(0.75),
                       fontSize: 14,
                       fontWeight: FontWeight.w300,
                     ),
                   ),
-                  const SizedBox(height: 4),
+                  const SizedBox(height: 6),
+
+                  // Main heading
                   Text(
-                    isAr ? 'إلى أين؟' : 'Where to?',
+                    isAr ? 'خطّط لمغامرتك القادمة' : 'Plan your next\nadventure',
                     style: TextStyle(
                       color: t.title,
-                      fontSize: 32,
+                      fontSize: 28,
                       fontWeight: FontWeight.w900,
                       letterSpacing: -0.5,
-                      height: 1,
+                      height: 1.1,
                     ),
                   ),
+                  const SizedBox(height: 14),
+
+
                   const SizedBox(height: 16),
                 ],
               ),
@@ -251,7 +265,11 @@ class _HomeScreenState extends State<HomeScreen> {
             ? Row(children: [
                 Icon(icon, color: Colors.white, size: 14),
                 const SizedBox(width: 5),
-                Text(label, style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w600)),
+                Text(label,
+                    style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w600)),
               ])
             : Icon(icon, color: Colors.white, size: 18),
       ),
@@ -288,7 +306,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 MaterialPageRoute(builder: (_) => (cat['page'] as Function)()),
               ),
               child: Container(
-                padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 8),
+                // ── Taller card + more padding ──
+                padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 8),
                 decoration: BoxDecoration(
                   color: t.card,
                   borderRadius: BorderRadius.circular(16),
@@ -304,19 +323,21 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Column(
                   children: [
                     Container(
-                      width: 40,
-                      height: 40,
+                      width: 35,
+                      height: 35,
                       decoration: BoxDecoration(
                         color: t.accentLight,
-                        borderRadius: BorderRadius.circular(12),
+                        borderRadius: BorderRadius.circular(14),
                       ),
-                      child: Icon(cat['icon'] as IconData, color: t.accent, size: 20),
+                      // ── Bigger icon ──
+                      child: Icon(cat['icon'] as IconData, color: t.accent, size: 32),
                     ),
-                    const SizedBox(height: 8),
+                    const SizedBox(height: 10),
                     Text(
                       cat['label'] as String,
                       style: TextStyle(
-                        fontSize: 11,
+                        // ── Bigger label ──
+                        fontSize: 13,
                         fontWeight: FontWeight.w700,
                         color: t.title,
                       ),
