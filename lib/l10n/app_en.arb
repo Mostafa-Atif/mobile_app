@@ -1,0 +1,269 @@
+{
+  "@@locale": "en",
+  "appTitle": "Rahal",
+  "devMenu": "Dev Menu",
+  "mainScreens": "Main Screens",
+  "auth": "Auth",
+  "hotels": "Hotels",
+  "flights": "Flights",
+  "carRent": "Car Rent",
+  "signIn": "Sign In",
+  "signUp": "Sign Up",
+  "next": "Next",
+  "getStarted": "Get Started",
+  "onboarding1Title": "Plan Your Trip",
+  "onboarding1Body": "Create your dream trip with ease. Choose a destination, find the perfect place to stay, and build an itinerary that suits you.",
+  "onboarding2Title": "Get the Best Deal",
+  "onboarding2Body": "Save time and money by finding the best travel deals. Exclusive promotions and discounts to make your trip more affordable.",
+  "onboarding3Title": "Explore Local Attractions",
+  "onboarding3Body": "Discover the beauty of local places you may never have visited. Experience authentic local life in every destination.",
+  "signInTitle": "Welcome back",
+  "signInSubtitle": "Sign in to continue",
+  "signUpTitle": "Create account",
+  "signUpSubtitle": "Join us and start exploring",
+  "email": "Email",
+  "password": "Password",
+  "firstName": "First Name",
+  "lastName": "Last Name",
+  "age": "Age",
+  "gender": "Gender",
+  "phone": "Phone Number",
+  "nationalId": "National ID",
+  "forgotPassword": "Forgot password?",
+  "noAccount": "Don't have an account?",
+  "haveAccount": "Already have an account?",
+  "passwordHint": "Min 8 chars, upper, lower, number, special",
+  "male": "Male",
+  "female": "Female",
+  "forgotPasswordTitle": "Reset password",
+  "forgotPasswordSubtitle": "Enter your email and we'll send you a reset link",
+  "sendResetLink": "Send Reset Link",
+  "resetLinkSent": "Reset link sent! Check your inbox.\nRedirecting to sign in...",
+  "errorFillFields": "Please fill in all fields",
+  "errorValidEmail": "Enter a valid email",
+  "errorPasswordLength": "Password must be at least 8 characters",
+  "errorLettersOnly": "Letters only",
+  "errorMustBe18": "Must be 18+",
+  "errorRequired": "Required",
+  "errorValidPhone": "Enter a valid phone number (7-15 digits)",
+  "errorPasswordUppercase": "At least 1 uppercase letter",
+  "errorPasswordLowercase": "At least 1 lowercase letter",
+  "errorPasswordNumber": "At least 1 number",
+  "errorPasswordSpecial": "At least 1 special character",
+  "errorPasswordMinLength": "At least 8 characters",
+  "carRentTitle": "Car Rent",
+  "carRentSubtitle": "Rent a car at the best rates",
+  "carRentHint": "Tap a car to select it, then fill in the details below",
+  "selected": "Selected",
+  "showMore": "Show more",
+  "bookingDetails": "Booking Details",
+  "selectCarFirst": "↑ Select a car from the list above",
+  "pickupLocation": "Pickup location",
+  "dropoffLocation": "Dropoff location",
+  "selectLocation": "Select location",
+  "pickupDateTime": "Pickup date & time",
+  "dropoffDateTime": "Dropoff date & time",
+  "selectDateTime": "Select date & time",
+  "totalDays": "Total: {days} day(s)",
+  "@totalDays": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "privateDriver": "Private driver",
+  "privateDriverExtra": "Extra ﷼100/day",
+  "carRentalDays": "Car rental ({days} days)",
+  "@carRentalDays": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "total": "Total",
+  "confirmBooking": "Confirm Booking",
+  "bookingConfirmed": "Booking confirmed! 🎉",
+  "bookingFailed": "Booking failed",
+  "selectCarError": "Please select a car first",
+  "selectLocationsError": "Please select pickup and dropoff locations",
+  "selectDatesError": "Please select pickup and dropoff date & time",
+  "dropoffBeforePickup": "Dropoff must be after pickup",
+  "signInFirst": "Please sign in first",
+  "perDay": "Per day",
+  "perWeek": "Per week",
+  "vatIncluded": "*The prices are inclusive of VAT",
+  "noCarAvailable": "No cars available",
+  "seats": "Seats",
+  "bags": "Bags",
+  "unableToConnect": "Unable to connect",
+  "checkConnectionRetry": "Please check your connection and try again",
+  "retry": "Retry",
+  "searchStays": "Search Stays",
+  "overOneMillion": "Over 1M properties worldwide",
+  "destination": "Destination",
+  "entireCountry": "Entire country",
+  "cityOnly": "City only",
+  "whereToQuestion": "Where to?",
+  "dates": "Dates",
+  "checkIn": "Check in",
+  "checkOut": "Check out",
+  "guests": "Guests",
+  "searchProperties": "Search Properties",
+  "nights": "{count} night(s)",
+  "@nights": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "room": "Room",
+  "adults": "Adults",
+  "children": "Children",
+  "addAnotherRoom": "Add another room",
+  "done": "Done",
+  "remove": "Remove",
+  "maxGuestsPerRoom": "The maximum number of guests allowed per room is 8.",
+  "propertiesFound": "{count} properties found in {destination}",
+  "@propertiesFound": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "destination": {
+        "type": "String"
+      }
+    }
+  },
+  "sortBy": "Sort by",
+  "filter": "Filter",
+  "propertyRating": "Property Rating",
+  "view": "View",
+  "clearAll": "Clear all",
+  "apply": "Apply",
+  "noPropertiesMatch": "No properties match your filters",
+  "searchByHotelName": "Search by hotel name",
+  "priceLowToHigh": "Price: Low to High",
+  "priceHighToLow": "Price: High to Low",
+  "rating": "Rating",
+  "totalPriceOneNight": "Total price for 1 night (including taxes)",
+  "yourStay": "Your Stay",
+  "views": "Views",
+  "rooms": "Rooms",
+  "roomsAndGuests": "Rooms & Guests",
+  "numberOfRooms": "Number of rooms",
+  "bookNow": "Book Now",
+  "perNight": "/ night",
+  "totalNightsRooms": "SAR {total} total ({nights} nights, {rooms} room(s))",
+  "@totalNightsRooms": {
+    "placeholders": {
+      "total": {
+        "type": "int"
+      },
+      "nights": {
+        "type": "int"
+      },
+      "rooms": {
+        "type": "int"
+      }
+    }
+  },
+  "guestDetails": "Guest details",
+  "guest": "Guest",
+  "you": "You",
+  "fullName": "Full name",
+  "address": "Address",
+  "saveGuest": "Save Guest {number}",
+  "@saveGuest": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "fillGuestDetails": "Please fill in details for all remaining guests",
+  "hotelBookedSuccess": "Hotel booked successfully! 🏨",
+  "viewSummary": "View summary",
+  "hideSummary": "Hide summary",
+  "checkInLabel": "Check-in",
+  "checkOutLabel": "Check-out",
+  "nightsLabel": "Nights",
+  "roomsLabel": "Rooms",
+  "guestsLabel": "Guests",
+  "pricePerNight": "Price per night",
+  "searchFlights": "Search Flights",
+  "oneWay": "One-way",
+  "roundTrip": "Round trip",
+  "from": "From",
+  "to": "To",
+  "departure": "Departure",
+  "returnDate": "Return",
+  "passengersAndClass": "Passengers & Class",
+  "passengers": "Passengers",
+  "age12Plus": "Age 12+",
+  "age211": "Age 2-11",
+  "underTwo": "Under 2",
+  "infants": "Infants",
+  "cabinClass": "Cabin Class",
+  "selectDepartureCity": "Select Departure City",
+  "selectArrivalCity": "Select Arrival City",
+  "passenger": "Passenger",
+  "travellerDetails": "Traveller details",
+  "nationality": "Nationality",
+  "passportNumber": "Passport number",
+  "passportExpiry": "Passport expiry date",
+  "dateOfBirth": "Date of birth",
+  "mobileNumber": "Mobile number",
+  "travelDocument": "Travel document",
+  "contactDetails": "Contact details",
+  "savePassenger": "Save Passenger {number}",
+  "@savePassenger": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "confirmBookings": "Confirm {count} Bookings",
+  "@confirmBookings": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "fillPassengerDetails": "Please fill in details for all remaining passengers",
+  "flightBookedSuccess": "Flight booked successfully! ✈️",
+  "someBookingsFailed": "Some bookings failed. Please try again.",
+  "reviewTrip": "Review your trip",
+  "flightDetails": "Flight Details",
+  "priceSummary": "Price Summary",
+  "baseFare": "Base fare",
+  "taxesAndFees": "Taxes & fees",
+  "included": "Included",
+  "checkedBaggage": "Checked Baggage",
+  "checkedBaggageIncluded": "This flight includes checked baggage at no extra cost.",
+  "noBaggageIncluded": "This flight does not include checked baggage. Additional fees may apply.",
+  "continue_": "Continue",
+  "totalPrice": "Total price",
+  "class_": "Class",
+  "tripType": "Trip Type",
+  "airline": "Airline",
+  "duration": "Duration",
+  "stops": "Stops",
+  "pricePerPerson": "Price per person",
+  "outboundFlight": "Outbound Flight",
+  "returnFlight": "Return Flight",
+  "noFlightsFound": "No flights found",
+  "tryDifferentDates": "Try different dates or cities",
+  "selectCitiesError": "Please select departure and arrival cities",
+  "selectReturnDate": "Please select a return date",
+  "errorPassport": "6-9 letters/numbers only",
+  "errorPhone": "7-15 digits only",
+  "pleaseFixErrors": "Please fix the errors above",
+  "selectDate": "Select date",
+  "viewSummaryFlight": "View summary",
+  "hideSummaryFlight": "Hide summary"
+}

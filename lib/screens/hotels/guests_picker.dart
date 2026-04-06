@@ -1,7 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
-import '../../config.dart';
+import 'package:mobile_app/l10n/app_localizations.dart';
 
 class RoomData {
   int adults;
@@ -48,6 +48,8 @@ class _GuestsPickerState extends State<GuestsPicker> {
 
   @override
   Widget build(BuildContext context) {
+    final l = AppLocalizations.of(context)!;
+
     return Container(
       padding: EdgeInsets.all(20),
       height: MediaQuery.of(context).size.height * 0.75,
@@ -58,64 +60,42 @@ class _GuestsPickerState extends State<GuestsPicker> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Header with title and close button
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                'Guests',
-                style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              IconButton(
-                icon: Icon(Icons.close),
-                onPressed: () => Navigator.pop(context),
-              ),
+              Text(l.guests,
+                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+              IconButton(icon: Icon(Icons.close), onPressed: () => Navigator.pop(context)),
             ],
           ),
 
-          Text(
-            'The maximum number of guests allowed per room is 8.',
-            style: TextStyle(
-              fontSize: 14,
-              color: Colors.grey,
-            ),
-          ),
+          Text(l.maxGuestsPerRoom, style: TextStyle(fontSize: 14, color: Colors.grey)),
 
           SizedBox(height: 20),
 
-          // Scrollable list of rooms
           Expanded(
             child: ListView.builder(
               itemCount: rooms.length,
-              itemBuilder: (context, index) {
-                return _buildRoomCard(index);
-              },
+              itemBuilder: (context, index) => _buildRoomCard(index, l),
             ),
           ),
 
           SizedBox(height: 10),
 
-          // Add another room button
           OutlinedButton.icon(
             onPressed: addRoom,
             icon: Icon(Icons.add_circle_outline),
-            label: Text('Add another room'),
+            label: Text(l.addAnotherRoom),
             style: OutlinedButton.styleFrom(
               foregroundColor: Colors.blue,
               side: BorderSide(color: Colors.blue),
               minimumSize: Size(double.infinity, 50),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(25),
-              ),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
             ),
           ),
 
           SizedBox(height: 10),
 
-          // Done button
           ElevatedButton(
             onPressed: () {
               widget.onDone(rooms);
@@ -125,24 +105,16 @@ class _GuestsPickerState extends State<GuestsPicker> {
               backgroundColor: Colors.blue,
               foregroundColor: Colors.white,
               minimumSize: Size(double.infinity, 50),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(25),
-              ),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
             ),
-            child: Text(
-              'Done',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
+            child: Text(l.done, style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
           ),
         ],
       ),
     );
   }
 
-  Widget _buildRoomCard(int index) {
+  Widget _buildRoomCard(int index, AppLocalizations l) {
     return Container(
       margin: EdgeInsets.only(bottom: 15),
       padding: EdgeInsets.all(15),
@@ -154,7 +126,6 @@ class _GuestsPickerState extends State<GuestsPicker> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Room header with removal option
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -162,122 +133,57 @@ class _GuestsPickerState extends State<GuestsPicker> {
                 children: [
                   Icon(Icons.bed, color: Colors.grey),
                   SizedBox(width: 8),
-                  Text(
-                    'Room ${index + 1}',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
+                  Text('${l.room} ${index + 1}',
+                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
                 ],
               ),
               if (rooms.length > 1)
                 TextButton(
                   onPressed: () => removeRoom(index),
-                  child: Text(
-                    'Remove',
-                    style: TextStyle(color: Colors.red),
-                  ),
+                  child: Text(l.remove, style: TextStyle(color: Colors.red)),
                 ),
             ],
           ),
 
           SizedBox(height: 15),
 
-          // Adults counter
           _buildCounter(
-            'Adults',
-            'Age (12+)',
-            rooms[index].adults,
-            () {
-              if (rooms[index].adults > 1) {
-                setState(() => rooms[index].adults--);
-              }
-            },
-            () {
-              int total = rooms[index].adults + rooms[index].children;
-              if (total < 8) {
-                setState(() => rooms[index].adults++);
-              }
-            },
+            '${l.adults} (12+)', rooms[index].adults,
+            () { if (rooms[index].adults > 1) setState(() => rooms[index].adults--); },
+            () { if (rooms[index].adults + rooms[index].children < 8) setState(() => rooms[index].adults++); },
           ),
 
           SizedBox(height: 15),
 
-          // Children counter
           _buildCounter(
-            'Children',
-            'Age (0-11)',
-            rooms[index].children,
-            () {
-              if (rooms[index].children > 0) {
-                setState(() => rooms[index].children--);
-              }
-            },
-            () {
-              int total = rooms[index].adults + rooms[index].children;
-              if (total < 8) {
-                setState(() => rooms[index].children++);
-              }
-            },
+            '${l.children} (0-11)', rooms[index].children,
+            () { if (rooms[index].children > 0) setState(() => rooms[index].children--); },
+            () { if (rooms[index].adults + rooms[index].children < 8) setState(() => rooms[index].children++); },
           ),
         ],
       ),
     );
   }
 
-  Widget _buildCounter(
-    String label,
-    String subtitle,
-    int value,
-    VoidCallback onDecrease,
-    VoidCallback onIncrease,
-  ) {
+  Widget _buildCounter(String label, int value,
+      VoidCallback onDecrease, VoidCallback onIncrease) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              label,
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-            Text(
-              subtitle,
-              style: TextStyle(
-                fontSize: 14,
-                color: Colors.grey,
-              ),
-            ),
-          ],
-        ),
+        Text(label, style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
         Row(
           children: [
             IconButton(
               icon: Icon(Icons.remove_circle_outline),
-              color: Colors.blue,
-              iconSize: 32,
+              color: Colors.blue, iconSize: 32,
               onPressed: onDecrease,
             ),
-            SizedBox(
-              width: 40,
-              child: Text(
-                '$value',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
+            SizedBox(width: 40,
+                child: Text('$value', textAlign: TextAlign.center,
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold))),
             IconButton(
               icon: Icon(Icons.add_circle_outline),
-              color: Colors.blue,
-              iconSize: 32,
+              color: Colors.blue, iconSize: 32,
               onPressed: onIncrease,
             ),
           ],

@@ -1,0 +1,269 @@
+{
+  "@@locale": "ar",
+  "appTitle": "رحّال",
+  "devMenu": "قائمة المطور",
+  "mainScreens": "الشاشات الرئيسية",
+  "auth": "التسجيل",
+  "hotels": "الفنادق",
+  "flights": "الرحلات",
+  "carRent": "تأجير السيارات",
+  "signIn": "تسجيل الدخول",
+  "signUp": "إنشاء حساب",
+  "next": "التالي",
+  "getStarted": "ابدأ الآن",
+  "onboarding1Title": "خطّط لرحلتك",
+  "onboarding1Body": "أنشئ رحلة أحلامك بسهولة. اختر وجهتك، وابحث عن أفضل مكان للإقامة، وابنِ جدول سفر يناسبك.",
+  "onboarding2Title": "احصل على أفضل العروض",
+  "onboarding2Body": "وفّر وقتك ومالك من خلال أفضل عروض السفر. خصومات وعروض حصرية تجعل رحلتك أكثر توفيراً.",
+  "onboarding3Title": "اكتشف المعالم المحلية",
+  "onboarding3Body": "اكتشف جمال الأماكن التي لم تزرها من قبل. عش تجارب أصيلة في كل وجهة تختارها.",
+  "signInTitle": "أهلاً بعودتك",
+  "signInSubtitle": "سجّل دخولك للمتابعة",
+  "signUpTitle": "إنشاء حساب",
+  "signUpSubtitle": "انضم إلينا وابدأ رحلتك",
+  "email": "البريد الإلكتروني",
+  "password": "كلمة المرور",
+  "firstName": "الاسم الأول",
+  "lastName": "اسم العائلة",
+  "age": "العمر",
+  "gender": "الجنس",
+  "phone": "رقم الهاتف",
+  "nationalId": "الرقم القومي",
+  "forgotPassword": "نسيت كلمة المرور؟",
+  "noAccount": "ليس لديك حساب؟",
+  "haveAccount": "لديك حساب بالفعل؟",
+  "passwordHint": "8 أحرف على الأقل، كبيرة وصغيرة وأرقام ورموز",
+  "male": "ذكر",
+  "female": "أنثى",
+  "forgotPasswordTitle": "استعادة كلمة المرور",
+  "forgotPasswordSubtitle": "أدخل بريدك الإلكتروني وسنرسل لك رابط إعادة التعيين",
+  "sendResetLink": "إرسال رابط الاستعادة",
+  "resetLinkSent": "تم إرسال الرابط! تحقق من بريدك.\nجارٍ التحويل لتسجيل الدخول...",
+  "errorFillFields": "يرجى ملء جميع الحقول",
+  "errorValidEmail": "أدخل بريداً إلكترونياً صحيحاً",
+  "errorPasswordLength": "كلمة المرور يجب أن تكون 8 أحرف على الأقل",
+  "errorLettersOnly": "أحرف فقط",
+  "errorMustBe18": "يجب أن يكون عمرك 18 أو أكثر",
+  "errorRequired": "مطلوب",
+  "errorValidPhone": "أدخل رقم هاتف صحيح (7-15 رقماً)",
+  "errorPasswordUppercase": "حرف كبير واحد على الأقل",
+  "errorPasswordLowercase": "حرف صغير واحد على الأقل",
+  "errorPasswordNumber": "رقم واحد على الأقل",
+  "errorPasswordSpecial": "رمز خاص واحد على الأقل",
+  "errorPasswordMinLength": "8 أحرف على الأقل",
+  "carRentTitle": "تأجير السيارات",
+  "carRentSubtitle": "استأجر سيارتك بأفضل الأسعار",
+  "carRentHint": "اضغط على سيارة لاختيارها، ثم أكمل تفاصيل الحجز",
+  "selected": "محدد",
+  "showMore": "عرض المزيد",
+  "bookingDetails": "تفاصيل الحجز",
+  "selectCarFirst": "↑ اختر سيارة من القائمة أعلاه",
+  "pickupLocation": "موقع الاستلام",
+  "dropoffLocation": "موقع التسليم",
+  "selectLocation": "اختر موقعاً",
+  "pickupDateTime": "تاريخ ووقت الاستلام",
+  "dropoffDateTime": "تاريخ ووقت التسليم",
+  "selectDateTime": "اختر التاريخ والوقت",
+  "totalDays": "الإجمالي: {days} يوم",
+  "@totalDays": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "privateDriver": "سائق خاص",
+  "privateDriverExtra": "إضافي ﷼100/يوم",
+  "carRentalDays": "تأجير السيارة ({days} أيام)",
+  "@carRentalDays": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "total": "الإجمالي",
+  "confirmBooking": "تأكيد الحجز",
+  "bookingConfirmed": "تم الحجز بنجاح! 🎉",
+  "bookingFailed": "فشل الحجز",
+  "selectCarError": "يرجى اختيار سيارة أولاً",
+  "selectLocationsError": "يرجى اختيار مواقع الاستلام والتسليم",
+  "selectDatesError": "يرجى اختيار تاريخ ووقت الاستلام والتسليم",
+  "dropoffBeforePickup": "يجب أن يكون وقت التسليم بعد الاستلام",
+  "signInFirst": "يرجى تسجيل الدخول أولاً",
+  "perDay": "يومياً",
+  "perWeek": "أسبوعياً",
+  "vatIncluded": "*الأسعار شاملة ضريبة القيمة المضافة",
+  "noCarAvailable": "لا توجد سيارات متاحة",
+  "seats": "مقاعد",
+  "bags": "حقائب",
+  "unableToConnect": "تعذّر الاتصال",
+  "checkConnectionRetry": "يرجى التحقق من اتصالك والمحاولة مجدداً",
+  "retry": "إعادة المحاولة",
+  "searchStays": "البحث عن إقامة",
+  "overOneMillion": "أكثر من مليون عقار حول العالم",
+  "destination": "الوجهة",
+  "entireCountry": "الدولة كاملة",
+  "cityOnly": "مدينة محددة",
+  "whereToQuestion": "إلى أين؟",
+  "dates": "التواريخ",
+  "checkIn": "تسجيل الدخول",
+  "checkOut": "تسجيل الخروج",
+  "guests": "الضيوف",
+  "searchProperties": "البحث عن عقارات",
+  "nights": "{count} ليلة",
+  "@nights": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "room": "غرفة",
+  "adults": "البالغون",
+  "children": "الأطفال",
+  "addAnotherRoom": "إضافة غرفة أخرى",
+  "done": "تم",
+  "remove": "إزالة",
+  "maxGuestsPerRoom": "الحد الأقصى لعدد الضيوف في الغرفة هو 8.",
+  "propertiesFound": "{count} عقار في {destination}",
+  "@propertiesFound": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "destination": {
+        "type": "String"
+      }
+    }
+  },
+  "sortBy": "ترتيب حسب",
+  "filter": "تصفية",
+  "propertyRating": "تقييم العقار",
+  "view": "الإطلالة",
+  "clearAll": "مسح الكل",
+  "apply": "تطبيق",
+  "noPropertiesMatch": "لا توجد عقارات تطابق معايير البحث",
+  "searchByHotelName": "البحث باسم الفندق",
+  "priceLowToHigh": "السعر: من الأقل إلى الأعلى",
+  "priceHighToLow": "السعر: من الأعلى إلى الأقل",
+  "rating": "التقييم",
+  "totalPriceOneNight": "السعر الإجمالي لليلة واحدة (شامل الضرائب)",
+  "yourStay": "إقامتك",
+  "views": "الإطلالات",
+  "rooms": "الغرف",
+  "roomsAndGuests": "الغرف والضيوف",
+  "numberOfRooms": "عدد الغرف",
+  "bookNow": "احجز الآن",
+  "perNight": "/ ليلة",
+  "totalNightsRooms": "SAR {total} الإجمالي ({nights} ليلة، {rooms} غرفة)",
+  "@totalNightsRooms": {
+    "placeholders": {
+      "total": {
+        "type": "int"
+      },
+      "nights": {
+        "type": "int"
+      },
+      "rooms": {
+        "type": "int"
+      }
+    }
+  },
+  "guestDetails": "تفاصيل الضيف",
+  "guest": "ضيف",
+  "you": "أنت",
+  "fullName": "الاسم الكامل",
+  "address": "العنوان",
+  "saveGuest": "حفظ الضيف {number}",
+  "@saveGuest": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "fillGuestDetails": "يرجى إكمال تفاصيل جميع الضيوف المتبقين",
+  "hotelBookedSuccess": "تم حجز الفندق بنجاح! 🏨",
+  "viewSummary": "عرض الملخص",
+  "hideSummary": "إخفاء الملخص",
+  "checkInLabel": "تسجيل الدخول",
+  "checkOutLabel": "تسجيل الخروج",
+  "nightsLabel": "الليالي",
+  "roomsLabel": "الغرف",
+  "guestsLabel": "الضيوف",
+  "pricePerNight": "السعر لكل ليلة",
+  "searchFlights": "البحث عن رحلات",
+  "oneWay": "رحلة ذهاب",
+  "roundTrip": "ذهاب وعودة",
+  "from": "من",
+  "to": "إلى",
+  "departure": "المغادرة",
+  "returnDate": "العودة",
+  "passengersAndClass": "الركاب والدرجة",
+  "passengers": "الركاب",
+  "age12Plus": "12 سنة فأكثر",
+  "age211": "2-11 سنة",
+  "underTwo": "أقل من سنتين",
+  "infants": "الرضع",
+  "cabinClass": "درجة المقصورة",
+  "selectDepartureCity": "اختر مدينة المغادرة",
+  "selectArrivalCity": "اختر مدينة الوصول",
+  "passenger": "راكب",
+  "travellerDetails": "تفاصيل المسافر",
+  "nationality": "الجنسية",
+  "passportNumber": "رقم جواز السفر",
+  "passportExpiry": "تاريخ انتهاء جواز السفر",
+  "dateOfBirth": "تاريخ الميلاد",
+  "mobileNumber": "رقم الهاتف المحمول",
+  "travelDocument": "وثيقة السفر",
+  "contactDetails": "بيانات التواصل",
+  "savePassenger": "حفظ الراكب {number}",
+  "@savePassenger": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "confirmBookings": "تأكيد {count} حجوزات",
+  "@confirmBookings": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "fillPassengerDetails": "يرجى إكمال تفاصيل جميع الركاب المتبقين",
+  "flightBookedSuccess": "تم حجز الرحلة بنجاح! ✈️",
+  "someBookingsFailed": "فشل بعض الحجوزات. يرجى المحاولة مجدداً.",
+  "reviewTrip": "مراجعة رحلتك",
+  "flightDetails": "تفاصيل الرحلة",
+  "priceSummary": "ملخص السعر",
+  "baseFare": "السعر الأساسي",
+  "taxesAndFees": "الضرائب والرسوم",
+  "included": "مشمول",
+  "checkedBaggage": "الأمتعة المسجّلة",
+  "checkedBaggageIncluded": "تشمل هذه الرحلة أمتعة مسجّلة بدون رسوم إضافية.",
+  "noBaggageIncluded": "لا تشمل هذه الرحلة أمتعة مسجّلة. قد تطبق رسوم إضافية.",
+  "continue_": "متابعة",
+  "totalPrice": "السعر الإجمالي",
+  "class_": "الدرجة",
+  "tripType": "نوع الرحلة",
+  "airline": "شركة الطيران",
+  "duration": "المدة",
+  "stops": "التوقفات",
+  "pricePerPerson": "السعر لكل شخص",
+  "outboundFlight": "رحلة الذهاب",
+  "returnFlight": "رحلة العودة",
+  "noFlightsFound": "لا توجد رحلات",
+  "tryDifferentDates": "جرّب تواريخ أو مدناً مختلفة",
+  "selectCitiesError": "يرجى اختيار مدينتي المغادرة والوصول",
+  "selectReturnDate": "يرجى اختيار تاريخ العودة",
+  "errorPassport": "6-9 أحرف/أرقام فقط",
+  "errorPhone": "7-15 رقماً فقط",
+  "pleaseFixErrors": "يرجى تصحيح الأخطاء أعلاه",
+  "selectDate": "اختر تاريخاً",
+  "viewSummaryFlight": "عرض الملخص",
+  "hideSummaryFlight": "إخفاء الملخص"
+}
