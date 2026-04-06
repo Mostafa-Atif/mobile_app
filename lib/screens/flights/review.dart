@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_app/l10n/app_localizations.dart';
 import 'package:mobile_app/screens/flights/flight_booking.dart';
+import 'package:mobile_app/theme.dart';
 
 class Review extends StatelessWidget {
   final Map<String, dynamic> flight;
@@ -29,6 +30,7 @@ class Review extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l = AppLocalizations.of(context)!;
+    final t = Theme.of(context).extension<AppThemeExtension>()!;
 
     final String airline = flight['airline'] ?? '';
     final String fromCity = flight['fromCity'] ?? '';
@@ -65,161 +67,175 @@ class Review extends StatelessWidget {
     }
 
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: t.bg,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: t.header,
         elevation: 0,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.blue),
+          icon: Icon(Icons.arrow_back, color: t.backIcon),
           onPressed: () => Navigator.pop(context),
         ),
         title: Text(l.reviewTrip,
-            style: TextStyle(fontSize: 17, fontWeight: FontWeight.w500, color: Colors.black87)),
+            style: TextStyle(fontSize: 17, fontWeight: FontWeight.w500, color: t.title)),
         centerTitle: true,
       ),
       body: Column(
         children: [
           Expanded(
             child: SingleChildScrollView(
-              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SizedBox(height: 8),
-
+                  // Route header
                   Row(
                     children: [
                       Text('$fromCity → $toCity',
-                          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-                      SizedBox(width: 10),
+                          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: t.title)),
+                      const SizedBox(width: 10),
                       if (isRoundTrip)
                         Container(
-                          padding: EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-                          decoration: BoxDecoration(color: Color(0xFFE3F0FF),
-                              borderRadius: BorderRadius.circular(20)),
+                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                          decoration: BoxDecoration(
+                              color: t.accentLight, borderRadius: BorderRadius.circular(20)),
                           child: Text(l.roundTrip, style: TextStyle(fontSize: 11,
-                              color: Color(0xFF1565C0), fontWeight: FontWeight.w600)),
+                              color: t.accent, fontWeight: FontWeight.w600)),
                         ),
                     ],
                   ),
-                  SizedBox(height: 4),
+                  const SizedBox(height: 4),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(duration, style: TextStyle(fontSize: 13, color: Colors.black54)),
-                      Text(formattedDepartDate, style: TextStyle(fontSize: 13, color: Colors.black54)),
+                      Text(duration, style: TextStyle(fontSize: 13, color: t.label)),
+                      Text(formattedDepartDate, style: TextStyle(fontSize: 13, color: t.label)),
                     ],
                   ),
 
-                  SizedBox(height: 24),
+                  const SizedBox(height: 24),
 
+                  // Outbound label
                   if (isRoundTrip)
                     Padding(
-                      padding: EdgeInsets.only(bottom: 10),
+                      padding: const EdgeInsets.only(bottom: 10),
                       child: Row(children: [
-                        Icon(Icons.flight_takeoff, size: 16, color: Color(0xFF2979FF)),
-                        SizedBox(width: 6),
+                        Icon(Icons.flight_takeoff, size: 16, color: t.accent),
+                        const SizedBox(width: 6),
                         Text(l.outboundFlight, style: TextStyle(fontSize: 14,
-                            fontWeight: FontWeight.bold, color: Color(0xFF2979FF))),
-                        SizedBox(width: 8),
-                        Text(formattedDepartDate, style: TextStyle(fontSize: 12, color: Colors.grey)),
+                            fontWeight: FontWeight.bold, color: t.accent)),
+                        const SizedBox(width: 8),
+                        Text(formattedDepartDate, style: TextStyle(fontSize: 12, color: t.label)),
                       ]),
                     ),
 
-                  _buildTimeline(fromCity, toCity, fromCode, toCode,
+                  _buildTimeline(context, t, fromCity, toCity, fromCode, toCode,
                       departTime, arrivalTime, airline, stops),
 
+                  // Return flight
                   if (isRoundTrip && returnTime.isNotEmpty) ...[
-                    SizedBox(height: 24),
-                    Divider(color: Colors.grey[200]),
-                    SizedBox(height: 16),
+                    const SizedBox(height: 24),
+                    Divider(color: t.divider),
+                    const SizedBox(height: 16),
                     Row(children: [
-                      Icon(Icons.flight_land, size: 16, color: Color(0xFF00BFA5)),
-                      SizedBox(width: 6),
+                      Icon(Icons.flight_land, size: 16, color: t.accent),
+                      const SizedBox(width: 6),
                       Text(l.returnFlight, style: TextStyle(fontSize: 14,
-                          fontWeight: FontWeight.bold, color: Color(0xFF00BFA5))),
-                      SizedBox(width: 8),
-                      Text(formattedReturnDate, style: TextStyle(fontSize: 12, color: Colors.grey)),
+                          fontWeight: FontWeight.bold, color: t.accent)),
+                      const SizedBox(width: 8),
+                      Text(formattedReturnDate, style: TextStyle(fontSize: 12, color: t.label)),
                     ]),
-                    SizedBox(height: 12),
-                    _buildTimeline(toCity, fromCity, toCode, fromCode,
-                        returnTime, _calcArrival(returnTime, duration), airline, stops,
-                        color: Color(0xFF00BFA5)),
+                    const SizedBox(height: 12),
+                    _buildTimeline(context, t, toCity, fromCity, toCode, fromCode,
+                        returnTime, _calcArrival(returnTime, duration), airline, stops),
                   ],
 
-                  SizedBox(height: 24),
+                  const SizedBox(height: 24),
 
+                  // Flight details card
                   Container(
-                    padding: EdgeInsets.all(16),
-                    decoration: BoxDecoration(color: Colors.grey[50],
-                        borderRadius: BorderRadius.circular(12),
-                        border: Border.all(color: Colors.grey[200]!)),
+                    padding: const EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      color: t.card,
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(color: t.cardBorder.withOpacity(0.5)),
+                    ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(l.flightDetails,
-                            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-                        SizedBox(height: 12),
-                        _infoRow(Icons.airline_seat_recline_normal, l.class_, flightClass),
-                        SizedBox(height: 10),
-                        _infoRow(Icons.swap_calls, l.tripType,
+                            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: t.title)),
+                        const SizedBox(height: 12),
+                        _infoRow(t, Icons.airline_seat_recline_normal, l.class_, flightClass),
+                        const SizedBox(height: 10),
+                        _infoRow(t, Icons.swap_calls, l.tripType,
                             isRoundTrip ? l.roundTrip : l.oneWay),
-                        SizedBox(height: 10),
-                        _infoRow(Icons.luggage, l.checkedBaggage,
+                        const SizedBox(height: 10),
+                        _infoRow(t, Icons.luggage, l.checkedBaggage,
                             hasLuggage ? l.included : 'Not included'),
                         if (isRoundTrip && formattedReturnDate.isNotEmpty) ...[
-                          SizedBox(height: 10),
-                          _infoRow(Icons.event_repeat, l.returnDate, formattedReturnDate),
+                          const SizedBox(height: 10),
+                          _infoRow(t, Icons.event_repeat, l.returnDate, formattedReturnDate),
                         ],
                       ],
                     ),
                   ),
 
-                  SizedBox(height: 16),
+                  const SizedBox(height: 16),
 
+                  // Price summary card
                   Container(
-                    padding: EdgeInsets.all(16),
+                    padding: const EdgeInsets.all(16),
                     decoration: BoxDecoration(
-                        color: Color(0xFFE3F0FF), borderRadius: BorderRadius.circular(12)),
+                      color: t.accentLight,
+                      borderRadius: BorderRadius.circular(12),
+                    ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(l.priceSummary, style: TextStyle(fontSize: 16,
-                            fontWeight: FontWeight.bold, color: Color(0xFF1565C0))),
-                        SizedBox(height: 12),
+                            fontWeight: FontWeight.bold, color: t.accent)),
+                        const SizedBox(height: 12),
                         Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                          Text(l.baseFare, style: TextStyle(color: Color(0xFF1565C0))),
-                          Text('$currency $price', style: TextStyle(color: Color(0xFF1565C0),
-                              fontWeight: FontWeight.w600)),
+                          Text(l.baseFare, style: TextStyle(color: t.accent)),
+                          Text('$currency $price', style: TextStyle(color: t.accent, fontWeight: FontWeight.w600)),
                         ]),
-                        SizedBox(height: 8),
+                        const SizedBox(height: 8),
                         Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                          Text(l.taxesAndFees, style: TextStyle(color: Color(0xFF1565C0))),
-                          Text(l.included, style: TextStyle(color: Color(0xFF1565C0))),
+                          Text(l.taxesAndFees, style: TextStyle(color: t.accent)),
+                          Text(l.included, style: TextStyle(color: t.accent)),
                         ]),
-                        Divider(color: Color(0xFF1565C0).withValues(alpha: 0.3)),
+                        Divider(color: t.accent.withOpacity(0.2)),
                         Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
                           Text(l.total, style: TextStyle(fontWeight: FontWeight.bold,
-                              fontSize: 15, color: Color(0xFF1565C0))),
+                              fontSize: 15, color: t.accent)),
                           Text('$currency $price', style: TextStyle(fontWeight: FontWeight.bold,
-                              fontSize: 15, color: Color(0xFF1565C0))),
+                              fontSize: 15, color: t.accent)),
                         ]),
                       ],
                     ),
                   ),
 
-                  SizedBox(height: 16),
+                  const SizedBox(height: 16),
 
+                  // Baggage notice
                   Container(
-                    padding: EdgeInsets.all(16),
+                    padding: const EdgeInsets.all(16),
                     decoration: BoxDecoration(
-                        color: hasLuggage ? Color(0xFFE8F5E9) : Color(0xFFFFF3E0),
-                        borderRadius: BorderRadius.circular(12)),
+                      color: hasLuggage
+                          ? Colors.green.withOpacity(0.08)
+                          : Colors.orange.withOpacity(0.08),
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(
+                        color: hasLuggage
+                            ? Colors.green.withOpacity(0.2)
+                            : Colors.orange.withOpacity(0.2),
+                      ),
+                    ),
                     child: Row(
                       children: [
                         Icon(hasLuggage ? Icons.check_circle : Icons.info_outline,
                             color: hasLuggage ? Colors.green : Colors.orange),
-                        SizedBox(width: 12),
+                        const SizedBox(width: 12),
                         Expanded(
                           child: Text(
                             hasLuggage ? l.checkedBaggageIncluded : l.noBaggageIncluded,
@@ -232,16 +248,20 @@ class Review extends StatelessWidget {
                     ),
                   ),
 
-                  SizedBox(height: 80),
+                  const SizedBox(height: 80),
                 ],
               ),
             ),
           ),
 
+          // Bottom bar
           Container(
-            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 14),
-            decoration: BoxDecoration(color: Colors.white,
-                boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 8, offset: Offset(0, -2))]),
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
+            decoration: BoxDecoration(
+              color: t.header,
+              border: Border(top: BorderSide(color: t.divider)),
+              boxShadow: [BoxShadow(color: t.divider.withOpacity(0.3), blurRadius: 8, offset: const Offset(0, -2))],
+            ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -249,13 +269,13 @@ class Review extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(l.totalPrice, style: TextStyle(fontSize: 12, color: Colors.grey)),
+                    Text(l.totalPrice, style: TextStyle(fontSize: 12, color: t.label)),
                     Text('$currency $price',
-                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: t.title)),
                   ],
                 ),
-                ElevatedButton(
-                  onPressed: () {
+                GestureDetector(
+                  onTap: () {
                     Navigator.push(context, MaterialPageRoute(
                       builder: (context) => FlightBooking(
                         fromCity: fromCity,
@@ -274,14 +294,16 @@ class Review extends StatelessWidget {
                       ),
                     ));
                   },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Color(0xFFE84560), foregroundColor: Colors.white,
-                    padding: EdgeInsets.symmetric(horizontal: 36, vertical: 14),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
-                    elevation: 0,
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 14),
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(colors: t.btnGradient),
+                      borderRadius: BorderRadius.circular(30),
+                      boxShadow: [BoxShadow(color: t.accent.withOpacity(0.3), blurRadius: 10, offset: const Offset(0, 4))],
+                    ),
+                    child: Text(l.continue_,
+                        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: Colors.white)),
                   ),
-                  child: Text(l.continue_,
-                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
                 ),
               ],
             ),
@@ -291,43 +313,44 @@ class Review extends StatelessWidget {
     );
   }
 
-  Widget _buildTimeline(String fromCity, String toCity, String fromCode, String toCode,
-      String departTime, String arrivalTime, String airline, String stops,
-      {Color color = const Color(0xFF2979FF)}) {
+  Widget _buildTimeline(BuildContext context, AppThemeExtension t,
+      String fromCity, String toCity, String fromCode, String toCode,
+      String departTime, String arrivalTime, String airline, String stops) {
     return IntrinsicHeight(
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           SizedBox(width: 72, child: Column(children: [
-            _timeLabel(departTime), SizedBox(height: 60), _timeLabel(arrivalTime),
+            _timeLabel(t, departTime), const SizedBox(height: 60), _timeLabel(t, arrivalTime),
           ])),
-          SizedBox(width: 8),
+          const SizedBox(width: 8),
           SizedBox(width: 20, child: Column(children: [
-            _dot(color), _line(height: 80, color: color), _dot(color),
+            _dot(t.accent), _line(height: 80, color: t.accent), _dot(t.accent),
           ])),
-          SizedBox(width: 10),
+          const SizedBox(width: 10),
           Expanded(
             child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                Text(fromCity, style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600)),
-                Text(fromCode, style: TextStyle(fontSize: 12, color: Colors.black54)),
+                Text(fromCity, style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: t.title)),
+                Text(fromCode, style: TextStyle(fontSize: 12, color: t.label)),
               ]),
-              SizedBox(height: 12),
+              const SizedBox(height: 12),
               Row(children: [
-                Container(width: 36, height: 36,
-                    decoration: BoxDecoration(color: Color(0xFF1B2A4A),
-                        borderRadius: BorderRadius.circular(6)),
-                    child: Icon(Icons.flight_takeoff, color: Colors.white, size: 20)),
-                SizedBox(width: 10),
+                Container(
+                  width: 36, height: 36,
+                  decoration: BoxDecoration(color: t.accentLight, borderRadius: BorderRadius.circular(6)),
+                  child: Icon(Icons.flight_takeoff, color: t.accent, size: 20),
+                ),
+                const SizedBox(width: 10),
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                  Text(airline, style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600)),
-                  Text(stops, style: TextStyle(fontSize: 12, color: Colors.black54)),
+                  Text(airline, style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: t.title)),
+                  Text(stops, style: TextStyle(fontSize: 12, color: t.label)),
                 ]),
               ]),
-              SizedBox(height: 12),
+              const SizedBox(height: 12),
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                Text(toCity, style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600)),
-                Text(toCode, style: TextStyle(fontSize: 12, color: Colors.black54)),
+                Text(toCity, style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: t.title)),
+                Text(toCode, style: TextStyle(fontSize: 12, color: t.label)),
               ]),
             ]),
           ),
@@ -336,20 +359,20 @@ class Review extends StatelessWidget {
     );
   }
 
-  Widget _timeLabel(String time) =>
-      Text(time, style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: Colors.black87));
+  Widget _timeLabel(AppThemeExtension t, String time) =>
+      Text(time, style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: t.title));
 
   Widget _dot(Color color) => Container(width: 10, height: 10,
       decoration: BoxDecoration(color: color, shape: BoxShape.circle));
 
-  Widget _line({required double height, Color color = const Color(0xFF2979FF)}) =>
+  Widget _line({required double height, required Color color}) =>
       Container(width: 2, height: height, color: color);
 
-  Widget _infoRow(IconData icon, String label, String value) =>
+  Widget _infoRow(AppThemeExtension t, IconData icon, String label, String value) =>
       Row(children: [
-        Icon(icon, size: 18, color: Colors.grey[600]),
-        SizedBox(width: 10),
-        Text('$label: ', style: TextStyle(color: Colors.grey[600], fontSize: 13)),
-        Text(value, style: TextStyle(fontWeight: FontWeight.w600, fontSize: 13)),
+        Icon(icon, size: 18, color: t.label),
+        const SizedBox(width: 10),
+        Text('$label: ', style: TextStyle(color: t.label, fontSize: 13)),
+        Text(value, style: TextStyle(fontWeight: FontWeight.w600, fontSize: 13, color: t.title)),
       ]);
 }

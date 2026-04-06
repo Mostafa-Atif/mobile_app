@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:mobile_app/l10n/app_localizations.dart';
+import 'package:mobile_app/theme.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../config.dart';
 
@@ -40,10 +41,6 @@ class FlightBooking extends StatefulWidget {
 }
 
 class _FlightBookingState extends State<FlightBooking> {
-  static const Color teal = Color(0xFF00BFA5);
-  static const Color red = Color(0xFFE53935);
-  static const Color blue = Color(0xFF1565C0);
-
   bool isSubmitting = false;
   bool summaryExpanded = false;
   String token = '';
@@ -136,7 +133,7 @@ class _FlightBookingState extends State<FlightBooking> {
     }
   }
 
-  void _openPassengerSheet(int index, AppLocalizations l) {
+  void _openPassengerSheet(int index, AppLocalizations l, AppThemeExtension t) {
     final p = Map<String, dynamic>.from(passengerList[index]);
     final firstNameCtrl = TextEditingController(text: p['firstName']);
     final lastNameCtrl = TextEditingController(text: p['lastName']);
@@ -152,7 +149,7 @@ class _FlightBookingState extends State<FlightBooking> {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      backgroundColor: Colors.white,
+      backgroundColor: t.card,
       shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
       builder: (sheetContext) {
@@ -177,10 +174,14 @@ class _FlightBookingState extends State<FlightBooking> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text('${l.passenger} ${index + 1}${index == 0 ? ' (${l.you})' : ''}',
-                            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-                        IconButton(icon: const Icon(Icons.close),
-                            onPressed: () => Navigator.pop(sheetContext)),
+                        Text(
+                          '${l.passenger} ${index + 1}${index == 0 ? ' (${l.you})' : ''}',
+                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: t.title),
+                        ),
+                        IconButton(
+                          icon: Icon(Icons.close, color: t.label),
+                          onPressed: () => Navigator.pop(sheetContext),
+                        ),
                       ],
                     ),
                     const SizedBox(height: 8),
@@ -190,75 +191,71 @@ class _FlightBookingState extends State<FlightBooking> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             const SizedBox(height: 8),
-                            _validatedField(firstNameCtrl, '${l.firstName} *',
-                                firstNameError, setSheet),
+                            _validatedField(t, firstNameCtrl, '${l.firstName} *', firstNameError, setSheet),
                             const SizedBox(height: 12),
-                            _validatedField(lastNameCtrl, '${l.lastName} *',
-                                lastNameError, setSheet),
+                            _validatedField(t, lastNameCtrl, '${l.lastName} *', lastNameError, setSheet),
                             const SizedBox(height: 12),
 
                             // Gender
                             Container(
                               padding: const EdgeInsets.symmetric(horizontal: 14),
                               decoration: BoxDecoration(
-                                border: Border.all(
-                                    color: showError && gender == null
-                                        ? Colors.red.shade300 : Colors.grey.shade400),
+                                color: t.field,
+                                border: Border.all(color: showError && gender == null
+                                    ? Colors.red.shade300 : t.fieldBorder),
                                 borderRadius: BorderRadius.circular(8),
                               ),
                               child: DropdownButtonHideUnderline(
                                 child: DropdownButton<String>(
                                   value: gender,
                                   isExpanded: true,
-                                  hint: Text('${l.gender} *',
-                                      style: TextStyle(color: Colors.grey.shade600, fontSize: 14)),
+                                  dropdownColor: t.card,
+                                  hint: Text('${l.gender} *', style: TextStyle(color: t.label, fontSize: 14)),
                                   items: [
-                                    DropdownMenuItem(value: 'Male', child: Text(l.male)),
-                                    DropdownMenuItem(value: 'Female', child: Text(l.female)),
+                                    DropdownMenuItem(value: 'Male', child: Text(l.male, style: TextStyle(color: t.title))),
+                                    DropdownMenuItem(value: 'Female', child: Text(l.female, style: TextStyle(color: t.title))),
                                   ],
                                   onChanged: (val) => setSheet(() => gender = val),
                                 ),
                               ),
                             ),
                             if (showError && gender == null)
-                              Padding(padding: EdgeInsets.only(left: 4, top: 4),
+                              Padding(padding: const EdgeInsets.only(left: 4, top: 4),
                                   child: Text(l.errorRequired,
                                       style: TextStyle(color: Colors.red.shade400, fontSize: 12))),
                             const SizedBox(height: 12),
 
-                            _sheetDateField(sheetContext, '${l.dateOfBirth} *', dob,
+                            _sheetDateField(t, sheetContext, '${l.dateOfBirth} *', dob,
                                 (picked) => setSheet(() => dob = picked), isDOB: true),
                             if (showError && dob == null)
-                              Padding(padding: EdgeInsets.only(left: 4, top: 4),
+                              Padding(padding: const EdgeInsets.only(left: 4, top: 4),
                                   child: Text(l.errorRequired,
                                       style: TextStyle(color: Colors.red.shade400, fontSize: 12))),
                             const SizedBox(height: 12),
 
-                            _validatedField(nationalityCtrl, '${l.nationality} *',
-                                nationalityError, setSheet),
+                            _validatedField(t, nationalityCtrl, '${l.nationality} *', nationalityError, setSheet),
                             const SizedBox(height: 16),
 
                             Text(l.travelDocument,
-                                style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600)),
+                                style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600, color: t.title)),
                             const SizedBox(height: 12),
 
-                            _validatedField(passportCtrl, '${l.passportNumber} *',
-                                passportError, setSheet),
+                            _validatedField(t, passportCtrl, '${l.passportNumber} *', passportError, setSheet),
                             const SizedBox(height: 12),
 
-                            _sheetDateField(sheetContext, '${l.passportExpiry} *', expiry,
+                            _sheetDateField(t, sheetContext, '${l.passportExpiry} *', expiry,
                                 (picked) => setSheet(() => expiry = picked), isDOB: false),
                             if (showError && expiry == null)
-                              Padding(padding: EdgeInsets.only(left: 4, top: 4),
+                              Padding(padding: const EdgeInsets.only(left: 4, top: 4),
                                   child: Text(l.errorRequired,
                                       style: TextStyle(color: Colors.red.shade400, fontSize: 12))),
                             const SizedBox(height: 16),
 
                             Text(l.contactDetails,
-                                style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600)),
+                                style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600, color: t.title)),
                             const SizedBox(height: 12),
 
-                            _validatedField(emailCtrl, '${l.email} *', emailError, setSheet,
+                            _validatedField(t, emailCtrl, '${l.email} *', emailError, setSheet,
                                 keyboardType: TextInputType.emailAddress),
                             const SizedBox(height: 12),
 
@@ -269,23 +266,26 @@ class _FlightBookingState extends State<FlightBooking> {
                                   height: 56,
                                   padding: const EdgeInsets.symmetric(horizontal: 10),
                                   decoration: BoxDecoration(
-                                      border: Border.all(color: Colors.grey.shade400),
-                                      borderRadius: BorderRadius.circular(8)),
+                                    color: t.field,
+                                    border: Border.all(color: t.fieldBorder),
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
                                   child: DropdownButtonHideUnderline(
                                     child: DropdownButton<String>(
                                       value: countryCode,
+                                      dropdownColor: t.card,
                                       items: ['+20', '+966', '+971', '+1', '+44']
-                                          .map((c) => DropdownMenuItem(value: c, child: Text(c)))
+                                          .map((c) => DropdownMenuItem(value: c, child: Text(c, style: TextStyle(color: t.title))))
                                           .toList(),
                                       onChanged: (val) => setSheet(() => countryCode = val!),
-                                      icon: const Icon(Icons.keyboard_arrow_down, size: 20),
-                                      style: const TextStyle(fontSize: 14, color: Colors.black),
+                                      icon: Icon(Icons.keyboard_arrow_down, size: 20, color: t.label),
+                                      style: TextStyle(fontSize: 14, color: t.title),
                                     ),
                                   ),
                                 ),
                                 const SizedBox(width: 10),
                                 Expanded(
-                                  child: _validatedField(phoneCtrl, '${l.mobileNumber} *',
+                                  child: _validatedField(t, phoneCtrl, '${l.mobileNumber} *',
                                       phoneError, setSheet, keyboardType: TextInputType.phone),
                                 ),
                               ],
@@ -300,61 +300,61 @@ class _FlightBookingState extends State<FlightBooking> {
                       Padding(
                         padding: const EdgeInsets.only(bottom: 10),
                         child: Text(l.pleaseFixErrors,
-                            style: TextStyle(color: Colors.red, fontSize: 13),
+                            style: const TextStyle(color: Colors.red, fontSize: 13),
                             textAlign: TextAlign.center),
                       ),
 
-                    SizedBox(
-                      width: double.infinity,
-                      child: ElevatedButton(
-                        onPressed: () {
-                          final fErr = _validateName(firstNameCtrl.text);
-                          final lErr = _validateName(lastNameCtrl.text);
-                          final eErr = _validateEmail(emailCtrl.text);
-                          final pErr = _validatePhone(phoneCtrl.text);
-                          final nErr = _validateName(nationalityCtrl.text);
-                          final ppErr = _validatePassport(passportCtrl.text);
+                    GestureDetector(
+                      onTap: () {
+                        final fErr = _validateName(firstNameCtrl.text);
+                        final lErr = _validateName(lastNameCtrl.text);
+                        final eErr = _validateEmail(emailCtrl.text);
+                        final pErr = _validatePhone(phoneCtrl.text);
+                        final nErr = _validateName(nationalityCtrl.text);
+                        final ppErr = _validatePassport(passportCtrl.text);
 
-                          if (fErr != null || lErr != null || eErr != null ||
-                              pErr != null || nErr != null || ppErr != null ||
-                              gender == null || dob == null || expiry == null) {
-                            setSheet(() {
-                              showError = true;
-                              firstNameError = fErr != null ? _resolveError(fErr, l) : null;
-                              lastNameError = lErr != null ? _resolveError(lErr, l) : null;
-                              emailError = eErr != null ? _resolveError(eErr, l) : null;
-                              phoneError = pErr != null ? _resolveError(pErr, l) : null;
-                              nationalityError = nErr != null ? _resolveError(nErr, l) : null;
-                              passportError = ppErr != null ? _resolveError(ppErr, l) : null;
-                            });
-                            return;
-                          }
-
-                          setState(() {
-                            passengerList[index] = {
-                              'filled': true,
-                              'firstName': firstNameCtrl.text.trim(),
-                              'lastName': lastNameCtrl.text.trim(),
-                              'email': emailCtrl.text.trim(),
-                              'phone': phoneCtrl.text.trim(),
-                              'nationality': nationalityCtrl.text.trim(),
-                              'passportNumber': passportCtrl.text.trim().toUpperCase(),
-                              'gender': gender,
-                              'dateOfBirth': dob,
-                              'passportExpiry': expiry,
-                              'countryCode': countryCode,
-                            };
+                        if (fErr != null || lErr != null || eErr != null ||
+                            pErr != null || nErr != null || ppErr != null ||
+                            gender == null || dob == null || expiry == null) {
+                          setSheet(() {
+                            showError = true;
+                            firstNameError = fErr != null ? _resolveError(fErr, l) : null;
+                            lastNameError = lErr != null ? _resolveError(lErr, l) : null;
+                            emailError = eErr != null ? _resolveError(eErr, l) : null;
+                            phoneError = pErr != null ? _resolveError(pErr, l) : null;
+                            nationalityError = nErr != null ? _resolveError(nErr, l) : null;
+                            passportError = ppErr != null ? _resolveError(ppErr, l) : null;
                           });
-                          Navigator.pop(sheetContext);
-                        },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: teal, foregroundColor: Colors.white,
-                          padding: const EdgeInsets.symmetric(vertical: 16),
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
-                          elevation: 0,
+                          return;
+                        }
+
+                        setState(() {
+                          passengerList[index] = {
+                            'filled': true,
+                            'firstName': firstNameCtrl.text.trim(),
+                            'lastName': lastNameCtrl.text.trim(),
+                            'email': emailCtrl.text.trim(),
+                            'phone': phoneCtrl.text.trim(),
+                            'nationality': nationalityCtrl.text.trim(),
+                            'passportNumber': passportCtrl.text.trim().toUpperCase(),
+                            'gender': gender,
+                            'dateOfBirth': dob,
+                            'passportExpiry': expiry,
+                            'countryCode': countryCode,
+                          };
+                        });
+                        Navigator.pop(sheetContext);
+                      },
+                      child: Container(
+                        width: double.infinity,
+                        padding: const EdgeInsets.symmetric(vertical: 16),
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(colors: t.btnGradient),
+                          borderRadius: BorderRadius.circular(30),
                         ),
                         child: Text(l.savePassenger(index + 1),
-                            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+                            textAlign: TextAlign.center,
+                            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: Colors.white)),
                       ),
                     ),
                   ],
@@ -419,7 +419,7 @@ class _FlightBookingState extends State<FlightBooking> {
     setState(() => isSubmitting = false);
   }
 
-  Widget _validatedField(TextEditingController ctrl, String label,
+  Widget _validatedField(AppThemeExtension t, TextEditingController ctrl, String label,
       String? errorText, StateSetter setSheet,
       {TextInputType keyboardType = TextInputType.text}) {
     return Column(
@@ -429,29 +429,29 @@ class _FlightBookingState extends State<FlightBooking> {
           controller: ctrl,
           keyboardType: keyboardType,
           onChanged: (_) => setSheet(() {}),
+          style: TextStyle(color: t.title),
           decoration: InputDecoration(
             labelText: label,
-            labelStyle: TextStyle(color: Colors.grey.shade600, fontSize: 14),
+            labelStyle: TextStyle(color: t.label, fontSize: 14),
+            filled: true,
+            fillColor: t.field,
             border: OutlineInputBorder(borderRadius: BorderRadius.circular(8),
-                borderSide: BorderSide(color: errorText != null
-                    ? Colors.red.shade300 : Colors.grey.shade400)),
+                borderSide: BorderSide(color: errorText != null ? Colors.red.shade300 : t.fieldBorder)),
             enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(8),
-                borderSide: BorderSide(color: errorText != null
-                    ? Colors.red.shade300 : Colors.grey.shade400)),
+                borderSide: BorderSide(color: errorText != null ? Colors.red.shade300 : t.fieldBorder)),
             focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(8),
-                borderSide: const BorderSide(color: teal, width: 1.5)),
+                borderSide: BorderSide(color: t.accent, width: 1.5)),
             contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
           ),
         ),
         if (errorText != null)
           Padding(padding: const EdgeInsets.only(left: 4, top: 4),
-              child: Text(errorText,
-                  style: TextStyle(color: Colors.red.shade400, fontSize: 12))),
+              child: Text(errorText, style: TextStyle(color: Colors.red.shade400, fontSize: 12))),
       ],
     );
   }
 
-  Widget _sheetDateField(BuildContext ctx, String label, DateTime? value,
+  Widget _sheetDateField(AppThemeExtension t, BuildContext ctx, String label, DateTime? value,
       Function(DateTime) onPicked, {required bool isDOB}) {
     return GestureDetector(
       onTap: () async {
@@ -467,15 +467,16 @@ class _FlightBookingState extends State<FlightBooking> {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 16),
         decoration: BoxDecoration(
-            border: Border.all(color: Colors.grey.shade400),
-            borderRadius: BorderRadius.circular(8)),
+          color: t.field,
+          border: Border.all(color: t.fieldBorder),
+          borderRadius: BorderRadius.circular(8),
+        ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(value != null ? _formatDate(value) : label,
-                style: TextStyle(fontSize: 14,
-                    color: value != null ? Colors.black87 : Colors.grey.shade600)),
-            Icon(Icons.calendar_today_outlined, size: 18, color: Colors.grey.shade500),
+                style: TextStyle(fontSize: 14, color: value != null ? t.title : t.label)),
+            Icon(Icons.calendar_today_outlined, size: 18, color: t.label),
           ],
         ),
       ),
@@ -485,35 +486,38 @@ class _FlightBookingState extends State<FlightBooking> {
   @override
   Widget build(BuildContext context) {
     final l = AppLocalizations.of(context)!;
+    final t = Theme.of(context).extension<AppThemeExtension>()!;
 
     return Scaffold(
-      backgroundColor: Colors.grey[50],
+      backgroundColor: t.bg,
       appBar: AppBar(
         title: Text(l.travellerDetails,
-            style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 17)),
-        backgroundColor: Colors.white,
-        foregroundColor: Colors.black,
+            style: TextStyle(fontWeight: FontWeight.w600, fontSize: 17, color: t.title)),
+        backgroundColor: t.header,
         elevation: 0.5,
+        shadowColor: t.divider,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.black),
+          icon: Icon(Icons.arrow_back, color: t.backIcon),
           onPressed: () => Navigator.pop(context),
         ),
       ),
       body: passengerList.isEmpty
-          ? const Center(child: CircularProgressIndicator())
+          ? Center(child: CircularProgressIndicator(color: t.accent))
           : SingleChildScrollView(
               padding: const EdgeInsets.all(16),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Summary card
+                  // Collapsible summary
                   GestureDetector(
                     onTap: () => setState(() => summaryExpanded = !summaryExpanded),
                     child: Container(
                       padding: const EdgeInsets.all(14),
-                      decoration: BoxDecoration(color: Colors.white,
-                          borderRadius: BorderRadius.circular(12),
-                          border: Border.all(color: Colors.grey.shade200)),
+                      decoration: BoxDecoration(
+                        color: t.card,
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(color: t.cardBorder.withOpacity(0.5)),
+                      ),
                       child: Column(
                         children: [
                           Row(
@@ -521,52 +525,43 @@ class _FlightBookingState extends State<FlightBooking> {
                             children: [
                               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                                 Text('${widget.fromCity} → ${widget.toCity}',
-                                    style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15)),
+                                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color: t.title)),
                                 const SizedBox(height: 4),
                                 Text('${widget.currency} $totalPrice',
-                                    style: const TextStyle(fontSize: 16,
-                                        fontWeight: FontWeight.bold, color: blue)),
+                                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: t.price)),
                               ]),
                               Row(children: [
                                 Text(summaryExpanded ? l.hideSummaryFlight : l.viewSummaryFlight,
-                                    style: const TextStyle(fontSize: 13, color: teal)),
+                                    style: TextStyle(fontSize: 13, color: t.accent)),
                                 Icon(summaryExpanded ? Icons.keyboard_arrow_up
-                                    : Icons.keyboard_arrow_down, color: teal),
+                                    : Icons.keyboard_arrow_down, color: t.accent),
                               ]),
                             ],
                           ),
                           if (summaryExpanded) ...[
                             const SizedBox(height: 14),
-                            const Divider(),
+                            Divider(color: t.divider),
                             const SizedBox(height: 10),
-                            _summaryRow(Icons.calendar_today_outlined, l.departure,
-                                _formatDate(widget.departureDate)),
+                            _summaryRow(t, Icons.calendar_today_outlined, l.departure, _formatDate(widget.departureDate)),
                             if (widget.returnDate != null)
-                              _summaryRow(Icons.calendar_today_outlined, l.returnDate,
-                                  _formatDate(widget.returnDate)),
-                            _summaryRow(Icons.airline_seat_recline_normal, l.class_,
-                                widget.flightClass),
-                            _summaryRow(Icons.swap_calls, l.tripType, widget.tripType),
-                            _summaryRow(Icons.people_outline, l.passengers,
-                                '${widget.passengers}'),
-                            _summaryRow(Icons.flight, l.airline, widget.airline),
-                            _summaryRow(Icons.timer_outlined, l.duration, widget.duration),
-                            _summaryRow(Icons.location_on_outlined, l.stops, widget.stops),
-                            const Divider(),
+                              _summaryRow(t, Icons.calendar_today_outlined, l.returnDate, _formatDate(widget.returnDate)),
+                            _summaryRow(t, Icons.airline_seat_recline_normal, l.class_, widget.flightClass),
+                            _summaryRow(t, Icons.swap_calls, l.tripType, widget.tripType),
+                            _summaryRow(t, Icons.people_outline, l.passengers, '${widget.passengers}'),
+                            _summaryRow(t, Icons.flight, l.airline, widget.airline),
+                            _summaryRow(t, Icons.timer_outlined, l.duration, widget.duration),
+                            _summaryRow(t, Icons.location_on_outlined, l.stops, widget.stops),
+                            Divider(color: t.divider),
                             const SizedBox(height: 6),
                             Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                              Text(l.pricePerPerson,
-                                  style: TextStyle(color: Colors.grey, fontSize: 13)),
-                              Text('${widget.currency} ${widget.price}',
-                                  style: const TextStyle(fontSize: 13)),
+                              Text(l.pricePerPerson, style: TextStyle(color: t.label, fontSize: 13)),
+                              Text('${widget.currency} ${widget.price}', style: TextStyle(fontSize: 13, color: t.title)),
                             ]),
                             const SizedBox(height: 6),
                             Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                              Text(l.total,
-                                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15)),
+                              Text(l.total, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color: t.title)),
                               Text('${widget.currency} $totalPrice',
-                                  style: const TextStyle(fontWeight: FontWeight.bold,
-                                      fontSize: 15, color: blue)),
+                                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color: t.price)),
                             ]),
                           ],
                         ],
@@ -576,45 +571,63 @@ class _FlightBookingState extends State<FlightBooking> {
 
                   const SizedBox(height: 24),
                   Text(l.travellerDetails,
-                      style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: t.title)),
                   const SizedBox(height: 12),
 
+                  // Passenger cards
                   ...List.generate(passengerList.length, (i) {
                     final p = passengerList[i];
                     final filled = p['filled'] as bool;
                     return Container(
                       margin: const EdgeInsets.only(bottom: 12),
-                      decoration: BoxDecoration(color: Colors.white,
-                          borderRadius: BorderRadius.circular(10),
-                          border: Border.all(color: Colors.grey.shade300)),
+                      decoration: BoxDecoration(
+                        color: t.card,
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(color: filled ? t.accent.withOpacity(0.3) : t.cardBorder.withOpacity(0.5)),
+                      ),
                       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Row(children: [
-                            Icon(Icons.person_outline,
-                                color: filled ? teal : Colors.black87, size: 22),
+                            Container(
+                              width: 36, height: 36,
+                              decoration: BoxDecoration(
+                                color: filled ? t.accentLight : t.bg,
+                                shape: BoxShape.circle,
+                              ),
+                              child: Icon(Icons.person_outline,
+                                  color: filled ? t.accent : t.label, size: 20),
+                            ),
                             const SizedBox(width: 10),
                             Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                               Text('${l.passenger} ${i + 1}${i == 0 ? ' (${l.you})' : ''}',
-                                  style: const TextStyle(fontSize: 15)),
+                                  style: TextStyle(fontSize: 15, color: t.title)),
                               if (filled && p['firstName'].isNotEmpty)
                                 Text('${p['firstName']} ${p['lastName']}',
-                                    style: TextStyle(fontSize: 12, color: Colors.grey.shade600)),
+                                    style: TextStyle(fontSize: 12, color: t.label)),
                             ]),
                           ]),
-                          ElevatedButton.icon(
-                            onPressed: () => _openPassengerSheet(i, l),
-                            icon: Icon(filled ? Icons.edit : Icons.add, size: 18),
-                            label: Text(filled ? 'Edit' : 'Add',
-                                style: const TextStyle(fontSize: 14)),
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: filled ? Colors.grey.shade100 : teal,
-                              foregroundColor: filled ? Colors.black87 : Colors.white,
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(20)),
+                          GestureDetector(
+                            onTap: () => _openPassengerSheet(i, l, t),
+                            child: Container(
                               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                              elevation: 0,
+                              decoration: BoxDecoration(
+                                color: filled ? t.accentLight : t.accent,
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Icon(filled ? Icons.edit : Icons.add,
+                                      size: 16, color: filled ? t.accent : Colors.white),
+                                  const SizedBox(width: 4),
+                                  Text(filled ? 'Edit' : 'Add',
+                                      style: TextStyle(fontSize: 13,
+                                          color: filled ? t.accent : Colors.white,
+                                          fontWeight: FontWeight.w600)),
+                                ],
+                              ),
                             ),
                           ),
                         ],
@@ -624,23 +637,24 @@ class _FlightBookingState extends State<FlightBooking> {
 
                   const SizedBox(height: 24),
 
-                  SizedBox(
-                    width: double.infinity,
-                    child: ElevatedButton(
-                      onPressed: isSubmitting ? null : () => _submitBookings(l),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: red, foregroundColor: Colors.white,
-                        padding: const EdgeInsets.symmetric(vertical: 16),
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
-                        elevation: 0,
+                  GestureDetector(
+                    onTap: isSubmitting ? null : () => _submitBookings(l),
+                    child: Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(colors: t.btnGradient),
+                        borderRadius: BorderRadius.circular(30),
+                        boxShadow: [BoxShadow(color: t.accent.withOpacity(0.3), blurRadius: 12, offset: const Offset(0, 4))],
                       ),
                       child: isSubmitting
-                          ? const CircularProgressIndicator(color: Colors.white)
+                          ? const Center(child: CircularProgressIndicator(color: Colors.white))
                           : Text(
                               passengerList.length > 1
                                   ? l.confirmBookings(passengerList.length)
                                   : l.confirmBooking,
-                              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+                              textAlign: TextAlign.center,
+                              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: Colors.white)),
                     ),
                   ),
                   const SizedBox(height: 24),
@@ -650,14 +664,14 @@ class _FlightBookingState extends State<FlightBooking> {
     );
   }
 
-  Widget _summaryRow(IconData icon, String label, String value) {
+  Widget _summaryRow(AppThemeExtension t, IconData icon, String label, String value) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 8),
       child: Row(children: [
-        Icon(icon, size: 16, color: Colors.grey),
+        Icon(icon, size: 16, color: t.label),
         const SizedBox(width: 8),
-        Text('$label: ', style: TextStyle(fontSize: 13, color: Colors.grey.shade600)),
-        Text(value, style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w500)),
+        Text('$label: ', style: TextStyle(fontSize: 13, color: t.label)),
+        Text(value, style: TextStyle(fontSize: 13, fontWeight: FontWeight.w500, color: t.title)),
       ]),
     );
   }

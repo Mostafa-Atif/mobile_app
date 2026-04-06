@@ -3,16 +3,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:mobile_app/l10n/app_localizations.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:mobile_app/screens/auth/sign_in.dart';
-import 'package:mobile_app/screens/auth/sign_up.dart';
-import 'package:mobile_app/screens/car%20rent/carssearch.dart';
-import 'package:mobile_app/screens/flights/flightsearch.dart';
-import 'package:mobile_app/screens/hotels/hotel_search.dart';
+import 'package:mobile_app/screens/home_screen.dart';
 import 'package:mobile_app/screens/onboarding/onboarding_screen_1.dart';
 import 'package:mobile_app/screens/temp_home.dart';
+import 'package:mobile_app/theme.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'screens/onboarding/onboarding_screen_1.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -24,12 +21,17 @@ void main() async {
   if (!onboardingDone) {
     startScreen = const OnboardingScreen1();
   } else if (token.isNotEmpty) {
-    startScreen = const TempHome();
+    startScreen = const HomeScreen();
   } else {
     startScreen = const SignIn();
   }
 
-  runApp(MyApp(startScreen: startScreen));
+  runApp(
+    ChangeNotifierProvider(
+      create: (_) => ThemeProvider(),
+      child: MyApp(startScreen: startScreen),
+    ),
+  );
 }
 
 class MyApp extends StatefulWidget {
@@ -54,6 +56,7 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = context.watch<ThemeProvider>();
     return MaterialApp(
       title: 'Rahal',
       localizationsDelegates: [
@@ -68,9 +71,9 @@ class _MyAppState extends State<MyApp> {
       ],
       locale: _locale,
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        textTheme: GoogleFonts.dmSansTextTheme(),
-      ),
+      theme: lightTheme(),
+      darkTheme: darkTheme(),
+      themeMode: themeProvider.mode,
       home: widget.startScreen,
     );
   }

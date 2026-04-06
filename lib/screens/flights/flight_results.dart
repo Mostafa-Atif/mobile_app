@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:mobile_app/l10n/app_localizations.dart';
 import 'package:mobile_app/screens/flights/review.dart';
+import 'package:mobile_app/theme.dart';
 import '../../config.dart';
 
 class FlightResults extends StatefulWidget {
@@ -90,17 +91,26 @@ class _FlightResultsState extends State<FlightResults> {
   @override
   Widget build(BuildContext context) {
     final l = AppLocalizations.of(context)!;
+    final t = Theme.of(context).extension<AppThemeExtension>()!;
 
-    if (isLoading) return Scaffold(body: Center(child: CircularProgressIndicator()));
-    if (hasError) return Scaffold(body: _buildError(l));
+    if (isLoading) return Scaffold(
+      backgroundColor: t.bg,
+      body: Center(child: CircularProgressIndicator(color: t.accent)),
+    );
+
+    if (hasError) return Scaffold(
+      backgroundColor: t.bg,
+      body: _buildError(l, t),
+    );
 
     return Scaffold(
-      backgroundColor: Colors.grey[100],
+      backgroundColor: t.bg,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: t.header,
         elevation: 0.5,
+        shadowColor: t.divider,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.blue),
+          icon: Icon(Icons.arrow_back, color: t.backIcon),
           onPressed: () => Navigator.pop(context),
         ),
         title: Column(
@@ -108,16 +118,20 @@ class _FlightResultsState extends State<FlightResults> {
             Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Text('${widget.fromCity} → ${widget.toCity}',
-                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Colors.black)),
+                Text(
+                  '${widget.fromCity} → ${widget.toCity}',
+                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: t.title),
+                ),
                 if (isRoundTrip) ...[
-                  SizedBox(width: 6),
+                  const SizedBox(width: 6),
                   Container(
-                    padding: EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                    decoration: BoxDecoration(color: Color(0xFFE3F0FF),
-                        borderRadius: BorderRadius.circular(10)),
+                    padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                    decoration: BoxDecoration(
+                      color: t.accentLight,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
                     child: Text('RT', style: TextStyle(fontSize: 10,
-                        color: Color(0xFF1565C0), fontWeight: FontWeight.bold)),
+                        color: t.accent, fontWeight: FontWeight.bold)),
                   ),
                 ],
               ],
@@ -126,15 +140,13 @@ class _FlightResultsState extends State<FlightResults> {
               isRoundTrip
                   ? '${_formatDate(widget.departureDate)} · ${widget.returnDate != null ? _formatDate(widget.returnDate!) : ''} · ${widget.passengers} pax'
                   : '${widget.passengers} passenger${widget.passengers > 1 ? 's' : ''} · ${widget.cabinClass} · ${_formatDate(widget.departureDate)}',
-              style: TextStyle(fontSize: 10, color: Colors.grey),
+              style: TextStyle(fontSize: 10, color: t.label),
             ),
           ],
         ),
         centerTitle: true,
         actions: [
-          IconButton(
-              icon: Icon(Icons.refresh, color: Colors.blue),
-              onPressed: fetchFlights),
+          IconButton(icon: Icon(Icons.refresh, color: t.accent), onPressed: fetchFlights),
         ],
       ),
       body: flights.isEmpty
@@ -142,49 +154,59 @@ class _FlightResultsState extends State<FlightResults> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(Icons.airplanemode_off, size: 60, color: Colors.grey[400]),
-                  SizedBox(height: 16),
-                  Text(l.noFlightsFound, style: TextStyle(fontSize: 18, color: Colors.grey)),
-                  SizedBox(height: 8),
-                  Text(l.tryDifferentDates, style: TextStyle(color: Colors.grey[400])),
+                  Icon(Icons.airplanemode_off, size: 60, color: t.label),
+                  const SizedBox(height: 16),
+                  Text(l.noFlightsFound, style: TextStyle(fontSize: 18, color: t.title)),
+                  const SizedBox(height: 8),
+                  Text(l.tryDifferentDates, style: TextStyle(color: t.label)),
                 ],
               ),
             )
           : ListView.builder(
-              padding: EdgeInsets.all(16),
+              padding: const EdgeInsets.all(16),
               itemCount: flights.length,
-              itemBuilder: (context, index) => _buildFlightCard(flights[index], l),
+              itemBuilder: (context, index) => _buildFlightCard(flights[index], l, t),
             ),
     );
   }
 
-  Widget _buildError(AppLocalizations l) {
+  Widget _buildError(AppLocalizations l, AppThemeExtension t) {
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(Icons.wifi_off, size: 60, color: Colors.grey[300]),
-          SizedBox(height: 16),
+          Icon(Icons.wifi_off, size: 60, color: t.label),
+          const SizedBox(height: 16),
           Text(l.unableToConnect,
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.grey[700])),
-          SizedBox(height: 8),
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: t.title)),
+          const SizedBox(height: 8),
           Text(l.checkConnectionRetry,
-              style: TextStyle(color: Colors.grey[500], fontSize: 13),
-              textAlign: TextAlign.center),
-          SizedBox(height: 24),
-          ElevatedButton.icon(
-            onPressed: fetchFlights,
-            icon: Icon(Icons.refresh),
-            label: Text(l.retry),
-            style: ElevatedButton.styleFrom(
-                shape: StadiumBorder(), backgroundColor: Colors.blue, foregroundColor: Colors.white),
+              style: TextStyle(color: t.label, fontSize: 13), textAlign: TextAlign.center),
+          const SizedBox(height: 24),
+          GestureDetector(
+            onTap: fetchFlights,
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+              decoration: BoxDecoration(
+                gradient: LinearGradient(colors: t.btnGradient),
+                borderRadius: BorderRadius.circular(30),
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Icon(Icons.refresh, color: Colors.white, size: 18),
+                  const SizedBox(width: 8),
+                  Text(l.retry, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w600)),
+                ],
+              ),
+            ),
           ),
         ],
       ),
     );
   }
 
-  Widget _buildFlightCard(Map<String, dynamic> flight, AppLocalizations l) {
+  Widget _buildFlightCard(Map<String, dynamic> flight, AppLocalizations l, AppThemeExtension t) {
     final bool hasLuggage = flight['hasLuggage'] ?? false;
     final String currency = flight['currency'] ?? 'QAR';
     final String stops = flight['stops'] ?? 'Direct';
@@ -194,35 +216,41 @@ class _FlightResultsState extends State<FlightResults> {
       onTap: () => Navigator.push(context, MaterialPageRoute(
           builder: (context) => Review(flight: flight, passengers: widget.passengers))),
       child: Container(
-        margin: EdgeInsets.only(bottom: 12),
+        margin: const EdgeInsets.only(bottom: 12),
         decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(12),
-          boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.05), blurRadius: 8)],
+          color: t.card,
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: t.cardBorder.withOpacity(0.5)),
+          boxShadow: [BoxShadow(color: t.cardBorder.withOpacity(0.15), blurRadius: 10)],
         ),
         child: Column(
           children: [
             Padding(
-              padding: EdgeInsets.all(16),
+              padding: const EdgeInsets.all(16),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  // Airline + price
                   Row(
                     children: [
                       Container(
                         width: 36, height: 36,
-                        decoration: BoxDecoration(color: Color(0xFF1B2A4A),
-                            borderRadius: BorderRadius.circular(8)),
-                        child: Icon(Icons.flight, color: Colors.white, size: 20),
+                        decoration: BoxDecoration(
+                          color: t.accentLight,
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Icon(Icons.flight, color: t.accent, size: 20),
                       ),
-                      SizedBox(width: 10),
+                      const SizedBox(width: 10),
                       Expanded(child: Text(flight['airline'] ?? '',
-                          style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600))),
+                          style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: t.title))),
                       Text('$currency ${flight['price']}',
-                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: t.price)),
                     ],
                   ),
-                  SizedBox(height: 16),
+                  const SizedBox(height: 16),
+
+                  // Outbound times
                   _timesRow(
                     flight['departTime'] ?? '--:--',
                     flight['fromCode'] ?? flight['fromCity'] ?? '',
@@ -230,18 +258,21 @@ class _FlightResultsState extends State<FlightResults> {
                     stops,
                     flight['arrivalTime'] ?? '--:--',
                     flight['toCode'] ?? flight['toCity'] ?? '',
+                    t,
                   ),
+
+                  // Return row
                   if (isRoundTrip && returnTime.isNotEmpty) ...[
-                    SizedBox(height: 12),
-                    Divider(height: 1, color: Colors.grey[200]),
-                    SizedBox(height: 12),
+                    const SizedBox(height: 12),
+                    Divider(height: 1, color: t.divider),
+                    const SizedBox(height: 12),
                     Row(children: [
-                      Icon(Icons.event_repeat, size: 14, color: Color(0xFF00BFA5)),
-                      SizedBox(width: 4),
+                      Icon(Icons.event_repeat, size: 14, color: t.accent),
+                      const SizedBox(width: 4),
                       Text(l.returnFlight, style: TextStyle(fontSize: 12,
-                          color: Color(0xFF00BFA5), fontWeight: FontWeight.w600)),
+                          color: t.accent, fontWeight: FontWeight.w600)),
                     ]),
-                    SizedBox(height: 8),
+                    const SizedBox(height: 8),
                     _timesRow(
                       returnTime,
                       flight['toCode'] ?? flight['toCity'] ?? '',
@@ -249,27 +280,31 @@ class _FlightResultsState extends State<FlightResults> {
                       stops,
                       _calcArrival(returnTime, flight['duration'] ?? ''),
                       flight['fromCode'] ?? flight['fromCity'] ?? '',
+                      t,
                     ),
                   ],
                 ],
               ),
             ),
+
+            // Footer
             Container(
-              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
               decoration: BoxDecoration(
-                color: Colors.grey[50],
-                borderRadius: BorderRadius.vertical(bottom: Radius.circular(12)),
-                border: Border(top: BorderSide(color: Colors.grey[200]!)),
+                color: t.accentLight.withOpacity(0.4),
+                borderRadius: const BorderRadius.vertical(bottom: Radius.circular(16)),
+                border: Border(top: BorderSide(color: t.divider)),
               ),
               child: Row(
                 children: [
                   Icon(hasLuggage ? Icons.luggage : Icons.no_luggage,
-                      size: 16, color: hasLuggage ? Colors.blue : Colors.grey),
-                  SizedBox(width: 6),
+                      size: 16, color: hasLuggage ? t.accent : t.label),
+                  const SizedBox(width: 6),
                   Text(hasLuggage ? l.checkedBaggage : 'No checked baggage',
-                      style: TextStyle(fontSize: 12, color: hasLuggage ? Colors.blue : Colors.grey)),
-                  Spacer(),
-                  Text(flight['flightClass'] ?? '', style: TextStyle(fontSize: 12, color: Colors.grey)),
+                      style: TextStyle(fontSize: 12, color: hasLuggage ? t.accent : t.label)),
+                  const Spacer(),
+                  Text(flight['flightClass'] ?? '',
+                      style: TextStyle(fontSize: 12, color: t.label)),
                 ],
               ),
             ),
@@ -280,28 +315,28 @@ class _FlightResultsState extends State<FlightResults> {
   }
 
   Widget _timesRow(String dep, String fromCode, String dur, String stops,
-      String arr, String toCode) {
+      String arr, String toCode, AppThemeExtension t) {
     return Row(
       children: [
         Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Text(dep, style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-          Text(fromCode, style: TextStyle(fontSize: 12, color: Colors.grey)),
+          Text(dep, style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: t.title)),
+          Text(fromCode, style: TextStyle(fontSize: 12, color: t.label)),
         ]),
         Expanded(
           child: Column(children: [
-            Text(dur, style: TextStyle(fontSize: 11, color: Colors.grey)),
-            SizedBox(height: 4),
+            Text(dur, style: TextStyle(fontSize: 11, color: t.label)),
+            const SizedBox(height: 4),
             Stack(alignment: Alignment.center, children: [
-              Divider(color: Colors.grey[300], thickness: 1),
-              Icon(Icons.flight, color: Colors.grey[400], size: 16),
+              Divider(color: t.divider, thickness: 1),
+              Icon(Icons.flight, color: t.label, size: 16),
             ]),
-            SizedBox(height: 4),
-            Text(stops, style: TextStyle(fontSize: 11, color: Colors.grey)),
+            const SizedBox(height: 4),
+            Text(stops, style: TextStyle(fontSize: 11, color: t.label)),
           ]),
         ),
         Column(crossAxisAlignment: CrossAxisAlignment.end, children: [
-          Text(arr, style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-          Text(toCode, style: TextStyle(fontSize: 12, color: Colors.grey)),
+          Text(arr, style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: t.title)),
+          Text(toCode, style: TextStyle(fontSize: 12, color: t.label)),
         ]),
       ],
     );
