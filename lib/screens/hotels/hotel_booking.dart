@@ -1,10 +1,14 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
 import 'package:mobile_app/l10n/app_localizations.dart';
+import 'package:mobile_app/theme.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
 import '../../config.dart';
 
 class HotelBooking extends StatefulWidget {
@@ -34,8 +38,7 @@ class HotelBooking extends StatefulWidget {
 }
 
 class _HotelBookingState extends State<HotelBooking> {
-  static const Color _teal = Color(0xFF1f93a0);
-  static const Color _red = Color(0xFFE84545);
+  AppThemeExtension get _t => Theme.of(context).extension<AppThemeExtension>()!;
 
   bool isSubmitting = false;
   bool summaryExpanded = false;
@@ -58,7 +61,9 @@ class _HotelBookingState extends State<HotelBooking> {
     final List<Map<String, dynamic>> list = [
       {
         'filled': false,
-        'name': '${prefs.getString('firstName') ?? ''} ${prefs.getString('lastName') ?? ''}'.trim(),
+        'name':
+            '${prefs.getString('firstName') ?? ''} ${prefs.getString('lastName') ?? ''}'
+                .trim(),
         'email': prefs.getString('email') ?? '',
         'phone': prefs.getString('phone') ?? '',
         'address': '',
@@ -66,26 +71,34 @@ class _HotelBookingState extends State<HotelBooking> {
     ];
 
     for (int i = 1; i < numPeople; i++) {
-      list.add({'filled': false, 'name': '', 'email': '', 'phone': '', 'address': ''});
+      list.add({
+        'filled': false,
+        'name': '',
+        'email': '',
+        'phone': '',
+        'address': '',
+      });
     }
 
     setState(() => guestList = list);
   }
 
   String _formatDate(DateTime date) {
-    List<String> months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-    return '${date.day} ${months[date.month - 1]} ${date.year}';
+    final locale = Localizations.localeOf(context).languageCode;
+    return DateFormat('d MMM y', locale).format(date);
   }
 
   String? _validateName(String val) {
     if (val.trim().isEmpty) return 'required';
-    if (!RegExp(r'^[a-zA-Z\s]+$').hasMatch(val.trim())) return 'lettersOnly';
+    if (!RegExp(r'^[a-zA-Z\u0600-\u06FF\s]+$').hasMatch(val.trim())) return 'lettersOnly';
     return null;
   }
 
   String? _validateEmail(String val) {
     if (val.trim().isEmpty) return 'required';
-    if (!RegExp(r'^[\w\.-]+@[\w\.-]+\.\w{2,}$').hasMatch(val.trim())) return 'validEmail';
+    if (!RegExp(r'^[\w\.-]+@[\w\.-]+\.\w{2,}$').hasMatch(val.trim())) {
+      return 'validEmail';
+    }
     return null;
   }
 
@@ -98,12 +111,27 @@ class _HotelBookingState extends State<HotelBooking> {
   String _resolveError(String? key, AppLocalizations l) {
     if (key == null) return '';
     switch (key) {
-      case 'required': return l.errorRequired;
-      case 'lettersOnly': return l.errorLettersOnly;
-      case 'validEmail': return l.errorValidEmail;
-      case 'validPhone': return l.errorValidPhone;
-      default: return '';
+      case 'required':
+        return l.errorRequired;
+      case 'lettersOnly':
+        return l.errorLettersOnly;
+      case 'validEmail':
+        return l.errorValidEmail;
+      case 'validPhone':
+        return l.errorValidPhone;
+      default:
+        return '';
     }
+  }
+
+  String _bookingErrorMessage(http.Response response, AppLocalizations l) {
+    try {
+      final body = json.decode(response.body);
+      if (body is Map && body['message'] != null) {
+        return body['message'].toString();
+      }
+    } catch (_) {}
+    return l.bookingFailed;
   }
 
   void _openGuestSheet(int index, AppLocalizations l) {
@@ -116,8 +144,7 @@ class _HotelBookingState extends State<HotelBooking> {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      backgroundColor: Colors.white,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
+      backgroundColor: Colors.transparent,
       builder: (sheetContext) {
         String? nameError;
         String? emailError;
@@ -126,78 +153,131 @@ class _HotelBookingState extends State<HotelBooking> {
         return StatefulBuilder(
           builder: (sheetContext, setSheet) {
             return Padding(
-              padding: EdgeInsets.only(bottom: MediaQuery.of(sheetContext).viewInsets.bottom),
+              padding: EdgeInsets.only(
+                bottom: MediaQuery.of(sheetContext).viewInsets.bottom,
+                left: 12,
+                right: 12,
+                top: 12,
+              ),
               child: Container(
-                height: MediaQuery.of(sheetContext).size.height * 0.75,
-                padding: EdgeInsets.all(20),
+                height: MediaQuery.of(sheetContext).size.height * 0.78,
+                padding: EdgeInsets.fromLTRB(20, 16, 20, 20),
+                decoration: BoxDecoration(
+                  color: _t.bg,
+                  borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
+                ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    Center(
+                      child: Container(
+                        width: 42,
+                        height: 5,
+                        decoration: BoxDecoration(
+                          color: _t.label.withOpacity(0.35),
+                          borderRadius: BorderRadius.circular(999),
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 18),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text('${l.guest} ${index + 1}${index == 0 ? ' (${l.you})' : ''}',
-                            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-                        IconButton(icon: Icon(Icons.close),
-                            onPressed: () => Navigator.pop(sheetContext)),
+                        Expanded(
+                          child: Text(
+                            '${l.guest} ${index + 1}${index == 0 ? ' (${l.you})' : ''}',
+                            style: TextStyle(
+                              color: _t.title,
+                              fontSize: 26,
+                              height: 1.05,
+                              fontWeight: FontWeight.w400,
+                              fontFamily: 'DM Serif Display',
+                            ),
+                          ),
+                        ),
+                        _iconShell(
+                          icon: Icons.close_rounded,
+                          onTap: () => Navigator.pop(sheetContext),
+                        ),
                       ],
                     ),
-                    SizedBox(height: 8),
+                    SizedBox(height: 18),
                     Expanded(
                       child: SingleChildScrollView(
                         child: Column(
                           children: [
-                            SizedBox(height: 8),
                             _validatedField(nameCtrl, '${l.fullName} *', nameError, setSheet),
                             SizedBox(height: 12),
-                            _validatedField(emailCtrl, '${l.email} *', emailError, setSheet,
-                                keyboardType: TextInputType.emailAddress),
+                            _validatedField(
+                              emailCtrl,
+                              '${l.email} *',
+                              emailError,
+                              setSheet,
+                              keyboardType: TextInputType.emailAddress,
+                            ),
                             SizedBox(height: 12),
-                            _validatedField(phoneCtrl, '${l.phone} *', phoneError, setSheet,
-                                keyboardType: TextInputType.phone),
+                            _validatedField(
+                              phoneCtrl,
+                              '${l.phone} *',
+                              phoneError,
+                              setSheet,
+                              keyboardType: TextInputType.phone,
+                            ),
                             SizedBox(height: 12),
                             _field(addressCtrl, l.address),
-                            SizedBox(height: 24),
                           ],
                         ),
                       ),
                     ),
+                    SizedBox(height: 16),
                     SizedBox(
                       width: double.infinity,
-                      child: ElevatedButton(
-                        onPressed: () {
-                          final nErr = _validateName(nameCtrl.text);
-                          final eErr = _validateEmail(emailCtrl.text);
-                          final pErr = _validatePhone(phoneCtrl.text);
-
-                          if (nErr != null || eErr != null || pErr != null) {
-                            setSheet(() {
-                              nameError = nErr != null ? _resolveError(nErr, l) : null;
-                              emailError = eErr != null ? _resolveError(eErr, l) : null;
-                              phoneError = pErr != null ? _resolveError(pErr, l) : null;
-                            });
-                            return;
-                          }
-
-                          setState(() {
-                            guestList[index] = {
-                              'filled': true,
-                              'name': nameCtrl.text.trim(),
-                              'email': emailCtrl.text.trim(),
-                              'phone': phoneCtrl.text.trim(),
-                              'address': addressCtrl.text.trim(),
-                            };
-                          });
-                          Navigator.pop(sheetContext);
-                        },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: _teal, foregroundColor: Colors.white,
-                          padding: EdgeInsets.symmetric(vertical: 16),
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
-                          elevation: 0,
+                      child: DecoratedBox(
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(colors: _t.btnGradient),
+                          borderRadius: BorderRadius.circular(18),
                         ),
-                        child: Text(l.saveGuest(index + 1),
-                            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+                        child: ElevatedButton(
+                          onPressed: () {
+                            final nErr = _validateName(nameCtrl.text);
+                            final eErr = _validateEmail(emailCtrl.text);
+                            final pErr = _validatePhone(phoneCtrl.text);
+
+                            if (nErr != null || eErr != null || pErr != null) {
+                              setSheet(() {
+                                nameError = nErr != null ? _resolveError(nErr, l) : null;
+                                emailError = eErr != null ? _resolveError(eErr, l) : null;
+                                phoneError = pErr != null ? _resolveError(pErr, l) : null;
+                              });
+                              return;
+                            }
+
+                            setState(() {
+                              guestList[index] = {
+                                'filled': true,
+                                'name': nameCtrl.text.trim(),
+                                'email': emailCtrl.text.trim(),
+                                'phone': phoneCtrl.text.trim(),
+                                'address': addressCtrl.text.trim(),
+                              };
+                            });
+                            Navigator.pop(sheetContext);
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.transparent,
+                            foregroundColor: Colors.white,
+                            shadowColor: Colors.transparent,
+                            elevation: 0,
+                            padding: EdgeInsets.symmetric(vertical: 18),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(18),
+                            ),
+                          ),
+                          child: Text(
+                            l.saveGuest(index + 1),
+                            style: TextStyle(fontSize: 15, fontWeight: FontWeight.w800),
+                          ),
+                        ),
                       ),
                     ),
                   ],
@@ -224,7 +304,10 @@ class _HotelBookingState extends State<HotelBooking> {
     try {
       final response = await http.post(
         Uri.parse('${Config.baseUrl}/api/hotels'),
-        headers: {'Content-Type': 'application/json', 'Authorization': 'Bearer $token'},
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $token',
+        },
         body: json.encode({
           'hotelName': widget.hotelName,
           'checkInDate': widget.checkIn.toIso8601String(),
@@ -233,33 +316,47 @@ class _HotelBookingState extends State<HotelBooking> {
           'checkOutTime': '12:00',
           'numRooms': widget.numRooms,
           'numPeople': numPeople,
-          'guests': guestList.map((g) => {
-            'name': g['name'], 'email': g['email'],
-            'phone': g['phone'], 'address': g['address'],
-          }).toList(),
+          'guests': guestList
+              .map((g) => {
+                    'name': g['name'],
+                    'email': g['email'],
+                    'phone': g['phone'],
+                    'address': g['address'],
+                  })
+              .toList(),
         }),
       );
 
       if (response.statusCode == 200 || response.statusCode == 201) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(l.hotelBookedSuccess), backgroundColor: Colors.green),
+          SnackBar(
+            content: Text(l.hotelBookedSuccess),
+            backgroundColor: Colors.green,
+          ),
         );
         Navigator.pop(context);
         Navigator.pop(context);
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(l.bookingFailed)),
+          SnackBar(content: Text(_bookingErrorMessage(response, l))),
         );
       }
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error: $e')));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error: $e')),
+      );
     }
 
     setState(() => isSubmitting = false);
   }
 
-  Widget _validatedField(TextEditingController ctrl, String label,
-      String? errorText, StateSetter setSheet, {TextInputType keyboardType = TextInputType.text}) {
+  Widget _validatedField(
+    TextEditingController ctrl,
+    String label,
+    String? errorText,
+    StateSetter setSheet, {
+    TextInputType keyboardType = TextInputType.text,
+  }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -267,41 +364,62 @@ class _HotelBookingState extends State<HotelBooking> {
           controller: ctrl,
           keyboardType: keyboardType,
           onChanged: (_) => setSheet(() {}),
-          decoration: InputDecoration(
-            labelText: label,
-            labelStyle: TextStyle(color: Colors.grey.shade600, fontSize: 14),
-            border: OutlineInputBorder(borderRadius: BorderRadius.circular(8),
-                borderSide: BorderSide(color: errorText != null ? Colors.red.shade300 : Colors.grey.shade400)),
-            enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(8),
-                borderSide: BorderSide(color: errorText != null ? Colors.red.shade300 : Colors.grey.shade400)),
-            focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(8),
-                borderSide: BorderSide(color: _teal, width: 1.5)),
-            contentPadding: EdgeInsets.symmetric(horizontal: 14, vertical: 14),
-          ),
+          style: TextStyle(color: _t.title),
+          decoration: _inputDecoration(label, errorText: errorText),
         ),
         if (errorText != null)
-          Padding(padding: EdgeInsets.only(left: 4, top: 4),
-              child: Text(errorText, style: TextStyle(color: Colors.red.shade400, fontSize: 12))),
+          Padding(
+            padding: EdgeInsets.only(left: 4, top: 6),
+            child: Text(
+              errorText,
+              style: TextStyle(
+                color: AppColors.error,
+                fontSize: 12,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ),
       ],
     );
   }
 
-  Widget _field(TextEditingController ctrl, String label,
-      {TextInputType keyboardType = TextInputType.text}) {
+  Widget _field(
+    TextEditingController ctrl,
+    String label, {
+    TextInputType keyboardType = TextInputType.text,
+  }) {
     return TextField(
       controller: ctrl,
       keyboardType: keyboardType,
-      decoration: InputDecoration(
-        labelText: label,
-        labelStyle: TextStyle(color: Colors.grey.shade600, fontSize: 14),
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(8),
-            borderSide: BorderSide(color: Colors.grey.shade400)),
-        enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(8),
-            borderSide: BorderSide(color: Colors.grey.shade400)),
-        focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(8),
-            borderSide: BorderSide(color: _teal, width: 1.5)),
-        contentPadding: EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+      style: TextStyle(color: _t.title),
+      decoration: _inputDecoration(label),
+    );
+  }
+
+  InputDecoration _inputDecoration(String label, {String? errorText}) {
+    final borderColor = errorText != null ? AppColors.error.withOpacity(0.5) : _t.fieldBorder;
+    return InputDecoration(
+      labelText: label,
+      labelStyle: TextStyle(
+        color: _t.label,
+        fontSize: 13,
+        fontWeight: FontWeight.w600,
       ),
+      filled: true,
+      fillColor: _t.field,
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(16),
+        borderSide: BorderSide(color: borderColor),
+      ),
+      enabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(16),
+        borderSide: BorderSide(color: borderColor),
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(16),
+        borderSide: BorderSide(color: _t.accent, width: 1.4),
+      ),
+      contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
     );
   }
 
@@ -310,189 +428,523 @@ class _HotelBookingState extends State<HotelBooking> {
     final l = AppLocalizations.of(context)!;
 
     return Scaffold(
-      backgroundColor: Colors.grey[50],
-      appBar: AppBar(
-        title: Text(l.guestDetails,
-            style: TextStyle(fontWeight: FontWeight.w600, fontSize: 17)),
-        backgroundColor: Colors.white,
-        foregroundColor: Colors.black,
-        elevation: 0.5,
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.black),
-          onPressed: () => Navigator.pop(context),
-        ),
-      ),
+      backgroundColor: _t.bg,
       body: guestList.isEmpty
-          ? Center(child: CircularProgressIndicator())
-          : SingleChildScrollView(
-              padding: EdgeInsets.all(16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // Collapsible summary
-                  GestureDetector(
-                    onTap: () => setState(() => summaryExpanded = !summaryExpanded),
-                    child: Container(
-                      padding: EdgeInsets.all(14),
-                      decoration: BoxDecoration(color: Colors.white,
-                          borderRadius: BorderRadius.circular(12),
-                          border: Border.all(color: Colors.grey.shade200)),
-                      child: Column(
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(widget.hotelName,
-                                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15)),
-                                  SizedBox(height: 4),
-                                  Text('SAR $totalPrice',
-                                      style: TextStyle(fontSize: 16,
-                                          fontWeight: FontWeight.bold, color: _teal)),
-                                ],
-                              ),
-                              Row(
-                                children: [
-                                  Text(summaryExpanded ? l.hideSummary : l.viewSummary,
-                                      style: TextStyle(fontSize: 13, color: _teal)),
-                                  Icon(summaryExpanded ? Icons.keyboard_arrow_up
-                                      : Icons.keyboard_arrow_down, color: _teal),
-                                ],
-                              ),
-                            ],
-                          ),
-                          if (summaryExpanded) ...[
-                            SizedBox(height: 14),
-                            Divider(),
-                            SizedBox(height: 10),
-                            _summaryRow(Icons.calendar_today_outlined, l.checkInLabel,
-                                _formatDate(widget.checkIn)),
-                            _summaryRow(Icons.calendar_today_outlined, l.checkOutLabel,
-                                _formatDate(widget.checkOut)),
-                            _summaryRow(Icons.nights_stay_outlined, l.nightsLabel,
-                                '${widget.nights}'),
-                            _summaryRow(Icons.bed_outlined, l.roomsLabel, '${widget.numRooms}'),
-                            _summaryRow(Icons.people_outline, l.guestsLabel, '$numPeople'),
-                            Divider(),
-                            SizedBox(height: 6),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(l.pricePerNight,
-                                    style: TextStyle(color: Colors.grey, fontSize: 13)),
-                                Text('SAR ${widget.pricePerNight}',
-                                    style: TextStyle(fontSize: 13)),
-                              ],
+          ? Center(child: CircularProgressIndicator(color: _t.accent))
+          : Stack(
+              children: [
+                CustomScrollView(
+                  slivers: [
+                    SliverAppBar(
+                      expandedHeight: 170,
+                      pinned: true,
+                      elevation: 0,
+                      backgroundColor: _t.bg,
+                      surfaceTintColor: Colors.transparent,
+                      leadingWidth: 72,
+                      leading: Padding(
+                        padding: EdgeInsets.only(left: 16, top: 8, bottom: 8),
+                        child: _iconShell(
+                          icon: Icons.chevron_left_rounded,
+                          onTap: () => Navigator.pop(context),
+                        ),
+                      ),
+                      flexibleSpace: FlexibleSpaceBar(
+                        background: Container(
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
+                              colors: [_t.accentLight, _t.bg],
                             ),
-                            SizedBox(height: 6),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(l.total,
-                                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15)),
-                                Text('SAR $totalPrice',
-                                    style: TextStyle(fontWeight: FontWeight.bold,
-                                        fontSize: 15, color: _teal)),
-                              ],
+                          ),
+                          child: SafeArea(
+                            child: Padding(
+                              padding: EdgeInsets.fromLTRB(20, 28, 20, 24),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  Text(
+                                    l.bookingDetails.toUpperCase(),
+                                    style: TextStyle(
+                                      color: _t.accent,
+                                      fontSize: 10,
+                                      letterSpacing: 2.4,
+                                      fontWeight: FontWeight.w700,
+                                    ),
+                                  ),
+                                  SizedBox(height: 8),
+                                  Text(
+                                    l.guestDetails,
+                                    style: TextStyle(
+                                      color: _t.title,
+                                      fontSize: 30,
+                                      height: 1,
+                                      fontWeight: FontWeight.w400,
+                                      fontFamily: 'DM Serif Display',
+                                    ),
+                                  ),
+                                  SizedBox(height: 8),
+                                  Text(
+                                    widget.hotelName,
+                                    style: TextStyle(
+                                      color: _t.label,
+                                      fontSize: 13,
+                                      fontWeight: FontWeight.w700,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    SliverToBoxAdapter(
+                      child: Padding(
+                        padding: EdgeInsets.fromLTRB(16, 16, 16, 130),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            _buildSummaryCard(l),
+                            SizedBox(height: 18),
+                            _sectionHeader(
+                              l.guestDetails,
+                              '${guestList.length} ${l.guests.toLowerCase()}',
+                            ),
+                            SizedBox(height: 10),
+                            ...List.generate(
+                              guestList.length,
+                              (i) => Padding(
+                                padding: EdgeInsets.only(bottom: 12),
+                                child: _buildGuestCard(i, l),
+                              ),
                             ),
                           ],
-                        ],
+                        ),
                       ),
                     ),
+                  ],
+                ),
+                _buildBottomBar(l),
+              ],
+            ),
+    );
+  }
+
+  Widget _buildSummaryCard(AppLocalizations l) {
+    return Container(
+      padding: EdgeInsets.all(18),
+      decoration: BoxDecoration(
+        color: _t.card,
+        borderRadius: BorderRadius.circular(24),
+        border: Border.all(color: _t.cardBorder.withOpacity(0.45)),
+        boxShadow: _cardShadows(),
+      ),
+      child: Column(
+        children: [
+          InkWell(
+            borderRadius: BorderRadius.circular(18),
+            onTap: () => setState(() => summaryExpanded = !summaryExpanded),
+            child: Row(
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        widget.hotelName,
+                        style: TextStyle(
+                          color: _t.title,
+                          fontSize: 24,
+                          height: 1.05,
+                          fontWeight: FontWeight.w400,
+                          fontFamily: 'DM Serif Display',
+                        ),
+                      ),
+                      SizedBox(height: 8),
+                      Text(
+                        'SAR $totalPrice',
+                        style: TextStyle(
+                          color: _t.accent,
+                          fontSize: 18,
+                          fontWeight: FontWeight.w900,
+                        ),
+                      ),
+                    ],
                   ),
-
-                  SizedBox(height: 24),
-                  Text(l.guestDetails,
-                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-                  SizedBox(height: 12),
-
-                  ...List.generate(guestList.length, (i) {
-                    final g = guestList[i];
-                    final filled = g['filled'] as bool;
-                    return Container(
-                      margin: EdgeInsets.only(bottom: 12),
-                      decoration: BoxDecoration(color: Colors.white,
-                          borderRadius: BorderRadius.circular(10),
-                          border: Border.all(color: Colors.grey.shade300)),
-                      padding: EdgeInsets.symmetric(horizontal: 14, vertical: 12),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Row(
-                            children: [
-                              Icon(Icons.person_outline,
-                                  color: filled ? _teal : Colors.black87, size: 22),
-                              SizedBox(width: 10),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text('${l.guest} ${i + 1}${i == 0 ? ' (${l.you})' : ''}',
-                                      style: TextStyle(fontSize: 15)),
-                                  if (filled && g['name'].isNotEmpty)
-                                    Text(g['name'],
-                                        style: TextStyle(fontSize: 12,
-                                            color: Colors.grey.shade600)),
-                                ],
-                              ),
-                            ],
-                          ),
-                          ElevatedButton.icon(
-                            onPressed: () => _openGuestSheet(i, l),
-                            icon: Icon(filled ? Icons.edit : Icons.add, size: 18),
-                            label: Text(filled ? 'Edit' : 'Add',
-                                style: TextStyle(fontSize: 14)),
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: filled ? Colors.grey.shade100 : _teal,
-                              foregroundColor: filled ? Colors.black87 : Colors.white,
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(20)),
-                              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                              elevation: 0,
-                            ),
-                          ),
-                        ],
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Text(
+                      summaryExpanded ? l.hideSummary : l.viewSummary,
+                      style: TextStyle(
+                        color: _t.accent,
+                        fontSize: 11,
+                        fontWeight: FontWeight.w700,
                       ),
-                    );
-                  }),
-
-                  SizedBox(height: 24),
-
-                  SizedBox(
-                    width: double.infinity,
-                    child: ElevatedButton(
-                      onPressed: isSubmitting ? null : () => _submitBooking(l),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: _red, foregroundColor: Colors.white,
-                        padding: EdgeInsets.symmetric(vertical: 16),
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
-                        elevation: 0,
-                      ),
-                      child: isSubmitting
-                          ? CircularProgressIndicator(color: Colors.white)
-                          : Text(l.confirmBooking,
-                              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
                     ),
-                  ),
-                  SizedBox(height: 24),
+                    SizedBox(height: 6),
+                    Container(
+                      width: 32,
+                      height: 32,
+                      decoration: BoxDecoration(
+                        color: _t.accentLight,
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Icon(
+                        summaryExpanded
+                            ? Icons.keyboard_arrow_up_rounded
+                            : Icons.keyboard_arrow_down_rounded,
+                        color: _t.accent,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+          if (summaryExpanded) ...[
+            SizedBox(height: 16),
+            Divider(color: _t.divider.withOpacity(0.45)),
+            SizedBox(height: 12),
+            _summaryRow(Icons.calendar_today_outlined, l.checkInLabel, _formatDate(widget.checkIn)),
+            _summaryRow(Icons.calendar_today_outlined, l.checkOutLabel, _formatDate(widget.checkOut)),
+            _summaryRow(Icons.nights_stay_outlined, l.nightsLabel, '${widget.nights}'),
+            _summaryRow(Icons.bed_outlined, l.roomsLabel, '${widget.numRooms}'),
+            _summaryRow(Icons.people_outline, l.guestsLabel, '$numPeople'),
+            SizedBox(height: 8),
+            Container(
+              padding: EdgeInsets.all(14),
+              decoration: BoxDecoration(
+                color: _t.accentLight,
+                borderRadius: BorderRadius.circular(16),
+              ),
+              child: Column(
+                children: [
+                  _priceLine(l.pricePerNight, 'SAR ${widget.pricePerNight}'),
+                  SizedBox(height: 8),
+                  _priceLine(l.total, 'SAR $totalPrice', strong: true),
                 ],
               ),
             ),
+          ],
+        ],
+      ),
+    );
+  }
+
+  Widget _buildGuestCard(int index, AppLocalizations l) {
+    final g = guestList[index];
+    final filled = g['filled'] as bool;
+
+    return Container(
+      padding: EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: _t.card,
+        borderRadius: BorderRadius.circular(22),
+        border: Border.all(color: _t.cardBorder.withOpacity(0.45)),
+        boxShadow: _cardShadows(),
+      ),
+      child: Row(
+        children: [
+          Container(
+            width: 46,
+            height: 46,
+            decoration: BoxDecoration(
+              color: filled ? _t.accentLight : _t.field,
+              borderRadius: BorderRadius.circular(14),
+            ),
+            child: Icon(
+              Icons.person_outline_rounded,
+              color: filled ? _t.accent : _t.title.withOpacity(0.7),
+            ),
+          ),
+          SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  '${l.guest} ${index + 1}${index == 0 ? ' (${l.you})' : ''}',
+                  style: TextStyle(
+                    color: _t.title,
+                    fontSize: 15,
+                    fontWeight: FontWeight.w800,
+                  ),
+                ),
+                SizedBox(height: 4),
+                Text(
+                  filled && (g['name'] as String).isNotEmpty ? g['name'] : l.guestDetails,
+                  style: TextStyle(
+                    color: _t.label,
+                    fontSize: 12,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          SizedBox(width: 8),
+          _pillButton(
+            label: filled ? l.done : l.next,
+            filled: filled,
+            icon: filled ? Icons.edit_outlined : Icons.add_rounded,
+            onTap: () => _openGuestSheet(index, l),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildBottomBar(AppLocalizations l) {
+    return Positioned(
+      left: 0,
+      right: 0,
+      bottom: 0,
+      child: Container(
+        padding: EdgeInsets.fromLTRB(18, 14, 18, 26),
+        decoration: BoxDecoration(
+          color: _t.card.withOpacity(0.97),
+          borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
+          border: Border(top: BorderSide(color: _t.cardBorder.withOpacity(0.4))),
+          boxShadow: _cardShadows(stronger: true),
+        ),
+        child: SafeArea(
+          top: false,
+          child: Row(
+            children: [
+              Expanded(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'SAR $totalPrice',
+                      style: TextStyle(
+                        color: _t.title,
+                        fontSize: 24,
+                        fontWeight: FontWeight.w900,
+                      ),
+                    ),
+                    SizedBox(height: 4),
+                    Text(
+                      l.totalNightsRooms(totalPrice, widget.nights, widget.numRooms),
+                      style: TextStyle(
+                        color: _t.label,
+                        fontSize: 11,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(width: 12),
+              DecoratedBox(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(colors: _t.btnGradient),
+                  borderRadius: BorderRadius.circular(18),
+                ),
+                child: ElevatedButton(
+                  onPressed: isSubmitting ? null : () => _submitBooking(l),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.transparent,
+                    disabledBackgroundColor: Colors.transparent,
+                    disabledForegroundColor: Colors.white70,
+                    foregroundColor: Colors.white,
+                    shadowColor: Colors.transparent,
+                    elevation: 0,
+                    padding: EdgeInsets.symmetric(horizontal: 24, vertical: 18),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(18),
+                    ),
+                  ),
+                  child: isSubmitting
+                      ? SizedBox(
+                          width: 20,
+                          height: 20,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2.2,
+                            color: Colors.white,
+                          ),
+                        )
+                      : Text(
+                          l.confirmBooking,
+                          style: TextStyle(fontSize: 14, fontWeight: FontWeight.w800),
+                        ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 
   Widget _summaryRow(IconData icon, String label, String value) {
     return Padding(
-      padding: EdgeInsets.only(bottom: 8),
+      padding: EdgeInsets.only(bottom: 10),
       child: Row(
         children: [
-          Icon(icon, size: 16, color: Colors.grey),
-          SizedBox(width: 8),
-          Text('$label: ', style: TextStyle(fontSize: 13, color: Colors.grey.shade600)),
-          Text(value, style: TextStyle(fontSize: 13, fontWeight: FontWeight.w500)),
+          Container(
+            width: 30,
+            height: 30,
+            decoration: BoxDecoration(
+              color: _t.accentLight,
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Icon(icon, size: 15, color: _t.accent),
+          ),
+          SizedBox(width: 10),
+          Expanded(
+            child: Text(
+              label,
+              style: TextStyle(
+                color: _t.label,
+                fontSize: 12,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+          ),
+          Text(
+            value,
+            style: TextStyle(
+              color: _t.title,
+              fontSize: 12,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
         ],
       ),
     );
+  }
+
+  Widget _priceLine(String label, String value, {bool strong = false}) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          label,
+          style: TextStyle(
+            color: strong ? _t.title : _t.label,
+            fontSize: strong ? 14 : 12,
+            fontWeight: strong ? FontWeight.w800 : FontWeight.w700,
+          ),
+        ),
+        Text(
+          value,
+          style: TextStyle(
+            color: strong ? _t.accent : _t.title,
+            fontSize: strong ? 14 : 12,
+            fontWeight: strong ? FontWeight.w900 : FontWeight.w700,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _sectionHeader(String title, String subtitle) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          title,
+          style: TextStyle(
+            color: _t.title,
+            fontSize: 20,
+            fontWeight: FontWeight.w400,
+            fontFamily: 'DM Serif Display',
+          ),
+        ),
+        Text(
+          subtitle,
+          style: TextStyle(
+            color: _t.accent,
+            fontSize: 11,
+            fontWeight: FontWeight.w700,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _pillButton({
+    required String label,
+    required bool filled,
+    required IconData icon,
+    required VoidCallback onTap,
+  }) {
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        borderRadius: BorderRadius.circular(16),
+        onTap: onTap,
+        child: Ink(
+          padding: EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+          decoration: BoxDecoration(
+            color: filled ? _t.field : _t.accent,
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(
+              color: filled ? _t.cardBorder.withOpacity(0.45) : _t.accent,
+            ),
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(icon, size: 16, color: filled ? _t.title : Colors.white),
+              SizedBox(width: 6),
+              Text(
+                label,
+                style: TextStyle(
+                  color: filled ? _t.title : Colors.white,
+                  fontSize: 13,
+                  fontWeight: FontWeight.w800,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _iconShell({
+    required IconData icon,
+    required VoidCallback onTap,
+  }) {
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        customBorder: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+        ),
+        onTap: onTap,
+        child: Ink(
+          width: 42,
+          height: 42,
+          decoration: BoxDecoration(
+            color: _t.card.withOpacity(0.9),
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(color: _t.cardBorder.withOpacity(0.25)),
+          ),
+          child: Icon(icon, color: _t.backIcon, size: 24),
+        ),
+      ),
+    );
+  }
+
+  List<BoxShadow> _cardShadows({bool stronger = false}) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    return [
+      BoxShadow(
+        color: isDark
+            ? Colors.black.withOpacity(stronger ? 0.28 : 0.22)
+            : _t.cardBorder.withOpacity(stronger ? 0.2 : 0.16),
+        blurRadius: isDark ? (stronger ? 22 : 18) : (stronger ? 28 : 22),
+        offset: Offset(0, stronger ? 12 : 10),
+      ),
+    ];
   }
 }

@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:mobile_app/l10n/app_localizations.dart';
 import '../main.dart';
 import '../theme.dart';
-import 'auth/sign_in.dart';
-import 'auth/sign_up.dart';
-import 'car rental/carssearch.dart';
-import 'flights/flightsearch.dart';
-import 'hotels/hotel_search.dart';
+import '../screens/auth/sign_in.dart';
+import '../screens/auth/sign_up.dart';
+import '../screens/car rental/carssearch.dart';
+import '../screens/flights/flightsearch.dart';
+import '../screens/hotels/hotel_search.dart';
 import 'package:provider/provider.dart';
 
 class TempHome extends StatelessWidget {

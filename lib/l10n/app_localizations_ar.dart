@@ -303,7 +303,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get checkOut => 'تسجيل الخروج';
 
   @override
-  String get guests => 'الضيوف';
+  String get guests => 'النزلاء';
 
   @override
   String get searchProperties => 'البحث عن عقارات';
@@ -332,7 +332,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get remove => 'إزالة';
 
   @override
-  String get maxGuestsPerRoom => 'الحد الأقصى لعدد الضيوف في الغرفة هو 8.';
+  String get maxGuestsPerRoom => 'الحد الأقصى لعدد النزلاء في الغرفة هو 8.';
 
   @override
   String propertiesFound(int count, String destination) {
@@ -385,7 +385,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get rooms => 'الغرف';
 
   @override
-  String get roomsAndGuests => 'الغرف والضيوف';
+  String get roomsAndGuests => 'الغرف والنزلاء';
 
   @override
   String get numberOfRooms => 'عدد الغرف';
@@ -402,10 +402,10 @@ class AppLocalizationsAr extends AppLocalizations {
   }
 
   @override
-  String get guestDetails => 'تفاصيل الضيف';
+  String get guestDetails => 'تفاصيل النزيل';
 
   @override
-  String get guest => 'ضيف';
+  String get guest => 'نزيل';
 
   @override
   String get you => 'أنت';
@@ -418,11 +418,11 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String saveGuest(int number) {
-    return 'حفظ الضيف $number';
+    return 'حفظ بيانات النزيل $number';
   }
 
   @override
-  String get fillGuestDetails => 'يرجى إكمال تفاصيل جميع الضيوف المتبقين';
+  String get fillGuestDetails => 'يرجى إكمال تفاصيل جميع النزلاء المتبقين';
 
   @override
   String get hotelBookedSuccess => 'تم حجز الفندق بنجاح! 🏨';
@@ -446,7 +446,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get roomsLabel => 'الغرف';
 
   @override
-  String get guestsLabel => 'الضيوف';
+  String get guestsLabel => 'نزلاء';
 
   @override
   String get pricePerNight => 'السعر لكل ليلة';

@@ -109,7 +109,7 @@
   "dates": "التواريخ",
   "checkIn": "تسجيل الدخول",
   "checkOut": "تسجيل الخروج",
-  "guests": "الضيوف",
+  "guests": "النزلاء",
   "searchProperties": "البحث عن عقارات",
   "nights": "{count} ليلة",
   "@nights": {
@@ -125,7 +125,7 @@
   "addAnotherRoom": "إضافة غرفة أخرى",
   "done": "تم",
   "remove": "إزالة",
-  "maxGuestsPerRoom": "الحد الأقصى لعدد الضيوف في الغرفة هو 8.",
+  "maxGuestsPerRoom": "الحد الأقصى لعدد النزلاء في الغرفة هو 8.",
   "propertiesFound": "{count} عقار في {destination}",
   "@propertiesFound": {
     "placeholders": {
@@ -152,7 +152,7 @@
   "yourStay": "إقامتك",
   "views": "الإطلالات",
   "rooms": "الغرف",
-  "roomsAndGuests": "الغرف والضيوف",
+  "roomsAndGuests": "الغرف والنزلاء",
   "numberOfRooms": "عدد الغرف",
   "bookNow": "احجز الآن",
   "perNight": "/ ليلة",
@@ -170,12 +170,12 @@
       }
     }
   },
-  "guestDetails": "تفاصيل الضيف",
-  "guest": "ضيف",
+  "guestDetails": "تفاصيل النزلاء",
+  "guest": "نزيل",
   "you": "أنت",
   "fullName": "الاسم الكامل",
   "address": "العنوان",
-  "saveGuest": "حفظ الضيف {number}",
+  "saveGuest": "حفظ بيانات النزيل {number}",
   "@saveGuest": {
     "placeholders": {
       "number": {
@@ -183,7 +183,7 @@
       }
     }
   },
-  "fillGuestDetails": "يرجى إكمال تفاصيل جميع الضيوف المتبقين",
+  "fillGuestDetails": "يرجى إكمال تفاصيل جميع النزلاء المتبقين",
   "hotelBookedSuccess": "تم حجز الفندق بنجاح! 🏨",
   "viewSummary": "عرض الملخص",
   "hideSummary": "إخفاء الملخص",
@@ -191,7 +191,7 @@
   "checkOutLabel": "تسجيل الخروج",
   "nightsLabel": "الليالي",
   "roomsLabel": "الغرف",
-  "guestsLabel": "الضيوف",
+  "guestsLabel": "نزلاء",
   "pricePerNight": "السعر لكل ليلة",
   "searchFlights": "البحث عن رحلات",
   "oneWay": "رحلة ذهاب",
