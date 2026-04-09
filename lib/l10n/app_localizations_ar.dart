@@ -12,6 +12,106 @@ class AppLocalizationsAr extends AppLocalizations {
   String get appTitle => 'رحّال';
 
   @override
+  String get homeGreeting => 'جاهز للإقلاع؟';
+
+  @override
+  String homeGreetingWithName(String name) {
+    return 'جاهز للإقلاع، $name؟';
+  }
+
+  @override
+  String get homeHeroTitle => 'خطّط لمغامرتك القادمة';
+
+  @override
+  String get homeHeroSubtitle =>
+      'ابحث عن أماكن ملهمة، وقارن الأفكار، وافتح دليل الوجهة مباشرة من الصفحة الرئيسية.';
+
+  @override
+  String get homeDestinationsTitle => 'استكشف الوجهات';
+
+  @override
+  String get homeDestinationsSubtitle =>
+      'تصفّح مجموعة مختارة من الوجهات وافتح دليلًا سريعًا للمكان المناسب لرحلتك القادمة.';
+
+  @override
+  String get homeSearchHint => 'ابحث عن وجهات أو دول أو كلمات مفتاحية';
+
+  @override
+  String get homeExploreDestination => 'افتح الدليل';
+
+  @override
+  String get homeBackToDestinations => 'العودة إلى الوجهات';
+
+  @override
+  String get homeNoDestinationsTitle => 'لم يتم العثور على وجهات';
+
+  @override
+  String get homeNoDestinationsSubtitle =>
+      'جرّب كلمة بحث مختلفة لاكتشاف مزيد من الأماكن.';
+
+  @override
+  String get homeOfficialWebsite => 'الموقع الرسمي';
+
+  @override
+  String get homeOfficialWebsiteHint =>
+      'استخدم هذا المصدر عندما تريد الصفحة الرسمية الخاصة بالوجهة.';
+
+  @override
+  String get homeOfficialSource => 'المصدر الرسمي';
+
+  @override
+  String get homeTravelerGuide => 'دليل المسافر';
+
+  @override
+  String get homeSearchReady => 'جاهز للبحث';
+
+  @override
+  String get seeAll => 'عرض الكل';
+
+  @override
+  String get allDestinationsTitle => 'كل الوجهات';
+
+  @override
+  String get popularDestinations => 'الأشهر';
+
+  @override
+  String get allDestinationsTab => 'الكل';
+
+  @override
+  String get noDestinationResults => 'لم يتم العثور على نتائج';
+
+  @override
+  String get destinationBestTimeTitle => 'أفضل وقت للزيارة';
+
+  @override
+  String destinationBestTimeBody(String name) {
+    return 'أفضل وقت لاكتشاف $name يكون خلال المواسم المعتدلة حين تكون الجولات والأنشطة الخارجية أكثر راحة.';
+  }
+
+  @override
+  String get destinationCuisineTitle => 'المأكولات المحلية';
+
+  @override
+  String destinationCuisineBody(String name) {
+    return 'استكشف نكهات $name المحلية وجرّب الأطباق المشهورة والأماكن المفضلة لدى السكان والأسواق الغذائية.';
+  }
+
+  @override
+  String get destinationStayTitle => 'أماكن الإقامة';
+
+  @override
+  String get destinationStayBody =>
+      'اختر منطقة قريبة من الأماكن التي تهمك مع سهولة في التنقل ومحيط مريح للإقامة.';
+
+  @override
+  String get destinationAttractionsTitle => 'أبرز المعالم';
+
+  @override
+  String destinationAttractionsBody(String name) {
+    return 'ابدأ بأشهر الأماكن في $name ثم اترك وقتًا لاكتشاف الأحياء المحلية والزوايا المميزة.';
+  }
+
+  @override
   String get devMenu => 'قائمة المطور';
 
   @override
@@ -36,7 +136,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get signUp => 'إنشاء حساب';
 
   @override
-  String get next => 'التالي';
+  String get next => 'أضف';
 
   @override
   String get getStarted => 'ابدأ الآن';
@@ -402,7 +502,7 @@ class AppLocalizationsAr extends AppLocalizations {
   }
 
   @override
-  String get guestDetails => 'تفاصيل النزيل';
+  String get guestDetails => 'تفاصيل النزلاء';
 
   @override
   String get guest => 'نزيل';
@@ -426,6 +526,48 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get hotelBookedSuccess => 'تم حجز الفندق بنجاح! 🏨';
+
+  @override
+  String get hotelSeeReviews => 'عرض التقييمات';
+
+  @override
+  String get hotelRatingExceptional => 'استثنائي';
+
+  @override
+  String get hotelRatingExcellent => 'ممتاز';
+
+  @override
+  String get hotelRatingVeryGood => 'جيد جدًا';
+
+  @override
+  String get hotelRatingGood => 'جيد';
+
+  @override
+  String get hotelRatingStandard => 'قياسي';
+
+  @override
+  String get hotelViewSea => 'إطلالة على البحر';
+
+  @override
+  String get hotelViewPool => 'إطلالة على المسبح';
+
+  @override
+  String get hotelViewGarden => 'إطلالة على الحديقة';
+
+  @override
+  String get hotelViewCity => 'إطلالة على المدينة';
+
+  @override
+  String get hotelViewMountain => 'إطلالة على الجبل';
+
+  @override
+  String get hotelViewRiver => 'إطلالة على النهر';
+
+  @override
+  String get hotelViewLake => 'إطلالة على البحيرة';
+
+  @override
+  String get hotelViewHarbor => 'إطلالة على الميناء';
 
   @override
   String get viewSummary => 'عرض الملخص';

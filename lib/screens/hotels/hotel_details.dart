@@ -80,20 +80,30 @@ class _HotelDetailsState extends State<HotelDetails> {
   }
 
   String _viewLabel(String view) =>
-      '${view[0].toUpperCase()}${view.substring(1)} ${AppLocalizations.of(context)!.view}';
+      switch (view) {
+        'sea' => AppLocalizations.of(context)!.hotelViewSea,
+        'pool' => AppLocalizations.of(context)!.hotelViewPool,
+        'garden' => AppLocalizations.of(context)!.hotelViewGarden,
+        'city' => AppLocalizations.of(context)!.hotelViewCity,
+        'mountain' => AppLocalizations.of(context)!.hotelViewMountain,
+        'river' => AppLocalizations.of(context)!.hotelViewRiver,
+        'lake' => AppLocalizations.of(context)!.hotelViewLake,
+        'harbor' => AppLocalizations.of(context)!.hotelViewHarbor,
+        _ => AppLocalizations.of(context)!.view,
+      };
 
   String _ratingLabel(int rating) {
     switch (rating) {
       case 5:
-        return 'Exceptional';
+        return AppLocalizations.of(context)!.hotelRatingExceptional;
       case 4:
-        return 'Excellent';
+        return AppLocalizations.of(context)!.hotelRatingExcellent;
       case 3:
-        return 'Very Good';
+        return AppLocalizations.of(context)!.hotelRatingVeryGood;
       case 2:
-        return 'Good';
+        return AppLocalizations.of(context)!.hotelRatingGood;
       default:
-        return 'Standard';
+        return AppLocalizations.of(context)!.hotelRatingStandard;
     }
   }
 

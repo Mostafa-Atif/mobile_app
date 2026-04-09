@@ -12,6 +12,106 @@ class AppLocalizationsEn extends AppLocalizations {
   String get appTitle => 'Rahal';
 
   @override
+  String get homeGreeting => 'Ready for takeoff?';
+
+  @override
+  String homeGreetingWithName(String name) {
+    return 'Ready for takeoff, $name?';
+  }
+
+  @override
+  String get homeHeroTitle => 'Plan your next adventure';
+
+  @override
+  String get homeHeroSubtitle =>
+      'Search inspiring places, compare ideas, and open a destination guide without leaving the home screen.';
+
+  @override
+  String get homeDestinationsTitle => 'Explore destinations';
+
+  @override
+  String get homeDestinationsSubtitle =>
+      'Browse a curated set of destinations and open a quick guide for the place that matches your next trip.';
+
+  @override
+  String get homeSearchHint => 'Search destinations, countries, or keywords';
+
+  @override
+  String get homeExploreDestination => 'Open guide';
+
+  @override
+  String get homeBackToDestinations => 'Back to destinations';
+
+  @override
+  String get homeNoDestinationsTitle => 'No destinations found';
+
+  @override
+  String get homeNoDestinationsSubtitle =>
+      'Try a different search term to explore more places.';
+
+  @override
+  String get homeOfficialWebsite => 'Official website';
+
+  @override
+  String get homeOfficialWebsiteHint =>
+      'Use this source when you want the destination\'s official travel page.';
+
+  @override
+  String get homeOfficialSource => 'Official source';
+
+  @override
+  String get homeTravelerGuide => 'Traveler guide';
+
+  @override
+  String get homeSearchReady => 'Search-ready';
+
+  @override
+  String get seeAll => 'See all';
+
+  @override
+  String get allDestinationsTitle => 'All Destinations';
+
+  @override
+  String get popularDestinations => 'Popular';
+
+  @override
+  String get allDestinationsTab => 'All';
+
+  @override
+  String get noDestinationResults => 'No results found';
+
+  @override
+  String get destinationBestTimeTitle => 'Best Time to Visit';
+
+  @override
+  String destinationBestTimeBody(String name) {
+    return 'The ideal time to explore $name is during the milder seasons when sightseeing and outdoor activities feel most comfortable.';
+  }
+
+  @override
+  String get destinationCuisineTitle => 'Local Cuisine';
+
+  @override
+  String destinationCuisineBody(String name) {
+    return 'Experience local flavors in $name and explore signature dishes, neighborhood favorites, and food markets.';
+  }
+
+  @override
+  String get destinationStayTitle => 'Where to Stay';
+
+  @override
+  String get destinationStayBody =>
+      'Choose an area close to the attractions you care about most, with good transport access and comfortable surroundings.';
+
+  @override
+  String get destinationAttractionsTitle => 'Top Attractions';
+
+  @override
+  String destinationAttractionsBody(String name) {
+    return 'Start with the best-known places in $name, then leave room for local neighborhoods and hidden gems.';
+  }
+
+  @override
   String get devMenu => 'Dev Menu';
 
   @override
@@ -36,7 +136,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get signUp => 'Sign Up';
 
   @override
-  String get next => 'Next';
+  String get next => 'Add';
 
   @override
   String get getStarted => 'Get Started';
@@ -431,6 +531,48 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get hotelBookedSuccess => 'Hotel booked successfully! 🏨';
+
+  @override
+  String get hotelSeeReviews => 'See reviews';
+
+  @override
+  String get hotelRatingExceptional => 'Exceptional';
+
+  @override
+  String get hotelRatingExcellent => 'Excellent';
+
+  @override
+  String get hotelRatingVeryGood => 'Very Good';
+
+  @override
+  String get hotelRatingGood => 'Good';
+
+  @override
+  String get hotelRatingStandard => 'Standard';
+
+  @override
+  String get hotelViewSea => 'Sea view';
+
+  @override
+  String get hotelViewPool => 'Pool view';
+
+  @override
+  String get hotelViewGarden => 'Garden view';
+
+  @override
+  String get hotelViewCity => 'City view';
+
+  @override
+  String get hotelViewMountain => 'Mountain view';
+
+  @override
+  String get hotelViewRiver => 'River view';
+
+  @override
+  String get hotelViewLake => 'Lake view';
+
+  @override
+  String get hotelViewHarbor => 'Harbor view';
 
   @override
   String get viewSummary => 'View summary';

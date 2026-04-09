@@ -104,6 +104,180 @@ abstract class AppLocalizations {
   /// **'Rahal'**
   String get appTitle;
 
+  /// No description provided for @homeGreeting.
+  ///
+  /// In en, this message translates to:
+  /// **'Ready for takeoff?'**
+  String get homeGreeting;
+
+  /// No description provided for @homeGreetingWithName.
+  ///
+  /// In en, this message translates to:
+  /// **'Ready for takeoff, {name}?'**
+  String homeGreetingWithName(String name);
+
+  /// No description provided for @homeHeroTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Plan your next adventure'**
+  String get homeHeroTitle;
+
+  /// No description provided for @homeHeroSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Search inspiring places, compare ideas, and open a destination guide without leaving the home screen.'**
+  String get homeHeroSubtitle;
+
+  /// No description provided for @homeDestinationsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Explore destinations'**
+  String get homeDestinationsTitle;
+
+  /// No description provided for @homeDestinationsSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Browse a curated set of destinations and open a quick guide for the place that matches your next trip.'**
+  String get homeDestinationsSubtitle;
+
+  /// No description provided for @homeSearchHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Search destinations, countries, or keywords'**
+  String get homeSearchHint;
+
+  /// No description provided for @homeExploreDestination.
+  ///
+  /// In en, this message translates to:
+  /// **'Open guide'**
+  String get homeExploreDestination;
+
+  /// No description provided for @homeBackToDestinations.
+  ///
+  /// In en, this message translates to:
+  /// **'Back to destinations'**
+  String get homeBackToDestinations;
+
+  /// No description provided for @homeNoDestinationsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No destinations found'**
+  String get homeNoDestinationsTitle;
+
+  /// No description provided for @homeNoDestinationsSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Try a different search term to explore more places.'**
+  String get homeNoDestinationsSubtitle;
+
+  /// No description provided for @homeOfficialWebsite.
+  ///
+  /// In en, this message translates to:
+  /// **'Official website'**
+  String get homeOfficialWebsite;
+
+  /// No description provided for @homeOfficialWebsiteHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Use this source when you want the destination\'s official travel page.'**
+  String get homeOfficialWebsiteHint;
+
+  /// No description provided for @homeOfficialSource.
+  ///
+  /// In en, this message translates to:
+  /// **'Official source'**
+  String get homeOfficialSource;
+
+  /// No description provided for @homeTravelerGuide.
+  ///
+  /// In en, this message translates to:
+  /// **'Traveler guide'**
+  String get homeTravelerGuide;
+
+  /// No description provided for @homeSearchReady.
+  ///
+  /// In en, this message translates to:
+  /// **'Search-ready'**
+  String get homeSearchReady;
+
+  /// No description provided for @seeAll.
+  ///
+  /// In en, this message translates to:
+  /// **'See all'**
+  String get seeAll;
+
+  /// No description provided for @allDestinationsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'All Destinations'**
+  String get allDestinationsTitle;
+
+  /// No description provided for @popularDestinations.
+  ///
+  /// In en, this message translates to:
+  /// **'Popular'**
+  String get popularDestinations;
+
+  /// No description provided for @allDestinationsTab.
+  ///
+  /// In en, this message translates to:
+  /// **'All'**
+  String get allDestinationsTab;
+
+  /// No description provided for @noDestinationResults.
+  ///
+  /// In en, this message translates to:
+  /// **'No results found'**
+  String get noDestinationResults;
+
+  /// No description provided for @destinationBestTimeTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Best Time to Visit'**
+  String get destinationBestTimeTitle;
+
+  /// No description provided for @destinationBestTimeBody.
+  ///
+  /// In en, this message translates to:
+  /// **'The ideal time to explore {name} is during the milder seasons when sightseeing and outdoor activities feel most comfortable.'**
+  String destinationBestTimeBody(String name);
+
+  /// No description provided for @destinationCuisineTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Local Cuisine'**
+  String get destinationCuisineTitle;
+
+  /// No description provided for @destinationCuisineBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Experience local flavors in {name} and explore signature dishes, neighborhood favorites, and food markets.'**
+  String destinationCuisineBody(String name);
+
+  /// No description provided for @destinationStayTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Where to Stay'**
+  String get destinationStayTitle;
+
+  /// No description provided for @destinationStayBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose an area close to the attractions you care about most, with good transport access and comfortable surroundings.'**
+  String get destinationStayBody;
+
+  /// No description provided for @destinationAttractionsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Top Attractions'**
+  String get destinationAttractionsTitle;
+
+  /// No description provided for @destinationAttractionsBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Start with the best-known places in {name}, then leave room for local neighborhoods and hidden gems.'**
+  String destinationAttractionsBody(String name);
+
   /// No description provided for @devMenu.
   ///
   /// In en, this message translates to:
@@ -155,7 +329,7 @@ abstract class AppLocalizations {
   /// No description provided for @next.
   ///
   /// In en, this message translates to:
-  /// **'Next'**
+  /// **'Add'**
   String get next;
 
   /// No description provided for @getStarted.
@@ -901,6 +1075,90 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Hotel booked successfully! 🏨'**
   String get hotelBookedSuccess;
+
+  /// No description provided for @hotelSeeReviews.
+  ///
+  /// In en, this message translates to:
+  /// **'See reviews'**
+  String get hotelSeeReviews;
+
+  /// No description provided for @hotelRatingExceptional.
+  ///
+  /// In en, this message translates to:
+  /// **'Exceptional'**
+  String get hotelRatingExceptional;
+
+  /// No description provided for @hotelRatingExcellent.
+  ///
+  /// In en, this message translates to:
+  /// **'Excellent'**
+  String get hotelRatingExcellent;
+
+  /// No description provided for @hotelRatingVeryGood.
+  ///
+  /// In en, this message translates to:
+  /// **'Very Good'**
+  String get hotelRatingVeryGood;
+
+  /// No description provided for @hotelRatingGood.
+  ///
+  /// In en, this message translates to:
+  /// **'Good'**
+  String get hotelRatingGood;
+
+  /// No description provided for @hotelRatingStandard.
+  ///
+  /// In en, this message translates to:
+  /// **'Standard'**
+  String get hotelRatingStandard;
+
+  /// No description provided for @hotelViewSea.
+  ///
+  /// In en, this message translates to:
+  /// **'Sea view'**
+  String get hotelViewSea;
+
+  /// No description provided for @hotelViewPool.
+  ///
+  /// In en, this message translates to:
+  /// **'Pool view'**
+  String get hotelViewPool;
+
+  /// No description provided for @hotelViewGarden.
+  ///
+  /// In en, this message translates to:
+  /// **'Garden view'**
+  String get hotelViewGarden;
+
+  /// No description provided for @hotelViewCity.
+  ///
+  /// In en, this message translates to:
+  /// **'City view'**
+  String get hotelViewCity;
+
+  /// No description provided for @hotelViewMountain.
+  ///
+  /// In en, this message translates to:
+  /// **'Mountain view'**
+  String get hotelViewMountain;
+
+  /// No description provided for @hotelViewRiver.
+  ///
+  /// In en, this message translates to:
+  /// **'River view'**
+  String get hotelViewRiver;
+
+  /// No description provided for @hotelViewLake.
+  ///
+  /// In en, this message translates to:
+  /// **'Lake view'**
+  String get hotelViewLake;
+
+  /// No description provided for @hotelViewHarbor.
+  ///
+  /// In en, this message translates to:
+  /// **'Harbor view'**
+  String get hotelViewHarbor;
 
   /// No description provided for @viewSummary.
   ///

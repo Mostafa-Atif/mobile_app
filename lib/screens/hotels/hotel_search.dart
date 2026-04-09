@@ -1,10 +1,8 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
+import 'package:mobile_app/data/hotels_repository.dart';
 import 'package:mobile_app/l10n/app_localizations.dart';
 import 'package:mobile_app/screens/hotels/hotel_results.dart';
 import 'package:mobile_app/theme.dart';
@@ -23,6 +21,7 @@ class HotelSearch extends StatefulWidget {
 
 class _HotelSearchState extends State<HotelSearch> {
   AppThemeExtension get _t => Theme.of(context).extension<AppThemeExtension>()!;
+  final HotelsRepository _hotelsRepository = HotelsRepository();
   String? _activeLang;
 
   String selectedDestination = '';
@@ -49,15 +48,7 @@ class _HotelSearchState extends State<HotelSearch> {
 
   Future<void> loadDestinations() async {
     final lang = _activeLang ?? 'en';
-    final String jsonString = await rootBundle.loadString('assets/hotels.json');
-    final List<dynamic> jsonData = json.decode(jsonString);
-    Map<String, List<String>> map = {};
-    for (var hotel in jsonData) {
-      final country = (hotel["country"][lang] ?? hotel["country"]["en"]).toString();
-      final city = (hotel["city"][lang] ?? hotel["city"]["en"]).toString();
-      if (!map.containsKey(country)) map[country] = [];
-      if (!map[country]!.contains(city)) map[country]!.add(city);
-    }
+    final map = await _hotelsRepository.loadCountryCityMap(lang);
     setState(() {
       countryCityMap = map;
       selectedDestination = map.keys.isNotEmpty ? map.keys.first : '';

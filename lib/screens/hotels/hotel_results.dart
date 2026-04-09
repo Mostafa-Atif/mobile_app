@@ -1,9 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:mobile_app/data/hotels_repository.dart';
 import 'package:mobile_app/l10n/app_localizations.dart';
 import 'package:mobile_app/screens/hotels/hotel_details.dart';
 import 'package:mobile_app/theme.dart';
@@ -34,6 +32,7 @@ class HotelResults extends StatefulWidget {
 
 class _HotelResultsState extends State<HotelResults> {
   AppThemeExtension get _t => Theme.of(context).extension<AppThemeExtension>()!;
+  final HotelsRepository _hotelsRepository = HotelsRepository();
   String? _activeLang;
 
   List<Map<String, dynamic>> allHotels = [];
@@ -70,45 +69,13 @@ class _HotelResultsState extends State<HotelResults> {
     });
     try {
       final lang = _activeLang ?? 'en';
-      final String jsonString = await rootBundle.loadString('assets/hotels.json');
-      final List<dynamic> jsonData = json.decode(jsonString);
-
-      String localizedValue(dynamic mapOrString) {
-        if (mapOrString is Map) {
-          return mapOrString[lang]?.toString() ??
-              mapOrString['en']?.toString() ??
-              mapOrString['ar']?.toString() ??
-              '';
-        }
-        return mapOrString?.toString() ?? '';
-      }
-
-      final loaded = jsonData
-          .where((hotel) {
-            final country = localizedValue(hotel["country"]);
-            final city = localizedValue(hotel["city"]);
-            if (widget.searchType == 'country') {
-              return country.toLowerCase() == widget.destination.toLowerCase();
-            } else {
-              return city.toLowerCase() == widget.destination.toLowerCase();
-            }
-          })
-          .map((hotel) {
-            final title = localizedValue(hotel["name"]);
-            final city = localizedValue(hotel["city"]);
-            final country = localizedValue(hotel["country"]);
-            return {
-                "title": title,
-                "subTitle": "$city, $country",
-                "rating": hotel["rating"].toString(),
-                "reviews": "See reviews",
-                "price": hotel["price"].toString(),
-                "views": hotel["views"] as List<dynamic>,
-                "imgUrl": hotel["image"],
-                "isFavorite": false,
-              };
-          })
-          .toList();
+      final l = AppLocalizations.of(context)!;
+      final loaded = await _hotelsRepository.loadSearchResults(
+        lang: lang,
+        destination: widget.destination,
+        searchType: widget.searchType,
+        reviewsLabel: l.hotelSeeReviews,
+      );
 
       setState(() {
         allHotels = loaded;
