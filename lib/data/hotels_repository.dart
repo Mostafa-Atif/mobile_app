@@ -60,7 +60,10 @@ class HotelsRepository {
         ...hotel,
         'title': localizedValue(hotel['name'], lang),
         'subTitle': '$city, $country',
+        'rating': hotel['rating'].toString(),
         'reviews': reviewsLabel,
+        'price': hotel['price'].toString(),
+        'views': List<String>.from(hotel['views'] as List<dynamic>),
         'imgUrl': hotel['image'],
         'isFavorite': false,
       };
