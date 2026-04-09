@@ -1,6 +1,63 @@
 {
   "@@locale": "en",
   "appTitle": "Rahal",
+  "homeGreeting": "Ready for takeoff?",
+  "homeGreetingWithName": "Ready for takeoff, {name}?",
+  "@homeGreetingWithName": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "homeHeroTitle": "Plan your next adventure",
+  "homeHeroSubtitle": "Search inspiring places, compare ideas, and open a destination guide without leaving the home screen.",
+  "homeDestinationsTitle": "Explore destinations",
+  "homeDestinationsSubtitle": "Browse a curated set of destinations and open a quick guide for the place that matches your next trip.",
+  "homeSearchHint": "Search destinations, countries, or keywords",
+  "homeExploreDestination": "Open guide",
+  "homeBackToDestinations": "Back to destinations",
+  "homeNoDestinationsTitle": "No destinations found",
+  "homeNoDestinationsSubtitle": "Try a different search term to explore more places.",
+  "homeOfficialWebsite": "Official website",
+  "homeOfficialWebsiteHint": "Use this source when you want the destination's official travel page.",
+  "homeOfficialSource": "Official source",
+  "homeTravelerGuide": "Traveler guide",
+  "homeSearchReady": "Search-ready",
+  "seeAll": "See all",
+  "allDestinationsTitle": "All Destinations",
+  "popularDestinations": "Popular",
+  "allDestinationsTab": "All",
+  "noDestinationResults": "No results found",
+  "destinationBestTimeTitle": "Best Time to Visit",
+  "destinationBestTimeBody": "The ideal time to explore {name} is during the milder seasons when sightseeing and outdoor activities feel most comfortable.",
+  "@destinationBestTimeBody": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "destinationCuisineTitle": "Local Cuisine",
+  "destinationCuisineBody": "Experience local flavors in {name} and explore signature dishes, neighborhood favorites, and food markets.",
+  "@destinationCuisineBody": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "destinationStayTitle": "Where to Stay",
+  "destinationStayBody": "Choose an area close to the attractions you care about most, with good transport access and comfortable surroundings.",
+  "destinationAttractionsTitle": "Top Attractions",
+  "destinationAttractionsBody": "Start with the best-known places in {name}, then leave room for local neighborhoods and hidden gems.",
+  "@destinationAttractionsBody": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "devMenu": "Dev Menu",
   "mainScreens": "Main Screens",
   "auth": "Auth",
@@ -9,7 +66,7 @@
   "carRent": "Car Rent",
   "signIn": "Sign In",
   "signUp": "Sign Up",
-  "next": "Next",
+  "next": "Add",
   "getStarted": "Get Started",
   "onboarding1Title": "Plan Your Trip",
   "onboarding1Body": "Create your dream trip with ease. Choose a destination, find the perfect place to stay, and build an itinerary that suits you.",
@@ -185,6 +242,20 @@
   },
   "fillGuestDetails": "Please fill in details for all remaining guests",
   "hotelBookedSuccess": "Hotel booked successfully! 🏨",
+  "hotelSeeReviews": "See reviews",
+  "hotelRatingExceptional": "Exceptional",
+  "hotelRatingExcellent": "Excellent",
+  "hotelRatingVeryGood": "Very Good",
+  "hotelRatingGood": "Good",
+  "hotelRatingStandard": "Standard",
+  "hotelViewSea": "Sea view",
+  "hotelViewPool": "Pool view",
+  "hotelViewGarden": "Garden view",
+  "hotelViewCity": "City view",
+  "hotelViewMountain": "Mountain view",
+  "hotelViewRiver": "River view",
+  "hotelViewLake": "Lake view",
+  "hotelViewHarbor": "Harbor view",
   "viewSummary": "View summary",
   "hideSummary": "Hide summary",
   "checkInLabel": "Check-in",

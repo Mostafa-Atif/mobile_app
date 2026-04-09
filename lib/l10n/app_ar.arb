@@ -1,5 +1,62 @@
 {
   "@@locale": "ar",
+  "homeGreeting": "جاهز للإقلاع؟",
+  "homeGreetingWithName": "جاهز للإقلاع، {name}؟",
+  "@homeGreetingWithName": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "homeHeroTitle": "خطّط لمغامرتك القادمة",
+  "homeHeroSubtitle": "ابحث عن أماكن ملهمة، وقارن الأفكار، وافتح دليل الوجهة مباشرة من الصفحة الرئيسية.",
+  "homeDestinationsTitle": "استكشف الوجهات",
+  "homeDestinationsSubtitle": "تصفّح مجموعة مختارة من الوجهات وافتح دليلًا سريعًا للمكان المناسب لرحلتك القادمة.",
+  "homeSearchHint": "ابحث عن وجهات أو دول أو كلمات مفتاحية",
+  "homeExploreDestination": "افتح الدليل",
+  "homeBackToDestinations": "العودة إلى الوجهات",
+  "homeNoDestinationsTitle": "لم يتم العثور على وجهات",
+  "homeNoDestinationsSubtitle": "جرّب كلمة بحث مختلفة لاكتشاف مزيد من الأماكن.",
+  "homeOfficialWebsite": "الموقع الرسمي",
+  "homeOfficialWebsiteHint": "استخدم هذا المصدر عندما تريد الصفحة الرسمية الخاصة بالوجهة.",
+  "homeOfficialSource": "المصدر الرسمي",
+  "homeTravelerGuide": "دليل المسافر",
+  "homeSearchReady": "جاهز للبحث",
+  "seeAll": "عرض الكل",
+  "allDestinationsTitle": "كل الوجهات",
+  "popularDestinations": "الأشهر",
+  "allDestinationsTab": "الكل",
+  "noDestinationResults": "لم يتم العثور على نتائج",
+  "destinationBestTimeTitle": "أفضل وقت للزيارة",
+  "destinationBestTimeBody": "أفضل وقت لاكتشاف {name} يكون خلال المواسم المعتدلة حين تكون الجولات والأنشطة الخارجية أكثر راحة.",
+  "@destinationBestTimeBody": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "destinationCuisineTitle": "المأكولات المحلية",
+  "destinationCuisineBody": "استكشف نكهات {name} المحلية وجرّب الأطباق المشهورة والأماكن المفضلة لدى السكان والأسواق الغذائية.",
+  "@destinationCuisineBody": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "destinationStayTitle": "أماكن الإقامة",
+  "destinationStayBody": "اختر منطقة قريبة من الأماكن التي تهمك مع سهولة في التنقل ومحيط مريح للإقامة.",
+  "destinationAttractionsTitle": "أبرز المعالم",
+  "destinationAttractionsBody": "ابدأ بأشهر الأماكن في {name} ثم اترك وقتًا لاكتشاف الأحياء المحلية والزوايا المميزة.",
+  "@destinationAttractionsBody": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "appTitle": "رحّال",
   "devMenu": "قائمة المطور",
   "mainScreens": "الشاشات الرئيسية",
@@ -9,7 +66,7 @@
   "carRent": "تأجير السيارات",
   "signIn": "تسجيل الدخول",
   "signUp": "إنشاء حساب",
-  "next": "التالي",
+  "next": "أضف",
   "getStarted": "ابدأ الآن",
   "onboarding1Title": "خطّط لرحلتك",
   "onboarding1Body": "أنشئ رحلة أحلامك بسهولة. اختر وجهتك، وابحث عن أفضل مكان للإقامة، وابنِ جدول سفر يناسبك.",
@@ -185,6 +242,20 @@
   },
   "fillGuestDetails": "يرجى إكمال تفاصيل جميع النزلاء المتبقين",
   "hotelBookedSuccess": "تم حجز الفندق بنجاح! 🏨",
+  "hotelSeeReviews": "عرض التقييمات",
+  "hotelRatingExceptional": "استثنائي",
+  "hotelRatingExcellent": "ممتاز",
+  "hotelRatingVeryGood": "جيد جدًا",
+  "hotelRatingGood": "جيد",
+  "hotelRatingStandard": "قياسي",
+  "hotelViewSea": "إطلالة على البحر",
+  "hotelViewPool": "إطلالة على المسبح",
+  "hotelViewGarden": "إطلالة على الحديقة",
+  "hotelViewCity": "إطلالة على المدينة",
+  "hotelViewMountain": "إطلالة على الجبل",
+  "hotelViewRiver": "إطلالة على النهر",
+  "hotelViewLake": "إطلالة على البحيرة",
+  "hotelViewHarbor": "إطلالة على الميناء",
   "viewSummary": "عرض الملخص",
   "hideSummary": "إخفاء الملخص",
   "checkInLabel": "تسجيل الدخول",

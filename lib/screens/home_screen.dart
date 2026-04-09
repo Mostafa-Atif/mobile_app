@@ -1,13 +1,18 @@
 import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:mobile_app/data/destinations_repository.dart';
 import 'package:mobile_app/l10n/app_localizations.dart';
+import 'package:mobile_app/screens/all_destinations_screen.dart';
 import 'package:mobile_app/theme.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
 import '../main.dart';
-import 'hotels/hotel_search.dart';
-import 'flights/flightsearch.dart';
 import 'car rental/carssearch.dart';
+import 'destination_detail_screen.dart';
+import 'flights/flightsearch.dart';
+import 'hotels/hotel_search.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -17,30 +22,9 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  final DestinationsRepository _destinationsRepository = DestinationsRepository();
   String firstName = '';
-
-  final List<Map<String, String>> destinations = [
-    {
-      'name': 'Dubai',
-      'nameAr': 'دبي',
-      'img': 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=800&q=80',
-    },
-    {
-      'name': 'Paris',
-      'nameAr': 'باريس',
-      'img': 'https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=800&q=80',
-    },
-    {
-      'name': 'London',
-      'nameAr': 'لندن',
-      'img': 'https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?w=800&q=80',
-    },
-    {
-      'name': 'Tokyo',
-      'nameAr': 'طوكيو',
-      'img': 'https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=800&q=80',
-    },
-  ];
+  late final Future<List<Map<String, dynamic>>> _featuredDestinationsFuture;
 
   late final PageController _heroPageController;
   int _currentHeroPage = 0;
@@ -50,6 +34,8 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     _loadUser();
+    _featuredDestinationsFuture =
+        _destinationsRepository.loadFeaturedDestinations();
     _heroPageController = PageController();
     _startHeroAutoScroll();
   }
@@ -57,13 +43,18 @@ class _HomeScreenState extends State<HomeScreen> {
   void _startHeroAutoScroll() {
     _heroTimer = Timer.periodic(const Duration(seconds: 4), (_) {
       if (!mounted) return;
-      final next = (_currentHeroPage + 1) % destinations.length;
-      _heroPageController.animateToPage(
-        next,
-        duration: const Duration(milliseconds: 800),
-        curve: Curves.easeInOut,
-      );
-      setState(() => _currentHeroPage = next);
+
+      _featuredDestinationsFuture.then((destinations) {
+        if (!mounted || destinations.isEmpty) return;
+
+        final next = (_currentHeroPage + 1) % destinations.length;
+        _heroPageController.animateToPage(
+          next,
+          duration: const Duration(milliseconds: 800),
+          curve: Curves.easeInOut,
+        );
+        setState(() => _currentHeroPage = next);
+      });
     });
   }
 
@@ -88,50 +79,80 @@ class _HomeScreenState extends State<HomeScreen> {
 
     return Scaffold(
       backgroundColor: t.bg,
-      body: CustomScrollView(
-        slivers: [
-          SliverToBoxAdapter(
-            child: _buildHero(context, t, l, isDark, isAr),
-          ),
-          SliverToBoxAdapter(
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(20, 28, 20, 0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _buildCategories(context, t, l),
-                  const SizedBox(height: 32),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      body: FutureBuilder<List<Map<String, dynamic>>>(
+        future: _featuredDestinationsFuture,
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) {
+            return const Center(child: CircularProgressIndicator());
+          }
+
+          final destinations = snapshot.data!;
+
+          return CustomScrollView(
+            slivers: [
+              SliverToBoxAdapter(
+                child: _buildHero(context, t, l, isDark, isAr, destinations),
+              ),
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(20, 28, 20, 0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        isAr ? 'الوجهات' : 'Destinations',
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          color: t.title,
-                          fontFamily: 'DM Serif Display',
-                        ),
+                      _buildCategories(context, t, l),
+                      const SizedBox(height: 32),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            l.homeDestinationsTitle,
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: t.title,
+                              fontFamily: 'DM Serif Display',
+                            ),
+                          ),
+                          GestureDetector(
+                            onTap: () => Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) => const AllDestinationsScreen(),
+                              ),
+                            ),
+                            child: Text(
+                              l.seeAll,
+                              style: TextStyle(
+                                fontSize: 13,
+                                color: t.accent,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
-                      Text(
-                        isAr ? 'عرض الكل' : 'See all',
-                        style: TextStyle(fontSize: 13, color: t.accent, fontWeight: FontWeight.w500),
-                      ),
+                      const SizedBox(height: 16),
+                      _buildDestinations(t, isAr, destinations),
+                      const SizedBox(height: 32),
                     ],
                   ),
-                  const SizedBox(height: 16),
-                  _buildDestinations(t, isAr),
-                  const SizedBox(height: 32),
-                ],
+                ),
               ),
-            ),
-          ),
-        ],
+            ],
+          );
+        },
       ),
     );
   }
 
-  Widget _buildHero(BuildContext context, AppThemeExtension t, AppLocalizations l, bool isDark, bool isAr) {
+  Widget _buildHero(
+    BuildContext context,
+    AppThemeExtension t,
+    AppLocalizations l,
+    bool isDark,
+    bool isAr,
+    List<Map<String, dynamic>> destinations,
+  ) {
     final heroFilter = isDark ? 0.45 : 0.30;
 
     return SizedBox(
@@ -139,14 +160,13 @@ class _HomeScreenState extends State<HomeScreen> {
       child: Stack(
         fit: StackFit.expand,
         children: [
-          // ── Auto-scrolling background images ──
           PageView.builder(
             controller: _heroPageController,
             onPageChanged: (i) => setState(() => _currentHeroPage = i),
             itemCount: destinations.length,
             itemBuilder: (context, i) {
               return Image.network(
-                destinations[i]['img']!,
+                destinations[i]['imageUrl'] as String,
                 fit: BoxFit.cover,
                 color: Colors.black.withOpacity(heroFilter),
                 colorBlendMode: BlendMode.darken,
@@ -154,8 +174,6 @@ class _HomeScreenState extends State<HomeScreen> {
               );
             },
           ),
-
-          // ── Gradient overlay ──
           Container(
             decoration: BoxDecoration(
               gradient: LinearGradient(
@@ -169,20 +187,17 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
           ),
-
-          // ── Content ──
           SafeArea(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Top bar
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        isAr ? 'رحّال' : 'RAHAL',
+                        isAr ? l.appTitle : l.appTitle.toUpperCase(),
                         style: TextStyle(
                           color: Colors.white.withOpacity(0.9),
                           fontSize: 13,
@@ -193,14 +208,17 @@ class _HomeScreenState extends State<HomeScreen> {
                       Row(
                         children: [
                           _heroIconBtn(
-                            isDark ? Icons.light_mode_outlined : Icons.dark_mode_outlined,
+                            isDark
+                                ? Icons.light_mode_outlined
+                                : Icons.dark_mode_outlined,
                             () => context.read<ThemeProvider>().toggle(),
                           ),
                           const SizedBox(width: 8),
                           _heroIconBtn(
                             Icons.language,
                             () {
-                              final next = isAr ? const Locale('en') : const Locale('ar');
+                              final next =
+                                  isAr ? const Locale('en') : const Locale('ar');
                               MyApp.setLocale(context, next);
                             },
                             label: isAr ? 'EN' : 'AR',
@@ -209,14 +227,11 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ],
                   ),
-
                   const Spacer(),
-
-                  // Greeting
                   Text(
-                    isAr
-                        ? '${firstName.isNotEmpty ? '$firstName، ' : ''}جاهز للإقلاع؟'
-                        : 'Ready for takeoff${firstName.isNotEmpty ? ', $firstName' : ''}',
+                    firstName.isNotEmpty
+                        ? l.homeGreetingWithName(firstName)
+                        : l.homeGreeting,
                     style: TextStyle(
                       color: Colors.white.withOpacity(0.75),
                       fontSize: 14,
@@ -224,10 +239,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
                   const SizedBox(height: 6),
-
-                  // Main heading
                   Text(
-                    isAr ? 'خطّط لمغامرتك القادمة' : 'Plan your next\nadventure',
+                    l.homeHeroTitle,
                     style: TextStyle(
                       color: t.title,
                       fontSize: 28,
@@ -236,10 +249,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       height: 1.1,
                     ),
                   ),
-                  const SizedBox(height: 14),
-
-
-                  const SizedBox(height: 16),
+                  const SizedBox(height: 30),
                 ],
               ),
             ),
@@ -262,21 +272,30 @@ class _HomeScreenState extends State<HomeScreen> {
           border: Border.all(color: Colors.white.withOpacity(0.2)),
         ),
         child: label != null
-            ? Row(children: [
-                Icon(icon, color: Colors.white, size: 14),
-                const SizedBox(width: 5),
-                Text(label,
+            ? Row(
+                children: [
+                  Icon(icon, color: Colors.white, size: 14),
+                  const SizedBox(width: 5),
+                  Text(
+                    label,
                     style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 12,
-                        fontWeight: FontWeight.w600)),
-              ])
+                      color: Colors.white,
+                      fontSize: 12,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ],
+              )
             : Icon(icon, color: Colors.white, size: 18),
       ),
     );
   }
 
-  Widget _buildCategories(BuildContext context, AppThemeExtension t, AppLocalizations l) {
+  Widget _buildCategories(
+    BuildContext context,
+    AppThemeExtension t,
+    AppLocalizations l,
+  ) {
     final categories = [
       {
         'label': l.flights,
@@ -306,8 +325,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 MaterialPageRoute(builder: (_) => (cat['page'] as Function)()),
               ),
               child: Container(
-                // ── Taller card + more padding ──
-                padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 8),
+                padding:
+                    const EdgeInsets.symmetric(vertical: 20, horizontal: 8),
                 decoration: BoxDecoration(
                   color: t.card,
                   borderRadius: BorderRadius.circular(16),
@@ -329,14 +348,16 @@ class _HomeScreenState extends State<HomeScreen> {
                         color: t.accentLight,
                         borderRadius: BorderRadius.circular(14),
                       ),
-                      // ── Bigger icon ──
-                      child: Icon(cat['icon'] as IconData, color: t.accent, size: 32),
+                      child: Icon(
+                        cat['icon'] as IconData,
+                        color: t.accent,
+                        size: 32,
+                      ),
                     ),
                     const SizedBox(height: 10),
                     Text(
                       cat['label'] as String,
                       style: TextStyle(
-                        // ── Bigger label ──
                         fontSize: 13,
                         fontWeight: FontWeight.w700,
                         color: t.title,
@@ -353,7 +374,11 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _buildDestinations(AppThemeExtension t, bool isAr) {
+  Widget _buildDestinations(
+    AppThemeExtension t,
+    bool isAr,
+    List<Map<String, dynamic>> destinations,
+  ) {
     return GridView.builder(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
@@ -365,40 +390,53 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       itemCount: destinations.length,
       itemBuilder: (context, i) {
-        final d = destinations[i];
-        return ClipRRect(
-          borderRadius: BorderRadius.circular(16),
-          child: Stack(
-            fit: StackFit.expand,
-            children: [
-              Image.network(
-                d['img']!,
-                fit: BoxFit.cover,
-                errorBuilder: (_, __, ___) => Container(color: t.card),
+        final destination = destinations[i];
+
+        return GestureDetector(
+          onTap: () => Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => DestinationDetailScreen(
+                destinationData: destination,
               ),
-              Container(
-                decoration: const BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    colors: [Colors.transparent, Colors.black54],
-                    stops: [0.4, 1.0],
+            ),
+          ),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(16),
+            child: Stack(
+              fit: StackFit.expand,
+              children: [
+                Image.network(
+                  destination['imageUrl'] as String,
+                  fit: BoxFit.cover,
+                  errorBuilder: (_, __, ___) => Container(color: t.card),
+                ),
+                Container(
+                  decoration: const BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: [Colors.transparent, Colors.black54],
+                      stops: [0.4, 1.0],
+                    ),
                   ),
                 ),
-              ),
-              Positioned(
-                bottom: 10,
-                left: 12,
-                child: Text(
-                  isAr ? d['nameAr']! : d['name']!,
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 14,
-                    fontWeight: FontWeight.w700,
+                Positioned(
+                  bottom: 10,
+                  left: 12,
+                  child: Text(
+                    isAr
+                        ? destination['nameAr'] as String
+                        : destination['nameEn'] as String,
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w700,
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         );
       },
