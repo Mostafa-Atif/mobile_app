@@ -32,7 +32,7 @@ class OnboardingPage extends StatelessWidget {
   final VoidCallback onNext;
   final String nextLabel;
 
-  const OnboardingPage({
+  const OnboardingPage({super.key, 
     required this.imagePath,
     required this.title,
     required this.body,

@@ -17,6 +17,8 @@ class RoomData {
 }
 
 class HotelSearch extends StatefulWidget {
+  const HotelSearch({super.key});
+
   @override
   _HotelSearchState createState() => _HotelSearchState();
 }

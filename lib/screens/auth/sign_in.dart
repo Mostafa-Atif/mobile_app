@@ -10,7 +10,7 @@ import 'forgot_password.dart';
 import '../../config.dart';
 
 class SignIn extends StatefulWidget {
-  const SignIn({Key? key}) : super(key: key);
+  const SignIn({super.key});
 
   @override
   State<SignIn> createState() => _SignInState();

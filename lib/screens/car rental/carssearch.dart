@@ -10,6 +10,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../config.dart';
 
 class CarsSearch extends StatefulWidget {
+  const CarsSearch({super.key});
+
   @override
   _CarsSearchState createState() => _CarsSearchState();
 }
@@ -311,7 +313,7 @@ class _CarsSearchState extends State<CarsSearch> {
         border: Border.all(color: t.fieldBorder.withOpacity(0.5)),
       ),
       child: DropdownButtonFormField<String>(
-        value: value,
+        initialValue: value,
         dropdownColor: t.card,
         style: TextStyle(color: t.title, fontSize: 15),
         decoration: InputDecoration(
@@ -845,7 +847,7 @@ class _CarsSearchState extends State<CarsSearch> {
                               value: privateDriver,
                               onChanged: (val) =>
                                   setState(() => privateDriver = val),
-                              activeColor: t.accent,
+                              activeThumbColor: t.accent,
                             ),
                           ),
 

@@ -9,6 +9,8 @@ import 'package:mobile_app/theme.dart';
 import '../../config.dart';
 
 class FlightSearch extends StatefulWidget {
+  const FlightSearch({super.key});
+
   @override
   _FlightSearchState createState() => _FlightSearchState();
 }

@@ -36,7 +36,7 @@ void main() async {
 
 class MyApp extends StatefulWidget {
   final Widget startScreen;
-  const MyApp({Key? key, required this.startScreen}) : super(key: key);
+  const MyApp({super.key, required this.startScreen});
 
   static void setLocale(BuildContext context, Locale newLocale) {
     _MyAppState? state = context.findAncestorStateOfType<_MyAppState>();
