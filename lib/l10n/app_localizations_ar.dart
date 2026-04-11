@@ -775,4 +775,196 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get hideSummaryFlight => 'إخفاء الملخص';
+
+  @override
+  String get userDashboardTitle => 'حجوزاتي';
+
+  @override
+  String get userDashboardSubtitle => 'كل حجوزاتك في مكان واحد';
+
+  @override
+  String get userDashboardTotal => 'الإجمالي';
+
+  @override
+  String get userDashboardConfirmed => 'مؤكد';
+
+  @override
+  String get userDashboardCompleted => 'مكتمل';
+
+  @override
+  String get userDashboardPending => 'قيد الانتظار';
+
+  @override
+  String get userDashboardAll => 'الكل';
+
+  @override
+  String get userDashboardFlights => 'رحلات';
+
+  @override
+  String get userDashboardHotels => 'فنادق';
+
+  @override
+  String get userDashboardCars => 'سيارات';
+
+  @override
+  String get userDashboardFlight => 'رحلة';
+
+  @override
+  String get userDashboardHotel => 'فندق';
+
+  @override
+  String get userDashboardCar => 'سيارة';
+
+  @override
+  String get userDashboardCheckIn => 'تاريخ الوصول';
+
+  @override
+  String get userDashboardCheckOut => 'تاريخ المغادرة';
+
+  @override
+  String get userDashboardRooms => 'الغرف';
+
+  @override
+  String get userDashboardGuest => 'النزيل';
+
+  @override
+  String get userDashboardPickUp => 'تاريخ الاستلام';
+
+  @override
+  String get userDashboardDropOff => 'تاريخ التسليم';
+
+  @override
+  String get userDashboardRoute => 'المسار';
+
+  @override
+  String get userDashboardDepartureDate => 'تاريخ الذهاب';
+
+  @override
+  String get userDashboardReturnDate => 'تاريخ العودة';
+
+  @override
+  String get userDashboardPassenger => 'المسافر';
+
+  @override
+  String get userDashboardTripType => 'نوع الرحلة';
+
+  @override
+  String get userDashboardNoBookings => 'لا توجد حجوزات بعد';
+
+  @override
+  String get userDashboardNoBookingsSubtitle =>
+      'ستظهر حجوزاتك هنا بمجرد إنشاء حجز.';
+
+  @override
+  String get userDashboardLoadError => 'تعذر تحميل الحجوزات';
+
+  @override
+  String get statusConfirmed => 'مؤكد';
+
+  @override
+  String get statusCompleted => 'مكتمل';
+
+  @override
+  String get statusCancelled => 'ملغي';
+
+  @override
+  String get statusPending => 'قيد الانتظار';
+
+  @override
+  String get aboutTitle => 'من نحن';
+
+  @override
+  String get aboutMissionLabel => 'مهمّتنا';
+
+  @override
+  String get aboutMissionBody =>
+      'رحّال هو رفيقك في كل رحلة. نؤمن بأن السفر يجب أن يكون سهلاً وممتعاً ومتاحاً للجميع. لذلك وفّرنا في مكان واحد كل ما تحتاجه - من حجز رحلات الطيران إلى الفنادق وتأجير السيارات - بأسعار منافسة وتجربة استخدام لا مثيل لها.';
+
+  @override
+  String get aboutOfferLabel => 'ما نقدّمه';
+
+  @override
+  String get aboutContactLabel => 'تواصل معنا';
+
+  @override
+  String get aboutHeadquarters => 'المقر الرئيسي';
+
+  @override
+  String get aboutHeadquartersValue => 'الرياض، المملكة العربية السعودية';
+
+  @override
+  String get aboutVersion => 'الإصدار ١.٠.٠';
+
+  @override
+  String get aboutStatsHotels => 'فندق';
+
+  @override
+  String get aboutStatsDestinations => 'وجهة';
+
+  @override
+  String get aboutStatsTravelers => 'عميل سعيد';
+
+  @override
+  String get aboutFeatureFlightsTitle => 'حجز رحلات';
+
+  @override
+  String get aboutFeatureFlightsDesc =>
+      'ابحث عن أفضل الرحلات وأرخصها من مئات شركات الطيران حول العالم.';
+
+  @override
+  String get aboutFeatureHotelsTitle => 'حجز فنادق';
+
+  @override
+  String get aboutFeatureHotelsDesc =>
+      'اختر من بين أكثر من مليون فندق وشقة فندقية في جميع أنحاء العالم.';
+
+  @override
+  String get aboutFeatureCarsTitle => 'تأجير سيارات';
+
+  @override
+  String get aboutFeatureCarsDesc =>
+      'استأجر سيارتك المفضلة بأفضل الأسعار مع خيار السائق الخاص.';
+
+  @override
+  String get aboutFeatureSupportTitle => 'دعم على مدار الساعة';
+
+  @override
+  String get aboutFeatureSupportDesc =>
+      'فريق دعم متاح دائماً لمساعدتك في أي وقت خلال رحلتك.';
+
+  @override
+  String get menuSettings => 'الإعدادات';
+
+  @override
+  String get menuAboutUs => 'من نحن';
+
+  @override
+  String get menuProfileFallback => 'مستخدم رحّال';
+
+  @override
+  String get menuNoEmail => 'لا يوجد بريد';
+
+  @override
+  String get settingsTitle => 'الإعدادات';
+
+  @override
+  String get settingsAppearanceTitle => 'المظهر';
+
+  @override
+  String get settingsAppearanceSubtitle => 'اختر وضع التطبيق';
+
+  @override
+  String get settingsLanguageTitle => 'اللغة';
+
+  @override
+  String get settingsLanguageSubtitle => 'اختر لغة التطبيق';
+
+  @override
+  String get settingsLight => 'فاتح';
+
+  @override
+  String get settingsDark => 'داكن';
+
+  @override
+  String get menuLogout => 'تسجيل الخروج';
 }

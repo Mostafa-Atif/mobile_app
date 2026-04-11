@@ -200,7 +200,7 @@ class DestinationDetailScreen extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            section['title']! as String,
+                            section['title']!,
                             style: TextStyle(
                               color: t.title,
                               fontSize: 17,
@@ -209,7 +209,7 @@ class DestinationDetailScreen extends StatelessWidget {
                           ),
                           const SizedBox(height: 10),
                           Text(
-                            section['body']! as String,
+                            section['body']!,
                             style: TextStyle(
                               color: t.sub,
                               fontSize: 14,

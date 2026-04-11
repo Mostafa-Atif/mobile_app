@@ -3,6 +3,18 @@ const router = express.Router();
 const FlightBooking = require("../models/FlightBooking");
 const protect = require("../middleware/authMiddleware"); // ✅ ضيف ده
 
+
+// router.get("/admin", (req, res) => {
+//   if (!req.user || !req.user.isAdmin) {
+//     return res.status(403).send("Forbidden");
+//   }
+
+//   res.send("Welcome Admin");
+// });
+
+
+
+
 const {
   createFlightBooking,
 } = require("../controllers/flightBookingController");
@@ -56,7 +68,7 @@ router.put("/:id/confirm", async (req, res) => {
     const booking = await FlightBooking.findByIdAndUpdate(
       req.params.id,
       { status: "confirmed" },
-      { new: true }
+      { returnDocument: "after" }
     );
 
     res.json(booking);

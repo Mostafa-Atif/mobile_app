@@ -23,6 +23,14 @@ class AppColors {
   static const lightBadge        = Color(0xFFFF6B6B);
   static const lightBackBg       = Color(0xFFE0F0F8);
   static const lightBackIcon     = Color(0xFF3A9DC4);
+  static const lightSuccess      = Color(0xFF167C5A);
+  static const lightSuccessBg    = Color(0xFFDDF7EC);
+  static const lightWarning      = Color(0xFFB57600);
+  static const lightWarningBg    = Color(0xFFFFF1CF);
+  static const lightDanger       = Color(0xFFC73D3D);
+  static const lightDangerBg     = Color(0xFFFFE3E3);
+  static const lightInfo         = Color(0xFF2D6BE4);
+  static const lightInfoBg       = Color(0xFFE6EEFF);
 
   // Dark
   static const darkBg            = Color(0xFF0D1B2A);
@@ -43,6 +51,14 @@ class AppColors {
   static const darkBadge         = Color(0xFFFF6B6B);
   static const darkBackBg        = Color(0x121E3A52);
   static const darkBackIcon      = Color(0xFF4DB8E8);
+  static const darkSuccess       = Color(0xFF72D4A8);
+  static const darkSuccessBg     = Color(0x1F72D4A8);
+  static const darkWarning       = Color(0xFFFFC857);
+  static const darkWarningBg     = Color(0x1FFFC857);
+  static const darkDanger        = Color(0xFFFF8A8A);
+  static const darkDangerBg      = Color(0x20FF8A8A);
+  static const darkInfo          = Color(0xFF7FB0FF);
+  static const darkInfoBg        = Color(0x227FB0FF);
 
   // Shared
   static const btnGradientLight  = [Color(0xFF1A3D55), Color(0xFF2A6080)];
@@ -72,6 +88,14 @@ class AppThemeExtension extends ThemeExtension<AppThemeExtension> {
   final Color badge;
   final Color backBg;
   final Color backIcon;
+  final Color success;
+  final Color successBg;
+  final Color warning;
+  final Color warningBg;
+  final Color danger;
+  final Color dangerBg;
+  final Color info;
+  final Color infoBg;
   final List<Color> btnGradient;
 
   const AppThemeExtension({
@@ -93,6 +117,14 @@ class AppThemeExtension extends ThemeExtension<AppThemeExtension> {
     required this.badge,
     required this.backBg,
     required this.backIcon,
+    required this.success,
+    required this.successBg,
+    required this.warning,
+    required this.warningBg,
+    required this.danger,
+    required this.dangerBg,
+    required this.info,
+    required this.infoBg,
     required this.btnGradient,
   });
 
@@ -115,6 +147,14 @@ class AppThemeExtension extends ThemeExtension<AppThemeExtension> {
     badge:        AppColors.lightBadge,
     backBg:       AppColors.lightBackBg,
     backIcon:     AppColors.lightBackIcon,
+    success:      AppColors.lightSuccess,
+    successBg:    AppColors.lightSuccessBg,
+    warning:      AppColors.lightWarning,
+    warningBg:    AppColors.lightWarningBg,
+    danger:       AppColors.lightDanger,
+    dangerBg:     AppColors.lightDangerBg,
+    info:         AppColors.lightInfo,
+    infoBg:       AppColors.lightInfoBg,
     btnGradient:  AppColors.btnGradientLight,
   );
 
@@ -137,6 +177,14 @@ class AppThemeExtension extends ThemeExtension<AppThemeExtension> {
     badge:        AppColors.darkBadge,
     backBg:       AppColors.darkBackBg,
     backIcon:     AppColors.darkBackIcon,
+    success:      AppColors.darkSuccess,
+    successBg:    AppColors.darkSuccessBg,
+    warning:      AppColors.darkWarning,
+    warningBg:    AppColors.darkWarningBg,
+    danger:       AppColors.darkDanger,
+    dangerBg:     AppColors.darkDangerBg,
+    info:         AppColors.darkInfo,
+    infoBg:       AppColors.darkInfoBg,
     btnGradient:  AppColors.btnGradientDark,
   );
 
@@ -146,7 +194,9 @@ class AppThemeExtension extends ThemeExtension<AppThemeExtension> {
     Color? field, Color? fieldBorder, Color? divider, Color? label,
     Color? sub, Color? title, Color? accent, Color? accentLight,
     Color? price, Color? tag, Color? tagText, Color? badge,
-    Color? backBg, Color? backIcon, List<Color>? btnGradient,
+    Color? backBg, Color? backIcon, Color? success, Color? successBg,
+    Color? warning, Color? warningBg, Color? danger, Color? dangerBg,
+    Color? info, Color? infoBg, List<Color>? btnGradient,
   }) {
     return AppThemeExtension(
       bg:          bg          ?? this.bg,
@@ -167,6 +217,14 @@ class AppThemeExtension extends ThemeExtension<AppThemeExtension> {
       badge:       badge       ?? this.badge,
       backBg:      backBg      ?? this.backBg,
       backIcon:    backIcon    ?? this.backIcon,
+      success:     success     ?? this.success,
+      successBg:   successBg   ?? this.successBg,
+      warning:     warning     ?? this.warning,
+      warningBg:   warningBg   ?? this.warningBg,
+      danger:      danger      ?? this.danger,
+      dangerBg:    dangerBg    ?? this.dangerBg,
+      info:        info        ?? this.info,
+      infoBg:      infoBg      ?? this.infoBg,
       btnGradient: btnGradient ?? this.btnGradient,
     );
   }
@@ -193,6 +251,14 @@ class AppThemeExtension extends ThemeExtension<AppThemeExtension> {
       badge:       Color.lerp(badge,       other.badge,       t)!,
       backBg:      Color.lerp(backBg,      other.backBg,      t)!,
       backIcon:    Color.lerp(backIcon,    other.backIcon,    t)!,
+      success:     Color.lerp(success,     other.success,     t)!,
+      successBg:   Color.lerp(successBg,   other.successBg,   t)!,
+      warning:     Color.lerp(warning,     other.warning,     t)!,
+      warningBg:   Color.lerp(warningBg,   other.warningBg,   t)!,
+      danger:      Color.lerp(danger,      other.danger,      t)!,
+      dangerBg:    Color.lerp(dangerBg,    other.dangerBg,    t)!,
+      info:        Color.lerp(info,        other.info,        t)!,
+      infoBg:      Color.lerp(infoBg,      other.infoBg,      t)!,
       btnGradient: [
         Color.lerp(btnGradient[0], other.btnGradient[0], t)!,
         Color.lerp(btnGradient[1], other.btnGradient[1], t)!,

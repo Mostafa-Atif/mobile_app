@@ -781,4 +781,196 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get hideSummaryFlight => 'Hide summary';
+
+  @override
+  String get userDashboardTitle => 'My Bookings';
+
+  @override
+  String get userDashboardSubtitle => 'All your travel bookings in one place';
+
+  @override
+  String get userDashboardTotal => 'Total';
+
+  @override
+  String get userDashboardConfirmed => 'Confirmed';
+
+  @override
+  String get userDashboardCompleted => 'Completed';
+
+  @override
+  String get userDashboardPending => 'Pending';
+
+  @override
+  String get userDashboardAll => 'All';
+
+  @override
+  String get userDashboardFlights => 'Flights';
+
+  @override
+  String get userDashboardHotels => 'Hotels';
+
+  @override
+  String get userDashboardCars => 'Cars';
+
+  @override
+  String get userDashboardFlight => 'Flight';
+
+  @override
+  String get userDashboardHotel => 'Hotel';
+
+  @override
+  String get userDashboardCar => 'Car';
+
+  @override
+  String get userDashboardCheckIn => 'Check in';
+
+  @override
+  String get userDashboardCheckOut => 'Check out';
+
+  @override
+  String get userDashboardRooms => 'Rooms';
+
+  @override
+  String get userDashboardGuest => 'Guest';
+
+  @override
+  String get userDashboardPickUp => 'Pick up';
+
+  @override
+  String get userDashboardDropOff => 'Drop off';
+
+  @override
+  String get userDashboardRoute => 'Route';
+
+  @override
+  String get userDashboardDepartureDate => 'Departure';
+
+  @override
+  String get userDashboardReturnDate => 'Return';
+
+  @override
+  String get userDashboardPassenger => 'Passenger';
+
+  @override
+  String get userDashboardTripType => 'Trip type';
+
+  @override
+  String get userDashboardNoBookings => 'No bookings yet';
+
+  @override
+  String get userDashboardNoBookingsSubtitle =>
+      'Your bookings will appear here once you create one.';
+
+  @override
+  String get userDashboardLoadError => 'Could not load bookings';
+
+  @override
+  String get statusConfirmed => 'Confirmed';
+
+  @override
+  String get statusCompleted => 'Completed';
+
+  @override
+  String get statusCancelled => 'Cancelled';
+
+  @override
+  String get statusPending => 'Pending';
+
+  @override
+  String get aboutTitle => 'About Us';
+
+  @override
+  String get aboutMissionLabel => 'Our Mission';
+
+  @override
+  String get aboutMissionBody =>
+      'Rahal is your companion on every journey. We believe travel should be simple, enjoyable, and accessible to everyone. That\'s why we\'ve brought everything you need into one place - from flights and hotels to car rentals - at competitive prices with an unmatched experience.';
+
+  @override
+  String get aboutOfferLabel => 'What We Offer';
+
+  @override
+  String get aboutContactLabel => 'Get In Touch';
+
+  @override
+  String get aboutHeadquarters => 'Headquarters';
+
+  @override
+  String get aboutHeadquartersValue => 'Riyadh, Saudi Arabia';
+
+  @override
+  String get aboutVersion => 'Version 1.0.0';
+
+  @override
+  String get aboutStatsHotels => 'Hotels';
+
+  @override
+  String get aboutStatsDestinations => 'Destinations';
+
+  @override
+  String get aboutStatsTravelers => 'Happy Travelers';
+
+  @override
+  String get aboutFeatureFlightsTitle => 'Flight Booking';
+
+  @override
+  String get aboutFeatureFlightsDesc =>
+      'Search and book the best flights from hundreds of airlines worldwide.';
+
+  @override
+  String get aboutFeatureHotelsTitle => 'Hotel Stays';
+
+  @override
+  String get aboutFeatureHotelsDesc =>
+      'Choose from over 1M+ hotels and apartments across the globe.';
+
+  @override
+  String get aboutFeatureCarsTitle => 'Car Rentals';
+
+  @override
+  String get aboutFeatureCarsDesc =>
+      'Rent your preferred car at the best rates with an optional private driver.';
+
+  @override
+  String get aboutFeatureSupportTitle => '24/7 Support';
+
+  @override
+  String get aboutFeatureSupportDesc =>
+      'Our support team is always available to assist you throughout your journey.';
+
+  @override
+  String get menuSettings => 'Settings';
+
+  @override
+  String get menuAboutUs => 'About Us';
+
+  @override
+  String get menuProfileFallback => 'Rahal User';
+
+  @override
+  String get menuNoEmail => 'No email';
+
+  @override
+  String get settingsTitle => 'Settings';
+
+  @override
+  String get settingsAppearanceTitle => 'Appearance';
+
+  @override
+  String get settingsAppearanceSubtitle => 'Choose the app mode';
+
+  @override
+  String get settingsLanguageTitle => 'Language';
+
+  @override
+  String get settingsLanguageSubtitle => 'Choose the app language';
+
+  @override
+  String get settingsLight => 'Light';
+
+  @override
+  String get settingsDark => 'Dark';
+
+  @override
+  String get menuLogout => 'Logout';
 }

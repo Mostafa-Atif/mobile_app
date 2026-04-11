@@ -4,7 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:mobile_app/l10n/app_localizations.dart';
 import 'package:mobile_app/screens/auth/sign_in.dart';
-import 'package:mobile_app/screens/home_screen.dart';
+import 'package:mobile_app/screens/home/admin_dashboard_screen.dart';
+import 'package:mobile_app/screens/home/home_screen.dart';
 import 'package:mobile_app/screens/onboarding/onboarding_screen_1.dart';
 import '../Archive/temp_home.dart';
 import 'package:mobile_app/theme.dart';
@@ -21,7 +22,7 @@ void main() async {
   if (!onboardingDone) {
     startScreen = const OnboardingScreen1();
   } else if (token.isNotEmpty) {
-    startScreen = const HomeScreen();
+    startScreen = const AdminDashboardScreen();
   } else {
     startScreen = const SignIn();
   }
@@ -71,7 +72,7 @@ class _MyAppState extends State<MyApp> {
       ],
       locale: _locale,
       debugShowCheckedModeBanner: false,
-      theme: lightTheme(),
+      theme: darkTheme(),
       darkTheme: darkTheme(),
       themeMode: themeProvider.mode,
       home: widget.startScreen,

@@ -3,16 +3,20 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:mobile_app/data/destinations_repository.dart';
 import 'package:mobile_app/l10n/app_localizations.dart';
-import 'package:mobile_app/screens/all_destinations_screen.dart';
+import 'package:mobile_app/screens/home/all_destinations_screen.dart';
+import 'package:mobile_app/screens/home/about_us_screen.dart';
+import 'package:mobile_app/screens/home/settings_screen.dart';
+import 'package:mobile_app/screens/home/user_dashboard_screen.dart';
+import 'package:mobile_app/screens/auth/sign_in.dart';
 import 'package:mobile_app/theme.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../main.dart';
-import 'car rental/carssearch.dart';
+import '../../main.dart';
+import '../car rental/carssearch.dart';
 import 'destination_detail_screen.dart';
-import 'flights/flightsearch.dart';
-import 'hotels/hotel_search.dart';
+import '../flights/flightsearch.dart';
+import '../hotels/hotel_search.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -24,37 +28,51 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   final DestinationsRepository _destinationsRepository = DestinationsRepository();
   String firstName = '';
+  String email = '';
+  late final Future<List<Map<String, dynamic>>> _heroDestinationsFuture;
   late final Future<List<Map<String, dynamic>>> _featuredDestinationsFuture;
 
-  late final PageController _heroPageController;
+  late PageController _heroPageController;
   int _currentHeroPage = 0;
   Timer? _heroTimer;
+  int _heroDestinationsCount = 0;
 
   @override
   void initState() {
     super.initState();
     _loadUser();
+    _heroDestinationsFuture = _destinationsRepository.loadDestinations();
     _featuredDestinationsFuture =
         _destinationsRepository.loadFeaturedDestinations();
     _heroPageController = PageController();
     _startHeroAutoScroll();
   }
 
+  @override
+  void reassemble() {
+    super.reassemble();
+    _heroTimer?.cancel();
+    _heroPageController.dispose();
+    _heroPageController = PageController(initialPage: _currentHeroPage);
+    _startHeroAutoScroll();
+  }
+
   void _startHeroAutoScroll() {
     _heroTimer = Timer.periodic(const Duration(seconds: 4), (_) {
       if (!mounted) return;
+      if (_heroDestinationsCount <= 1) return;
+      if (!_heroPageController.hasClients ||
+          _heroPageController.positions.length != 1) {
+        return;
+      }
 
-      _featuredDestinationsFuture.then((destinations) {
-        if (!mounted || destinations.isEmpty) return;
-
-        final next = (_currentHeroPage + 1) % destinations.length;
-        _heroPageController.animateToPage(
-          next,
-          duration: const Duration(milliseconds: 800),
-          curve: Curves.easeInOut,
-        );
-        setState(() => _currentHeroPage = next);
-      });
+      final next = (_currentHeroPage + 1) % _heroDestinationsCount;
+      _heroPageController.animateToPage(
+        next,
+        duration: const Duration(milliseconds: 800),
+        curve: Curves.easeInOut,
+      );
+      setState(() => _currentHeroPage = next);
     });
   }
 
@@ -67,7 +85,28 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Future<void> _loadUser() async {
     final prefs = await SharedPreferences.getInstance();
-    setState(() => firstName = prefs.getString('firstName') ?? '');
+    setState(() {
+      firstName = prefs.getString('firstName') ?? '';
+      email = prefs.getString('email') ?? '';
+    });
+  }
+
+  Future<void> _logout() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove('token');
+    await prefs.remove('firstName');
+    await prefs.remove('lastName');
+    await prefs.remove('email');
+    await prefs.remove('phone');
+    await prefs.remove('userId');
+    await prefs.remove('gender');
+
+    if (!mounted) return;
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(builder: (_) => const SignIn()),
+      (route) => false,
+    );
   }
 
   @override
@@ -79,19 +118,47 @@ class _HomeScreenState extends State<HomeScreen> {
 
     return Scaffold(
       backgroundColor: t.bg,
-      body: FutureBuilder<List<Map<String, dynamic>>>(
-        future: _featuredDestinationsFuture,
+      body: FutureBuilder<List<List<Map<String, dynamic>>>>(
+        future: Future.wait([
+          _heroDestinationsFuture,
+          _featuredDestinationsFuture,
+        ]),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
             return const Center(child: CircularProgressIndicator());
           }
 
-          final destinations = snapshot.data!;
+          final heroDestinations = snapshot.data![0];
+          final featuredDestinations = snapshot.data![1];
+
+          if (_heroDestinationsCount != heroDestinations.length) {
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              if (!mounted) return;
+              final nextPage = heroDestinations.isEmpty
+                  ? 0
+                  : _currentHeroPage % heroDestinations.length;
+              setState(() {
+                _heroDestinationsCount = heroDestinations.length;
+                _currentHeroPage = nextPage;
+              });
+              if (_heroPageController.hasClients &&
+                  _heroPageController.positions.length == 1) {
+                _heroPageController.jumpToPage(nextPage);
+              }
+            });
+          }
 
           return CustomScrollView(
             slivers: [
               SliverToBoxAdapter(
-                child: _buildHero(context, t, l, isDark, isAr, destinations),
+                child: _buildHero(
+                  context,
+                  t,
+                  l,
+                  isDark,
+                  isAr,
+                  heroDestinations,
+                ),
               ),
               SliverToBoxAdapter(
                 child: Padding(
@@ -132,7 +199,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         ],
                       ),
                       const SizedBox(height: 16),
-                      _buildDestinations(t, isAr, destinations),
+                      _buildDestinations(t, isAr, featuredDestinations),
                       const SizedBox(height: 32),
                     ],
                   ),
@@ -207,22 +274,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                       Row(
                         children: [
-                          _heroIconBtn(
-                            isDark
-                                ? Icons.light_mode_outlined
-                                : Icons.dark_mode_outlined,
-                            () => context.read<ThemeProvider>().toggle(),
-                          ),
-                          const SizedBox(width: 8),
-                          _heroIconBtn(
-                            Icons.language,
-                            () {
-                              final next =
-                                  isAr ? const Locale('en') : const Locale('ar');
-                              MyApp.setLocale(context, next);
-                            },
-                            label: isAr ? 'EN' : 'AR',
-                          ),
+                          _buildProfileMenu(context, isDark, isAr),
                         ],
                       ),
                     ],
@@ -288,6 +340,181 @@ class _HomeScreenState extends State<HomeScreen> {
               )
             : Icon(icon, color: Colors.white, size: 18),
       ),
+    );
+  }
+
+  Widget _buildProfileMenu(BuildContext context, bool isDark, bool isAr) {
+    final l = AppLocalizations.of(context)!;
+    final t = Theme.of(context).extension<AppThemeExtension>()!;
+    final displayName = firstName.isNotEmpty
+        ? firstName
+        : (email.isNotEmpty ? email.characters.first.toUpperCase() : 'R');
+
+    return PopupMenuButton<String>(
+      color: isDark
+          ? Theme.of(context).extension<AppThemeExtension>()!.header
+          : Color.lerp(t.accentLight, t.accent, 0.18)!,
+      constraints: const BoxConstraints(
+        minWidth: 220,
+        maxWidth: 220,
+      ),
+      offset: const Offset(0, 48),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
+      onSelected: (value) {
+        if (value == 'dashboard') {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => const UserDashboardScreen(),
+            ),
+          );
+        } else if (value == 'about') {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => const AboutUsScreen(),
+            ),
+          );
+        } else if (value == 'settings') {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => const SettingsScreen(),
+            ),
+          );
+        } else if (value == 'logout') {
+          _logout();
+        }
+      },
+      itemBuilder: (context) {
+        final t = Theme.of(context).extension<AppThemeExtension>()!;
+        return [
+          PopupMenuItem<String>(
+            value: 'dashboard',
+            height: 156,
+            padding: const EdgeInsets.fromLTRB(14, 14, 14, 10),
+            child: Container(
+              width: 250,
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: t.accentLight,
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(color: t.cardBorder.withOpacity(0.35)),
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    width: 54,
+                    height: 54,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: t.accent,
+                    ),
+                    alignment: Alignment.center,
+                    child: Text(
+                      displayName.characters.first,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 18,
+                        fontWeight: FontWeight.w800,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  Text(
+                    firstName.isNotEmpty ? firstName : l.menuProfileFallback,
+                    style: TextStyle(
+                      color: t.title,
+                      fontSize: 15,
+                      fontWeight: FontWeight.w800,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    email.isNotEmpty ? email : l.menuNoEmail,
+                    style: TextStyle(
+                      color: t.sub,
+                      fontSize: 12.5,
+                      fontWeight: FontWeight.w600,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ],
+              ),
+            ),
+          ),
+          const PopupMenuDivider(),
+          PopupMenuItem<String>(
+            value: 'settings',
+            child: _menuRow(
+              Icons.settings_outlined,
+              l.menuSettings,
+              t,
+              isDark,
+            ),
+          ),
+          PopupMenuItem<String>(
+            value: 'about',
+            child: _menuRow(
+              Icons.info_outline_rounded,
+              l.menuAboutUs,
+              t,
+              isDark,
+            ),
+          ),
+          PopupMenuItem<String>(
+            value: 'logout',
+            child: _menuRow(
+              Icons.logout_rounded,
+              l.menuLogout,
+              t,
+              isDark,
+            ),
+          ),
+        ];
+      },
+      child: Container(
+        width: 42,
+        height: 42,
+        margin: const EdgeInsets.only(top: 6),
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          color: Colors.black.withOpacity(0.3),
+          border: Border.all(color: Colors.white.withOpacity(0.22)),
+        ),
+        alignment: Alignment.center,
+        child: Text(
+          displayName.characters.first,
+          style: const TextStyle(
+            color: Colors.white,
+            fontSize: 15,
+            fontWeight: FontWeight.w800,
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _menuRow(
+    IconData icon,
+    String label,
+    AppThemeExtension t,
+    bool onDarkMenu,
+  ) {
+    return Row(
+      children: [
+        Icon(icon, color: onDarkMenu ? Colors.white : t.title, size: 18),
+        const SizedBox(width: 10),
+        Text(
+          label,
+          style: TextStyle(
+            color: onDarkMenu ? Colors.white : t.title,
+            fontSize: 13,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+      ],
     );
   }
 

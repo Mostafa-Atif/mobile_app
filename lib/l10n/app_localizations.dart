@@ -1561,6 +1561,378 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Hide summary'**
   String get hideSummaryFlight;
+
+  /// No description provided for @userDashboardTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'My Bookings'**
+  String get userDashboardTitle;
+
+  /// No description provided for @userDashboardSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'All your travel bookings in one place'**
+  String get userDashboardSubtitle;
+
+  /// No description provided for @userDashboardTotal.
+  ///
+  /// In en, this message translates to:
+  /// **'Total'**
+  String get userDashboardTotal;
+
+  /// No description provided for @userDashboardConfirmed.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirmed'**
+  String get userDashboardConfirmed;
+
+  /// No description provided for @userDashboardCompleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Completed'**
+  String get userDashboardCompleted;
+
+  /// No description provided for @userDashboardPending.
+  ///
+  /// In en, this message translates to:
+  /// **'Pending'**
+  String get userDashboardPending;
+
+  /// No description provided for @userDashboardAll.
+  ///
+  /// In en, this message translates to:
+  /// **'All'**
+  String get userDashboardAll;
+
+  /// No description provided for @userDashboardFlights.
+  ///
+  /// In en, this message translates to:
+  /// **'Flights'**
+  String get userDashboardFlights;
+
+  /// No description provided for @userDashboardHotels.
+  ///
+  /// In en, this message translates to:
+  /// **'Hotels'**
+  String get userDashboardHotels;
+
+  /// No description provided for @userDashboardCars.
+  ///
+  /// In en, this message translates to:
+  /// **'Cars'**
+  String get userDashboardCars;
+
+  /// No description provided for @userDashboardFlight.
+  ///
+  /// In en, this message translates to:
+  /// **'Flight'**
+  String get userDashboardFlight;
+
+  /// No description provided for @userDashboardHotel.
+  ///
+  /// In en, this message translates to:
+  /// **'Hotel'**
+  String get userDashboardHotel;
+
+  /// No description provided for @userDashboardCar.
+  ///
+  /// In en, this message translates to:
+  /// **'Car'**
+  String get userDashboardCar;
+
+  /// No description provided for @userDashboardCheckIn.
+  ///
+  /// In en, this message translates to:
+  /// **'Check in'**
+  String get userDashboardCheckIn;
+
+  /// No description provided for @userDashboardCheckOut.
+  ///
+  /// In en, this message translates to:
+  /// **'Check out'**
+  String get userDashboardCheckOut;
+
+  /// No description provided for @userDashboardRooms.
+  ///
+  /// In en, this message translates to:
+  /// **'Rooms'**
+  String get userDashboardRooms;
+
+  /// No description provided for @userDashboardGuest.
+  ///
+  /// In en, this message translates to:
+  /// **'Guest'**
+  String get userDashboardGuest;
+
+  /// No description provided for @userDashboardPickUp.
+  ///
+  /// In en, this message translates to:
+  /// **'Pick up'**
+  String get userDashboardPickUp;
+
+  /// No description provided for @userDashboardDropOff.
+  ///
+  /// In en, this message translates to:
+  /// **'Drop off'**
+  String get userDashboardDropOff;
+
+  /// No description provided for @userDashboardRoute.
+  ///
+  /// In en, this message translates to:
+  /// **'Route'**
+  String get userDashboardRoute;
+
+  /// No description provided for @userDashboardDepartureDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Departure'**
+  String get userDashboardDepartureDate;
+
+  /// No description provided for @userDashboardReturnDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Return'**
+  String get userDashboardReturnDate;
+
+  /// No description provided for @userDashboardPassenger.
+  ///
+  /// In en, this message translates to:
+  /// **'Passenger'**
+  String get userDashboardPassenger;
+
+  /// No description provided for @userDashboardTripType.
+  ///
+  /// In en, this message translates to:
+  /// **'Trip type'**
+  String get userDashboardTripType;
+
+  /// No description provided for @userDashboardNoBookings.
+  ///
+  /// In en, this message translates to:
+  /// **'No bookings yet'**
+  String get userDashboardNoBookings;
+
+  /// No description provided for @userDashboardNoBookingsSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Your bookings will appear here once you create one.'**
+  String get userDashboardNoBookingsSubtitle;
+
+  /// No description provided for @userDashboardLoadError.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not load bookings'**
+  String get userDashboardLoadError;
+
+  /// No description provided for @statusConfirmed.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirmed'**
+  String get statusConfirmed;
+
+  /// No description provided for @statusCompleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Completed'**
+  String get statusCompleted;
+
+  /// No description provided for @statusCancelled.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancelled'**
+  String get statusCancelled;
+
+  /// No description provided for @statusPending.
+  ///
+  /// In en, this message translates to:
+  /// **'Pending'**
+  String get statusPending;
+
+  /// No description provided for @aboutTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'About Us'**
+  String get aboutTitle;
+
+  /// No description provided for @aboutMissionLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Our Mission'**
+  String get aboutMissionLabel;
+
+  /// No description provided for @aboutMissionBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Rahal is your companion on every journey. We believe travel should be simple, enjoyable, and accessible to everyone. That\'s why we\'ve brought everything you need into one place - from flights and hotels to car rentals - at competitive prices with an unmatched experience.'**
+  String get aboutMissionBody;
+
+  /// No description provided for @aboutOfferLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'What We Offer'**
+  String get aboutOfferLabel;
+
+  /// No description provided for @aboutContactLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Get In Touch'**
+  String get aboutContactLabel;
+
+  /// No description provided for @aboutHeadquarters.
+  ///
+  /// In en, this message translates to:
+  /// **'Headquarters'**
+  String get aboutHeadquarters;
+
+  /// No description provided for @aboutHeadquartersValue.
+  ///
+  /// In en, this message translates to:
+  /// **'Riyadh, Saudi Arabia'**
+  String get aboutHeadquartersValue;
+
+  /// No description provided for @aboutVersion.
+  ///
+  /// In en, this message translates to:
+  /// **'Version 1.0.0'**
+  String get aboutVersion;
+
+  /// No description provided for @aboutStatsHotels.
+  ///
+  /// In en, this message translates to:
+  /// **'Hotels'**
+  String get aboutStatsHotels;
+
+  /// No description provided for @aboutStatsDestinations.
+  ///
+  /// In en, this message translates to:
+  /// **'Destinations'**
+  String get aboutStatsDestinations;
+
+  /// No description provided for @aboutStatsTravelers.
+  ///
+  /// In en, this message translates to:
+  /// **'Happy Travelers'**
+  String get aboutStatsTravelers;
+
+  /// No description provided for @aboutFeatureFlightsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Flight Booking'**
+  String get aboutFeatureFlightsTitle;
+
+  /// No description provided for @aboutFeatureFlightsDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Search and book the best flights from hundreds of airlines worldwide.'**
+  String get aboutFeatureFlightsDesc;
+
+  /// No description provided for @aboutFeatureHotelsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Hotel Stays'**
+  String get aboutFeatureHotelsTitle;
+
+  /// No description provided for @aboutFeatureHotelsDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose from over 1M+ hotels and apartments across the globe.'**
+  String get aboutFeatureHotelsDesc;
+
+  /// No description provided for @aboutFeatureCarsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Car Rentals'**
+  String get aboutFeatureCarsTitle;
+
+  /// No description provided for @aboutFeatureCarsDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Rent your preferred car at the best rates with an optional private driver.'**
+  String get aboutFeatureCarsDesc;
+
+  /// No description provided for @aboutFeatureSupportTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'24/7 Support'**
+  String get aboutFeatureSupportTitle;
+
+  /// No description provided for @aboutFeatureSupportDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Our support team is always available to assist you throughout your journey.'**
+  String get aboutFeatureSupportDesc;
+
+  /// No description provided for @menuSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Settings'**
+  String get menuSettings;
+
+  /// No description provided for @menuAboutUs.
+  ///
+  /// In en, this message translates to:
+  /// **'About Us'**
+  String get menuAboutUs;
+
+  /// No description provided for @menuProfileFallback.
+  ///
+  /// In en, this message translates to:
+  /// **'Rahal User'**
+  String get menuProfileFallback;
+
+  /// No description provided for @menuNoEmail.
+  ///
+  /// In en, this message translates to:
+  /// **'No email'**
+  String get menuNoEmail;
+
+  /// No description provided for @settingsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Settings'**
+  String get settingsTitle;
+
+  /// No description provided for @settingsAppearanceTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Appearance'**
+  String get settingsAppearanceTitle;
+
+  /// No description provided for @settingsAppearanceSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose the app mode'**
+  String get settingsAppearanceSubtitle;
+
+  /// No description provided for @settingsLanguageTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Language'**
+  String get settingsLanguageTitle;
+
+  /// No description provided for @settingsLanguageSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose the app language'**
+  String get settingsLanguageSubtitle;
+
+  /// No description provided for @settingsLight.
+  ///
+  /// In en, this message translates to:
+  /// **'Light'**
+  String get settingsLight;
+
+  /// No description provided for @settingsDark.
+  ///
+  /// In en, this message translates to:
+  /// **'Dark'**
+  String get settingsDark;
+
+  /// No description provided for @menuLogout.
+  ///
+  /// In en, this message translates to:
+  /// **'Logout'**
+  String get menuLogout;
 }
 
 class _AppLocalizationsDelegate

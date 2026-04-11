@@ -160,7 +160,7 @@ const cars = [
     pricePerDay: 240,
     pricePerWeek: 1500,
     image:
-      "https://th.bing.com/th/id/OIF.p92XvVcHeuMusAFDL6so1g?w=244&h=183&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3",
+      "https://ymimg1.b8cdn.com/uploads/car_model/10589/pictures/13142116/2023_Kia_Sportage_Exterior_01.png",
   },
   {
     id: 13,
@@ -213,7 +213,7 @@ const cars = [
     pricePerDay: 485,
     pricePerWeek: 3050,
     image:
-      "https://th.bing.com/th/id/OIP.1_IRhVfkcZQWYk2SSy2ogQHaHa?w=209&h=209&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3",
+      "https://images8.alphacoders.com/833/833705.jpg",
   },
   {
     id: 17,
@@ -529,7 +529,7 @@ const cars = [
     pricePerDay: 215,
     pricePerWeek: 1380,
     image:
-      "https://www.carkhabri.com/Gallery/skoda/skoda-octavia/common/large/113.jpg",
+      "https://www.pngplay.com/wp-content/uploads/13/Skoda-Superb-Background-PNG-Image.png",
   },
 
   {
@@ -673,7 +673,7 @@ const cars = [
     pricePerDay: 680,
     pricePerWeek: 4300,
     image:
-      "https://tse1.mm.bing.net/th/id/OIP.hYSLa4FyVoLTFdMvmqADYQHaE7?w=815&h=543&rs=1&pid=ImgDetMain&o=7&rm=3",
+      "https://imgd.aeplcdn.com/664x374/n/cw/ec/56265/f-pace-exterior-right-front-three-quarter-2.jpeg?q=75&q=75",
   },
 ];
 

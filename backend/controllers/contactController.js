@@ -27,7 +27,7 @@ exports.sendMessage = async (req, res) => {
     });
 
     await transporter.sendMail({
-      from: `"Travel Contact" <${process.env.EMAIL_USER}>`,
+      from: `"Rahal Contact" <${process.env.EMAIL_USER}>`,
       to: process.env.EMAIL_USER,
       subject: `📩 New Contact Message - ${subject}`,
       text: `

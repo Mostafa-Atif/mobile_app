@@ -11,12 +11,22 @@ exports.signup = async (req, res) => {
   try {
     const { email, password, nationalId, phone } = req.body;
 
+    if (!email || !password || !nationalId || !phone) {
+      return res.status(400).json({
+        success: false,
+        message: "All fields are required"
+      });
+    }
+
     const userExists = await User.findOne({
       $or: [{ email }, { nationalId }, { phone }]
     });
 
     if (userExists) {
-      return res.status(400).json({ message: "User already exists" });
+      return res.status(400).json({
+        success: false,
+        message: "User already exists"
+      });
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -26,15 +36,21 @@ exports.signup = async (req, res) => {
       password: hashedPassword
     });
 
-    res.status(201).json({
+    return res.status(201).json({
+      success: true,
       message: "Account created successfully"
     });
 
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Server error" });
+    console.error("SIGNUP ERROR:", error.message);
+
+    return res.status(500).json({
+      success: false,
+      message: "Server error"
+    });
   }
 };
+
 
 // =====================
 // LOGIN
@@ -44,20 +60,32 @@ exports.login = async (req, res) => {
     const { email, password } = req.body;
 
     if (!email || !password) {
-      return res.status(400).json({ message: "All fields are required" });
+      return res.status(400).json({
+        success: false,
+        message: "All fields are required"
+      });
     }
 
     const user = await User.findOne({ email });
+
     if (!user) {
-      return res.status(400).json({ message: "No user with this data" });
+      return res.status(400).json({
+        success: false,
+        message: "No user with this data"
+      });
     }
 
     const isMatch = await bcrypt.compare(password, user.password);
+
     if (!isMatch) {
-      return res.status(400).json({ message: "Invalid email or password" });
+      return res.status(400).json({
+        success: false,
+        message: "Invalid email or password"
+      });
     }
 
-    res.json({
+    return res.status(200).json({
+      success: true,
       message: "Login successful",
       token: generateToken(user._id),
       user: {
@@ -67,93 +95,149 @@ exports.login = async (req, res) => {
         lastName: user.lastName,
         phone: user.phone,
         gender: user.gender,
+        isAdmin: user.isAdmin
       }
     });
 
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Server error" });
+    console.error("LOGIN ERROR:", error.message);
+
+    return res.status(500).json({
+      success: false,
+      message: "Server error, try again"
+    });
   }
 };
-//forget password
+
+
+// =====================
+// FORGOT PASSWORD
+// =====================
 exports.forgotPassword = async (req, res) => {
-  const { email } = req.body;
+  try {
+    const { email } = req.body;
 
-  const user = await User.findOne({ email });
-  if (!user) {
-    return res.status(404).json({ message: "Email not found" });
-  }
+    if (!email) {
+      return res.status(400).json({
+        success: false,
+        message: "Email is required"
+      });
+    }
 
-  // Generate token
-  const resetToken = crypto.randomBytes(32).toString("hex");
+    const user = await User.findOne({ email });
 
-  // Hash token
-  user.resetPasswordToken = crypto
-    .createHash("sha256")
-    .update(resetToken)
-    .digest("hex");
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "Email not found"
+      });
+    }
 
-  user.resetPasswordExpire = Date.now() + 15 * 60 * 1000; // 15 min
+    // Generate token
+    const resetToken = crypto.randomBytes(32).toString("hex");
 
-  await user.save();
+    // Hash token
+    user.resetPasswordToken = crypto
+      .createHash("sha256")
+      .update(resetToken)
+      .digest("hex");
 
-  const resetLink = `http://127.0.0.1:5500/registration/login/reset-password.html?token=${resetToken}`;
+    user.resetPasswordExpire = Date.now() + 15 * 60 * 1000;
 
+    await user.save();
 
+    const resetLink = `https://mern-frontend-rouge-five.vercel.app/registration/login/reset-password.html?token=${resetToken}`;
 
+    // Email config
+    const transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS,
+      },
+    });
 
-  // Email
-  const transporter = nodemailer.createTransport({
-    service: "gmail",
-    auth: {
-      user: process.env.EMAIL_USER,
-      pass: process.env.EMAIL_PASS,
-    },
-  });
-
-  const message = `
+    const message = `
 Please click on the link below to reset your password:
 
 ${resetLink}
 
-⚠️ Do not share this link with anyone for your own security.
+⚠️ Do not share this link with anyone.
 
-If you did not request this, please ignore this email.
-  `;
+If you did not request this, ignore this email.
+    `;
 
-  await transporter.sendMail({
-    from: `"Travel App" <${process.env.EMAIL_USER}>`,
-    to: user.email,
-    subject: "Reset Your Password",
-    text: message,
-  });
+    await transporter.sendMail({
+      from: `"Rahal App" <${process.env.EMAIL_USER}>`,
+      to: user.email,
+      subject: "Reset Your Password",
+      text: message,
+    });
 
-  res.json({ message: "Reset password email sent" });
+    return res.json({
+      success: true,
+      message: "Reset password email sent"
+    });
+
+  } catch (error) {
+    console.error("FORGOT PASSWORD ERROR:", error.message);
+
+    return res.status(500).json({
+      success: false,
+      message: "Error sending email"
+    });
+  }
 };
 
-// Reset Password
+
+// =====================
+// RESET PASSWORD
+// =====================
 exports.resetPassword = async (req, res) => {
-  const { token, newPassword } = req.body;
+  try {
+    const { token, newPassword } = req.body;
 
-  const hashedToken = crypto
-    .createHash("sha256")
-    .update(token)
-    .digest("hex");
+    if (!token || !newPassword) {
+      return res.status(400).json({
+        success: false,
+        message: "Token and new password are required"
+      });
+    }
 
-  const user = await User.findOne({
-    resetPasswordToken: hashedToken,
-    resetPasswordExpire: { $gt: Date.now() },
-  });
+    const hashedToken = crypto
+      .createHash("sha256")
+      .update(token)
+      .digest("hex");
 
-  if (!user) {
-    return res.status(400).json({ message: "Invalid or expired token" });
+    const user = await User.findOne({
+      resetPasswordToken: hashedToken,
+      resetPasswordExpire: { $gt: Date.now() },
+    });
+
+    if (!user) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid or expired token"
+      });
+    }
+
+    user.password = await bcrypt.hash(newPassword, 10);
+    user.resetPasswordToken = undefined;
+    user.resetPasswordExpire = undefined;
+
+    await user.save();
+
+    return res.json({
+      success: true,
+      message: "Password reset successful"
+    });
+
+  } catch (error) {
+    console.error("RESET PASSWORD ERROR:", error.message);
+
+    return res.status(500).json({
+      success: false,
+      message: "Server error"
+    });
   }
-
-  user.password = await bcrypt.hash(newPassword, 10);
-  user.resetPasswordToken = undefined;
-  user.resetPasswordExpire = undefined;
-
-  await user.save();
-
-  res.json({ message: "Password reset successful" });
 };
