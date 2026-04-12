@@ -329,7 +329,7 @@ abstract class AppLocalizations {
   /// No description provided for @next.
   ///
   /// In en, this message translates to:
-  /// **'Add'**
+  /// **'Next'**
   String get next;
 
   /// No description provided for @getStarted.
@@ -1861,6 +1861,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Our support team is always available to assist you throughout your journey.'**
   String get aboutFeatureSupportDesc;
+
+  /// No description provided for @menuDashboard.
+  ///
+  /// In en, this message translates to:
+  /// **'My Bookings'**
+  String get menuDashboard;
 
   /// No description provided for @menuSettings.
   ///

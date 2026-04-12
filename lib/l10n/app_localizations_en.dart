@@ -136,7 +136,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get signUp => 'Sign Up';
 
   @override
-  String get next => 'Add';
+  String get next => 'Next';
 
   @override
   String get getStarted => 'Get Started';
@@ -937,6 +937,9 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get aboutFeatureSupportDesc =>
       'Our support team is always available to assist you throughout your journey.';
+
+  @override
+  String get menuDashboard => 'My Bookings';
 
   @override
   String get menuSettings => 'Settings';

@@ -199,7 +199,7 @@ class AboutUsScreen extends StatelessWidget {
                               child: Column(
                                 children: [
                                   Text(
-                                    s['value']! as String,
+                                    s['value']!,
                                     style: const TextStyle(
                                       color: Colors.white,
                                       fontSize: 22,
@@ -208,7 +208,7 @@ class AboutUsScreen extends StatelessWidget {
                                   ),
                                   const SizedBox(height: 4),
                                   Text(
-                                    s['label']! as String,
+                                    s['label']!,
                                     style: TextStyle(
                                       color: Colors.white.withOpacity(0.75),
                                       fontSize: 12,

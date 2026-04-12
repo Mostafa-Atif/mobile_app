@@ -1,12 +1,11 @@
 {
   "@@locale": "ar",
+  "appTitle": "رحّال",
   "homeGreeting": "جاهز للإقلاع؟",
   "homeGreetingWithName": "جاهز للإقلاع، {name}؟",
   "@homeGreetingWithName": {
     "placeholders": {
-      "name": {
-        "type": "String"
-      }
+      "name": { "type": "String" }
     }
   },
   "homeHeroTitle": "خطّط لمغامرتك القادمة",
@@ -32,18 +31,14 @@
   "destinationBestTimeBody": "أفضل وقت لاكتشاف {name} يكون خلال المواسم المعتدلة حين تكون الجولات والأنشطة الخارجية أكثر راحة.",
   "@destinationBestTimeBody": {
     "placeholders": {
-      "name": {
-        "type": "String"
-      }
+      "name": { "type": "String" }
     }
   },
   "destinationCuisineTitle": "المأكولات المحلية",
   "destinationCuisineBody": "استكشف نكهات {name} المحلية وجرّب الأطباق المشهورة والأماكن المفضلة لدى السكان والأسواق الغذائية.",
   "@destinationCuisineBody": {
     "placeholders": {
-      "name": {
-        "type": "String"
-      }
+      "name": { "type": "String" }
     }
   },
   "destinationStayTitle": "أماكن الإقامة",
@@ -52,12 +47,9 @@
   "destinationAttractionsBody": "ابدأ بأشهر الأماكن في {name} ثم اترك وقتًا لاكتشاف الأحياء المحلية والزوايا المميزة.",
   "@destinationAttractionsBody": {
     "placeholders": {
-      "name": {
-        "type": "String"
-      }
+      "name": { "type": "String" }
     }
   },
-  "appTitle": "رحّال",
   "devMenu": "قائمة المطور",
   "mainScreens": "الشاشات الرئيسية",
   "auth": "التسجيل",
@@ -66,7 +58,7 @@
   "carRent": "تأجير السيارات",
   "signIn": "تسجيل الدخول",
   "signUp": "إنشاء حساب",
-  "next": "أضف",
+  "next": "التالي",
   "getStarted": "ابدأ الآن",
   "onboarding1Title": "خطّط لرحلتك",
   "onboarding1Body": "أنشئ رحلة أحلامك بسهولة. اختر وجهتك، وابحث عن أفضل مكان للإقامة، وابنِ جدول سفر يناسبك.",
@@ -124,9 +116,7 @@
   "totalDays": "الإجمالي: {days} يوم",
   "@totalDays": {
     "placeholders": {
-      "days": {
-        "type": "int"
-      }
+      "days": { "type": "int" }
     }
   },
   "privateDriver": "سائق خاص",
@@ -134,9 +124,7 @@
   "carRentalDays": "تأجير السيارة ({days} أيام)",
   "@carRentalDays": {
     "placeholders": {
-      "days": {
-        "type": "int"
-      }
+      "days": { "type": "int" }
     }
   },
   "total": "الإجمالي",
@@ -171,9 +159,7 @@
   "nights": "{count} ليلة",
   "@nights": {
     "placeholders": {
-      "count": {
-        "type": "int"
-      }
+      "count": { "type": "int" }
     }
   },
   "room": "غرفة",
@@ -186,12 +172,8 @@
   "propertiesFound": "{count} عقار في {destination}",
   "@propertiesFound": {
     "placeholders": {
-      "count": {
-        "type": "int"
-      },
-      "destination": {
-        "type": "String"
-      }
+      "count": { "type": "int" },
+      "destination": { "type": "String" }
     }
   },
   "sortBy": "ترتيب حسب",
@@ -216,15 +198,9 @@
   "totalNightsRooms": "SAR {total} الإجمالي ({nights} ليلة، {rooms} غرفة)",
   "@totalNightsRooms": {
     "placeholders": {
-      "total": {
-        "type": "int"
-      },
-      "nights": {
-        "type": "int"
-      },
-      "rooms": {
-        "type": "int"
-      }
+      "total": { "type": "int" },
+      "nights": { "type": "int" },
+      "rooms": { "type": "int" }
     }
   },
   "guestDetails": "تفاصيل النزلاء",
@@ -235,9 +211,7 @@
   "saveGuest": "حفظ بيانات النزيل {number}",
   "@saveGuest": {
     "placeholders": {
-      "number": {
-        "type": "int"
-      }
+      "number": { "type": "int" }
     }
   },
   "fillGuestDetails": "يرجى إكمال تفاصيل جميع النزلاء المتبقين",
@@ -292,17 +266,13 @@
   "savePassenger": "حفظ الراكب {number}",
   "@savePassenger": {
     "placeholders": {
-      "number": {
-        "type": "int"
-      }
+      "number": { "type": "int" }
     }
   },
   "confirmBookings": "تأكيد {count} حجوزات",
   "@confirmBookings": {
     "placeholders": {
-      "count": {
-        "type": "int"
-      }
+      "count": { "type": "int" }
     }
   },
   "fillPassengerDetails": "يرجى إكمال تفاصيل جميع الركاب المتبقين",
@@ -336,8 +306,7 @@
   "pleaseFixErrors": "يرجى تصحيح الأخطاء أعلاه",
   "selectDate": "اختر تاريخاً",
   "viewSummaryFlight": "عرض الملخص",
-  "hideSummaryFlight": "إخفاء الملخص"
-  ,
+  "hideSummaryFlight": "إخفاء الملخص",
   "userDashboardTitle": "حجوزاتي",
   "userDashboardSubtitle": "كل حجوزاتك في مكان واحد",
   "userDashboardTotal": "الإجمالي",
@@ -388,6 +357,7 @@
   "aboutFeatureCarsDesc": "استأجر سيارتك المفضلة بأفضل الأسعار مع خيار السائق الخاص.",
   "aboutFeatureSupportTitle": "دعم على مدار الساعة",
   "aboutFeatureSupportDesc": "فريق دعم متاح دائماً لمساعدتك في أي وقت خلال رحلتك.",
+  "menuDashboard": "حجوزاتي",
   "menuSettings": "الإعدادات",
   "menuAboutUs": "من نحن",
   "menuProfileFallback": "مستخدم رحّال",

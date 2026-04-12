@@ -5,9 +5,7 @@
   "homeGreetingWithName": "Ready for takeoff, {name}?",
   "@homeGreetingWithName": {
     "placeholders": {
-      "name": {
-        "type": "String"
-      }
+      "name": { "type": "String" }
     }
   },
   "homeHeroTitle": "Plan your next adventure",
@@ -33,18 +31,14 @@
   "destinationBestTimeBody": "The ideal time to explore {name} is during the milder seasons when sightseeing and outdoor activities feel most comfortable.",
   "@destinationBestTimeBody": {
     "placeholders": {
-      "name": {
-        "type": "String"
-      }
+      "name": { "type": "String" }
     }
   },
   "destinationCuisineTitle": "Local Cuisine",
   "destinationCuisineBody": "Experience local flavors in {name} and explore signature dishes, neighborhood favorites, and food markets.",
   "@destinationCuisineBody": {
     "placeholders": {
-      "name": {
-        "type": "String"
-      }
+      "name": { "type": "String" }
     }
   },
   "destinationStayTitle": "Where to Stay",
@@ -53,9 +47,7 @@
   "destinationAttractionsBody": "Start with the best-known places in {name}, then leave room for local neighborhoods and hidden gems.",
   "@destinationAttractionsBody": {
     "placeholders": {
-      "name": {
-        "type": "String"
-      }
+      "name": { "type": "String" }
     }
   },
   "devMenu": "Dev Menu",
@@ -66,7 +58,7 @@
   "carRent": "Car Rent",
   "signIn": "Sign In",
   "signUp": "Sign Up",
-  "next": "Add",
+  "next": "Next",
   "getStarted": "Get Started",
   "onboarding1Title": "Plan Your Trip",
   "onboarding1Body": "Create your dream trip with ease. Choose a destination, find the perfect place to stay, and build an itinerary that suits you.",
@@ -124,9 +116,7 @@
   "totalDays": "Total: {days} day(s)",
   "@totalDays": {
     "placeholders": {
-      "days": {
-        "type": "int"
-      }
+      "days": { "type": "int" }
     }
   },
   "privateDriver": "Private driver",
@@ -134,9 +124,7 @@
   "carRentalDays": "Car rental ({days} days)",
   "@carRentalDays": {
     "placeholders": {
-      "days": {
-        "type": "int"
-      }
+      "days": { "type": "int" }
     }
   },
   "total": "Total",
@@ -171,9 +159,7 @@
   "nights": "{count} night(s)",
   "@nights": {
     "placeholders": {
-      "count": {
-        "type": "int"
-      }
+      "count": { "type": "int" }
     }
   },
   "room": "Room",
@@ -186,12 +172,8 @@
   "propertiesFound": "{count} properties found in {destination}",
   "@propertiesFound": {
     "placeholders": {
-      "count": {
-        "type": "int"
-      },
-      "destination": {
-        "type": "String"
-      }
+      "count": { "type": "int" },
+      "destination": { "type": "String" }
     }
   },
   "sortBy": "Sort by",
@@ -216,15 +198,9 @@
   "totalNightsRooms": "SAR {total} total ({nights} nights, {rooms} room(s))",
   "@totalNightsRooms": {
     "placeholders": {
-      "total": {
-        "type": "int"
-      },
-      "nights": {
-        "type": "int"
-      },
-      "rooms": {
-        "type": "int"
-      }
+      "total": { "type": "int" },
+      "nights": { "type": "int" },
+      "rooms": { "type": "int" }
     }
   },
   "guestDetails": "Guest details",
@@ -235,9 +211,7 @@
   "saveGuest": "Save Guest {number}",
   "@saveGuest": {
     "placeholders": {
-      "number": {
-        "type": "int"
-      }
+      "number": { "type": "int" }
     }
   },
   "fillGuestDetails": "Please fill in details for all remaining guests",
@@ -292,17 +266,13 @@
   "savePassenger": "Save Passenger {number}",
   "@savePassenger": {
     "placeholders": {
-      "number": {
-        "type": "int"
-      }
+      "number": { "type": "int" }
     }
   },
   "confirmBookings": "Confirm {count} Bookings",
   "@confirmBookings": {
     "placeholders": {
-      "count": {
-        "type": "int"
-      }
+      "count": { "type": "int" }
     }
   },
   "fillPassengerDetails": "Please fill in details for all remaining passengers",
@@ -336,8 +306,7 @@
   "pleaseFixErrors": "Please fix the errors above",
   "selectDate": "Select date",
   "viewSummaryFlight": "View summary",
-  "hideSummaryFlight": "Hide summary"
-  ,
+  "hideSummaryFlight": "Hide summary",
   "userDashboardTitle": "My Bookings",
   "userDashboardSubtitle": "All your travel bookings in one place",
   "userDashboardTotal": "Total",
@@ -388,6 +357,7 @@
   "aboutFeatureCarsDesc": "Rent your preferred car at the best rates with an optional private driver.",
   "aboutFeatureSupportTitle": "24/7 Support",
   "aboutFeatureSupportDesc": "Our support team is always available to assist you throughout your journey.",
+  "menuDashboard": "My Bookings",
   "menuSettings": "Settings",
   "menuAboutUs": "About Us",
   "menuProfileFallback": "Rahal User",

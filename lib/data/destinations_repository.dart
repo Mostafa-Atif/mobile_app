@@ -18,6 +18,17 @@ class DestinationsRepository {
         .toList();
   }
 
+  Future<List<Map<String, dynamic>>> loadHeroDestinations({
+    int limit = 4,
+  }) async {
+    final featuredDestinations = await loadFeaturedDestinations();
+    final heroDestinations = featuredDestinations.isNotEmpty
+        ? featuredDestinations
+        : await loadDestinations();
+
+    return heroDestinations.take(limit).toList();
+  }
+
   Future<Map<String, dynamic>> loadDestinationByName(String destinationName) async {
     final destinations = await loadDestinations();
     return destinations.firstWhere(

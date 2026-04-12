@@ -20,11 +20,11 @@ void main() async {
 
   Widget startScreen;
   if (!onboardingDone) {
-    startScreen = const OnboardingScreen1();
+    startScreen = const TempHome();
   } else if (token.isNotEmpty) {
-    startScreen = const AdminDashboardScreen();
+    startScreen = const HomeScreen();
   } else {
-    startScreen = const SignIn();
+    startScreen = const TempHome();
   }
 
   runApp(
@@ -72,7 +72,7 @@ class _MyAppState extends State<MyApp> {
       ],
       locale: _locale,
       debugShowCheckedModeBanner: false,
-      theme: darkTheme(),
+      theme: lightTheme(),
       darkTheme: darkTheme(),
       themeMode: themeProvider.mode,
       home: widget.startScreen,
