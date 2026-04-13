@@ -67,10 +67,10 @@ class _HotelSearchState extends State<HotelSearch> {
       builder: (context, child) => Theme(
         data: Theme.of(context).copyWith(
           colorScheme: Theme.of(context).colorScheme.copyWith(
-                primary: _t.accent,
-                surface: _t.card,
-                onSurface: _t.title,
-              ),
+            primary: _t.accent,
+            surface: _t.card,
+            onSurface: _t.title,
+          ),
           dialogTheme: DialogThemeData(backgroundColor: _t.card),
         ),
         child: child!,
@@ -205,7 +205,7 @@ class _HotelSearchState extends State<HotelSearch> {
                         },
                       ),
                       ...entry.value.map(
-                        (city) => Padding(
+                            (city) => Padding(
                           padding: EdgeInsetsDirectional.only(start: 18),
                           child: _destinationTile(
                             icon: Icons.location_city_rounded,
@@ -283,26 +283,7 @@ class _HotelSearchState extends State<HotelSearch> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      l.whereToQuestion,
-                      style: TextStyle(
-                        color: _t.title,
-                        fontSize: 34,
-                        height: 1,
-                        fontWeight: FontWeight.w400,
-                        fontFamily: 'DM Serif Display',
-                      ),
-                    ),
-                    SizedBox(height: 8),
-                    Text(
-                      l.searchStays,
-                      style: TextStyle(
-                        color: _t.label,
-                        fontSize: 13,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                    SizedBox(height: 18),
+                    // "Where to?" and "Search Stays" removed here
                     Container(
                       padding: EdgeInsets.all(18),
                       decoration: BoxDecoration(
@@ -369,7 +350,7 @@ class _HotelSearchState extends State<HotelSearch> {
                           SizedBox(height: 12),
                           ...List.generate(
                             roomsList.length,
-                            (index) => Padding(
+                                (index) => Padding(
                               padding: EdgeInsets.only(bottom: 12),
                               child: _roomCard(index, l),
                             ),
@@ -499,12 +480,12 @@ class _HotelSearchState extends State<HotelSearch> {
           _counterRow(
             '${l.adults} (12+)',
             roomsList[index].adults,
-            () {
+                () {
               if (roomsList[index].adults > 1) {
                 setState(() => roomsList[index].adults--);
               }
             },
-            () {
+                () {
               if (roomsList[index].adults + roomsList[index].children < 8) {
                 setState(() => roomsList[index].adults++);
               }
@@ -514,12 +495,12 @@ class _HotelSearchState extends State<HotelSearch> {
           _counterRow(
             '${l.children} (0-11)',
             roomsList[index].children,
-            () {
+                () {
               if (roomsList[index].children > 0) {
                 setState(() => roomsList[index].children--);
               }
             },
-            () {
+                () {
               if (roomsList[index].adults + roomsList[index].children < 8) {
                 setState(() => roomsList[index].children++);
               }
@@ -531,11 +512,11 @@ class _HotelSearchState extends State<HotelSearch> {
   }
 
   Widget _counterRow(
-    String label,
-    int value,
-    VoidCallback onDecrease,
-    VoidCallback onIncrease,
-  ) {
+      String label,
+      int value,
+      VoidCallback onDecrease,
+      VoidCallback onIncrease,
+      ) {
     return Row(
       children: [
         Expanded(

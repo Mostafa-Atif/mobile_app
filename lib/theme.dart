@@ -13,7 +13,7 @@ class AppColors {
   static const lightFieldBorder  = Color(0xFFA0D2EB);
   static const lightDivider      = Color(0xFFA0D2EB);
   static const lightLabel        = Color(0xFF88B0C8);
-  static const lightSub          = Color(0xFFAAC8D8);
+  static const lightSub          = Color(0xFF4A7A96); // was 0xFFAAC8D8 — too washed out
   static const lightTitle        = Color(0xFF1A3D55);
   static const lightAccent       = Color(0xFF3A9DC4);
   static const lightAccentLight  = Color(0xFFE8F6FC);
@@ -41,7 +41,7 @@ class AppColors {
   static const darkFieldBorder   = Color(0xFF1E3A52);
   static const darkDivider       = Color(0xFF1A2E40);
   static const darkLabel         = Color(0xFF4A6A80);
-  static const darkSub           = Color(0xFF3A5568);
+  static const darkSub           = Color(0xFF8AACBF); // was 0xFF3A5568 — too dark on dark bg
   static const darkTitle         = Color(0xFFE8F4FA);
   static const darkAccent        = Color(0xFF4DB8E8);
   static const darkAccentLight   = Color(0x1F4DB8E8);
@@ -67,7 +67,7 @@ class AppColors {
   static const error             = Color(0xFFFF6B6B);
 }
 
-// ── Theme Extension (custom colors accessible via Theme.of(context)) ────────
+// ── Theme Extension ──────────────────────────────────────────────────────────
 
 class AppThemeExtension extends ThemeExtension<AppThemeExtension> {
   final Color bg;
@@ -267,7 +267,7 @@ class AppThemeExtension extends ThemeExtension<AppThemeExtension> {
   }
 }
 
-// ── ThemeData ───────────────────────────────────────────────────────────────
+// ── ThemeData ────────────────────────────────────────────────────────────────
 
 ThemeData lightTheme() => ThemeData(
   brightness: Brightness.light,
@@ -276,6 +276,7 @@ ThemeData lightTheme() => ThemeData(
     primary: AppColors.lightAccent,
     surface: AppColors.lightCard,
   ),
+  // DM Sans as global text theme — all Text widgets inherit it automatically
   textTheme: GoogleFonts.dmSansTextTheme(),
   extensions: const [AppThemeExtension.light],
 );
@@ -293,7 +294,7 @@ ThemeData darkTheme() => ThemeData(
   extensions: const [AppThemeExtension.dark],
 );
 
-// ── Theme Provider ──────────────────────────────────────────────────────────
+// ── Theme Provider ───────────────────────────────────────────────────────────
 
 class ThemeProvider extends ChangeNotifier {
   ThemeMode _mode = ThemeMode.light;
