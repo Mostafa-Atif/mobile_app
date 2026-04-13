@@ -136,7 +136,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get signUp => 'إنشاء حساب';
 
   @override
-  String get next => 'أضف';
+  String get next => 'التالي';
 
   @override
   String get getStarted => 'ابدأ الآن';
@@ -931,6 +931,9 @@ class AppLocalizationsAr extends AppLocalizations {
   @override
   String get aboutFeatureSupportDesc =>
       'فريق دعم متاح دائماً لمساعدتك في أي وقت خلال رحلتك.';
+
+  @override
+  String get menuDashboard => 'حجوزاتي';
 
   @override
   String get menuSettings => 'الإعدادات';

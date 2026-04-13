@@ -7,6 +7,8 @@ import '../screens/auth/sign_up.dart';
 import '../screens/car rental/carssearch.dart';
 import '../screens/flights/flightsearch.dart';
 import '../screens/hotels/hotel_search.dart';
+import '../screens/home/home_screen.dart';
+import '../screens/onboarding/onboarding_screen_1.dart';
 import 'package:provider/provider.dart';
 
 class TempHome extends StatelessWidget {
@@ -116,6 +118,29 @@ class TempHome extends StatelessWidget {
               ),
               const SizedBox(height: 16),
 
+              Row(
+                children: [
+                  Expanded(
+                    child: _card(context, t,
+                      label: l.homeDestinationsTitle,
+                      icon: Icons.home_rounded,
+                      page: () => const HomeScreen(),
+                      small: true,
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: _card(context, t,
+                      label: l.getStarted,
+                      icon: Icons.rocket_launch_rounded,
+                      page: () => const OnboardingScreen1(),
+                      small: true,
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 12),
+
               _card(context, t,
                 label: l.hotels,
                 icon: Icons.hotel_rounded,
@@ -209,11 +234,11 @@ class TempHome extends StatelessWidget {
             ),
           ],
         ),
-        padding: const EdgeInsets.all(18),
+        padding: const EdgeInsets.all(10),
         child: Row(
           children: [
             Container(
-              padding: const EdgeInsets.all(10),
+              padding: const EdgeInsets.all(1),
               decoration: BoxDecoration(
                 color: t.accentLight,
                 borderRadius: BorderRadius.circular(12),
@@ -221,15 +246,18 @@ class TempHome extends StatelessWidget {
               child: Icon(icon, color: t.accent, size: small ? 20 : 24),
             ),
             const SizedBox(width: 14),
-            Text(
-              label,
-              style: TextStyle(
-                color: t.title,
-                fontSize: small ? 14 : 17,
-                fontWeight: FontWeight.bold,
+            Expanded(
+              child: Text(
+                label,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                  color: t.title,
+                  fontSize: small ? 14 : 17,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
-            const Spacer(),
             Icon(Icons.arrow_forward_ios, color: t.label, size: 14),
           ],
         ),

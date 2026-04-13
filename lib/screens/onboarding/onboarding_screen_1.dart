@@ -1,7 +1,6 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
-
 import 'package:flutter/material.dart';
 import 'package:mobile_app/l10n/app_localizations.dart';
+import 'package:mobile_app/theme.dart';
 import 'onboarding_screen_2.dart';
 
 class OnboardingScreen1 extends StatelessWidget {
@@ -12,123 +11,316 @@ class OnboardingScreen1 extends StatelessWidget {
     final l = AppLocalizations.of(context)!;
     return OnboardingPage(
       imagePath: 'images/onboarding/onboarding1.png',
-      title: l.onboarding1Title,
-      body: l.onboarding1Body,
-      dotIndex: 0,
+      title:     l.onboarding1Title,
+      body:      l.onboarding1Body,
+      dotIndex:  0,
       onNext: () => Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (_) => const OnboardingScreen2()),
       ),
-      nextLabel: l.next,
+      nextLabel:      l.next,
+      // secondaryLabel: l.skip,
+      onSecondary: () {
+        // navigate to sign-in / home as needed
+      },
     );
   }
 }
 
-class OnboardingPage extends StatelessWidget {
-  final String imagePath;
-  final String title;
-  final String body;
-  final int dotIndex;
-  final VoidCallback onNext;
-  final String nextLabel;
+// ── Reusable OnboardingPage ───────────────────────────────────────────────────
 
-  const OnboardingPage({super.key, 
+class OnboardingPage extends StatelessWidget {
+  const OnboardingPage({
+    super.key,
     required this.imagePath,
     required this.title,
     required this.body,
     required this.dotIndex,
     required this.onNext,
     required this.nextLabel,
+    this.onSecondary,
+    this.secondaryLabel,
+    this.totalDots = 3,
   });
+
+  final String        imagePath;
+  final String        title;
+  final String        body;
+  final int           dotIndex;
+  final int           totalDots;
+  final VoidCallback  onNext;
+  final String        nextLabel;
+  final VoidCallback? onSecondary;
+  final String?       secondaryLabel;
 
   @override
   Widget build(BuildContext context) {
+    final t          = Theme.of(context).extension<AppThemeExtension>()!;
+    final isAr       = Localizations.localeOf(context).languageCode == 'ar';
+    final h          = MediaQuery.sizeOf(context).height;
+    final compact    = h < 760;
+    final hasSkip    = onSecondary != null && secondaryLabel != null;
+
     return Scaffold(
-      backgroundColor: Colors.white,
-      body: SafeArea(
+      backgroundColor: t.bg,
+      body: Directionality(
+        textDirection: isAr ? TextDirection.rtl : TextDirection.ltr,
         child: Column(
           children: [
-            // Image section
+            // ── Image zone ─────────────────────────────────────────────────
             Expanded(
               flex: 5,
-              child: Padding(
-                padding: EdgeInsets.all(32),
-                child: Image.asset(imagePath, fit: BoxFit.contain),
+              child: SafeArea(
+                bottom: false,
+                child: Padding(
+                  padding: EdgeInsets.fromLTRB(
+                    20, compact ? 16 : 22, 20, compact ? 12 : 16,
+                  ),
+                  child: _ImageCard(imagePath: imagePath, t: t),
+                ),
               ),
             ),
 
-            // Content section
+            // ── Content zone ───────────────────────────────────────────────
             Expanded(
-              flex: 4,
-              child: Container(
-                width: double.infinity,
-                padding: EdgeInsets.fromLTRB(28, 32, 28, 28),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.vertical(top: Radius.circular(32)),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withValues(alpha: 0.06),
-                      blurRadius: 20,
-                      offset: Offset(0, -4),
-                    ),
-                  ],
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // Dots
-                    Row(
-                      children: List.generate(3, (i) => Container(
-                        margin: EdgeInsets.only(right: 6),
-                        width: i == dotIndex ? 24 : 8,
-                        height: 8,
-                        decoration: BoxDecoration(
-                          color: i == dotIndex ? Color(0xFF1f93a0) : Colors.grey[300],
-                          borderRadius: BorderRadius.circular(4),
-                        ),
-                      )),
-                    ),
-                    SizedBox(height: 20),
-
-                    Text(title,
-                        style: TextStyle(
-                            fontSize: 26,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black87,
-                            height: 1.2)),
-                    SizedBox(height: 12),
-                    Text(body,
-                        style: TextStyle(
-                            fontSize: 15,
-                            color: Colors.grey[600],
-                            height: 1.6)),
-                    Spacer(),
-
-                    // Next button
-                    SizedBox(
-                      width: double.infinity,
-                      height: 54,
-                      child: ElevatedButton(
-                        onPressed: onNext,
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Color(0xFF1f93a0),
-                          foregroundColor: Colors.white,
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(16)),
-                          elevation: 0,
-                        ),
-                        child: Text(nextLabel,
-                            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-                      ),
-                    ),
-                  ],
-                ),
+              flex: compact ? 4 : 45,
+              child: _BottomSheet(
+                title:          title,
+                body:           body,
+                dotIndex:       dotIndex,
+                totalDots:      totalDots,
+                nextLabel:      nextLabel,
+                onNext:         onNext,
+                hasSkip:        hasSkip,
+                secondaryLabel: secondaryLabel,
+                onSecondary:    onSecondary,
+                isAr:           isAr,
+                compact:        compact,
+                t:              t,
               ),
             ),
           ],
         ),
       ),
+    );
+  }
+}
+
+// ── Image Card ────────────────────────────────────────────────────────────────
+
+class _ImageCard extends StatelessWidget {
+  const _ImageCard({required this.imagePath, required this.t});
+
+  final String            imagePath;
+  final AppThemeExtension t;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width:  double.infinity,
+      decoration: BoxDecoration(
+        color:        t.card,
+        borderRadius: BorderRadius.circular(28),
+        border:       Border.all(color: t.cardBorder.withOpacity(0.5)),
+        boxShadow: [
+          BoxShadow(
+            color:      t.cardBorder.withOpacity(0.14),
+            blurRadius: 20,
+            offset:     const Offset(0, 8),
+          ),
+        ],
+      ),
+      padding: const EdgeInsets.all(20),
+      child: Image.asset(imagePath, fit: BoxFit.contain),
+    );
+  }
+}
+
+// ── Bottom Sheet panel ────────────────────────────────────────────────────────
+
+class _BottomSheet extends StatelessWidget {
+  const _BottomSheet({
+    required this.title,
+    required this.body,
+    required this.dotIndex,
+    required this.totalDots,
+    required this.nextLabel,
+    required this.onNext,
+    required this.hasSkip,
+    required this.isAr,
+    required this.compact,
+    required this.t,
+    this.secondaryLabel,
+    this.onSecondary,
+  });
+
+  final String            title;
+  final String            body;
+  final int               dotIndex;
+  final int               totalDots;
+  final String            nextLabel;
+  final VoidCallback      onNext;
+  final bool              hasSkip;
+  final String?           secondaryLabel;
+  final VoidCallback?     onSecondary;
+  final bool              isAr;
+  final bool              compact;
+  final AppThemeExtension t;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      padding: EdgeInsets.fromLTRB(
+        22, compact ? 20 : 26, 22, compact ? 18 : 28,
+      ),
+      decoration: BoxDecoration(
+        color: t.card,
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(28)),
+        border: Border(
+          top: BorderSide(color: t.cardBorder.withOpacity(0.5)),
+        ),
+      ),
+      child: Column(
+        crossAxisAlignment:
+            isAr ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+        children: [
+          // Dots
+          _DotIndicator(
+            dotIndex:  dotIndex,
+            totalDots: totalDots,
+            isAr:      isAr,
+            t:         t,
+          ),
+          SizedBox(height: compact ? 14 : 20),
+
+          // Title
+          Text(
+            title,
+            textAlign: isAr ? TextAlign.right : TextAlign.left,
+            style: TextStyle(
+              fontSize:   compact ? 24.0 : 28.0,
+              fontWeight: FontWeight.w900,
+              color:      t.title,
+              height:     1.1,
+            ),
+          ),
+          SizedBox(height: compact ? 8 : 10),
+
+          // Body
+          Text(
+            body,
+            textAlign: isAr ? TextAlign.right : TextAlign.left,
+            style: TextStyle(
+              fontSize:   compact ? 13.5 : 14.5,
+              color:      t.sub,
+              fontWeight: FontWeight.w600,
+              height:     1.55,
+            ),
+          ),
+
+          const Spacer(),
+
+          // Primary button
+          SizedBox(
+            width:  double.infinity,
+            height: compact ? 50.0 : 54.0,
+            child: DecoratedBox(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin:  Alignment.topLeft,
+                  end:    Alignment.bottomRight,
+                  colors: t.btnGradient,
+                ),
+                borderRadius: BorderRadius.circular(16),
+              ),
+              child: ElevatedButton(
+                onPressed: onNext,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.transparent,
+                  shadowColor:     Colors.transparent,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                ),
+                child: Text(
+                  nextLabel,
+                  style: TextStyle(
+                    color:         Colors.white,
+                    fontSize:      compact ? 14.5 : 15.5,
+                    fontWeight:    FontWeight.w800,
+                    letterSpacing: 0.2,
+                  ),
+                ),
+              ),
+            ),
+          ),
+
+          // Secondary / skip button
+          if (hasSkip) ...[
+            SizedBox(height: compact ? 2 : 4),
+            Center(
+              child: TextButton(
+                onPressed: onSecondary,
+                style: TextButton.styleFrom(
+                  foregroundColor: t.accent,
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical:   compact ? 4 : 8,
+                  ),
+                ),
+                child: Text(
+                  secondaryLabel!,
+                  style: TextStyle(
+                    fontSize:   compact ? 12.5 : 13.5,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ],
+      ),
+    );
+  }
+}
+
+// ── Dot Indicator ─────────────────────────────────────────────────────────────
+
+class _DotIndicator extends StatelessWidget {
+  const _DotIndicator({
+    required this.dotIndex,
+    required this.totalDots,
+    required this.isAr,
+    required this.t,
+  });
+
+  final int               dotIndex;
+  final int               totalDots;
+  final bool              isAr;
+  final AppThemeExtension t;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment:
+          isAr ? MainAxisAlignment.end : MainAxisAlignment.start,
+      children: List.generate(totalDots, (i) {
+        final active = i == dotIndex;
+        return AnimatedContainer(
+          duration: const Duration(milliseconds: 260),
+          curve:    Curves.easeInOut,
+          margin:   const EdgeInsetsDirectional.only(end: 6),
+          width:    active ? 22 : 7,
+          height:   7,
+          decoration: BoxDecoration(
+            color:        active
+                ? t.accent
+                : t.fieldBorder.withOpacity(0.45),
+            borderRadius: BorderRadius.circular(4),
+          ),
+        );
+      }),
     );
   }
 }
