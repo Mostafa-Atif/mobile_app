@@ -417,25 +417,43 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget _buildCategories(
       BuildContext context, AppThemeExtension t, AppLocalizations l) {
     final categories = [
-      {'label': l.flights,  'icon': Icons.flight_rounded,        'page': () => FlightSearch()},
-      {'label': l.hotels,   'icon': Icons.hotel_rounded,          'page': () => HotelSearch()},
-      {'label': l.carRent,  'icon': Icons.directions_car_rounded, 'page': () => CarsSearch()},
+      {
+        'label': l.menuDashboard,
+        'icon': Icons.dashboard_customize_rounded,
+        'page': () => const UserDashboardScreen()
+      },
+      {
+        'label': l.flights,
+        'icon': Icons.flight_rounded,
+        'page': () => FlightSearch()
+      },
+      {
+        'label': l.hotels,
+        'icon': Icons.hotel_rounded,
+        'page': () => HotelSearch()
+      },
+      {
+        'label': l.carRent,
+        'icon': Icons.directions_car_rounded,
+        'page': () => CarsSearch()
+      },
     ];
 
-    return Row(
+    final itemWidth = (MediaQuery.sizeOf(context).width - 22 - 22 - 12) / 2;
+
+    return Wrap(
+      spacing: 12,
+      runSpacing: 12,
       children: categories.map((cat) {
-        return Expanded(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 5),
-            child: _CategoryCard(
-              icon: cat['icon'] as IconData,
-              label: cat['label'] as String,
-              t: t,
-              onTap: () => Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (_) => (cat['page'] as Function)()),
-              ),
+        return SizedBox(
+          width: itemWidth,
+          child: _CategoryCard(
+            icon: cat['icon'] as IconData,
+            label: cat['label'] as String,
+            t: t,
+            onTap: () => Navigator.push(
+              context,
+              MaterialPageRoute(builder: (_) => (cat['page'] as Function)()),
             ),
           ),
         );

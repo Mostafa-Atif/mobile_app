@@ -8,6 +8,7 @@ import '../screens/car rental/carssearch.dart';
 import '../screens/flights/flightsearch.dart';
 import '../screens/hotels/hotel_search.dart';
 import '../screens/home/home_screen.dart';
+import '../screens/home/user_dashboard_screen.dart';
 import '../screens/onboarding/onboarding_screen_1.dart';
 import 'package:provider/provider.dart';
 
@@ -138,6 +139,14 @@ class TempHome extends StatelessWidget {
                     ),
                   ),
                 ],
+              ),
+              const SizedBox(height: 12),
+
+              _card(context, t,
+                label: l.menuDashboard,
+                icon: Icons.dashboard_customize_rounded,
+                page: () => const UserDashboardScreen(),
+                small: true,
               ),
               const SizedBox(height: 12),
 
