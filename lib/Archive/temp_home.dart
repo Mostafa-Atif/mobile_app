@@ -25,18 +25,19 @@ class TempHome extends StatelessWidget {
     return Scaffold(
       backgroundColor: t.bg,
       body: SafeArea(
-        child: Padding(
+        child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // Header
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
                       Text(
                         l.appTitle,
                         style: TextStyle(
@@ -50,8 +51,10 @@ class TempHome extends StatelessWidget {
                         l.devMenu,
                         style: TextStyle(color: t.label, fontSize: 13),
                       ),
-                    ],
+                      ],
+                    ),
                   ),
+                  const SizedBox(width: 12),
                   Row(
                     children: [
                       // Dark mode toggle
