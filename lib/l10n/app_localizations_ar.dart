@@ -970,4 +970,13 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get menuLogout => 'تسجيل الخروج';
+
+  @override
+  String get errorName => 'يجب أن يكون من 2 إلى 50 حرفاً';
+
+  @override
+  String get errorAge => 'يجب أن يكون العمر بين 18 و 120';
+
+  @override
+  String get errorNationalId => 'يجب أن يكون من 8 إلى 20 حرفاً أو رقماً';
 }

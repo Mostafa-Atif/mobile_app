@@ -976,4 +976,13 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get menuLogout => 'Logout';
+
+  @override
+  String get errorName => 'Must be 2–50 letters';
+
+  @override
+  String get errorAge => 'Must be between 18 and 120';
+
+  @override
+  String get errorNationalId => 'Must be 8–20 alphanumeric characters';
 }

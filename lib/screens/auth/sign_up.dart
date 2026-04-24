@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:mobile_app/config.dart';
 import 'package:mobile_app/l10n/app_localizations.dart';
@@ -30,38 +31,46 @@ class _SignUpState extends State<SignUp> {
   bool _submitted = false;
 
   static final RegExp _namePattern = RegExp(r"^[a-zA-Z\u0600-\u06FF\s'-]+$");
+  // E.164-compatible: optional +, no leading zero after it, 7–15 digits total
+  static final RegExp _phonePattern = RegExp(r'^\+?[1-9]\d{6,14}$');
+  // National ID: alphanumeric + optional hyphens/spaces, 8–20 chars
+  static final RegExp _nationalIdPattern = RegExp(r'^[a-zA-Z0-9\s\-]{8,20}$');
 
   bool get _hasMinLength => _passwordController.text.length >= 8;
   bool get _hasUppercase => _passwordController.text.contains(RegExp(r'[A-Z]'));
   bool get _hasLowercase => _passwordController.text.contains(RegExp(r'[a-z]'));
   bool get _hasDigit => _passwordController.text.contains(RegExp(r'[0-9]'));
-  bool get _hasSpecial => _passwordController.text.contains(RegExp(r'[!@#$%^&*(),.?":{}|<>\[\]\-_]'));
+  bool get _hasSpecial =>
+      _passwordController.text.contains(RegExp(r'[!@#$%^&*(),.?":{}|<>\[\]\-_]'));
   bool get _passwordValid =>
-      _hasMinLength &&
-      _hasUppercase &&
-      _hasLowercase &&
-      _hasDigit &&
-      _hasSpecial;
+      _hasMinLength && _hasUppercase && _hasLowercase && _hasDigit && _hasSpecial;
 
   bool get _emailValid =>
       RegExp(r'^[\w\.-]+@[\w\.-]+\.\w{2,}$').hasMatch(_emailController.text.trim());
-  bool get _phoneValid =>
-      RegExp(r'^\d{7,15}$').hasMatch(_phoneController.text.trim());
-  bool get _nationalIdValid => _nationalIdController.text.trim().isNotEmpty;
+
+  bool get _phoneValid => _phonePattern.hasMatch(_phoneController.text.trim());
+
+  bool get _nationalIdValid {
+    final value = _nationalIdController.text.trim();
+    if (!_nationalIdPattern.hasMatch(value)) return false;
+    // Must contain at least 6 actual alphanumeric characters (not just dashes/spaces)
+    final alphanumeric = value.replaceAll(RegExp(r'[\s\-]'), '');
+    return alphanumeric.length >= 6;
+  }
 
   bool get _ageValid {
-    final age = int.tryParse(_ageController.text.trim());
-    return age != null && age >= 18;
+    final n = int.tryParse(_ageController.text.trim());
+    return n != null && n >= 18 && n <= 120;
   }
 
   bool get _firstNameValid {
     final value = _firstNameController.text.trim();
-    return value.isNotEmpty && _namePattern.hasMatch(value);
+    return value.length >= 2 && value.length <= 50 && _namePattern.hasMatch(value);
   }
 
   bool get _lastNameValid {
     final value = _lastNameController.text.trim();
-    return value.isNotEmpty && _namePattern.hasMatch(value);
+    return value.length >= 2 && value.length <= 50 && _namePattern.hasMatch(value);
   }
 
   @override
@@ -211,8 +220,12 @@ class _SignUpState extends State<SignUp> {
                               child: _AuthTextField(
                                 controller: _firstNameController,
                                 label: l.firstName,
+                                maxLength: 50,
+                                inputFormatters: [
+                                  LengthLimitingTextInputFormatter(50),
+                                ],
                                 errorText: _submitted && !_firstNameValid
-                                    ? l.errorLettersOnly
+                                    ? l.errorName
                                     : null,
                                 onChanged: () => setState(() {}),
                               ),
@@ -222,8 +235,12 @@ class _SignUpState extends State<SignUp> {
                               child: _AuthTextField(
                                 controller: _lastNameController,
                                 label: l.lastName,
+                                maxLength: 50,
+                                inputFormatters: [
+                                  LengthLimitingTextInputFormatter(50),
+                                ],
                                 errorText: _submitted && !_lastNameValid
-                                    ? l.errorLettersOnly
+                                    ? l.errorName
                                     : null,
                                 onChanged: () => setState(() {}),
                               ),
@@ -239,8 +256,13 @@ class _SignUpState extends State<SignUp> {
                                 controller: _ageController,
                                 label: l.age,
                                 keyboardType: TextInputType.number,
-                                errorText:
-                                    _submitted && !_ageValid ? l.errorMustBe18 : null,
+                                inputFormatters: [
+                                  FilteringTextInputFormatter.digitsOnly,
+                                  LengthLimitingTextInputFormatter(3),
+                                ],
+                                errorText: _submitted && !_ageValid
+                                    ? l.errorAge
+                                    : null,
                                 onChanged: () => setState(() {}),
                               ),
                             ),
@@ -283,8 +305,9 @@ class _SignUpState extends State<SignUp> {
                           controller: _emailController,
                           label: l.email,
                           keyboardType: TextInputType.emailAddress,
-                          errorText:
-                              _submitted && !_emailValid ? l.errorValidEmail : null,
+                          errorText: _submitted && !_emailValid
+                              ? l.errorValidEmail
+                              : null,
                           onChanged: () => setState(() {}),
                         ),
                         const SizedBox(height: 16),
@@ -318,17 +341,45 @@ class _SignUpState extends State<SignUp> {
                           controller: _phoneController,
                           label: l.phone,
                           keyboardType: TextInputType.phone,
-                          errorText:
-                              _submitted && !_phoneValid ? l.errorValidPhone : null,
+                          inputFormatters: [
+                            TextInputFormatter.withFunction(
+                              (oldValue, newValue) {
+                                // Allow + only as the first character, then digits only
+                                final text = newValue.text;
+                                if (text.isEmpty) return newValue;
+                                if (RegExp(r'^\+?\d*$').hasMatch(text)) {
+                                  return newValue;
+                                }
+                                return oldValue;
+                              },
+                            ),
+                            LengthLimitingTextInputFormatter(16),
+                          ],
+                          errorText: _submitted && !_phoneValid
+                              ? l.errorValidPhone
+                              : null,
                           onChanged: () => setState(() {}),
                         ),
                         const SizedBox(height: 16),
                         _AuthTextField(
                           controller: _nationalIdController,
                           label: l.nationalId,
-                          keyboardType: TextInputType.number,
+                          keyboardType: TextInputType.text,
+                          inputFormatters: [
+                            // Allow alphanumeric, hyphens, and spaces only
+                            TextInputFormatter.withFunction(
+                              (oldValue, newValue) {
+                                if (RegExp(r'^[a-zA-Z0-9\s\-]*$')
+                                    .hasMatch(newValue.text)) {
+                                  return newValue;
+                                }
+                                return oldValue;
+                              },
+                            ),
+                            LengthLimitingTextInputFormatter(20),
+                          ],
                           errorText: _submitted && !_nationalIdValid
-                              ? l.errorRequired
+                              ? l.errorNationalId
                               : null,
                           onChanged: () => setState(() {}),
                         ),
@@ -412,75 +463,6 @@ class _SignUpState extends State<SignUp> {
           ),
         ),
       ),
-    );
-  }
-
-  Widget _inputField(
-    TextEditingController ctrl,
-    String label, {
-    TextInputType keyboard = TextInputType.text,
-    String? errorText,
-  }) {
-    final t = Theme.of(context).extension<AppThemeExtension>()!;
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        TextField(
-          controller: ctrl,
-          keyboardType: keyboard,
-          onChanged: (_) => setState(() {}),
-          style: TextStyle(
-            fontSize: 15,
-            color: t.title,
-            fontWeight: FontWeight.w600,
-          ),
-          decoration: InputDecoration(
-            labelText: label,
-            labelStyle: TextStyle(
-              color: t.label,
-              fontSize: 14,
-              fontWeight: FontWeight.w600,
-            ),
-            filled: true,
-            fillColor: t.field,
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(18),
-              borderSide: BorderSide(color: t.fieldBorder.withOpacity(0.6)),
-            ),
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(18),
-              borderSide: BorderSide(
-                color: errorText != null ? t.danger : t.fieldBorder,
-              ),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(18),
-              borderSide: BorderSide(color: t.accent, width: 1.6),
-            ),
-            focusedErrorBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(18),
-              borderSide: BorderSide(color: t.danger, width: 1.6),
-            ),
-            contentPadding: const EdgeInsets.symmetric(
-              horizontal: 16,
-              vertical: 18,
-            ),
-          ),
-        ),
-        if (errorText != null)
-          Padding(
-            padding: const EdgeInsetsDirectional.only(start: 4, top: 6),
-            child: Text(
-              errorText,
-              style: TextStyle(
-                color: t.danger,
-                fontSize: 12,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-          ),
-      ],
     );
   }
 
@@ -603,6 +585,8 @@ class _AuthTextField extends StatelessWidget {
     this.obscureText = false,
     this.errorText,
     this.suffixIcon,
+    this.inputFormatters,
+    this.maxLength,
   });
 
   final TextEditingController controller;
@@ -612,6 +596,8 @@ class _AuthTextField extends StatelessWidget {
   final bool obscureText;
   final String? errorText;
   final Widget? suffixIcon;
+  final List<TextInputFormatter>? inputFormatters;
+  final int? maxLength;
 
   @override
   Widget build(BuildContext context) {
@@ -624,6 +610,11 @@ class _AuthTextField extends StatelessWidget {
           controller: controller,
           keyboardType: keyboardType,
           obscureText: obscureText,
+          inputFormatters: inputFormatters,
+          maxLength: maxLength,
+          maxLengthEnforcement: maxLength != null
+              ? MaxLengthEnforcement.enforced
+              : null,
           onChanged: (_) => onChanged(),
           style: TextStyle(
             color: t.title,
@@ -663,6 +654,7 @@ class _AuthTextField extends StatelessWidget {
               borderRadius: BorderRadius.circular(18),
               borderSide: BorderSide(color: t.danger, width: 1.6),
             ),
+            counterText: maxLength != null ? '' : null,
           ),
         ),
         if (errorText != null)

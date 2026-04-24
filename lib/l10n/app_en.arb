@@ -369,5 +369,8 @@
   "settingsLanguageSubtitle": "Choose the app language",
   "settingsLight": "Light",
   "settingsDark": "Dark",
-  "menuLogout": "Logout"
+  "menuLogout": "Logout",
+  "errorName": "Must be 2–50 letters",
+  "errorAge": "Must be between 18 and 120",
+  "errorNationalId": "Must be 8–20 alphanumeric characters"
 }

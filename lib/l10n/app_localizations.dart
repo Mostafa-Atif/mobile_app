@@ -1939,6 +1939,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Logout'**
   String get menuLogout;
+
+  /// No description provided for @errorName.
+  ///
+  /// In en, this message translates to:
+  /// **'Must be 2–50 letters'**
+  String get errorName;
+
+  /// No description provided for @errorAge.
+  ///
+  /// In en, this message translates to:
+  /// **'Must be between 18 and 120'**
+  String get errorAge;
+
+  /// No description provided for @errorNationalId.
+  ///
+  /// In en, this message translates to:
+  /// **'Must be 8–20 alphanumeric characters'**
+  String get errorNationalId;
 }
 
 class _AppLocalizationsDelegate

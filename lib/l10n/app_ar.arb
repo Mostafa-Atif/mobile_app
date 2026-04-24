@@ -369,5 +369,8 @@
   "settingsLanguageSubtitle": "اختر لغة التطبيق",
   "settingsLight": "فاتح",
   "settingsDark": "داكن",
-  "menuLogout": "تسجيل الخروج"
+  "menuLogout": "تسجيل الخروج",
+  "errorName": "يجب أن يكون من 2 إلى 50 حرفاً",
+  "errorAge": "يجب أن يكون العمر بين 18 و 120",
+  "errorNationalId": "يجب أن يكون من 8 إلى 20 حرفاً أو رقماً"
 }
