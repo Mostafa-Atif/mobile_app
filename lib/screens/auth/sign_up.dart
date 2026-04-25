@@ -32,7 +32,7 @@ class _SignUpState extends State<SignUp> {
 
   static final RegExp _namePattern = RegExp(r"^[a-zA-Z\u0600-\u06FF\s'-]+$");
   // E.164-compatible: optional +, no leading zero after it, 7–15 digits total
-  static final RegExp _phonePattern = RegExp(r'^\+?[1-9]\d{6,14}$');
+  static final RegExp _phonePattern = RegExp(r'^\+?(?!0+$)\d{7,15}$');
   // National ID: alphanumeric + optional hyphens/spaces, 8–20 chars
   static final RegExp _nationalIdPattern = RegExp(r'^[a-zA-Z0-9\s\-]{8,20}$');
 
