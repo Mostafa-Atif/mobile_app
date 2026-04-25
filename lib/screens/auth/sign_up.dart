@@ -258,6 +258,16 @@ class _SignUpState extends State<SignUp> {
                                 keyboardType: TextInputType.number,
                                 inputFormatters: [
                                   FilteringTextInputFormatter.digitsOnly,
+                                  TextInputFormatter.withFunction(
+                                    (oldValue, newValue) {
+                                      if (newValue.text.isEmpty) {
+                                        return newValue;
+                                      }
+                                      return newValue.text.startsWith('0')
+                                          ? oldValue
+                                          : newValue;
+                                    },
+                                  ),
                                   LengthLimitingTextInputFormatter(3),
                                 ],
                                 errorText: _submitted && !_ageValid
