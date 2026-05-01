@@ -865,6 +865,49 @@ class AppLocalizationsEn extends AppLocalizations {
   String get userDashboardLoadError => 'Could not load bookings';
 
   @override
+  String get adminCarBookings => 'Car Bookings';
+
+  @override
+  String get adminHotelBookings => 'Hotel Bookings';
+
+  @override
+  String get adminFlightBookings => 'Flight Bookings';
+
+  @override
+  String get adminCarBookingsSubtitle =>
+      'Manage and review all car rental bookings';
+
+  @override
+  String get adminHotelBookingsSubtitle =>
+      'Manage and review all hotel bookings';
+
+  @override
+  String get adminFlightBookingsSubtitle =>
+      'Manage and review all flight bookings';
+
+  @override
+  String get adminDashboardLoadError => 'Could not load admin dashboard';
+
+  @override
+  String get adminNoBookings => 'No bookings here yet';
+
+  @override
+  String get adminNoBookingsSubtitle =>
+      'New bookings for this section will appear here.';
+
+  @override
+  String get adminBookingConfirmed => 'Booking confirmed';
+
+  @override
+  String get adminBookingDeleted => 'Booking deleted';
+
+  @override
+  String get adminActionFailed => 'Action failed';
+
+  @override
+  String get adminConfirm => 'Confirm';
+
+  @override
   String get statusConfirmed => 'Confirmed';
 
   @override

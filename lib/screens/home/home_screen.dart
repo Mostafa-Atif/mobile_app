@@ -6,6 +6,7 @@ import 'package:mobile_app/data/destinations_repository.dart';
 import 'package:mobile_app/l10n/app_localizations.dart';
 import 'package:mobile_app/screens/home/all_destinations_screen.dart';
 import 'package:mobile_app/screens/home/about_us_screen.dart';
+import 'package:mobile_app/screens/home/admin_dashboard_screen.dart';
 import 'package:mobile_app/screens/home/settings_screen.dart';
 import 'package:mobile_app/screens/home/user_dashboard_screen.dart';
 import 'package:mobile_app/screens/auth/sign_in.dart';
@@ -27,7 +28,8 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  final DestinationsRepository _destinationsRepository = DestinationsRepository();
+  final DestinationsRepository _destinationsRepository =
+      DestinationsRepository();
 
   String firstName = '';
   String email = '';
@@ -48,7 +50,8 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
     _loadUser();
     _heroDestinationsFuture = _destinationsRepository.loadHeroDestinations();
-    _featuredDestinationsFuture = _destinationsRepository.loadFeaturedDestinations();
+    _featuredDestinationsFuture =
+        _destinationsRepository.loadFeaturedDestinations();
     _heroPageController = PageController();
     _startHeroAutoScroll();
   }
@@ -79,8 +82,10 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   @override
+  @override
   void dispose() {
-    _closeProfileMenu();
+    _profileMenuEntry?.remove();
+    _profileMenuEntry = null;
     _heroTimer?.cancel();
     _heroPageController.dispose();
     super.dispose();
@@ -104,6 +109,9 @@ class _HomeScreenState extends State<HomeScreen> {
     await prefs.remove('phone');
     await prefs.remove('userId');
     await prefs.remove('gender');
+    await prefs.remove('role');
+    await prefs.remove('userType');
+    await prefs.remove('isAdmin');
     if (!mounted) return;
     Navigator.pushAndRemoveUntil(
       context,
@@ -125,12 +133,11 @@ class _HomeScreenState extends State<HomeScreen> {
         link: _profileMenuLink,
         onClose: _closeProfileMenu,
         isRtl: isRtl,
-        onSelected: (value) {
+        onSelected: (value) async {
           _closeProfileMenu();
           switch (value) {
             case 'dashboard':
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (_) => const UserDashboardScreen()));
+              _openDashboard();
             case 'about':
               Navigator.push(context,
                   MaterialPageRoute(builder: (_) => const AboutUsScreen()));
@@ -138,6 +145,7 @@ class _HomeScreenState extends State<HomeScreen> {
               Navigator.push(context,
                   MaterialPageRoute(builder: (_) => const SettingsScreen()));
             case 'logout':
+              await Future.delayed(const Duration(milliseconds: 100));
               _logout();
           }
         },
@@ -155,6 +163,25 @@ class _HomeScreenState extends State<HomeScreen> {
     if (mounted) setState(() {});
   }
 
+  Future<void> _openDashboard() async {
+    final prefs = await SharedPreferences.getInstance();
+    final role = (prefs.getString('role') ?? '').toLowerCase();
+    final userType = (prefs.getString('userType') ?? '').toLowerCase();
+    final isAdmin = prefs.getBool('isAdmin') == true ||
+        role == 'admin' ||
+        userType == 'admin';
+
+    if (!mounted) return;
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => isAdmin
+            ? const AdminDashboardScreen()
+            : const UserDashboardScreen(),
+      ),
+    );
+  }
+
   // ── Build ─────────────────────────────────────────────────────────────────
 
   @override
@@ -167,7 +194,8 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       backgroundColor: t.bg,
       body: FutureBuilder<List<List<Map<String, dynamic>>>>(
-        future: Future.wait([_heroDestinationsFuture, _featuredDestinationsFuture]),
+        future:
+            Future.wait([_heroDestinationsFuture, _featuredDestinationsFuture]),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
             return Center(child: CircularProgressIndicator(color: t.accent));
@@ -196,12 +224,11 @@ class _HomeScreenState extends State<HomeScreen> {
           return CustomScrollView(
             slivers: [
               SliverToBoxAdapter(
-                child: _buildHero(
-                    context, t, l, isDark, isAr, heroDestinations),
+                child:
+                    _buildHero(context, t, l, isDark, isAr, heroDestinations),
               ),
               SliverToBoxAdapter(
-                child: _buildBody(
-                    context, t, l, isAr, featuredDestinations),
+                child: _buildBody(context, t, l, isAr, featuredDestinations),
               ),
             ],
           );
@@ -420,7 +447,7 @@ class _HomeScreenState extends State<HomeScreen> {
       {
         'label': l.menuDashboard,
         'icon': Icons.dashboard_customize_rounded,
-        'page': () => const UserDashboardScreen()
+        'onTap': _openDashboard,
       },
       {
         'label': l.flights,
@@ -451,10 +478,13 @@ class _HomeScreenState extends State<HomeScreen> {
             icon: cat['icon'] as IconData,
             label: cat['label'] as String,
             t: t,
-            onTap: () => Navigator.push(
-              context,
-              MaterialPageRoute(builder: (_) => (cat['page'] as Function)()),
-            ),
+            onTap: cat['onTap'] as VoidCallback? ??
+                () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => (cat['page'] as Widget Function())(),
+                      ),
+                    ),
           ),
         );
       }).toList(),
@@ -729,8 +759,9 @@ class _ProfileMenuOverlayState extends State<_ProfileMenuOverlay>
     final menuBg = isDark
         ? const Color(0xFF0F192D).withOpacity(0.93)
         : Colors.white.withOpacity(0.84);
-    final borderCol =
-        isDark ? Colors.white.withOpacity(0.10) : Colors.white.withOpacity(0.90);
+    final borderCol = isDark
+        ? Colors.white.withOpacity(0.10)
+        : Colors.white.withOpacity(0.90);
     final headerBorderCol = isDark
         ? Colors.white.withOpacity(0.07)
         : const Color(0xFF6496BE).withOpacity(0.12);
@@ -760,8 +791,7 @@ class _ProfileMenuOverlayState extends State<_ProfileMenuOverlay>
     const menuWidth = 232.0;
     const avatarWidth = 40.0;
     final offsetX = widget.isRtl ? 0.0 : -(menuWidth - avatarWidth);
-    final scaleOrigin =
-        widget.isRtl ? Alignment.topLeft : Alignment.topRight;
+    final scaleOrigin = widget.isRtl ? Alignment.topLeft : Alignment.topRight;
 
     return Stack(
       children: [
@@ -798,8 +828,8 @@ class _ProfileMenuOverlayState extends State<_ProfileMenuOverlay>
                         border: Border.all(color: borderCol),
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.black
-                                .withOpacity(isDark ? 0.48 : 0.12),
+                            color:
+                                Colors.black.withOpacity(isDark ? 0.48 : 0.12),
                             blurRadius: 32,
                             offset: const Offset(0, 8),
                           ),
@@ -810,8 +840,7 @@ class _ProfileMenuOverlayState extends State<_ProfileMenuOverlay>
                         children: [
                           // Profile header
                           Container(
-                            padding:
-                                const EdgeInsets.fromLTRB(16, 20, 16, 16),
+                            padding: const EdgeInsets.fromLTRB(16, 20, 16, 16),
                             decoration: BoxDecoration(
                               border: Border(
                                   bottom: BorderSide(color: headerBorderCol)),
@@ -931,12 +960,12 @@ class _ProfileMenuOverlayState extends State<_ProfileMenuOverlay>
                                 _MenuRow(
                                   icon: Icons.logout_rounded,
                                   label: l.menuLogout,
-                                  iconBg: const Color(0xFFFB7185)
-                                      .withOpacity(0.08),
-                                  iconColor: const Color(0xFFFB7185)
-                                      .withOpacity(0.70),
-                                  labelColor: const Color(0xFFDC4545)
-                                      .withOpacity(0.78),
+                                  iconBg:
+                                      const Color(0xFFFB7185).withOpacity(0.08),
+                                  iconColor:
+                                      const Color(0xFFFB7185).withOpacity(0.70),
+                                  labelColor:
+                                      const Color(0xFFDC4545).withOpacity(0.78),
                                   chevronColor: Colors.transparent,
                                   isDark: isDark,
                                   showChevron: false,

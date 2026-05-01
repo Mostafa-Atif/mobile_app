@@ -859,6 +859,47 @@ class AppLocalizationsAr extends AppLocalizations {
   String get userDashboardLoadError => 'تعذر تحميل الحجوزات';
 
   @override
+  String get adminCarBookings => 'حجوزات السيارات';
+
+  @override
+  String get adminHotelBookings => 'حجوزات الفنادق';
+
+  @override
+  String get adminFlightBookings => 'حجوزات الرحلات';
+
+  @override
+  String get adminCarBookingsSubtitle =>
+      'إدارة ومراجعة جميع حجوزات تأجير السيارات';
+
+  @override
+  String get adminHotelBookingsSubtitle => 'إدارة ومراجعة جميع حجوزات الفنادق';
+
+  @override
+  String get adminFlightBookingsSubtitle => 'إدارة ومراجعة جميع حجوزات الرحلات';
+
+  @override
+  String get adminDashboardLoadError => 'تعذر تحميل لوحة تحكم المدير';
+
+  @override
+  String get adminNoBookings => 'لا توجد حجوزات هنا بعد';
+
+  @override
+  String get adminNoBookingsSubtitle =>
+      'ستظهر الحجوزات الجديدة لهذا القسم هنا.';
+
+  @override
+  String get adminBookingConfirmed => 'تم تأكيد الحجز';
+
+  @override
+  String get adminBookingDeleted => 'تم حذف الحجز';
+
+  @override
+  String get adminActionFailed => 'فشلت العملية';
+
+  @override
+  String get adminConfirm => 'تأكيد';
+
+  @override
   String get statusConfirmed => 'مؤكد';
 
   @override

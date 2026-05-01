@@ -39,6 +39,7 @@ class _SignInState extends State<SignIn> {
 
   Future<void> _signIn() async {
     final l = AppLocalizations.of(context)!;
+    final messenger = ScaffoldMessenger.of(context);
 
     setState(() => _submitted = true);
     if (!_emailValid || _passwordEmpty) return;
@@ -68,6 +69,9 @@ class _SignInState extends State<SignIn> {
         await prefs.setString('phone',     data['user']['phone']);
         await prefs.setString('userId',    data['user']['id']);
         await prefs.setString('gender',    data['user']['gender'] ?? '');
+        await prefs.setString('role',      data['user']['role'] ?? '');
+        await prefs.setString('userType',  data['user']['userType'] ?? '');
+        await prefs.setBool('isAdmin',     data['user']['isAdmin'] == true);
 
         if (!mounted) return;
         Navigator.pushReplacement(
@@ -77,7 +81,8 @@ class _SignInState extends State<SignIn> {
         return;
       }
 
-      ScaffoldMessenger.of(context).showSnackBar(
+      messenger.clearSnackBars();
+      messenger.showSnackBar(
         SnackBar(
           content: Text(
             (data['message'] as String?)?.trim().isNotEmpty == true
@@ -88,7 +93,8 @@ class _SignInState extends State<SignIn> {
       );
     } catch (_) {
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
+      messenger.clearSnackBars();
+      messenger.showSnackBar(
         SnackBar(content: Text(l.checkConnectionRetry)),
       );
     } finally {

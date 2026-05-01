@@ -1724,6 +1724,84 @@ abstract class AppLocalizations {
   /// **'Could not load bookings'**
   String get userDashboardLoadError;
 
+  /// No description provided for @adminCarBookings.
+  ///
+  /// In en, this message translates to:
+  /// **'Car Bookings'**
+  String get adminCarBookings;
+
+  /// No description provided for @adminHotelBookings.
+  ///
+  /// In en, this message translates to:
+  /// **'Hotel Bookings'**
+  String get adminHotelBookings;
+
+  /// No description provided for @adminFlightBookings.
+  ///
+  /// In en, this message translates to:
+  /// **'Flight Bookings'**
+  String get adminFlightBookings;
+
+  /// No description provided for @adminCarBookingsSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Manage and review all car rental bookings'**
+  String get adminCarBookingsSubtitle;
+
+  /// No description provided for @adminHotelBookingsSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Manage and review all hotel bookings'**
+  String get adminHotelBookingsSubtitle;
+
+  /// No description provided for @adminFlightBookingsSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Manage and review all flight bookings'**
+  String get adminFlightBookingsSubtitle;
+
+  /// No description provided for @adminDashboardLoadError.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not load admin dashboard'**
+  String get adminDashboardLoadError;
+
+  /// No description provided for @adminNoBookings.
+  ///
+  /// In en, this message translates to:
+  /// **'No bookings here yet'**
+  String get adminNoBookings;
+
+  /// No description provided for @adminNoBookingsSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'New bookings for this section will appear here.'**
+  String get adminNoBookingsSubtitle;
+
+  /// No description provided for @adminBookingConfirmed.
+  ///
+  /// In en, this message translates to:
+  /// **'Booking confirmed'**
+  String get adminBookingConfirmed;
+
+  /// No description provided for @adminBookingDeleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Booking deleted'**
+  String get adminBookingDeleted;
+
+  /// No description provided for @adminActionFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Action failed'**
+  String get adminActionFailed;
+
+  /// No description provided for @adminConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm'**
+  String get adminConfirm;
+
   /// No description provided for @statusConfirmed.
   ///
   /// In en, this message translates to:
