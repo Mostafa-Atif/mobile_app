@@ -5,11 +5,11 @@ import 'package:mobile_app/l10n/app_localizations.dart';
 import 'package:mobile_app/screens/flights/flight_booking.dart';
 import 'package:mobile_app/theme.dart';
 
-class Review extends StatelessWidget {
+class FlightDetails extends StatelessWidget {
   final Map<String, dynamic> flight;
   final int passengers;
 
-  const Review({super.key, required this.flight, required this.passengers});
+  const FlightDetails({super.key, required this.flight, required this.passengers});
 
   String _calcArrival(String departTime, String duration) {
     try {

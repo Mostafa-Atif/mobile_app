@@ -17,7 +17,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../main.dart';
 import '../car rental/carssearch.dart';
 import 'destination_detail_screen.dart';
-import '../flights/flightsearch.dart';
+import '../flights/flight_search.dart';
 import '../hotels/hotel_search.dart';
 
 class HomeScreen extends StatefulWidget {

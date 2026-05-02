@@ -4,7 +4,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:mobile_app/l10n/app_localizations.dart';
-import 'package:mobile_app/screens/flights/review.dart';
+import 'package:mobile_app/screens/flights/flight_details.dart';
 import 'package:mobile_app/theme.dart';
 import '../../config.dart';
 
@@ -214,7 +214,7 @@ class _FlightResultsState extends State<FlightResults> {
 
     return GestureDetector(
       onTap: () => Navigator.push(context, MaterialPageRoute(
-          builder: (context) => Review(flight: flight, passengers: widget.passengers))),
+          builder: (context) => FlightDetails(flight: flight, passengers: widget.passengers))),
       child: Container(
         margin: const EdgeInsets.only(bottom: 12),
         decoration: BoxDecoration(

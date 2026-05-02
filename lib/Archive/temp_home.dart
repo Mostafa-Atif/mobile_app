@@ -5,7 +5,7 @@ import '../theme.dart';
 import '../screens/auth/sign_in.dart';
 import '../screens/auth/sign_up.dart';
 import '../screens/car rental/carssearch.dart';
-import '../screens/flights/flightsearch.dart';
+import '../screens/flights/flight_search.dart';
 import '../screens/hotels/hotel_search.dart';
 import '../screens/home/admin_dashboard_screen.dart';
 import '../screens/home/home_screen.dart';
