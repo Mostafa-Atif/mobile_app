@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:flutter/services.dart';
 
 class DestinationsRepository {
-  static const String _assetPath = 'data/destinations.json';
+  static const String _assetPath = 'assets/data/destinations.json';
 
   Future<List<Map<String, dynamic>>> loadDestinations() async {
     final jsonString = await rootBundle.loadString(_assetPath);

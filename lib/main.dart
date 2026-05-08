@@ -22,7 +22,7 @@ void main() async {
   if (!onboardingDone) {
     startScreen = const TempHome();
   } else if (token.isNotEmpty) {
-    startScreen = const HomeScreen();
+    startScreen = const TempHome();
   } else {
     startScreen = const TempHome();
   }

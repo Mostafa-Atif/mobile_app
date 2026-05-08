@@ -18,16 +18,16 @@ class SignIn extends StatefulWidget {
 }
 
 class _SignInState extends State<SignIn> {
-  final _emailController    = TextEditingController();
+  final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
 
   bool _obscurePassword = true;
-  bool _isLoading       = false;
-  bool _submitted       = false;
+  bool _isLoading = false;
+  bool _submitted = false;
 
   bool get _emailValid => RegExp(
-    r'^[\w\.-]+@[\w\.-]+\.\w{2,}$',
-  ).hasMatch(_emailController.text.trim());
+        r'^[\w\.-]+@[\w\.-]+\.\w{2,}$',
+      ).hasMatch(_emailController.text.trim());
   bool get _passwordEmpty => _passwordController.text.isEmpty;
 
   @override
@@ -51,7 +51,7 @@ class _SignInState extends State<SignIn> {
         Uri.parse('${Config.baseUrl}/api/auth/login'),
         headers: {'Content-Type': 'application/json'},
         body: json.encode({
-          'email':    _emailController.text.trim(),
+          'email': _emailController.text.trim(),
           'password': _passwordController.text,
         }),
       );
@@ -62,16 +62,18 @@ class _SignInState extends State<SignIn> {
 
       if (response.statusCode == 200) {
         final prefs = await SharedPreferences.getInstance();
-        await prefs.setString('token',     data['token']);
-        await prefs.setString('firstName', data['user']['firstName']);
-        await prefs.setString('lastName',  data['user']['lastName']);
-        await prefs.setString('email',     data['user']['email']);
-        await prefs.setString('phone',     data['user']['phone']);
-        await prefs.setString('userId',    data['user']['id']);
-        await prefs.setString('gender',    data['user']['gender'] ?? '');
-        await prefs.setString('role',      data['user']['role'] ?? '');
-        await prefs.setString('userType',  data['user']['userType'] ?? '');
-        await prefs.setBool('isAdmin',     data['user']['isAdmin'] == true);
+        await prefs.setString('token', data['token']?.toString() ?? '');
+        await prefs.setString(
+            'firstName', data['user']['firstName']?.toString() ?? '');
+        await prefs.setString(
+            'lastName', data['user']['lastName']?.toString() ?? '');
+        await prefs.setString('email', data['user']['email']?.toString() ?? '');
+        await prefs.setString('phone', data['user']['phone']?.toString() ?? '');
+        await prefs.setString('userId', data['user']['id']?.toString() ?? '');
+        await prefs.setString('gender', data['user']['gender'] ?? '');
+        await prefs.setString('role', data['user']['role'] ?? '');
+        await prefs.setString('userType', data['user']['userType'] ?? '');
+        await prefs.setBool('isAdmin', data['user']['isAdmin'] == true);
 
         if (!mounted) return;
         Navigator.pushReplacement(
@@ -91,7 +93,8 @@ class _SignInState extends State<SignIn> {
           ),
         ),
       );
-    } catch (_) {
+    } catch (e) {
+      print('Sign in error: $e');
       if (!mounted) return;
       messenger.clearSnackBars();
       messenger.showSnackBar(
@@ -104,9 +107,9 @@ class _SignInState extends State<SignIn> {
 
   @override
   Widget build(BuildContext context) {
-    final l     = AppLocalizations.of(context)!;
-    final t     = Theme.of(context).extension<AppThemeExtension>()!;
-    final isAr  = Localizations.localeOf(context).languageCode == 'ar';
+    final l = AppLocalizations.of(context)!;
+    final t = Theme.of(context).extension<AppThemeExtension>()!;
+    final isAr = Localizations.localeOf(context).languageCode == 'ar';
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
@@ -125,10 +128,10 @@ class _SignInState extends State<SignIn> {
 
                 // ── Header ───────────────────────────────────────────────────
                 _AuthHeader(
-                  title:    l.signInTitle,
+                  title: l.signInTitle,
                   subtitle: l.signInSubtitle,
-                  isAr:     isAr,
-                  t:        t,
+                  isAr: isAr,
+                  t: t,
                 ),
                 const SizedBox(height: 28),
 
@@ -137,14 +140,14 @@ class _SignInState extends State<SignIn> {
                   width: double.infinity,
                   padding: const EdgeInsets.fromLTRB(22, 24, 22, 26),
                   decoration: BoxDecoration(
-                    color:        t.card,
+                    color: t.card,
                     borderRadius: BorderRadius.circular(24),
-                    border:       Border.all(color: t.cardBorder.withOpacity(0.6)),
+                    border: Border.all(color: t.cardBorder.withOpacity(0.6)),
                     boxShadow: [
                       BoxShadow(
-                        color:      t.cardBorder.withOpacity(0.12),
+                        color: t.cardBorder.withOpacity(0.12),
                         blurRadius: 20,
-                        offset:     const Offset(0, 8),
+                        offset: const Offset(0, 8),
                       ),
                     ],
                   ),
@@ -153,28 +156,32 @@ class _SignInState extends State<SignIn> {
                     children: [
                       // Email
                       _LabeledField(
-                        label:        l.email,
-                        controller:   _emailController,
+                        label: l.email,
+                        controller: _emailController,
                         keyboardType: TextInputType.emailAddress,
-                        prefixIcon:   Icons.mail_outline_rounded,
-                        errorText:    _submitted && !_emailValid ? l.errorValidEmail : null,
-                        onChanged:    () => setState(() {}),
-                        t:            t,
+                        prefixIcon: Icons.mail_outline_rounded,
+                        errorText: _submitted && !_emailValid
+                            ? l.errorValidEmail
+                            : null,
+                        onChanged: () => setState(() {}),
+                        t: t,
                       ),
                       const SizedBox(height: 16),
 
                       // Password
                       _LabeledField(
-                        label:       l.password,
-                        controller:  _passwordController,
+                        label: l.password,
+                        controller: _passwordController,
                         obscureText: _obscurePassword,
-                        prefixIcon:  Icons.lock_outline_rounded,
-                        errorText:   _submitted && _passwordEmpty ? l.errorRequired : null,
-                        onChanged:   () => setState(() {}),
-                        t:           t,
+                        prefixIcon: Icons.lock_outline_rounded,
+                        errorText: _submitted && _passwordEmpty
+                            ? l.errorRequired
+                            : null,
+                        onChanged: () => setState(() {}),
+                        t: t,
                         suffixIcon: IconButton(
-                          onPressed: () =>
-                              setState(() => _obscurePassword = !_obscurePassword),
+                          onPressed: () => setState(
+                              () => _obscurePassword = !_obscurePassword),
                           icon: Icon(
                             _obscurePassword
                                 ? Icons.visibility_off_outlined
@@ -204,7 +211,7 @@ class _SignInState extends State<SignIn> {
                           child: Text(
                             l.forgotPassword,
                             style: const TextStyle(
-                              fontSize:   13,
+                              fontSize: 13,
                               fontWeight: FontWeight.w700,
                             ),
                           ),
@@ -214,13 +221,13 @@ class _SignInState extends State<SignIn> {
 
                       // Sign-in button
                       SizedBox(
-                        width:  double.infinity,
+                        width: double.infinity,
                         height: 52,
                         child: DecoratedBox(
                           decoration: BoxDecoration(
                             gradient: LinearGradient(
-                              begin:  Alignment.topLeft,
-                              end:    Alignment.bottomRight,
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
                               colors: t.btnGradient,
                             ),
                             borderRadius: BorderRadius.circular(16),
@@ -228,8 +235,8 @@ class _SignInState extends State<SignIn> {
                           child: ElevatedButton(
                             onPressed: _isLoading ? null : _signIn,
                             style: ElevatedButton.styleFrom(
-                              backgroundColor:         Colors.transparent,
-                              shadowColor:             Colors.transparent,
+                              backgroundColor: Colors.transparent,
+                              shadowColor: Colors.transparent,
                               disabledBackgroundColor: Colors.transparent,
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(16),
@@ -237,18 +244,18 @@ class _SignInState extends State<SignIn> {
                             ),
                             child: _isLoading
                                 ? const SizedBox(
-                                    width:  20,
+                                    width: 20,
                                     height: 20,
                                     child: CircularProgressIndicator(
-                                      color:       Colors.white,
+                                      color: Colors.white,
                                       strokeWidth: 2.2,
                                     ),
                                   )
                                 : Text(
                                     l.signIn,
                                     style: const TextStyle(
-                                      color:      Colors.white,
-                                      fontSize:   15,
+                                      color: Colors.white,
+                                      fontSize: 15,
                                       fontWeight: FontWeight.w800,
                                       letterSpacing: 0.2,
                                     ),
@@ -270,8 +277,8 @@ class _SignInState extends State<SignIn> {
                       child: Text(
                         'or',
                         style: TextStyle(
-                          color:      t.label,
-                          fontSize:   12,
+                          color: t.label,
+                          fontSize: 12,
                           fontWeight: FontWeight.w600,
                         ),
                       ),
@@ -291,8 +298,8 @@ class _SignInState extends State<SignIn> {
                       Text(
                         l.noAccount,
                         style: TextStyle(
-                          color:      t.sub,
-                          fontSize:   13.5,
+                          color: t.sub,
+                          fontSize: 13.5,
                           fontWeight: FontWeight.w600,
                         ),
                       ),
@@ -304,8 +311,8 @@ class _SignInState extends State<SignIn> {
                         child: Text(
                           l.signUp,
                           style: TextStyle(
-                            color:      t.accent,
-                            fontSize:   14,
+                            color: t.accent,
+                            fontSize: 14,
                             fontWeight: FontWeight.w800,
                           ),
                         ),
@@ -336,17 +343,17 @@ class _BackButton extends StatelessWidget {
       onTap: () => Navigator.pop(context),
       borderRadius: BorderRadius.circular(14),
       child: Container(
-        width:  42,
+        width: 42,
         height: 42,
         decoration: BoxDecoration(
-          color:        t.backBg,
+          color: t.backBg,
           borderRadius: BorderRadius.circular(14),
-          border:       Border.all(color: t.cardBorder.withOpacity(0.5)),
+          border: Border.all(color: t.cardBorder.withOpacity(0.5)),
         ),
         child: Icon(
           isAr ? Icons.arrow_forward_rounded : Icons.arrow_back_rounded,
           color: t.accent,
-          size:  20,
+          size: 20,
         ),
       ),
     );
@@ -365,7 +372,7 @@ class _AuthHeader extends StatelessWidget {
 
   final String title;
   final String subtitle;
-  final bool   isAr;
+  final bool isAr;
   final AppThemeExtension t;
 
   @override
@@ -378,10 +385,10 @@ class _AuthHeader extends StatelessWidget {
           title,
           textAlign: isAr ? TextAlign.right : TextAlign.left,
           style: TextStyle(
-            color:      t.title,
-            fontSize:   30,
+            color: t.title,
+            fontSize: 30,
             fontWeight: FontWeight.w900,
-            height:     1.08,
+            height: 1.08,
           ),
         ),
         const SizedBox(height: 6),
@@ -389,10 +396,10 @@ class _AuthHeader extends StatelessWidget {
           subtitle,
           textAlign: isAr ? TextAlign.right : TextAlign.left,
           style: TextStyle(
-            color:      t.sub,
-            fontSize:   14,
+            color: t.sub,
+            fontSize: 14,
             fontWeight: FontWeight.w600,
-            height:     1.5,
+            height: 1.5,
           ),
         ),
       ],
@@ -410,20 +417,20 @@ class _LabeledField extends StatelessWidget {
     required this.onChanged,
     required this.t,
     this.keyboardType = TextInputType.text,
-    this.obscureText  = false,
+    this.obscureText = false,
     this.errorText,
     this.suffixIcon,
   });
 
-  final String                label;
+  final String label;
   final TextEditingController controller;
-  final IconData              prefixIcon;
-  final VoidCallback          onChanged;
-  final AppThemeExtension     t;
-  final TextInputType         keyboardType;
-  final bool                  obscureText;
-  final String?               errorText;
-  final Widget?               suffixIcon;
+  final IconData prefixIcon;
+  final VoidCallback onChanged;
+  final AppThemeExtension t;
+  final TextInputType keyboardType;
+  final bool obscureText;
+  final String? errorText;
+  final Widget? suffixIcon;
 
   @override
   Widget build(BuildContext context) {
@@ -436,9 +443,9 @@ class _LabeledField extends StatelessWidget {
         Text(
           label.toUpperCase(),
           style: TextStyle(
-            color:         t.label,
-            fontSize:      11,
-            fontWeight:    FontWeight.w700,
+            color: t.label,
+            fontSize: 11,
+            fontWeight: FontWeight.w700,
             letterSpacing: 0.7,
           ),
         ),
@@ -446,33 +453,33 @@ class _LabeledField extends StatelessWidget {
 
         // Field
         TextField(
-          controller:   controller,
+          controller: controller,
           keyboardType: keyboardType,
-          obscureText:  obscureText,
-          onChanged:    (_) => onChanged(),
+          obscureText: obscureText,
+          onChanged: (_) => onChanged(),
           style: TextStyle(
-            color:      t.title,
-            fontSize:   14.5,
+            color: t.title,
+            fontSize: 14.5,
             fontWeight: FontWeight.w600,
           ),
           decoration: InputDecoration(
-            hintText:  '${label.toLowerCase()}...',
+            hintText: '${label.toLowerCase()}...',
             hintStyle: TextStyle(
-              color:      t.label,
-              fontSize:   14,
+              color: t.label,
+              fontSize: 14,
               fontWeight: FontWeight.w500,
             ),
             prefixIcon: Icon(prefixIcon, size: 18, color: t.label),
             suffixIcon: suffixIcon,
-            filled:     true,
-            fillColor:  t.field,
+            filled: true,
+            fillColor: t.field,
             contentPadding: const EdgeInsets.symmetric(
               horizontal: 14,
-              vertical:   15,
+              vertical: 15,
             ),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(14),
-              borderSide:   BorderSide(color: t.fieldBorder),
+              borderSide: BorderSide(color: t.fieldBorder),
             ),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(14),
@@ -483,15 +490,15 @@ class _LabeledField extends StatelessWidget {
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(14),
-              borderSide:   BorderSide(color: t.accent, width: 1.8),
+              borderSide: BorderSide(color: t.accent, width: 1.8),
             ),
             errorBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(14),
-              borderSide:   BorderSide(color: t.danger, width: 1.5),
+              borderSide: BorderSide(color: t.danger, width: 1.5),
             ),
             focusedErrorBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(14),
-              borderSide:   BorderSide(color: t.danger, width: 1.8),
+              borderSide: BorderSide(color: t.danger, width: 1.8),
             ),
           ),
         ),
@@ -504,8 +511,8 @@ class _LabeledField extends StatelessWidget {
             child: Text(
               errorText!,
               style: TextStyle(
-                color:      t.danger,
-                fontSize:   12,
+                color: t.danger,
+                fontSize: 12,
                 fontWeight: FontWeight.w600,
               ),
             ),
