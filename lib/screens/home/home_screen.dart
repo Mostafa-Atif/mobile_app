@@ -1,7 +1,10 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:mobile_app/config.dart';
 import 'package:mobile_app/data/destinations_repository.dart';
 import 'package:mobile_app/l10n/app_localizations.dart';
 import 'package:mobile_app/screens/home/all_destinations_screen.dart';
@@ -36,11 +39,14 @@ class _HomeScreenState extends State<HomeScreen> {
 
   late final Future<List<Map<String, dynamic>>> _heroDestinationsFuture;
   late final Future<List<Map<String, dynamic>>> _featuredDestinationsFuture;
+  late final Future<_UpcomingBooking?> _upcomingFuture;
 
   late PageController _heroPageController;
   int _currentHeroPage = 0;
   Timer? _heroTimer;
   int _heroDestinationsCount = 0;
+
+  int _selectedNavIndex = 0;
 
   final LayerLink _profileMenuLink = LayerLink();
   OverlayEntry? _profileMenuEntry;
@@ -52,6 +58,7 @@ class _HomeScreenState extends State<HomeScreen> {
     _heroDestinationsFuture = _destinationsRepository.loadHeroDestinations();
     _featuredDestinationsFuture =
         _destinationsRepository.loadFeaturedDestinations();
+    _upcomingFuture = _fetchUpcoming();
     _heroPageController = PageController();
     _startHeroAutoScroll();
   }
@@ -81,7 +88,6 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
-  @override
   @override
   void dispose() {
     _profileMenuEntry?.remove();
@@ -118,6 +124,93 @@ class _HomeScreenState extends State<HomeScreen> {
       MaterialPageRoute(builder: (_) => const SignIn()),
       (route) => false,
     );
+  }
+
+  // ── Fetch upcoming booking ────────────────────────────────────────────────
+
+  Future<_UpcomingBooking?> _fetchUpcoming() async {
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('token') ?? '';
+    if (token.isEmpty) return null;
+
+    final response = await http.get(
+      Uri.parse('${Config.baseUrl}/api/my-bookings'),
+      headers: {'Authorization': 'Bearer $token'},
+    );
+    if (response.statusCode != 200) return null;
+
+    final data = json.decode(response.body) as Map<String, dynamic>;
+    final now = DateTime.now();
+    _UpcomingBooking? pick;
+
+    // flights
+    for (final item in (data['flightBookings'] as List<dynamic>? ?? [])) {
+      final m = item as Map<String, dynamic>;
+      final date = _parseDate(m['departureDate']);
+      if (date.isAfter(now)) {
+        if (pick == null || date.isBefore(pick.date)) {
+          pick = _UpcomingBooking(
+            type: _BType.flight,
+            date: date,
+            status: (m['status'] ?? 'pending') as String,
+            title: '${m['fromCity']} → ${m['toCity']}',
+            line1Label: 'Date',
+            line1Value: _formatDate(m['departureDate']),
+            line2Label: 'Departs',
+            line2Value: _formatTime(m['departureDate']),
+            line3Label: 'Passenger',
+            line3Value:
+                (m['fullName'] as String? ?? '-').split(' ').first,
+          );
+        }
+      }
+    }
+
+    // cars
+    for (final item in (data['carBookings'] as List<dynamic>? ?? [])) {
+      final m = item as Map<String, dynamic>;
+      final date = _parseDate(m['pickupDateTime']);
+      if (date.isAfter(now)) {
+        if (pick == null || date.isBefore(pick.date)) {
+          pick = _UpcomingBooking(
+            type: _BType.car,
+            date: date,
+            status: (m['status'] ?? 'pending') as String,
+            title: (m['carName'] ?? '-') as String,
+            line1Label: 'Pick-up',
+            line1Value: _formatDate(m['pickupDateTime']),
+            line2Label: 'Drop-off',
+            line2Value: _formatDate(m['dropoffDateTime']),
+            line3Label: 'From',
+            line3Value: (m['pickupLocation'] ?? '-') as String,
+          );
+        }
+      }
+    }
+
+    // hotels
+    for (final item in (data['hotelBookings'] as List<dynamic>? ?? [])) {
+      final m = item as Map<String, dynamic>;
+      final date = _parseDate(m['checkInDate']);
+      if (date.isAfter(now)) {
+        if (pick == null || date.isBefore(pick.date)) {
+          pick = _UpcomingBooking(
+            type: _BType.hotel,
+            date: date,
+            status: (m['status'] ?? 'pending') as String,
+            title: (m['hotelName'] ?? '-') as String,
+            line1Label: 'Check-in',
+            line1Value: _formatDate(m['checkInDate']),
+            line2Label: 'Check-out',
+            line2Value: _formatDate(m['checkOutDate']),
+            line3Label: 'Rooms',
+            line3Value: '${m['numRooms'] ?? '-'}',
+          );
+        }
+      }
+    }
+
+    return pick;
   }
 
   // ── Profile menu ──────────────────────────────────────────────────────────
@@ -182,6 +275,30 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
+  // ── Bottom nav ────────────────────────────────────────────────────────────
+
+  void _onNavTap(int index) {
+    if (index == _selectedNavIndex) return;
+    setState(() => _selectedNavIndex = index);
+    switch (index) {
+      case 1:
+        Navigator.push(
+            context, MaterialPageRoute(builder: (_) => FlightSearch()));
+      case 2:
+        Navigator.push(
+            context, MaterialPageRoute(builder: (_) => HotelSearch()));
+      case 3:
+        Navigator.push(
+            context, MaterialPageRoute(builder: (_) => CarsSearch()));
+      case 4:
+        _openDashboard();
+    }
+    if (index != 0) {
+      WidgetsBinding.instance
+          .addPostFrameCallback((_) => setState(() => _selectedNavIndex = 0));
+    }
+  }
+
   // ── Build ─────────────────────────────────────────────────────────────────
 
   @override
@@ -193,12 +310,14 @@ class _HomeScreenState extends State<HomeScreen> {
 
     return Scaffold(
       backgroundColor: t.bg,
+      bottomNavigationBar: _buildBottomNavBar(context, t, l, isDark),
       body: FutureBuilder<List<List<Map<String, dynamic>>>>(
-        future:
-            Future.wait([_heroDestinationsFuture, _featuredDestinationsFuture]),
+        future: Future.wait(
+            [_heroDestinationsFuture, _featuredDestinationsFuture]),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
-            return Center(child: CircularProgressIndicator(color: t.accent));
+            return Center(
+                child: CircularProgressIndicator(color: t.accent));
           }
 
           final heroDestinations = snapshot.data![0];
@@ -224,15 +343,111 @@ class _HomeScreenState extends State<HomeScreen> {
           return CustomScrollView(
             slivers: [
               SliverToBoxAdapter(
-                child:
-                    _buildHero(context, t, l, isDark, isAr, heroDestinations),
+                child: _buildHero(
+                    context, t, l, isDark, isAr, heroDestinations),
               ),
               SliverToBoxAdapter(
-                child: _buildBody(context, t, l, isAr, featuredDestinations),
+                child: _buildBody(
+                    context, t, l, isAr, featuredDestinations),
               ),
             ],
           );
         },
+      ),
+    );
+  }
+
+  // ── Bottom nav bar ────────────────────────────────────────────────────────
+
+  Widget _buildBottomNavBar(
+    BuildContext context,
+    AppThemeExtension t,
+    AppLocalizations l,
+    bool isDark,
+  ) {
+    final labels = [
+      l.navHome,
+      l.flights,
+      l.hotels,
+      l.carRent,
+      l.navBookings,
+    ];
+    final icons = [
+      Icons.home_rounded,
+      Icons.flight_rounded,
+      Icons.hotel_rounded,
+      Icons.directions_car_rounded,
+      Icons.confirmation_num_outlined,
+    ];
+
+    return Container(
+      decoration: BoxDecoration(
+        color: t.bg,
+        border: Border(
+          top: BorderSide(
+            color: t.cardBorder.withOpacity(0.18),
+            width: 0.5,
+          ),
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(isDark ? 0.28 : 0.06),
+            blurRadius: 12,
+            offset: const Offset(0, -3),
+          ),
+        ],
+      ),
+      child: SafeArea(
+        top: false,
+        child: SizedBox(
+          height: 60,
+          child: Row(
+            children: List.generate(labels.length, (i) {
+              final active = i == _selectedNavIndex;
+              return Expanded(
+                child: GestureDetector(
+                  behavior: HitTestBehavior.opaque,
+                  onTap: () => _onNavTap(i),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        icons[i],
+                        size: 22,
+                        color: active
+                            ? t.accent
+                            : t.title.withOpacity(0.32),
+                      ),
+                      const SizedBox(height: 3),
+                      Text(
+                        labels[i],
+                        style: TextStyle(
+                          fontSize: 10,
+                          fontWeight: FontWeight.w600,
+                          color: active
+                              ? t.accent
+                              : t.title.withOpacity(0.32),
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      const SizedBox(height: 3),
+                      AnimatedContainer(
+                        duration: const Duration(milliseconds: 200),
+                        width: active ? 4 : 0,
+                        height: active ? 4 : 0,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: t.accent,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            }),
+          ),
+        ),
       ),
     );
   }
@@ -249,14 +464,15 @@ class _HomeScreenState extends State<HomeScreen> {
   ) {
     final displayLetter = firstName.isNotEmpty
         ? firstName.characters.first
-        : (email.isNotEmpty ? email.characters.first.toUpperCase() : '?');
+        : (email.isNotEmpty
+            ? email.characters.first.toUpperCase()
+            : '?');
 
     return SizedBox(
-      height: 360,
+      height: 340,
       child: Stack(
         fit: StackFit.expand,
         children: [
-          // Background carousel
           PageView.builder(
             controller: _heroPageController,
             onPageChanged: (i) => setState(() => _currentHeroPage = i),
@@ -267,31 +483,26 @@ class _HomeScreenState extends State<HomeScreen> {
               errorBuilder: (_, __, ___) => Container(color: t.card),
             ),
           ),
-
-          // Three-stop gradient: transparent top → mid dark → bg color
           Container(
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
                 colors: [
-                  Colors.black.withOpacity(isDark ? 0.50 : 0.35),
-                  Colors.black.withOpacity(isDark ? 0.68 : 0.52),
-                  t.bg.withOpacity(0.97),
+                  Colors.black.withOpacity(isDark ? 0.55 : 0.40),
+                  Colors.black.withOpacity(isDark ? 0.70 : 0.54),
+                  t.bg.withOpacity(0.98),
                 ],
-                stops: const [0.0, 0.52, 1.0],
+                stops: const [0.0, 0.50, 1.0],
               ),
             ),
           ),
-
-          // Content
           SafeArea(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 22),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Top bar
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -333,24 +544,19 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ],
                   ),
-
                   const Spacer(),
-
-                  // Greeting
                   Text(
                     firstName.isNotEmpty
                         ? l.homeGreetingWithName(firstName)
                         : l.homeGreeting,
                     style: TextStyle(
-                      color: Colors.white.withOpacity(0.68),
+                      color: Colors.white.withOpacity(0.72),
                       fontSize: 13.5,
                       fontWeight: FontWeight.w400,
                       letterSpacing: 0.2,
                     ),
                   ),
-                  const SizedBox(height: 5),
-
-                  // Hero title
+                  const SizedBox(height: 6),
                   Text(
                     l.homeHeroTitle,
                     style: const TextStyle(
@@ -362,9 +568,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       height: 1.15,
                     ),
                   ),
-                  const SizedBox(height: 20),
-
-                  const SizedBox(height: 24),
+                  const SizedBox(height: 28),
                 ],
               ),
             ),
@@ -374,7 +578,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  // ── Body (below hero) ─────────────────────────────────────────────────────
+  // ── Body ──────────────────────────────────────────────────────────────────
 
   Widget _buildBody(
     BuildContext context,
@@ -384,14 +588,14 @@ class _HomeScreenState extends State<HomeScreen> {
     List<Map<String, dynamic>> destinations,
   ) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(22, 28, 22, 0),
+      padding: const EdgeInsets.fromLTRB(22, 24, 22, 0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _buildCategories(context, t, l),
-          const SizedBox(height: 36),
-
-          // Section header
+          _buildUpcomingTrip(context, t, l),
+          const SizedBox(height: 32),
+          _buildSpecialOffers(context, t, l),
+          const SizedBox(height: 32),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -412,8 +616,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       builder: (_) => const AllDestinationsScreen()),
                 ),
                 child: Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 12, vertical: 5),
                   decoration: BoxDecoration(
                     color: t.accentLight,
                     borderRadius: BorderRadius.circular(20),
@@ -430,64 +634,408 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ],
           ),
-          const SizedBox(height: 16),
-
+          const SizedBox(height: 14),
           _buildDestinations(t, isAr, destinations),
-          const SizedBox(height: 36),
+          const SizedBox(height: 32),
         ],
       ),
     );
   }
 
-  // ── Categories ────────────────────────────────────────────────────────────
+  // ── Upcoming trip ─────────────────────────────────────────────────────────
 
-  Widget _buildCategories(
-      BuildContext context, AppThemeExtension t, AppLocalizations l) {
-    final categories = [
-      {
-        'label': l.menuDashboard,
-        'icon': Icons.dashboard_customize_rounded,
-        'onTap': _openDashboard,
-      },
-      {
-        'label': l.flights,
-        'icon': Icons.flight_rounded,
-        'page': () => FlightSearch()
-      },
-      {
-        'label': l.hotels,
-        'icon': Icons.hotel_rounded,
-        'page': () => HotelSearch()
-      },
-      {
-        'label': l.carRent,
-        'icon': Icons.directions_car_rounded,
-        'page': () => CarsSearch()
-      },
-    ];
+  Widget _buildUpcomingTrip(
+    BuildContext context,
+    AppThemeExtension t,
+    AppLocalizations l,
+  ) {
+    return FutureBuilder<_UpcomingBooking?>(
+      future: _upcomingFuture,
+      builder: (context, snapshot) {
+        // loading
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                l.upcomingTrip,
+                style: TextStyle(
+                  fontSize: 17,
+                  fontWeight: FontWeight.w800,
+                  color: t.title,
+                  fontFamily: 'DM Serif Display',
+                  letterSpacing: -0.2,
+                ),
+              ),
+              const SizedBox(height: 14),
+              Container(
+                height: 150,
+                decoration: BoxDecoration(
+                  color: t.card,
+                  borderRadius: BorderRadius.circular(18),
+                  border:
+                      Border.all(color: t.cardBorder.withOpacity(0.45)),
+                ),
+                child: Center(
+                  child: CircularProgressIndicator(
+                      color: t.accent, strokeWidth: 2),
+                ),
+              ),
+            ],
+          );
+        }
 
-    final itemWidth = (MediaQuery.sizeOf(context).width - 22 - 22 - 12) / 2;
+        // no upcoming booking → hide section entirely
+        if (snapshot.hasError ||
+            !snapshot.hasData ||
+            snapshot.data == null) {
+          return const SizedBox.shrink();
+        }
 
-    return Wrap(
-      spacing: 12,
-      runSpacing: 12,
-      children: categories.map((cat) {
-        return SizedBox(
-          width: itemWidth,
-          child: _CategoryCard(
-            icon: cat['icon'] as IconData,
-            label: cat['label'] as String,
-            t: t,
-            onTap: cat['onTap'] as VoidCallback? ??
-                () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => (cat['page'] as Widget Function())(),
+        final b = snapshot.data!;
+        final daysUntil = b.date.difference(DateTime.now()).inDays;
+        final isConfirmed = b.status == 'confirmed';
+
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Section header
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  l.upcomingTrip,
+                  style: TextStyle(
+                    fontSize: 17,
+                    fontWeight: FontWeight.w800,
+                    color: t.title,
+                    fontFamily: 'DM Serif Display',
+                    letterSpacing: -0.2,
+                  ),
+                ),
+                GestureDetector(
+                  onTap: _openDashboard,
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 12, vertical: 5),
+                    decoration: BoxDecoration(
+                      color: t.accentLight,
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Text(
+                      l.seeAll,
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: t.accent,
+                        fontWeight: FontWeight.w700,
                       ),
                     ),
-          ),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 14),
+
+            // Card
+            Container(
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: t.card,
+                borderRadius: BorderRadius.circular(18),
+                border:
+                    Border.all(color: t.cardBorder.withOpacity(0.45)),
+                boxShadow: [
+                  BoxShadow(
+                    color: t.cardBorder.withOpacity(0.15),
+                    blurRadius: 12,
+                    offset: const Offset(0, 4),
+                  ),
+                ],
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Type + status badge
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        b.typeLabel,
+                        style: TextStyle(
+                          fontSize: 11,
+                          color: t.title.withOpacity(0.45),
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 9, vertical: 3),
+                        decoration: BoxDecoration(
+                          color: isConfirmed
+                              ? const Color(0xFFDCFCE7)
+                              : const Color(0xFFFEF9C3),
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(
+                              isConfirmed
+                                  ? Icons.check_circle_outline_rounded
+                                  : Icons.access_time_rounded,
+                              size: 11,
+                              color: isConfirmed
+                                  ? const Color(0xFF166534)
+                                  : const Color(0xFF854D0E),
+                            ),
+                            const SizedBox(width: 4),
+                            Text(
+                              isConfirmed ? 'Confirmed' : 'Pending',
+                              style: TextStyle(
+                                fontSize: 10,
+                                fontWeight: FontWeight.w700,
+                                color: isConfirmed
+                                    ? const Color(0xFF166534)
+                                    : const Color(0xFF854D0E),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 14),
+
+                  // Title
+                  Text(
+                    b.title,
+                    style: TextStyle(
+                      fontSize: 22,
+                      fontWeight: FontWeight.w900,
+                      color: t.title,
+                      letterSpacing: -0.5,
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  const SizedBox(height: 14),
+
+                  // Meta row
+                  Row(
+                    children: [
+                      _TripMeta(
+                          label: b.line1Label,
+                          value: b.line1Value,
+                          t: t),
+                      const SizedBox(width: 18),
+                      _TripMeta(
+                          label: b.line2Label,
+                          value: b.line2Value,
+                          t: t),
+                      const SizedBox(width: 18),
+                      _TripMeta(
+                          label: b.line3Label,
+                          value: b.line3Value,
+                          t: t),
+                    ],
+                  ),
+                  const SizedBox(height: 14),
+
+                  // Footer
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 12, vertical: 9),
+                    decoration: BoxDecoration(
+                      color: t.bg,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        RichText(
+                          text: TextSpan(
+                            style: TextStyle(
+                              fontSize: 11,
+                              color: t.title.withOpacity(0.55),
+                            ),
+                            children: [
+                              const TextSpan(text: 'In '),
+                              TextSpan(
+                                text: '$daysUntil days',
+                                style: TextStyle(
+                                  color: t.accent,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        GestureDetector(
+                          onTap: _openDashboard,
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 14, vertical: 5),
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                  color: t.accent.withOpacity(0.60)),
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            child: Text(
+                              'Details',
+                              style: TextStyle(
+                                fontSize: 11,
+                                color: t.accent,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
         );
-      }).toList(),
+      },
+    );
+  }
+
+  // ── Special Offers ────────────────────────────────────────────────────────
+
+  Widget _buildSpecialOffers(
+    BuildContext context,
+    AppThemeExtension t,
+    AppLocalizations l,
+  ) {
+    const String offerImageUrl =
+        'https://images.unsplash.com/photo-1524231757912-21f4fe3a7200?w=720&q=80';
+    const String offerTag = 'This week only';
+    const String offerTitle = '30% off hotels\nin Istanbul';
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              l.specialOffers,
+              style: TextStyle(
+                fontSize: 17,
+                fontWeight: FontWeight.w800,
+                color: t.title,
+                fontFamily: 'DM Serif Display',
+                letterSpacing: -0.2,
+              ),
+            ),
+            GestureDetector(
+              onTap: () {},
+              child: Container(
+                padding: const EdgeInsets.symmetric(
+                    horizontal: 12, vertical: 5),
+                decoration: BoxDecoration(
+                  color: t.accentLight,
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: Text(
+                  l.seeAll,
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: t.accent,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 14),
+        ClipRRect(
+          borderRadius: BorderRadius.circular(18),
+          child: SizedBox(
+            height: 96,
+            child: Stack(
+              fit: StackFit.expand,
+              children: [
+                Image.network(
+                  offerImageUrl,
+                  fit: BoxFit.cover,
+                  errorBuilder: (_, __, ___) =>
+                      Container(color: t.card),
+                ),
+                Container(
+                  decoration: const BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.centerLeft,
+                      end: Alignment.centerRight,
+                      colors: [
+                        Color(0xCC0A143C),
+                        Color(0x880A143C),
+                      ],
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 18),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            offerTag,
+                            style: TextStyle(
+                              color: Color(0xB3FFFFFF),
+                              fontSize: 10,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                          SizedBox(height: 4),
+                          Text(
+                            offerTitle,
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w700,
+                              height: 1.3,
+                            ),
+                          ),
+                        ],
+                      ),
+                      GestureDetector(
+                        onTap: () => Navigator.push(context,
+                            MaterialPageRoute(
+                                builder: (_) => HotelSearch())),
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 16, vertical: 8),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          child: const Text(
+                            'Book',
+                            style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w700,
+                              color: Color(0xFF1E3A6E),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ],
     );
   }
 
@@ -505,7 +1053,7 @@ class _HomeScreenState extends State<HomeScreen> {
         crossAxisCount: 2,
         crossAxisSpacing: 12,
         mainAxisSpacing: 12,
-        childAspectRatio: 0.92, // taller = better for photos
+        childAspectRatio: 0.92,
       ),
       itemCount: destinations.length,
       itemBuilder: (context, i) {
@@ -517,7 +1065,8 @@ class _HomeScreenState extends State<HomeScreen> {
           onTap: () => Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (_) => DestinationDetailScreen(destinationData: dest),
+              builder: (_) =>
+                  DestinationDetailScreen(destinationData: dest),
             ),
           ),
         );
@@ -527,82 +1076,106 @@ class _HomeScreenState extends State<HomeScreen> {
 }
 
 // ═══════════════════════════════════════════════════════════════════════════
-// Category card
+// Upcoming booking model
 // ═══════════════════════════════════════════════════════════════════════════
 
-class _CategoryCard extends StatefulWidget {
-  final IconData icon;
-  final String label;
-  final AppThemeExtension t;
-  final VoidCallback onTap;
+enum _BType { flight, car, hotel }
 
-  const _CategoryCard({
-    required this.icon,
+class _UpcomingBooking {
+  final _BType type;
+  final DateTime date;
+  final String status;
+  final String title;
+  final String line1Label;
+  final String line1Value;
+  final String line2Label;
+  final String line2Value;
+  final String line3Label;
+  final String line3Value;
+
+  const _UpcomingBooking({
+    required this.type,
+    required this.date,
+    required this.status,
+    required this.title,
+    required this.line1Label,
+    required this.line1Value,
+    required this.line2Label,
+    required this.line2Value,
+    required this.line3Label,
+    required this.line3Value,
+  });
+
+  String get typeLabel {
+    switch (type) {
+      case _BType.flight:
+        return 'Flight';
+      case _BType.car:
+        return 'Car Rental';
+      case _BType.hotel:
+        return 'Hotel';
+    }
+  }
+}
+
+DateTime _parseDate(dynamic value) {
+  if (value == null) return DateTime.fromMillisecondsSinceEpoch(0);
+  return DateTime.tryParse(value.toString()) ??
+      DateTime.fromMillisecondsSinceEpoch(0);
+}
+
+String _formatDate(dynamic value) {
+  final d = _parseDate(value);
+  if (d.year == 1970) return '-';
+  return '${d.day}/${d.month}/${d.year}';
+}
+
+String _formatTime(dynamic value) {
+  final d = _parseDate(value);
+  if (d.year == 1970) return '-';
+  final h = d.hour.toString().padLeft(2, '0');
+  final m = d.minute.toString().padLeft(2, '0');
+  return '$h:$m';
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// Trip meta
+// ═══════════════════════════════════════════════════════════════════════════
+
+class _TripMeta extends StatelessWidget {
+  final String label;
+  final String value;
+  final AppThemeExtension t;
+
+  const _TripMeta({
     required this.label,
+    required this.value,
     required this.t,
-    required this.onTap,
   });
 
   @override
-  State<_CategoryCard> createState() => _CategoryCardState();
-}
-
-class _CategoryCardState extends State<_CategoryCard> {
-  bool _pressed = false;
-
-  @override
   Widget build(BuildContext context) {
-    final t = widget.t;
-    return GestureDetector(
-      onTapDown: (_) => setState(() => _pressed = true),
-      onTapUp: (_) {
-        setState(() => _pressed = false);
-        widget.onTap();
-      },
-      onTapCancel: () => setState(() => _pressed = false),
-      child: AnimatedScale(
-        scale: _pressed ? 0.95 : 1.0,
-        duration: const Duration(milliseconds: 100),
-        child: Container(
-          padding: const EdgeInsets.symmetric(vertical: 18, horizontal: 8),
-          decoration: BoxDecoration(
-            color: t.card,
-            borderRadius: BorderRadius.circular(18),
-            border: Border.all(color: t.cardBorder.withOpacity(0.45)),
-            boxShadow: [
-              BoxShadow(
-                color: t.cardBorder.withOpacity(0.15),
-                blurRadius: 12,
-                offset: const Offset(0, 4),
-              ),
-            ],
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Container(
-                width: 48,
-                height: 48,
-                decoration: BoxDecoration(
-                  color: t.accentLight,
-                  borderRadius: BorderRadius.circular(14),
-                ),
-                child: Icon(widget.icon, color: t.accent, size: 24),
-              ),
-              const SizedBox(height: 10),
-              Text(
-                widget.label,
-                style: TextStyle(
-                  fontSize: 12.5,
-                  fontWeight: FontWeight.w700,
-                  color: t.title,
-                ),
-                textAlign: TextAlign.center,
-              ),
-            ],
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          label,
+          style: TextStyle(
+            fontSize: 10,
+            color: t.title.withOpacity(0.45),
+            fontWeight: FontWeight.w500,
           ),
         ),
-      ),
+        const SizedBox(height: 2),
+        Text(
+          value,
+          style: TextStyle(
+            fontSize: 12,
+            fontWeight: FontWeight.w700,
+            color: t.title,
+          ),
+        ),
+      ],
     );
   }
 }
@@ -655,7 +1228,8 @@ class _DestinationCardState extends State<_DestinationCard> {
               Image.network(
                 widget.destination['imageUrl'] as String,
                 fit: BoxFit.cover,
-                errorBuilder: (_, __, ___) => Container(color: widget.t.card),
+                errorBuilder: (_, __, ___) =>
+                    Container(color: widget.t.card),
               ),
               Container(
                 decoration: const BoxDecoration(
@@ -678,7 +1252,9 @@ class _DestinationCardState extends State<_DestinationCard> {
                     fontSize: 14,
                     fontWeight: FontWeight.w800,
                     letterSpacing: -0.2,
-                    shadows: [Shadow(color: Colors.black54, blurRadius: 8)],
+                    shadows: [
+                      Shadow(color: Colors.black54, blurRadius: 8),
+                    ],
                   ),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
@@ -769,9 +1345,11 @@ class _ProfileMenuOverlayState extends State<_ProfileMenuOverlay>
     final emailCol = isDark
         ? Colors.white.withOpacity(0.72)
         : const Color(0xFF234B72).withOpacity(0.65);
-    final iconBg = isDark ? Colors.white.withOpacity(0.06) : t.accentLight;
-    final iconCol =
-        isDark ? Colors.white.withOpacity(0.50) : t.accent.withOpacity(0.70);
+    final iconBg =
+        isDark ? Colors.white.withOpacity(0.06) : t.accentLight;
+    final iconCol = isDark
+        ? Colors.white.withOpacity(0.50)
+        : t.accent.withOpacity(0.70);
     final labelCol = isDark
         ? Colors.white.withOpacity(0.65)
         : const Color(0xFF194164).withOpacity(0.70);
@@ -781,21 +1359,15 @@ class _ProfileMenuOverlayState extends State<_ProfileMenuOverlay>
     final dividerCol = isDark
         ? Colors.white.withOpacity(0.07)
         : const Color(0xFF6496BE).withOpacity(0.13);
-    final onlineDotBorder = isDark ? const Color(0xFF0F1A2D) : Colors.white;
 
-    // RTL fix:
-    // LTR — avatar is on the right. Shift menu LEFT by (menuWidth - avatarWidth)
-    //        so the right edges line up. Spring opens from top-right.
-    // RTL — avatar is on the LEFT (after the layout flip). No X shift needed;
-    //        left edges already align. Spring opens from top-left.
     const menuWidth = 232.0;
     const avatarWidth = 40.0;
     final offsetX = widget.isRtl ? 0.0 : -(menuWidth - avatarWidth);
-    final scaleOrigin = widget.isRtl ? Alignment.topLeft : Alignment.topRight;
+    final scaleOrigin =
+        widget.isRtl ? Alignment.topLeft : Alignment.topRight;
 
     return Stack(
       children: [
-        // Dismiss barrier
         Positioned.fill(
           child: GestureDetector(
             onTap: _dismiss,
@@ -803,8 +1375,6 @@ class _ProfileMenuOverlayState extends State<_ProfileMenuOverlay>
             child: const SizedBox.expand(),
           ),
         ),
-
-        // Menu
         CompositedTransformFollower(
           link: widget.link,
           showWhenUnlinked: false,
@@ -828,8 +1398,8 @@ class _ProfileMenuOverlayState extends State<_ProfileMenuOverlay>
                         border: Border.all(color: borderCol),
                         boxShadow: [
                           BoxShadow(
-                            color:
-                                Colors.black.withOpacity(isDark ? 0.48 : 0.12),
+                            color: Colors.black
+                                .withOpacity(isDark ? 0.48 : 0.12),
                             blurRadius: 32,
                             offset: const Offset(0, 8),
                           ),
@@ -838,64 +1408,47 @@ class _ProfileMenuOverlayState extends State<_ProfileMenuOverlay>
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          // Profile header
                           Container(
-                            padding: const EdgeInsets.fromLTRB(16, 20, 16, 16),
+                            padding: const EdgeInsets.fromLTRB(
+                                16, 20, 16, 16),
                             decoration: BoxDecoration(
                               border: Border(
-                                  bottom: BorderSide(color: headerBorderCol)),
+                                  bottom: BorderSide(
+                                      color: headerBorderCol)),
                             ),
                             child: Column(
                               children: [
-                                Stack(
-                                  children: [
-                                    Container(
-                                      width: 52,
-                                      height: 52,
-                                      decoration: BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        gradient: LinearGradient(
-                                          begin: Alignment.topLeft,
-                                          end: Alignment.bottomRight,
-                                          colors: [
-                                            t.accent,
-                                            t.accent.withOpacity(0.70),
-                                          ],
-                                        ),
-                                        boxShadow: [
-                                          BoxShadow(
-                                            color: t.accent.withOpacity(0.28),
-                                            blurRadius: 0,
-                                            spreadRadius: 3,
-                                          ),
-                                        ],
-                                      ),
-                                      alignment: Alignment.center,
-                                      child: Text(
-                                        displayLetter,
-                                        style: const TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.w800,
-                                        ),
-                                      ),
+                                Container(
+                                  width: 52,
+                                  height: 52,
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    gradient: LinearGradient(
+                                      begin: Alignment.topLeft,
+                                      end: Alignment.bottomRight,
+                                      colors: [
+                                        t.accent,
+                                        t.accent.withOpacity(0.70),
+                                      ],
                                     ),
-                                    // Positioned(
-                                    //   bottom: 2,
-                                    //   right: 2,
-                                    //   child: Container(
-                                    //     width: 12,
-                                    //     height: 12,
-                                    //     decoration: BoxDecoration(
-                                    //       shape: BoxShape.circle,
-                                    //       color: const Color(0xFF34D399),
-                                    //       border: Border.all(
-                                    //           color: onlineDotBorder,
-                                    //           width: 2),
-                                    //     ),
-                                    //   ),
-                                    // ),
-                                  ],
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color:
+                                            t.accent.withOpacity(0.28),
+                                        blurRadius: 0,
+                                        spreadRadius: 3,
+                                      ),
+                                    ],
+                                  ),
+                                  alignment: Alignment.center,
+                                  child: Text(
+                                    displayLetter,
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.w800,
+                                    ),
+                                  ),
                                 ),
                                 const SizedBox(height: 10),
                                 Text(
@@ -926,10 +1479,9 @@ class _ProfileMenuOverlayState extends State<_ProfileMenuOverlay>
                               ],
                             ),
                           ),
-
-                          // Rows
                           Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 6),
+                            padding:
+                                const EdgeInsets.symmetric(vertical: 6),
                             child: Column(
                               children: [
                                 _MenuRow(
@@ -940,7 +1492,8 @@ class _ProfileMenuOverlayState extends State<_ProfileMenuOverlay>
                                   labelColor: labelCol,
                                   chevronColor: chevronCol,
                                   isDark: isDark,
-                                  onTap: () => widget.onSelected('settings'),
+                                  onTap: () =>
+                                      widget.onSelected('settings'),
                                 ),
                                 _MenuRow(
                                   icon: Icons.info_outline_rounded,
@@ -950,26 +1503,29 @@ class _ProfileMenuOverlayState extends State<_ProfileMenuOverlay>
                                   labelColor: labelCol,
                                   chevronColor: chevronCol,
                                   isDark: isDark,
-                                  onTap: () => widget.onSelected('about'),
+                                  onTap: () =>
+                                      widget.onSelected('about'),
                                 ),
                                 Padding(
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 14, vertical: 3),
-                                  child: Divider(height: 1, color: dividerCol),
+                                  child: Divider(
+                                      height: 1, color: dividerCol),
                                 ),
                                 _MenuRow(
                                   icon: Icons.logout_rounded,
                                   label: l.menuLogout,
-                                  iconBg:
-                                      const Color(0xFFFB7185).withOpacity(0.08),
-                                  iconColor:
-                                      const Color(0xFFFB7185).withOpacity(0.70),
-                                  labelColor:
-                                      const Color(0xFFDC4545).withOpacity(0.78),
+                                  iconBg: const Color(0xFFFB7185)
+                                      .withOpacity(0.08),
+                                  iconColor: const Color(0xFFFB7185)
+                                      .withOpacity(0.70),
+                                  labelColor: const Color(0xFFDC4545)
+                                      .withOpacity(0.78),
                                   chevronColor: Colors.transparent,
                                   isDark: isDark,
                                   showChevron: false,
-                                  onTap: () => widget.onSelected('logout'),
+                                  onTap: () =>
+                                      widget.onSelected('logout'),
                                 ),
                               ],
                             ),
@@ -1038,7 +1594,8 @@ class _MenuRowState extends State<_MenuRow> {
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 100),
         margin: const EdgeInsets.symmetric(horizontal: 6, vertical: 1),
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 9),
+        padding:
+            const EdgeInsets.symmetric(horizontal: 10, vertical: 9),
         decoration: BoxDecoration(
           color: _pressed ? hoverBg : Colors.transparent,
           borderRadius: BorderRadius.circular(12),
@@ -1052,7 +1609,8 @@ class _MenuRowState extends State<_MenuRow> {
                 color: widget.iconBg,
                 borderRadius: BorderRadius.circular(9),
               ),
-              child: Icon(widget.icon, color: widget.iconColor, size: 15),
+              child: Icon(widget.icon,
+                  color: widget.iconColor, size: 15),
             ),
             const SizedBox(width: 11),
             Expanded(

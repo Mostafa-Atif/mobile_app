@@ -8,6 +8,7 @@ import 'package:mobile_app/theme.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../config.dart';
+import 'package:mobile_app/widgets/payment_section.dart';
 
 class CarsSearch extends StatefulWidget {
   const CarsSearch({super.key});
@@ -23,6 +24,7 @@ class _CarsSearchState extends State<CarsSearch> {
   bool isSubmitting = false;
   bool _submitted = false;
   int visibleCount = 3;
+  final _paymentKey = GlobalKey<PaymentSectionState>();
 
   Map<String, dynamic>? selectedCar;
   String? pickupLocation;
@@ -169,6 +171,11 @@ class _CarsSearchState extends State<CarsSearch> {
     if (dropoffDateTime!.isBefore(pickupDateTime!)) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l.dropoffBeforePickup)));
       return;
+    }
+    // Validate payment fields
+    if (selectedCar != null && totalDays > 0) {
+      final paymentValid = _paymentKey.currentState?.validate() ?? false;
+      if (!paymentValid) return;
     }
     if (token.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l.signInFirst)));
@@ -904,6 +911,12 @@ class _CarsSearchState extends State<CarsSearch> {
                               ),
                             ),
                           ],
+
+                          const SizedBox(height: 24),
+
+                          // ── Payment ──
+                          if (selectedCar != null && totalDays > 0)
+                            PaymentSection(key: _paymentKey),
 
                           const SizedBox(height: 24),
 

@@ -1028,4 +1028,82 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get errorNationalId => 'Must be 8–20 alphanumeric characters';
+
+  @override
+  String get upcomingTrip => 'Upcoming trip';
+
+  @override
+  String get specialOffers => 'Special offers';
+
+  @override
+  String get navHome => 'Home';
+
+  @override
+  String get navBookings => 'Bookings';
+
+  @override
+  String get paymentTitle => 'Payment';
+
+  @override
+  String get paymentCreditCard => 'Credit card';
+
+  @override
+  String get paymentDebitCard => 'Debit card';
+
+  @override
+  String get paymentCardNumber => 'Card number';
+
+  @override
+  String get paymentCardholderName => 'Cardholder name';
+
+  @override
+  String get paymentCardholderHint => 'Name on card';
+
+  @override
+  String get paymentExpiry => 'Expiry date';
+
+  @override
+  String get paymentCvv => 'CVV';
+
+  @override
+  String get paymentSaveCard => 'Save card';
+
+  @override
+  String get paymentSaveCardSub => 'For faster checkout next time';
+
+  @override
+  String get paymentSecureNote => 'Your payment is secured';
+
+  @override
+  String get paymentErrorCardNumberRequired => 'Enter your card number';
+
+  @override
+  String get paymentErrorCardNumberInvalid => 'Enter a valid card number';
+
+  @override
+  String get paymentErrorCardholderRequired => 'Enter the cardholder name';
+
+  @override
+  String get paymentErrorCardholderInvalid => 'Enter a valid name';
+
+  @override
+  String get paymentErrorExpiryRequired => 'Enter the expiry date';
+
+  @override
+  String get paymentErrorExpiryInvalid => 'Enter a valid expiry date';
+
+  @override
+  String get paymentErrorExpiryExpired => 'This card has expired';
+
+  @override
+  String get paymentErrorCvvRequired => 'Enter the CVV';
+
+  @override
+  String get paymentErrorCvvInvalid => 'Enter a valid CVV';
+
+  @override
+  String get edit => 'Edit';
+
+  @override
+  String get add => 'Add';
 }
