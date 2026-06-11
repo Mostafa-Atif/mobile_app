@@ -191,9 +191,6 @@ class _CarsSearchState extends State<CarsSearch> {
       );
       final data = json.decode(response.body);
       if (response.statusCode == 200 || response.statusCode == 201) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(l.bookingConfirmed), backgroundColor: Colors.green),
-        );
         setState(() {
           selectedCar = null;
           pickupLocation = null;
@@ -203,6 +200,15 @@ class _CarsSearchState extends State<CarsSearch> {
           privateDriver = false;
           _submitted = false;
         });
+        if (!mounted) return;
+        showModalBottomSheet(
+          context: context,
+          backgroundColor: Colors.transparent,
+          isDismissible: false,
+          builder: (_) => SuccessBottomSheet(
+            onDone: () => Navigator.pop(context),
+          ),
+        );
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text(data['message'] ?? l.bookingFailed)),
@@ -988,6 +994,60 @@ class _CarsSearchState extends State<CarsSearch> {
             style: TextStyle(
                 color: t.title, fontSize: 14, fontWeight: FontWeight.w600)),
       ],
+    );
+
+  }
+
+}
+class SuccessBottomSheet extends StatelessWidget {
+  final String title;
+  final String message;
+  final VoidCallback onDone;
+
+  const SuccessBottomSheet({
+    super.key,
+    this.title = 'Successful',
+    this.message = 'Your New Experience is successfully added.',
+    required this.onDone,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: const BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      padding: const EdgeInsets.fromLTRB(24, 32, 24, 24),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Container(
+            width: 80, height: 80,
+            decoration: const BoxDecoration(color: Color(0xFFB8F0A0), shape: BoxShape.circle),
+            child: const Icon(Icons.check_circle_rounded, color: Color(0xFF2E7D1E), size: 44),
+          ),
+          const SizedBox(height: 20),
+          Text(title, style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w600, color: Colors.black87)),
+          const SizedBox(height: 8),
+          Text(message, textAlign: TextAlign.center, style: const TextStyle(fontSize: 14, color: Colors.black54, height: 1.5)),
+          const SizedBox(height: 28),
+          SizedBox(
+            width: double.infinity,
+            child: ElevatedButton(
+              onPressed: onDone,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xFF1A1A1A),
+                foregroundColor: Colors.white,
+                padding: const EdgeInsets.symmetric(vertical: 16),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                elevation: 0,
+              ),
+              child: const Text('Done', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
