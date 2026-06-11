@@ -865,6 +865,49 @@ class AppLocalizationsEn extends AppLocalizations {
   String get userDashboardLoadError => 'Could not load bookings';
 
   @override
+  String get adminCarBookings => 'Car Bookings';
+
+  @override
+  String get adminHotelBookings => 'Hotel Bookings';
+
+  @override
+  String get adminFlightBookings => 'Flight Bookings';
+
+  @override
+  String get adminCarBookingsSubtitle =>
+      'Manage and review all car rental bookings';
+
+  @override
+  String get adminHotelBookingsSubtitle =>
+      'Manage and review all hotel bookings';
+
+  @override
+  String get adminFlightBookingsSubtitle =>
+      'Manage and review all flight bookings';
+
+  @override
+  String get adminDashboardLoadError => 'Could not load admin dashboard';
+
+  @override
+  String get adminNoBookings => 'No bookings here yet';
+
+  @override
+  String get adminNoBookingsSubtitle =>
+      'New bookings for this section will appear here.';
+
+  @override
+  String get adminBookingConfirmed => 'Booking confirmed';
+
+  @override
+  String get adminBookingDeleted => 'Booking deleted';
+
+  @override
+  String get adminActionFailed => 'Action failed';
+
+  @override
+  String get adminConfirm => 'Confirm';
+
+  @override
   String get statusConfirmed => 'Confirmed';
 
   @override
@@ -985,4 +1028,82 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get errorNationalId => 'Must be 8–20 alphanumeric characters';
+
+  @override
+  String get upcomingTrip => 'Upcoming trip';
+
+  @override
+  String get specialOffers => 'Special offers';
+
+  @override
+  String get navHome => 'Home';
+
+  @override
+  String get navBookings => 'Bookings';
+
+  @override
+  String get paymentTitle => 'Payment';
+
+  @override
+  String get paymentCreditCard => 'Credit card';
+
+  @override
+  String get paymentDebitCard => 'Debit card';
+
+  @override
+  String get paymentCardNumber => 'Card number';
+
+  @override
+  String get paymentCardholderName => 'Cardholder name';
+
+  @override
+  String get paymentCardholderHint => 'Name on card';
+
+  @override
+  String get paymentExpiry => 'Expiry date';
+
+  @override
+  String get paymentCvv => 'CVV';
+
+  @override
+  String get paymentSaveCard => 'Save card';
+
+  @override
+  String get paymentSaveCardSub => 'For faster checkout next time';
+
+  @override
+  String get paymentSecureNote => 'Your payment is secured';
+
+  @override
+  String get paymentErrorCardNumberRequired => 'Enter your card number';
+
+  @override
+  String get paymentErrorCardNumberInvalid => 'Enter a valid card number';
+
+  @override
+  String get paymentErrorCardholderRequired => 'Enter the cardholder name';
+
+  @override
+  String get paymentErrorCardholderInvalid => 'Enter a valid name';
+
+  @override
+  String get paymentErrorExpiryRequired => 'Enter the expiry date';
+
+  @override
+  String get paymentErrorExpiryInvalid => 'Enter a valid expiry date';
+
+  @override
+  String get paymentErrorExpiryExpired => 'This card has expired';
+
+  @override
+  String get paymentErrorCvvRequired => 'Enter the CVV';
+
+  @override
+  String get paymentErrorCvvInvalid => 'Enter a valid CVV';
+
+  @override
+  String get edit => 'Edit';
+
+  @override
+  String get add => 'Add';
 }

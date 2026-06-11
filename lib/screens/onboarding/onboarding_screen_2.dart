@@ -12,7 +12,7 @@ class OnboardingScreen2 extends StatelessWidget {
   Widget build(BuildContext context) {
     final l = AppLocalizations.of(context)!;
     return OnboardingPage(
-      imagePath: 'images/onboarding/onboarding2.png',
+      imagePath: 'assets/images/onboarding/onboarding2.png',
       title: l.onboarding2Title,
       body: l.onboarding2Body,
       dotIndex: 1,

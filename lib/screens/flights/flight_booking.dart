@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:mobile_app/l10n/app_localizations.dart';
 import 'package:mobile_app/theme.dart';
+import 'package:mobile_app/widgets/payment_section.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../config.dart';
 
@@ -45,6 +46,9 @@ class _FlightBookingState extends State<FlightBooking> {
   bool summaryExpanded = false;
   String token = '';
   List<Map<String, dynamic>> passengerList = [];
+
+  // Key to access PaymentSection's validate()
+  final _paymentKey = GlobalKey<PaymentSectionState>();
 
   @override
   void initState() {
@@ -368,10 +372,19 @@ class _FlightBookingState extends State<FlightBooking> {
   }
 
   Future<void> _submitBookings(AppLocalizations l) async {
+    // Validate all passengers are filled
     final unfilled = passengerList.where((p) => !p['filled']).length;
     if (unfilled > 0) {
       ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text(l.fillPassengerDetails)));
+      return;
+    }
+
+    // Validate payment section
+    final paymentValid = _paymentKey.currentState?.validate() ?? false;
+    if (!paymentValid) {
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(l.paymentErrorCardNumberRequired)));
       return;
     }
 
@@ -508,7 +521,7 @@ class _FlightBookingState extends State<FlightBooking> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Collapsible summary
+                  // ── Collapsible summary ───────────────────────────
                   GestureDetector(
                     onTap: () => setState(() => summaryExpanded = !summaryExpanded),
                     child: Container(
@@ -574,7 +587,7 @@ class _FlightBookingState extends State<FlightBooking> {
                       style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: t.title)),
                   const SizedBox(height: 12),
 
-                  // Passenger cards
+                  // ── Passenger cards ───────────────────────────────
                   ...List.generate(passengerList.length, (i) {
                     final p = passengerList[i];
                     final filled = p['filled'] as bool;
@@ -622,7 +635,7 @@ class _FlightBookingState extends State<FlightBooking> {
                                   Icon(filled ? Icons.edit : Icons.add,
                                       size: 16, color: filled ? t.accent : Colors.white),
                                   const SizedBox(width: 4),
-                                  Text(filled ? 'Edit' : 'Add',
+                                  Text(filled ? l.edit : l.add,
                                       style: TextStyle(fontSize: 13,
                                           color: filled ? t.accent : Colors.white,
                                           fontWeight: FontWeight.w600)),
@@ -635,8 +648,13 @@ class _FlightBookingState extends State<FlightBooking> {
                     );
                   }),
 
+                  // ── Payment Section ───────────────────────────────
+                  const SizedBox(height: 24),
+                  PaymentSection(key: _paymentKey),
+
                   const SizedBox(height: 24),
 
+                  // ── Confirm button ────────────────────────────────
                   GestureDetector(
                     onTap: isSubmitting ? null : () => _submitBookings(l),
                     child: Container(

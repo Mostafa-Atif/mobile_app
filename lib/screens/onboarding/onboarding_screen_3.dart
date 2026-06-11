@@ -14,7 +14,7 @@ class OnboardingScreen3 extends StatelessWidget {
   Widget build(BuildContext context) {
     final l = AppLocalizations.of(context)!;
     return OnboardingPage(
-      imagePath: 'images/onboarding/onboarding3.png',
+      imagePath: 'assets/images/onboarding/onboarding3.png',
       title: l.onboarding3Title,
       body: l.onboarding3Body,
       dotIndex: 2,

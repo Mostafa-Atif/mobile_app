@@ -1724,6 +1724,84 @@ abstract class AppLocalizations {
   /// **'Could not load bookings'**
   String get userDashboardLoadError;
 
+  /// No description provided for @adminCarBookings.
+  ///
+  /// In en, this message translates to:
+  /// **'Car Bookings'**
+  String get adminCarBookings;
+
+  /// No description provided for @adminHotelBookings.
+  ///
+  /// In en, this message translates to:
+  /// **'Hotel Bookings'**
+  String get adminHotelBookings;
+
+  /// No description provided for @adminFlightBookings.
+  ///
+  /// In en, this message translates to:
+  /// **'Flight Bookings'**
+  String get adminFlightBookings;
+
+  /// No description provided for @adminCarBookingsSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Manage and review all car rental bookings'**
+  String get adminCarBookingsSubtitle;
+
+  /// No description provided for @adminHotelBookingsSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Manage and review all hotel bookings'**
+  String get adminHotelBookingsSubtitle;
+
+  /// No description provided for @adminFlightBookingsSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Manage and review all flight bookings'**
+  String get adminFlightBookingsSubtitle;
+
+  /// No description provided for @adminDashboardLoadError.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not load admin dashboard'**
+  String get adminDashboardLoadError;
+
+  /// No description provided for @adminNoBookings.
+  ///
+  /// In en, this message translates to:
+  /// **'No bookings here yet'**
+  String get adminNoBookings;
+
+  /// No description provided for @adminNoBookingsSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'New bookings for this section will appear here.'**
+  String get adminNoBookingsSubtitle;
+
+  /// No description provided for @adminBookingConfirmed.
+  ///
+  /// In en, this message translates to:
+  /// **'Booking confirmed'**
+  String get adminBookingConfirmed;
+
+  /// No description provided for @adminBookingDeleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Booking deleted'**
+  String get adminBookingDeleted;
+
+  /// No description provided for @adminActionFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Action failed'**
+  String get adminActionFailed;
+
+  /// No description provided for @adminConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm'**
+  String get adminConfirm;
+
   /// No description provided for @statusConfirmed.
   ///
   /// In en, this message translates to:
@@ -1957,6 +2035,162 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Must be 8–20 alphanumeric characters'**
   String get errorNationalId;
+
+  /// No description provided for @upcomingTrip.
+  ///
+  /// In en, this message translates to:
+  /// **'Upcoming trip'**
+  String get upcomingTrip;
+
+  /// No description provided for @specialOffers.
+  ///
+  /// In en, this message translates to:
+  /// **'Special offers'**
+  String get specialOffers;
+
+  /// No description provided for @navHome.
+  ///
+  /// In en, this message translates to:
+  /// **'Home'**
+  String get navHome;
+
+  /// No description provided for @navBookings.
+  ///
+  /// In en, this message translates to:
+  /// **'Bookings'**
+  String get navBookings;
+
+  /// No description provided for @paymentTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Payment'**
+  String get paymentTitle;
+
+  /// No description provided for @paymentCreditCard.
+  ///
+  /// In en, this message translates to:
+  /// **'Credit card'**
+  String get paymentCreditCard;
+
+  /// No description provided for @paymentDebitCard.
+  ///
+  /// In en, this message translates to:
+  /// **'Debit card'**
+  String get paymentDebitCard;
+
+  /// No description provided for @paymentCardNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Card number'**
+  String get paymentCardNumber;
+
+  /// No description provided for @paymentCardholderName.
+  ///
+  /// In en, this message translates to:
+  /// **'Cardholder name'**
+  String get paymentCardholderName;
+
+  /// No description provided for @paymentCardholderHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Name on card'**
+  String get paymentCardholderHint;
+
+  /// No description provided for @paymentExpiry.
+  ///
+  /// In en, this message translates to:
+  /// **'Expiry date'**
+  String get paymentExpiry;
+
+  /// No description provided for @paymentCvv.
+  ///
+  /// In en, this message translates to:
+  /// **'CVV'**
+  String get paymentCvv;
+
+  /// No description provided for @paymentSaveCard.
+  ///
+  /// In en, this message translates to:
+  /// **'Save card'**
+  String get paymentSaveCard;
+
+  /// No description provided for @paymentSaveCardSub.
+  ///
+  /// In en, this message translates to:
+  /// **'For faster checkout next time'**
+  String get paymentSaveCardSub;
+
+  /// No description provided for @paymentSecureNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Your payment is secured'**
+  String get paymentSecureNote;
+
+  /// No description provided for @paymentErrorCardNumberRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your card number'**
+  String get paymentErrorCardNumberRequired;
+
+  /// No description provided for @paymentErrorCardNumberInvalid.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a valid card number'**
+  String get paymentErrorCardNumberInvalid;
+
+  /// No description provided for @paymentErrorCardholderRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter the cardholder name'**
+  String get paymentErrorCardholderRequired;
+
+  /// No description provided for @paymentErrorCardholderInvalid.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a valid name'**
+  String get paymentErrorCardholderInvalid;
+
+  /// No description provided for @paymentErrorExpiryRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter the expiry date'**
+  String get paymentErrorExpiryRequired;
+
+  /// No description provided for @paymentErrorExpiryInvalid.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a valid expiry date'**
+  String get paymentErrorExpiryInvalid;
+
+  /// No description provided for @paymentErrorExpiryExpired.
+  ///
+  /// In en, this message translates to:
+  /// **'This card has expired'**
+  String get paymentErrorExpiryExpired;
+
+  /// No description provided for @paymentErrorCvvRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter the CVV'**
+  String get paymentErrorCvvRequired;
+
+  /// No description provided for @paymentErrorCvvInvalid.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a valid CVV'**
+  String get paymentErrorCvvInvalid;
+
+  /// No description provided for @edit.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit'**
+  String get edit;
+
+  /// No description provided for @add.
+  ///
+  /// In en, this message translates to:
+  /// **'Add'**
+  String get add;
 }
 
 class _AppLocalizationsDelegate

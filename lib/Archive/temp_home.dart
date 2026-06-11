@@ -5,8 +5,9 @@ import '../theme.dart';
 import '../screens/auth/sign_in.dart';
 import '../screens/auth/sign_up.dart';
 import '../screens/car rental/carssearch.dart';
-import '../screens/flights/flightsearch.dart';
+import '../screens/flights/flight_search.dart';
 import '../screens/hotels/hotel_search.dart';
+import '../screens/home/admin_dashboard_screen.dart';
 import '../screens/home/home_screen.dart';
 import '../screens/home/user_dashboard_screen.dart';
 import '../screens/onboarding/onboarding_screen_1.dart';
@@ -149,6 +150,14 @@ class TempHome extends StatelessWidget {
                 label: l.menuDashboard,
                 icon: Icons.dashboard_customize_rounded,
                 page: () => const UserDashboardScreen(),
+                small: true,
+              ),
+              const SizedBox(height: 12),
+
+              _card(context, t,
+                label: 'Admin Dashboard',
+                icon: Icons.admin_panel_settings_rounded,
+                page: () => const AdminDashboardScreen(),
                 small: true,
               ),
               const SizedBox(height: 12),

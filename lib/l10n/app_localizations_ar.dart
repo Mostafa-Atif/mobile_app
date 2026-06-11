@@ -859,6 +859,47 @@ class AppLocalizationsAr extends AppLocalizations {
   String get userDashboardLoadError => 'تعذر تحميل الحجوزات';
 
   @override
+  String get adminCarBookings => 'حجوزات السيارات';
+
+  @override
+  String get adminHotelBookings => 'حجوزات الفنادق';
+
+  @override
+  String get adminFlightBookings => 'حجوزات الرحلات';
+
+  @override
+  String get adminCarBookingsSubtitle =>
+      'إدارة ومراجعة جميع حجوزات تأجير السيارات';
+
+  @override
+  String get adminHotelBookingsSubtitle => 'إدارة ومراجعة جميع حجوزات الفنادق';
+
+  @override
+  String get adminFlightBookingsSubtitle => 'إدارة ومراجعة جميع حجوزات الرحلات';
+
+  @override
+  String get adminDashboardLoadError => 'تعذر تحميل لوحة تحكم المدير';
+
+  @override
+  String get adminNoBookings => 'لا توجد حجوزات هنا بعد';
+
+  @override
+  String get adminNoBookingsSubtitle =>
+      'ستظهر الحجوزات الجديدة لهذا القسم هنا.';
+
+  @override
+  String get adminBookingConfirmed => 'تم تأكيد الحجز';
+
+  @override
+  String get adminBookingDeleted => 'تم حذف الحجز';
+
+  @override
+  String get adminActionFailed => 'فشلت العملية';
+
+  @override
+  String get adminConfirm => 'تأكيد';
+
+  @override
   String get statusConfirmed => 'مؤكد';
 
   @override
@@ -979,4 +1020,82 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get errorNationalId => 'يجب أن يكون من 8 إلى 20 حرفاً أو رقماً';
+
+  @override
+  String get upcomingTrip => 'Upcoming trip';
+
+  @override
+  String get specialOffers => 'Special offers';
+
+  @override
+  String get navHome => 'Home';
+
+  @override
+  String get navBookings => 'Bookings';
+
+  @override
+  String get paymentTitle => 'الدفع';
+
+  @override
+  String get paymentCreditCard => 'بطاقة ائتمان';
+
+  @override
+  String get paymentDebitCard => 'بطاقة مدين';
+
+  @override
+  String get paymentCardNumber => 'رقم البطاقة';
+
+  @override
+  String get paymentCardholderName => 'اسم حامل البطاقة';
+
+  @override
+  String get paymentCardholderHint => 'الاسم على البطاقة';
+
+  @override
+  String get paymentExpiry => 'تاريخ الانتهاء';
+
+  @override
+  String get paymentCvv => 'CVV';
+
+  @override
+  String get paymentSaveCard => 'حفظ البطاقة';
+
+  @override
+  String get paymentSaveCardSub => 'لإتمام الدفع بشكل أسرع في المرة القادمة';
+
+  @override
+  String get paymentSecureNote => 'بيانات الدفع محمية';
+
+  @override
+  String get paymentErrorCardNumberRequired => 'أدخل رقم البطاقة';
+
+  @override
+  String get paymentErrorCardNumberInvalid => 'أدخل رقم بطاقة صحيح';
+
+  @override
+  String get paymentErrorCardholderRequired => 'أدخل اسم حامل البطاقة';
+
+  @override
+  String get paymentErrorCardholderInvalid => 'أدخل اسمًا صحيحًا';
+
+  @override
+  String get paymentErrorExpiryRequired => 'أدخل تاريخ الانتهاء';
+
+  @override
+  String get paymentErrorExpiryInvalid => 'أدخل تاريخ انتهاء صحيح';
+
+  @override
+  String get paymentErrorExpiryExpired => 'انتهت صلاحية هذه البطاقة';
+
+  @override
+  String get paymentErrorCvvRequired => 'أدخل رمز CVV';
+
+  @override
+  String get paymentErrorCvvInvalid => 'أدخل رمز CVV صحيح';
+
+  @override
+  String get edit => 'تعديل';
+
+  @override
+  String get add => 'إضافة';
 }

@@ -10,7 +10,7 @@ class OnboardingScreen1 extends StatelessWidget {
   Widget build(BuildContext context) {
     final l = AppLocalizations.of(context)!;
     return OnboardingPage(
-      imagePath: 'images/onboarding/onboarding1.png',
+      imagePath: 'assets/images/onboarding/onboarding1.png',
       title:     l.onboarding1Title,
       body:      l.onboarding1Body,
       dotIndex:  0,
@@ -83,7 +83,7 @@ class OnboardingPage extends StatelessWidget {
 
             // ── Content zone ───────────────────────────────────────────────
             Expanded(
-              flex: compact ? 4 : 45,
+              flex: 4,
               child: _BottomSheet(
                 title:          title,
                 body:           body,

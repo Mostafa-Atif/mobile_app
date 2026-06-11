@@ -70,6 +70,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
           .map(
             (item) => _AdminBooking.fromCar(
               item as Map<String, dynamic>,
+              AppLocalizations.of(context)!,
             ),
           )
           .toList();
@@ -77,6 +78,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
           .map(
             (item) => _AdminBooking.fromHotel(
               item as Map<String, dynamic>,
+              AppLocalizations.of(context)!,
             ),
           )
           .toList();
@@ -84,6 +86,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
           .map(
             (item) => _AdminBooking.fromFlight(
               item as Map<String, dynamic>,
+              AppLocalizations.of(context)!,
             ),
           )
           .toList();
@@ -98,7 +101,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
     } catch (_) {
       if (!mounted) return;
       setState(() {
-        _error = 'Could not load admin dashboard';
+        _error = AppLocalizations.of(context)!.adminDashboardLoadError;
         _isLoading = false;
       });
     }
@@ -118,7 +121,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                 : item,
           )
           .toList(),
-      successMessage: 'Booking confirmed',
+      successMessage: AppLocalizations.of(context)!.adminBookingConfirmed,
     );
   }
 
@@ -130,7 +133,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
         headers: headers,
       ),
       onSuccess: (items) => items.where((item) => item.id != booking.id).toList(),
-      successMessage: 'Booking deleted',
+      successMessage: AppLocalizations.of(context)!.adminBookingDeleted,
     );
   }
 
@@ -176,7 +179,9 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
     } catch (_) {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Action failed')),
+        SnackBar(
+          content: Text(AppLocalizations.of(context)!.adminActionFailed),
+        ),
       );
     } finally {
       if (mounted) {
@@ -196,25 +201,25 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
     }
   }
 
-  String _sectionTitle(AdminSection section) {
+  String _sectionTitle(AdminSection section, AppLocalizations l) {
     switch (section) {
       case AdminSection.cars:
-        return 'Car Bookings';
+        return l.adminCarBookings;
       case AdminSection.hotels:
-        return 'Hotel Bookings';
+        return l.adminHotelBookings;
       case AdminSection.flights:
-        return 'Flight Bookings';
+        return l.adminFlightBookings;
     }
   }
 
-  String _sectionSubtitle(AdminSection section) {
+  String _sectionSubtitle(AdminSection section, AppLocalizations l) {
     switch (section) {
       case AdminSection.cars:
-        return 'Manage and review all car rental bookings';
+        return l.adminCarBookingsSubtitle;
       case AdminSection.hotels:
-        return 'Manage and review all hotel bookings';
+        return l.adminHotelBookingsSubtitle;
       case AdminSection.flights:
-        return 'Manage and review all flight bookings';
+        return l.adminFlightBookingsSubtitle;
     }
   }
 
@@ -238,8 +243,8 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
           slivers: [
             SliverToBoxAdapter(
               child: _AdminHero(
-                title: _sectionTitle(_activeSection),
-                subtitle: _sectionSubtitle(_activeSection),
+                title: _sectionTitle(_activeSection, l),
+                subtitle: _sectionSubtitle(_activeSection, l),
               ),
             ),
             SliverToBoxAdapter(
@@ -298,8 +303,8 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
               SliverFillRemaining(
                 hasScrollBody: false,
                 child: _AdminEmptyState(
-                  title: 'No bookings here yet',
-                  subtitle: 'New bookings for this section will appear here.',
+                  title: l.adminNoBookings,
+                  subtitle: l.adminNoBookingsSubtitle,
                 ),
               )
             else
@@ -415,10 +420,11 @@ class _AdminSectionRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l = AppLocalizations.of(context)!;
     final sections = [
-      (AdminSection.cars, 'Cars'),
-      (AdminSection.hotels, 'Hotels'),
-      (AdminSection.flights, 'Flights'),
+      (AdminSection.cars, l.userDashboardCars),
+      (AdminSection.hotels, l.userDashboardHotels),
+      (AdminSection.flights, l.userDashboardFlights),
     ];
 
     return SingleChildScrollView(
@@ -637,7 +643,7 @@ class _AdminBookingCard extends StatelessWidget {
                             color: Colors.white,
                           ),
                         )
-                      : Text(isConfirmed ? l.statusConfirmed : 'Confirm'),
+                      : Text(isConfirmed ? l.statusConfirmed : l.adminConfirm),
                 ),
               ),
               const SizedBox(width: 10),
@@ -651,7 +657,7 @@ class _AdminBookingCard extends StatelessWidget {
                       borderRadius: BorderRadius.circular(14),
                     ),
                   ),
-                  child: const Text('Delete'),
+                  child: Text(l.remove),
                 ),
               ),
             ],
@@ -879,7 +885,10 @@ class _AdminBooking {
   final IconData icon;
   final List<_AdminBookingDetail> details;
 
-  factory _AdminBooking.fromCar(Map<String, dynamic> item) {
+  factory _AdminBooking.fromCar(
+    Map<String, dynamic> item,
+    AppLocalizations l,
+  ) {
     final customerName =
         '${item['firstName'] ?? ''} ${item['lastName'] ?? ''}'.trim();
 
@@ -895,15 +904,24 @@ class _AdminBooking {
       status: '${item['status'] ?? 'pending'}'.toLowerCase(),
       icon: Icons.directions_car_filled_rounded,
       details: [
-        _AdminBookingDetail('Phone', '${item['phone'] ?? '-'}'),
-        _AdminBookingDetail('Pick up', _formatDate(item['pickupDateTime'])),
-        _AdminBookingDetail('Drop off', _formatDate(item['dropoffDateTime'])),
-        _AdminBookingDetail('Total', '\$${item['totalPrice'] ?? '-'}'),
+        _AdminBookingDetail(l.phone, '${item['phone'] ?? '-'}'),
+        _AdminBookingDetail(
+          l.userDashboardPickUp,
+          _formatDate(item['pickupDateTime']),
+        ),
+        _AdminBookingDetail(
+          l.userDashboardDropOff,
+          _formatDate(item['dropoffDateTime']),
+        ),
+        _AdminBookingDetail(l.total, '\$${item['totalPrice'] ?? '-'}'),
       ],
     );
   }
 
-  factory _AdminBooking.fromHotel(Map<String, dynamic> item) {
+  factory _AdminBooking.fromHotel(
+    Map<String, dynamic> item,
+    AppLocalizations l,
+  ) {
     final guests = item['guests'] as List<dynamic>? ?? const [];
     final guest = guests.isNotEmpty
         ? guests.first as Map<String, dynamic>
@@ -921,15 +939,18 @@ class _AdminBooking {
       status: '${item['status'] ?? 'pending'}'.toLowerCase(),
       icon: Icons.hotel_rounded,
       details: [
-        _AdminBookingDetail('Phone', '${guest['phone'] ?? '-'}'),
-        _AdminBookingDetail('Check in', _formatDate(item['checkInDate'])),
-        _AdminBookingDetail('Check out', _formatDate(item['checkOutDate'])),
-        _AdminBookingDetail('Rooms', '${item['numRooms'] ?? '-'}'),
+        _AdminBookingDetail(l.phone, '${guest['phone'] ?? '-'}'),
+        _AdminBookingDetail(l.userDashboardCheckIn, _formatDate(item['checkInDate'])),
+        _AdminBookingDetail(l.userDashboardCheckOut, _formatDate(item['checkOutDate'])),
+        _AdminBookingDetail(l.userDashboardRooms, '${item['numRooms'] ?? '-'}'),
       ],
     );
   }
 
-  factory _AdminBooking.fromFlight(Map<String, dynamic> item) {
+  factory _AdminBooking.fromFlight(
+    Map<String, dynamic> item,
+    AppLocalizations l,
+  ) {
     return _AdminBooking(
       id: '${item['_id']}',
       section: AdminSection.flights,
@@ -942,12 +963,15 @@ class _AdminBooking {
       status: '${item['status'] ?? 'pending'}'.toLowerCase(),
       icon: Icons.flight_takeoff_rounded,
       details: [
-        _AdminBookingDetail('Departure', _formatDate(item['departureDate'])),
         _AdminBookingDetail(
-          'Return',
+          l.userDashboardDepartureDate,
+          _formatDate(item['departureDate']),
+        ),
+        _AdminBookingDetail(
+          l.userDashboardReturnDate,
           item['returnDate'] == null ? '-' : _formatDate(item['returnDate']),
         ),
-        _AdminBookingDetail('Trip type', '${item['tripType'] ?? '-'}'),
+        _AdminBookingDetail(l.userDashboardTripType, '${item['tripType'] ?? '-'}'),
       ],
     );
   }

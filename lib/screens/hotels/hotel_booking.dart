@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
 import 'package:mobile_app/l10n/app_localizations.dart';
+import 'package:mobile_app/widgets/payment_section.dart';
 import 'package:mobile_app/theme.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -44,6 +45,8 @@ class _HotelBookingState extends State<HotelBooking> {
   bool summaryExpanded = false;
   String token = '';
   List<Map<String, dynamic>> guestList = [];
+
+  final _paymentKey = GlobalKey<PaymentSectionState>();
 
   @override
   void initState() {
@@ -291,6 +294,7 @@ class _HotelBookingState extends State<HotelBooking> {
   }
 
   Future<void> _submitBooking(AppLocalizations l) async {
+    // Validate guests
     final unfilled = guestList.where((g) => !g['filled']).length;
     if (unfilled > 0) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -298,6 +302,9 @@ class _HotelBookingState extends State<HotelBooking> {
       );
       return;
     }
+
+    // Validate payment
+    if (!(_paymentKey.currentState?.validate() ?? false)) return;
 
     setState(() => isSubmitting = true);
 
@@ -521,6 +528,10 @@ class _HotelBookingState extends State<HotelBooking> {
                                 child: _buildGuestCard(i, l),
                               ),
                             ),
+                            SizedBox(height: 6),
+                            _sectionHeader(l.paymentTitle, ''),
+                            SizedBox(height: 10),
+                            PaymentSection(key: _paymentKey),
                           ],
                         ),
                       ),
@@ -689,7 +700,7 @@ class _HotelBookingState extends State<HotelBooking> {
           ),
           SizedBox(width: 8),
           _pillButton(
-            label: filled ? l.done : l.next,
+            label: filled ? l.edit : l.add,
             filled: filled,
             icon: filled ? Icons.edit_outlined : Icons.add_rounded,
             onTap: () => _openGuestSheet(index, l),
