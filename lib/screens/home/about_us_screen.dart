@@ -303,16 +303,7 @@ class AboutUsScreen extends StatelessWidget {
                             showDivider: true,
                             onTap: () => _launchUrl('tel:+966500000000'),
                           ),
-                          _contactRow(
-                            icon: Icons.location_on_outlined,
-                            label: isAr ? 'المقر الرئيسي' : 'Headquarters',
-                            value: isAr
-                                ? 'الرياض، المملكة العربية السعودية'
-                                : 'Riyadh, Saudi Arabia',
-                            t: t,
-                            showDivider: true,
-                            onTap: () {},
-                          ),
+                          
                           _contactRow(
                             icon: Icons.facebook_rounded,
                             label: 'Facebook',
