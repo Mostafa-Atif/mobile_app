@@ -290,18 +290,18 @@ class AboutUsScreen extends StatelessWidget {
                           _contactRow(
                             icon: Icons.email_outlined,
                             label: isAr ? 'البريد الإلكتروني' : 'Email',
-                            value: 'support@rahal.app',
+                            value: 'rahaltour53@gmail.com',
                             t: t,
                             showDivider: true,
-                            onTap: () => _launchUrl('mailto:support@rahal.app'),
+                            onTap: () => _launchUrl('mailto:rahaltour53@gmail.com'),
                           ),
                           _contactRow(
                             icon: Icons.phone_outlined,
                             label: isAr ? 'الهاتف' : 'Phone',
-                            value: '+966 50 000 0000',
+                            value: '+201287754201',
                             t: t,
                             showDivider: true,
-                            onTap: () => _launchUrl('tel:+966500000000'),
+                            onTap: () => _launchUrl('tel:+201287754201'),
                           ),
                           
                           _contactRow(
