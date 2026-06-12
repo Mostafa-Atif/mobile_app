@@ -208,12 +208,12 @@ class _CarsSearchState extends State<CarsSearch> {
           _submitted = false;
         });
         if (!mounted) return;
-        showModalBottomSheet(
-          context: context,
-          backgroundColor: Colors.transparent,
-          isDismissible: false,
-          builder: (_) => SuccessBottomSheet(
-            onDone: () => Navigator.pop(context),
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (_) => SuccessScreen(
+              onContinue: () => Navigator.pop(context),
+            ),
           ),
         );
       } else {
@@ -1012,54 +1012,115 @@ class _CarsSearchState extends State<CarsSearch> {
   }
 
 }
-class SuccessBottomSheet extends StatelessWidget {
+class SuccessScreen extends StatelessWidget {
   final String title;
   final String message;
-  final VoidCallback onDone;
+  final VoidCallback onContinue;
 
-  const SuccessBottomSheet({
+  const SuccessScreen({
     super.key,
-    this.title = 'Successful',
-    this.message = 'Your New Experience is successfully added.',
-    required this.onDone,
+    this.title = 'Success!',
+    this.message = 'Your request has been completed.\nEverything is set!',
+    required this.onContinue,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: const BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-      ),
-      padding: const EdgeInsets.fromLTRB(24, 32, 24, 24),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Container(
-            width: 80, height: 80,
-            decoration: const BoxDecoration(color: Color(0xFFB8F0A0), shape: BoxShape.circle),
-            child: const Icon(Icons.check_circle_rounded, color: Color(0xFF2E7D1E), size: 44),
-          ),
-          const SizedBox(height: 20),
-          Text(title, style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w600, color: Colors.black87)),
-          const SizedBox(height: 8),
-          Text(message, textAlign: TextAlign.center, style: const TextStyle(fontSize: 14, color: Colors.black54, height: 1.5)),
-          const SizedBox(height: 28),
-          SizedBox(
-            width: double.infinity,
-            child: ElevatedButton(
-              onPressed: onDone,
-              style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF1A1A1A),
-                foregroundColor: Colors.white,
-                padding: const EdgeInsets.symmetric(vertical: 16),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                elevation: 0,
+    final t = Theme.of(context).extension<AppThemeExtension>()!;
+
+    return Scaffold(
+      backgroundColor: t.bg,
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 24),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Spacer(),
+
+              // ── Circle + Check ──
+              Container(
+                width: 88,
+                height: 88,
+                decoration: BoxDecoration(
+                  color: t.successBg,
+                  shape: BoxShape.circle,
+                ),
+                child: Icon(
+                  Icons.check_rounded,
+                  color: t.success,
+                  size: 48,
+                ),
               ),
-              child: const Text('Done', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
-            ),
+
+              const SizedBox(height: 28),
+
+              // ── Title ──
+              Text(
+                title,
+                style: TextStyle(
+                  fontSize: 26,
+                  fontWeight: FontWeight.bold,
+                  color: t.title,
+                ),
+              ),
+
+              const SizedBox(height: 12),
+
+              // ── Message ──
+              Text(
+                message,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 15,
+                  color: t.label,
+                  height: 1.6,
+                ),
+              ),
+
+              const Spacer(),
+
+              // ── Continue Button ──
+              Container(
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(colors: t.btnGradient),
+                  borderRadius: BorderRadius.circular(16),
+                  boxShadow: [
+                    BoxShadow(
+                      color: t.accent.withOpacity(0.3),
+                      blurRadius: 12,
+                      offset: const Offset(0, 4),
+                    ),
+                  ],
+                ),
+                child: ElevatedButton(
+                  onPressed: onContinue,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.transparent,
+                    shadowColor: Colors.transparent,
+                    foregroundColor: Colors.white,
+                    padding: const EdgeInsets.symmetric(vertical: 18),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    elevation: 0,
+                  ),
+                  child: const Text(
+                    'Continue',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                      letterSpacing: 0.5,
+                    ),
+                  ),
+                ),
+              ),
+
+              const SizedBox(height: 16),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }
