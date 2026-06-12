@@ -47,6 +47,13 @@ class _FlightBookingState extends State<FlightBooking> {
   String token = '';
   List<Map<String, dynamic>> passengerList = [];
 
+  // Promo code state
+  final _promoCtrl = TextEditingController();
+  String? _appliedPromo;
+  double _discountAmount = 0;
+  bool _promoLoading = false;
+  String? _promoError;
+
   // Key to access PaymentSection's validate()
   final _paymentKey = GlobalKey<PaymentSectionState>();
 
@@ -54,6 +61,12 @@ class _FlightBookingState extends State<FlightBooking> {
   void initState() {
     super.initState();
     _initPassengers();
+  }
+
+  @override
+  void dispose() {
+    _promoCtrl.dispose();
+    super.dispose();
   }
 
   String _capitalizeGender(String g) {
@@ -100,6 +113,7 @@ class _FlightBookingState extends State<FlightBooking> {
   }
 
   num get totalPrice => widget.price * widget.passengers;
+  num get discountedTotal => totalPrice - _discountAmount;
 
   String? _validateName(String val) {
     if (val.trim().isEmpty) return 'required';
@@ -136,6 +150,192 @@ class _FlightBookingState extends State<FlightBooking> {
       default: return '';
     }
   }
+
+  // ── Promo code logic ───────────────────────────────────────────────────────
+
+  Future<void> _applyPromo(AppLocalizations l, AppThemeExtension t) async {
+    final code = _promoCtrl.text.trim().toUpperCase();
+    if (code.isEmpty) return;
+
+    setState(() { _promoLoading = true; _promoError = null; });
+
+    try {
+      // Replace with your real API call, e.g.:
+      // final res = await http.post(
+      //   Uri.parse('${Config.baseUrl}/api/promo-codes/validate'),
+      //   headers: {'Content-Type': 'application/json', 'Authorization': 'Bearer $token'},
+      //   body: json.encode({'code': code, 'totalPrice': totalPrice}),
+      // );
+      // if (res.statusCode == 200) { ... }
+
+      // Mock validation — remove and replace with API response above
+      await Future.delayed(const Duration(seconds: 1));
+      const validCodes = {'RAHAL20': 0.20};
+
+      if (validCodes.containsKey(code)) {
+        setState(() {
+          _appliedPromo = code;
+          _discountAmount = (totalPrice * validCodes[code]!).toDouble();
+          _promoLoading = false;
+        });
+      } else {
+        setState(() {
+          _promoError = l.invalidPromoCode;
+          _promoLoading = false;
+        });
+      }
+    } catch (e) {
+      setState(() {
+        _promoError = l.promoValidateFailed;
+        _promoLoading = false;
+      });
+    }
+  }
+
+  void _removePromo() {
+    setState(() {
+      _appliedPromo = null;
+      _discountAmount = 0;
+      _promoError = null;
+      _promoCtrl.clear();
+    });
+  }
+
+  // ── Promo section widget ───────────────────────────────────────────────────
+
+  Widget _promoSection(AppLocalizations l, AppThemeExtension t) {
+    return Container(
+      padding: const EdgeInsets.all(14),
+      decoration: BoxDecoration(
+        color: t.card,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: t.cardBorder.withOpacity(0.5)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(children: [
+            Icon(Icons.local_offer_outlined, size: 18, color: t.accent),
+            const SizedBox(width: 8),
+            Text(l.promoCode,
+                style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600, color: t.title)),
+          ]),
+          const SizedBox(height: 12),
+
+          if (_appliedPromo == null) ...[
+            Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              Expanded(
+                child: TextField(
+                  controller: _promoCtrl,
+                  textCapitalization: TextCapitalization.characters,
+                  style: TextStyle(color: t.title, letterSpacing: 1.2),
+                  onChanged: (_) { if (_promoError != null) setState(() => _promoError = null); },
+                  decoration: InputDecoration(
+                    hintText: l.enterCode,
+                    hintStyle: TextStyle(color: t.label, fontSize: 14),
+                    filled: true,
+                    fillColor: t.field,
+                    errorText: _promoError,
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide(color: t.fieldBorder)),
+                    enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide(
+                            color: _promoError != null ? Colors.red.shade300 : t.fieldBorder)),
+                    focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide(color: t.accent, width: 1.5)),
+                    contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+                  ),
+                ),
+              ),
+              const SizedBox(width: 10),
+              GestureDetector(
+                onTap: _promoLoading ? null : () => _applyPromo(l, t),
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 15),
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(colors: t.btnGradient),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: _promoLoading
+                      ? const SizedBox(width: 18, height: 18,
+                          child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2))
+                      : Text(l.apply,
+                          style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w600)),
+                ),
+              ),
+            ]),
+          ] else ...[
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+              decoration: BoxDecoration(
+                color: Colors.green.withOpacity(0.08),
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(color: Colors.green.withOpacity(0.3)),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(children: [
+                    const Icon(Icons.check_circle_outline, color: Colors.green, size: 18),
+                    const SizedBox(width: 8),
+                    Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                      Text(_appliedPromo!,
+                          style: const TextStyle(
+                              fontWeight: FontWeight.w700, letterSpacing: 1.1, color: Colors.green)),
+                      Text('−${widget.currency} ${_discountAmount.toStringAsFixed(2)}',
+                          style: TextStyle(fontSize: 12, color: Colors.green.shade700)),
+                    ]),
+                  ]),
+                  GestureDetector(
+                    onTap: _removePromo,
+                    child: Icon(Icons.close, size: 20, color: t.label),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ],
+      ),
+    );
+  }
+
+  // ── Price breakdown widget (shown when promo is active) ────────────────────
+
+  Widget _priceBreakdown(AppLocalizations l, AppThemeExtension t) {
+    return Container(
+      padding: const EdgeInsets.all(14),
+      decoration: BoxDecoration(
+        color: t.card,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: t.cardBorder.withOpacity(0.5)),
+      ),
+      child: Column(children: [
+        Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+          Text(l.subtotal, style: TextStyle(color: t.label, fontSize: 13)),
+          Text('${widget.currency} $totalPrice', style: TextStyle(color: t.title, fontSize: 13)),
+        ]),
+        const SizedBox(height: 6),
+        Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+          Text(l.discountWithCode(_appliedPromo!),
+              style: const TextStyle(color: Colors.green, fontSize: 13)),
+          Text('−${widget.currency} ${_discountAmount.toStringAsFixed(2)}',
+              style: const TextStyle(color: Colors.green, fontSize: 13)),
+        ]),
+        Divider(color: t.divider, height: 16),
+        Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+          Text('Total',
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color: t.title)),
+          Text('${widget.currency} ${discountedTotal.toStringAsFixed(2)}',
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color: t.price)),
+        ]),
+      ]),
+    );
+  }
+
+  // ── Passenger sheet ────────────────────────────────────────────────────────
 
   void _openPassengerSheet(int index, AppLocalizations l, AppThemeExtension t) {
     final p = Map<String, dynamic>.from(passengerList[index]);
@@ -372,7 +572,6 @@ class _FlightBookingState extends State<FlightBooking> {
   }
 
   Future<void> _submitBookings(AppLocalizations l) async {
-    // Validate all passengers are filled
     final unfilled = passengerList.where((p) => !p['filled']).length;
     if (unfilled > 0) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -380,7 +579,6 @@ class _FlightBookingState extends State<FlightBooking> {
       return;
     }
 
-    // Validate payment section
     final paymentValid = _paymentKey.currentState?.validate() ?? false;
     if (!paymentValid) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -409,6 +607,8 @@ class _FlightBookingState extends State<FlightBooking> {
             'passportExpiry': (p['passportExpiry'] as DateTime).toIso8601String(),
             'email': p['email'],
             'phone': '${p['countryCode']}${p['phone']}',
+            'promoCode': _appliedPromo,
+            'totalPrice': discountedTotal,
           }),
         );
       }).toList();
@@ -426,7 +626,8 @@ class _FlightBookingState extends State<FlightBooking> {
             SnackBar(content: Text(l.someBookingsFailed)));
       }
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error: $e')));
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text(l.errorWithMessage('$e'))));
     }
 
     setState(() => isSubmitting = false);
@@ -540,7 +741,7 @@ class _FlightBookingState extends State<FlightBooking> {
                                 Text('${widget.fromCity} → ${widget.toCity}',
                                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color: t.title)),
                                 const SizedBox(height: 4),
-                                Text('${widget.currency} $totalPrice',
+                                Text('${widget.currency} ${_appliedPromo != null ? discountedTotal.toStringAsFixed(2) : totalPrice}',
                                     style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: t.price)),
                               ]),
                               Row(children: [
@@ -571,10 +772,21 @@ class _FlightBookingState extends State<FlightBooking> {
                               Text('${widget.currency} ${widget.price}', style: TextStyle(fontSize: 13, color: t.title)),
                             ]),
                             const SizedBox(height: 6),
+                            if (_appliedPromo != null) ...[
+                              Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+                                Text(l.discountWithCode(_appliedPromo!),
+                                    style: const TextStyle(color: Colors.green, fontSize: 13)),
+                                Text('−${widget.currency} ${_discountAmount.toStringAsFixed(2)}',
+                                    style: const TextStyle(color: Colors.green, fontSize: 13)),
+                              ]),
+                              const SizedBox(height: 6),
+                            ],
                             Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
                               Text(l.total, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color: t.title)),
-                              Text('${widget.currency} $totalPrice',
-                                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color: t.price)),
+                              Text(
+                                '${widget.currency} ${_appliedPromo != null ? discountedTotal.toStringAsFixed(2) : totalPrice}',
+                                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color: t.price),
+                              ),
                             ]),
                           ],
                         ],
@@ -651,6 +863,16 @@ class _FlightBookingState extends State<FlightBooking> {
                   // ── Payment Section ───────────────────────────────
                   const SizedBox(height: 24),
                   PaymentSection(key: _paymentKey),
+
+                  // ── Promo Code ────────────────────────────────────
+                  const SizedBox(height: 16),
+                  _promoSection(l, t),
+
+                  // ── Price breakdown (only when promo applied) ─────
+                  if (_appliedPromo != null) ...[
+                    const SizedBox(height: 12),
+                    _priceBreakdown(l, t),
+                  ],
 
                   const SizedBox(height: 24),
 

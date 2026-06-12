@@ -788,6 +788,18 @@ abstract class AppLocalizations {
   /// **'Retry'**
   String get retry;
 
+  /// No description provided for @dateTimeAt.
+  ///
+  /// In en, this message translates to:
+  /// **'{date} at {time}'**
+  String dateTimeAt(String date, String time);
+
+  /// No description provided for @errorWithMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Error: {message}'**
+  String errorWithMessage(String message);
+
   /// No description provided for @searchStays.
   ///
   /// In en, this message translates to:
@@ -1562,6 +1574,42 @@ abstract class AppLocalizations {
   /// **'Hide summary'**
   String get hideSummaryFlight;
 
+  /// No description provided for @promoCode.
+  ///
+  /// In en, this message translates to:
+  /// **'Promo Code'**
+  String get promoCode;
+
+  /// No description provided for @enterCode.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter code'**
+  String get enterCode;
+
+  /// No description provided for @subtotal.
+  ///
+  /// In en, this message translates to:
+  /// **'Subtotal'**
+  String get subtotal;
+
+  /// No description provided for @discountWithCode.
+  ///
+  /// In en, this message translates to:
+  /// **'Discount ({code})'**
+  String discountWithCode(String code);
+
+  /// No description provided for @invalidPromoCode.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid promo code'**
+  String get invalidPromoCode;
+
+  /// No description provided for @promoValidateFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not validate code. Try again.'**
+  String get promoValidateFailed;
+
   /// No description provided for @userDashboardTitle.
   ///
   /// In en, this message translates to:
@@ -2048,17 +2096,47 @@ abstract class AppLocalizations {
   /// **'Special offers'**
   String get specialOffers;
 
-  /// No description provided for @navHome.
+  /// No description provided for @specialOffer.
   ///
   /// In en, this message translates to:
-  /// **'Home'**
-  String get navHome;
+  /// **'Special Offer'**
+  String get specialOffer;
 
-  /// No description provided for @navBookings.
+  /// No description provided for @offerBadge.
   ///
   /// In en, this message translates to:
-  /// **'Bookings'**
-  String get navBookings;
+  /// **'APP EXCLUSIVE'**
+  String get offerBadge;
+
+  /// No description provided for @offerWelcomeGift.
+  ///
+  /// In en, this message translates to:
+  /// **'Your welcome gift.'**
+  String get offerWelcomeGift;
+
+  /// No description provided for @offerDiscount.
+  ///
+  /// In en, this message translates to:
+  /// **'20% off everything.'**
+  String get offerDiscount;
+
+  /// No description provided for @offerCodeLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Code'**
+  String get offerCodeLabel;
+
+  /// No description provided for @offerCodeCopied.
+  ///
+  /// In en, this message translates to:
+  /// **'Code copied: RAHAL20'**
+  String get offerCodeCopied;
+
+  /// No description provided for @offerCopyCode.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy Code'**
+  String get offerCopyCode;
 
   /// No description provided for @paymentTitle.
   ///

@@ -350,7 +350,7 @@ class _HotelBookingState extends State<HotelBooking> {
       }
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error: $e')),
+        SnackBar(content: Text(l.errorWithMessage('$e'))),
       );
     }
 

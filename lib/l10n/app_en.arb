@@ -145,6 +145,19 @@
   "unableToConnect": "Unable to connect",
   "checkConnectionRetry": "Please check your connection and try again",
   "retry": "Retry",
+  "dateTimeAt": "{date} at {time}",
+  "@dateTimeAt": {
+    "placeholders": {
+      "date": { "type": "String" },
+      "time": { "type": "String" }
+    }
+  },
+  "errorWithMessage": "Error: {message}",
+  "@errorWithMessage": {
+    "placeholders": {
+      "message": { "type": "String" }
+    }
+  },
   "searchStays": "Search Stays",
   "overOneMillion": "Over 1M properties worldwide",
   "destination": "Destination",
@@ -307,6 +320,17 @@
   "selectDate": "Select date",
   "viewSummaryFlight": "View summary",
   "hideSummaryFlight": "Hide summary",
+  "promoCode": "Promo Code",
+  "enterCode": "Enter code",
+  "subtotal": "Subtotal",
+  "discountWithCode": "Discount ({code})",
+  "@discountWithCode": {
+    "placeholders": {
+      "code": { "type": "String" }
+    }
+  },
+  "invalidPromoCode": "Invalid promo code",
+  "promoValidateFailed": "Could not validate code. Try again.",
   "userDashboardTitle": "My Bookings",
   "userDashboardSubtitle": "All your travel bookings in one place",
   "userDashboardTotal": "Total",
@@ -388,8 +412,13 @@
   "errorNationalId": "Must be 8–20 alphanumeric characters",
   "upcomingTrip": "Upcoming trip",
   "specialOffers": "Special offers",
-  "navHome": "Home",
-  "navBookings": "Bookings",
+  "specialOffer": "Special Offer",
+  "offerBadge": "APP EXCLUSIVE",
+  "offerWelcomeGift": "Your welcome gift.",
+  "offerDiscount": "20% off everything.",
+  "offerCodeLabel": "Code",
+  "offerCodeCopied": "Code copied: RAHAL20",
+  "offerCopyCode": "Copy Code",
   "paymentTitle": "Payment",
   "paymentCreditCard": "Credit card",
   "paymentDebitCard": "Debit card",

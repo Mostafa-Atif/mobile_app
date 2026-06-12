@@ -141,7 +141,10 @@ class _CarsSearchState extends State<CarsSearch> {
 
   String _formatDateTime(DateTime? dt, AppLocalizations l) {
     if (dt == null) return l.selectDateTime;
-    return '${dt.day}/${dt.month}/${dt.year} at ${dt.hour.toString().padLeft(2, '0')}:${dt.minute.toString().padLeft(2, '0')}';
+    final date = '${dt.day}/${dt.month}/${dt.year}';
+    final time =
+        '${dt.hour.toString().padLeft(2, '0')}:${dt.minute.toString().padLeft(2, '0')}';
+    return l.dateTimeAt(date, time);
   }
 
   int get totalDays {
@@ -222,30 +225,31 @@ class _CarsSearchState extends State<CarsSearch> {
         );
       }
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error: $e')));
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text(l.errorWithMessage('$e'))));
     }
     setState(() => isSubmitting = false);
   }
 
   // ── UI Helpers ──────────────────────────────────────────────────────────────
 
-  Widget _buildError(AppThemeExtension t) {
+  Widget _buildError(AppThemeExtension t, AppLocalizations l) {
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Icon(Icons.wifi_off, size: 60, color: t.cardBorder),
           const SizedBox(height: 16),
-          Text('Unable to connect',
+          Text(l.unableToConnect,
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: t.title)),
           const SizedBox(height: 8),
-          Text('Please check your connection and try again',
+          Text(l.checkConnectionRetry,
               style: TextStyle(color: t.label, fontSize: 13), textAlign: TextAlign.center),
           const SizedBox(height: 24),
           ElevatedButton.icon(
             onPressed: fetchCars,
             icon: const Icon(Icons.refresh),
-            label: const Text('Retry'),
+            label: Text(l.retry),
             style: ElevatedButton.styleFrom(
               shape: const StadiumBorder(),
               backgroundColor: t.accent,
@@ -387,13 +391,14 @@ class _CarsSearchState extends State<CarsSearch> {
   Widget build(BuildContext context) {
     final t = Theme.of(context).extension<AppThemeExtension>()!;
     final l = AppLocalizations.of(context)!;
+    final l = AppLocalizations.of(context)!;
     final isAr = Localizations.localeOf(context).languageCode == 'ar';
 
     return Scaffold(
       backgroundColor: t.bg,
       body: SafeArea(
         child: hasError
-            ? _buildError(t)
+            ? _buildError(t, l)
             : Column(
                 children: [
                   // ── Header ──
@@ -1106,9 +1111,9 @@ class SuccessScreen extends StatelessWidget {
                     ),
                     elevation: 0,
                   ),
-                  child: const Text(
-                    'Continue',
-                    style: TextStyle(
+                  child: Text(
+                    l.continue_,
+                    style: const TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w600,
                       letterSpacing: 0.5,

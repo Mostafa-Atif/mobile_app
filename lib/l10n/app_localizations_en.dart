@@ -379,6 +379,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get retry => 'Retry';
 
   @override
+  String dateTimeAt(String date, String time) {
+    return '$date at $time';
+  }
+
+  @override
+  String errorWithMessage(String message) {
+    return 'Error: $message';
+  }
+
+  @override
   String get searchStays => 'Search Stays';
 
   @override
@@ -783,6 +793,26 @@ class AppLocalizationsEn extends AppLocalizations {
   String get hideSummaryFlight => 'Hide summary';
 
   @override
+  String get promoCode => 'Promo Code';
+
+  @override
+  String get enterCode => 'Enter code';
+
+  @override
+  String get subtotal => 'Subtotal';
+
+  @override
+  String discountWithCode(String code) {
+    return 'Discount ($code)';
+  }
+
+  @override
+  String get invalidPromoCode => 'Invalid promo code';
+
+  @override
+  String get promoValidateFailed => 'Could not validate code. Try again.';
+
+  @override
   String get userDashboardTitle => 'My Bookings';
 
   @override
@@ -1036,10 +1066,25 @@ class AppLocalizationsEn extends AppLocalizations {
   String get specialOffers => 'Special offers';
 
   @override
-  String get navHome => 'Home';
+  String get specialOffer => 'Special Offer';
 
   @override
-  String get navBookings => 'Bookings';
+  String get offerBadge => 'APP EXCLUSIVE';
+
+  @override
+  String get offerWelcomeGift => 'Your welcome gift.';
+
+  @override
+  String get offerDiscount => '20% off everything.';
+
+  @override
+  String get offerCodeLabel => 'Code';
+
+  @override
+  String get offerCodeCopied => 'Code copied: RAHAL20';
+
+  @override
+  String get offerCopyCode => 'Copy Code';
 
   @override
   String get paymentTitle => 'Payment';

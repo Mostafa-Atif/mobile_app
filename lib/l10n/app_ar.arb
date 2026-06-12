@@ -145,6 +145,19 @@
   "unableToConnect": "تعذّر الاتصال",
   "checkConnectionRetry": "يرجى التحقق من اتصالك والمحاولة مجدداً",
   "retry": "إعادة المحاولة",
+  "dateTimeAt": "{date} في {time}",
+  "@dateTimeAt": {
+    "placeholders": {
+      "date": { "type": "String" },
+      "time": { "type": "String" }
+    }
+  },
+  "errorWithMessage": "خطأ: {message}",
+  "@errorWithMessage": {
+    "placeholders": {
+      "message": { "type": "String" }
+    }
+  },
   "searchStays": "البحث عن إقامة",
   "overOneMillion": "أكثر من مليون عقار حول العالم",
   "destination": "الوجهة",
@@ -307,6 +320,17 @@
   "selectDate": "اختر تاريخاً",
   "viewSummaryFlight": "عرض الملخص",
   "hideSummaryFlight": "إخفاء الملخص",
+  "promoCode": "كود الخصم",
+  "enterCode": "أدخل الكود",
+  "subtotal": "المجموع الفرعي",
+  "discountWithCode": "الخصم ({code})",
+  "@discountWithCode": {
+    "placeholders": {
+      "code": { "type": "String" }
+    }
+  },
+  "invalidPromoCode": "كود الخصم غير صالح",
+  "promoValidateFailed": "تعذّر التحقق من الكود. حاول مرة أخرى.",
   "userDashboardTitle": "حجوزاتي",
   "userDashboardSubtitle": "كل حجوزاتك في مكان واحد",
   "userDashboardTotal": "الإجمالي",
@@ -386,6 +410,15 @@
   "errorName": "يجب أن يكون من 2 إلى 50 حرفاً",
   "errorAge": "يجب أن يكون العمر بين 18 و 120",
   "errorNationalId": "يجب أن يكون من 8 إلى 20 حرفاً أو رقماً",
+  "upcomingTrip": "رحلتك القادمة",
+  "specialOffers": "عروض خاصة",
+  "specialOffer": "عرض خاص",
+  "offerBadge": "حصري للتطبيق",
+  "offerWelcomeGift": "هدية رحال.",
+  "offerDiscount": "خصم 20%",
+  "offerCodeLabel": "الكود",
+  "offerCodeCopied": "تم نسخ الكود: RAHAL20",
+  "offerCopyCode": "نسخ الكود",
   "paymentTitle": "الدفع",
   "paymentCreditCard": "بطاقة ائتمان",
   "paymentDebitCard": "بطاقة مدين",

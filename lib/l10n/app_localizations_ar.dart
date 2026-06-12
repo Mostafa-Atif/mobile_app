@@ -376,6 +376,16 @@ class AppLocalizationsAr extends AppLocalizations {
   String get retry => 'إعادة المحاولة';
 
   @override
+  String dateTimeAt(String date, String time) {
+    return '$date في $time';
+  }
+
+  @override
+  String errorWithMessage(String message) {
+    return 'خطأ: $message';
+  }
+
+  @override
   String get searchStays => 'البحث عن إقامة';
 
   @override
@@ -777,6 +787,26 @@ class AppLocalizationsAr extends AppLocalizations {
   String get hideSummaryFlight => 'إخفاء الملخص';
 
   @override
+  String get promoCode => 'كود الخصم';
+
+  @override
+  String get enterCode => 'أدخل الكود';
+
+  @override
+  String get subtotal => 'المجموع الفرعي';
+
+  @override
+  String discountWithCode(String code) {
+    return 'الخصم ($code)';
+  }
+
+  @override
+  String get invalidPromoCode => 'كود الخصم غير صالح';
+
+  @override
+  String get promoValidateFailed => 'تعذّر التحقق من الكود. حاول مرة أخرى.';
+
+  @override
   String get userDashboardTitle => 'حجوزاتي';
 
   @override
@@ -1022,16 +1052,31 @@ class AppLocalizationsAr extends AppLocalizations {
   String get errorNationalId => 'يجب أن يكون من 8 إلى 20 حرفاً أو رقماً';
 
   @override
-  String get upcomingTrip => 'Upcoming trip';
+  String get upcomingTrip => 'رحلتك القادمة';
 
   @override
-  String get specialOffers => 'Special offers';
+  String get specialOffers => 'عروض خاصة';
 
   @override
-  String get navHome => 'Home';
+  String get specialOffer => 'عرض خاص';
 
   @override
-  String get navBookings => 'Bookings';
+  String get offerBadge => 'حصري للتطبيق';
+
+  @override
+  String get offerWelcomeGift => 'هدية رحال.';
+
+  @override
+  String get offerDiscount => 'خصم 20%';
+
+  @override
+  String get offerCodeLabel => 'الكود';
+
+  @override
+  String get offerCodeCopied => 'تم نسخ الكود: RAHAL20';
+
+  @override
+  String get offerCopyCode => 'نسخ الكود';
 
   @override
   String get paymentTitle => 'الدفع';

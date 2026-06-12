@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:mobile_app/config.dart';
 import 'package:mobile_app/data/destinations_repository.dart';
@@ -45,8 +46,6 @@ class _HomeScreenState extends State<HomeScreen> {
   int _currentHeroPage = 0;
   Timer? _heroTimer;
   int _heroDestinationsCount = 0;
-
-  int _selectedNavIndex = 0;
 
   final LayerLink _profileMenuLink = LayerLink();
   OverlayEntry? _profileMenuEntry;
@@ -275,30 +274,6 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  // ── Bottom nav ────────────────────────────────────────────────────────────
-
-  void _onNavTap(int index) {
-    if (index == _selectedNavIndex) return;
-    setState(() => _selectedNavIndex = index);
-    switch (index) {
-      case 1:
-        Navigator.push(
-            context, MaterialPageRoute(builder: (_) => FlightSearch()));
-      case 2:
-        Navigator.push(
-            context, MaterialPageRoute(builder: (_) => HotelSearch()));
-      case 3:
-        Navigator.push(
-            context, MaterialPageRoute(builder: (_) => CarsSearch()));
-      case 4:
-        _openDashboard();
-    }
-    if (index != 0) {
-      WidgetsBinding.instance
-          .addPostFrameCallback((_) => setState(() => _selectedNavIndex = 0));
-    }
-  }
-
   // ── Build ─────────────────────────────────────────────────────────────────
 
   @override
@@ -310,7 +285,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
     return Scaffold(
       backgroundColor: t.bg,
-      bottomNavigationBar: _buildBottomNavBar(context, t, l, isDark),
       body: FutureBuilder<List<List<Map<String, dynamic>>>>(
         future: Future.wait(
             [_heroDestinationsFuture, _featuredDestinationsFuture]),
@@ -357,98 +331,90 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  // ── Bottom nav bar ────────────────────────────────────────────────────────
+  // ── Category buttons (replaces bottom nav bar) ───────────────────────────
 
-  Widget _buildBottomNavBar(
+  Widget _buildCategoryButtons(
     BuildContext context,
     AppThemeExtension t,
     AppLocalizations l,
-    bool isDark,
   ) {
-    final labels = [
-      l.navHome,
-      l.flights,
-      l.hotels,
-      l.carRent,
-      l.navBookings,
-    ];
-    final icons = [
-      Icons.home_rounded,
-      Icons.flight_rounded,
-      Icons.hotel_rounded,
-      Icons.directions_car_rounded,
-      Icons.confirmation_num_outlined,
+    final items = [
+      (
+        icon: Icons.flight_rounded,
+        label: l.flights,
+        page: () => FlightSearch(),
+      ),
+      (
+        icon: Icons.hotel_rounded,
+        label: l.hotels,
+        page: () => HotelSearch(),
+      ),
+      (
+        icon: Icons.directions_car_rounded,
+        label: l.carRent,
+        page: () => CarsSearch(),
+      ),
     ];
 
-    return Container(
-      decoration: BoxDecoration(
-        color: t.bg,
-        border: Border(
-          top: BorderSide(
-            color: t.cardBorder.withOpacity(0.18),
-            width: 0.5,
-          ),
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(isDark ? 0.28 : 0.06),
-            blurRadius: 12,
-            offset: const Offset(0, -3),
-          ),
-        ],
-      ),
-      child: SafeArea(
-        top: false,
-        child: SizedBox(
-          height: 60,
-          child: Row(
-            children: List.generate(labels.length, (i) {
-              final active = i == _selectedNavIndex;
-              return Expanded(
-                child: GestureDetector(
-                  behavior: HitTestBehavior.opaque,
-                  onTap: () => _onNavTap(i),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(
-                        icons[i],
-                        size: 22,
-                        color: active
-                            ? t.accent
-                            : t.title.withOpacity(0.32),
-                      ),
-                      const SizedBox(height: 3),
-                      Text(
-                        labels[i],
-                        style: TextStyle(
-                          fontSize: 10,
-                          fontWeight: FontWeight.w600,
-                          color: active
-                              ? t.accent
-                              : t.title.withOpacity(0.32),
-                        ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      const SizedBox(height: 3),
-                      AnimatedContainer(
-                        duration: const Duration(milliseconds: 200),
-                        width: active ? 4 : 0,
-                        height: active ? 4 : 0,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: t.accent,
-                        ),
-                      ),
-                    ],
-                  ),
+    return Row(
+      children: List.generate(items.length, (i) {
+        final item = items[i];
+        final cardColor = Color.lerp(t.card, t.accent, 0.07)!;
+        return Expanded(
+          child: Padding(
+            padding: EdgeInsets.only(
+              left: i == 0 ? 0 : 5,
+              right: i == items.length - 1 ? 0 : 5,
+            ),
+            child: GestureDetector(
+              onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => item.page()),
+              ),
+              child: Container(
+                padding: const EdgeInsets.symmetric(vertical: 13),
+                decoration: BoxDecoration(
+                  color: cardColor,
+                  borderRadius: BorderRadius.circular(14),
+                  border: Border.all(color: t.accent.withOpacity(0.18)),
+                  boxShadow: [
+                    BoxShadow(
+                      color: t.accent.withOpacity(0.08),
+                      blurRadius: 18,
+                      offset: const Offset(0, 8),
+                    ),
+                  ],
                 ),
-              );
-            }),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      width: 38,
+                      height: 38,
+                      decoration: BoxDecoration(
+                        color: t.accentLight,
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Icon(item.icon, color: t.accent, size: 19),
+                    ),
+                    const SizedBox(height: 7),
+                    Text(
+                      item.label,
+                      style: TextStyle(
+                        fontSize: 10,
+                        fontWeight: FontWeight.w800,
+                        color: t.title,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ],
+                ),
+              ),
+            ),
           ),
-        ),
-      ),
+        );
+      }),
     );
   }
 
@@ -592,6 +558,8 @@ class _HomeScreenState extends State<HomeScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          _buildCategoryButtons(context, t, l),
+          const SizedBox(height: 24),
           _buildUpcomingTrip(context, t, l),
           const SizedBox(height: 32),
           _buildSpecialOffers(context, t, l),
@@ -902,140 +870,180 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  // ── Special Offers ────────────────────────────────────────────────────────
+  // ── Special Offers / 20% promo banner ────────────────────────────────────
 
   Widget _buildSpecialOffers(
     BuildContext context,
     AppThemeExtension t,
     AppLocalizations l,
   ) {
-    const String offerImageUrl =
-        'https://images.unsplash.com/photo-1524231757912-21f4fe3a7200?w=720&q=80';
-    const String offerTag = 'This week only';
-    const String offerTitle = '30% off hotels\nin Istanbul';
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              l.specialOffers,
-              style: TextStyle(
-                fontSize: 17,
-                fontWeight: FontWeight.w800,
-                color: t.title,
-                fontFamily: 'DM Serif Display',
-                letterSpacing: -0.2,
-              ),
-            ),
-            GestureDetector(
-              onTap: () {},
-              child: Container(
-                padding: const EdgeInsets.symmetric(
-                    horizontal: 12, vertical: 5),
-                decoration: BoxDecoration(
-                  color: t.accentLight,
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: Text(
-                  l.seeAll,
-                  style: TextStyle(
-                    fontSize: 12,
-                    color: t.accent,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-              ),
-            ),
-          ],
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(18),
+      child: Container(
+        padding: const EdgeInsets.all(16),
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [
+              Color(0xFF0A1628),
+              Color(0xFF0D2A5E),
+              Color(0xFF1A4A8A),
+            ],
+          ),
         ),
-        const SizedBox(height: 14),
-        ClipRRect(
-          borderRadius: BorderRadius.circular(18),
-          child: SizedBox(
-            height: 96,
-            child: Stack(
-              fit: StackFit.expand,
+        child: Stack(
+          children: [
+            Positioned(
+              right: -8,
+              top: -10,
+              child: Text(
+                '20%',
+                style: TextStyle(
+                  fontSize: 90,
+                  fontWeight: FontWeight.w900,
+                  color: Colors.white.withOpacity(0.04),
+                  letterSpacing: -4,
+                  height: 1.0,
+                ),
+              ),
+            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
               children: [
-                Image.network(
-                  offerImageUrl,
-                  fit: BoxFit.cover,
-                  errorBuilder: (_, __, ___) =>
-                      Container(color: t.card),
-                ),
-                Container(
-                  decoration: const BoxDecoration(
-                    gradient: LinearGradient(
-                      begin: Alignment.centerLeft,
-                      end: Alignment.centerRight,
-                      colors: [
-                        Color(0xCC0A143C),
-                        Color(0x880A143C),
-                      ],
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 18),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            offerTag,
-                            style: TextStyle(
-                              color: Color(0xB3FFFFFF),
-                              fontSize: 10,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                          SizedBox(height: 4),
-                          Text(
-                            offerTitle,
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 14,
-                              fontWeight: FontWeight.w700,
-                              height: 1.3,
-                            ),
-                          ),
-                        ],
-                      ),
-                      GestureDetector(
-                        onTap: () => Navigator.push(context,
-                            MaterialPageRoute(
-                                builder: (_) => HotelSearch())),
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 16, vertical: 8),
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          child: const Text(
-                            'Book',
-                            style: TextStyle(
-                              fontSize: 12,
-                              fontWeight: FontWeight.w700,
-                              color: Color(0xFF1E3A6E),
-                            ),
-                          ),
+                Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        l.specialOffer,
+                        style: const TextStyle(
+                          fontSize: 17,
+                          fontWeight: FontWeight.w800,
+                          color: Colors.white,
+                          fontFamily: 'DM Serif Display',
+                          letterSpacing: -0.2,
                         ),
+                      ),
+                    ),
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 8, vertical: 3),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFF5A623).withOpacity(0.12),
+                        borderRadius: BorderRadius.circular(4),
+                        border: Border.all(
+                          color: const Color(0xFFF5A623).withOpacity(0.3),
+                          width: 0.5,
+                        ),
+                      ),
+                      child: Text(
+                        l.offerBadge,
+                        style: TextStyle(
+                          fontSize: 10,
+                          fontWeight: FontWeight.w800,
+                          letterSpacing: 1.2,
+                          color: Color(0xFFF5A623),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 12),
+                RichText(
+                  text: TextSpan(
+                    style: const TextStyle(
+                      fontSize: 21,
+                      fontWeight: FontWeight.w900,
+                      height: 1.2,
+                      color: Colors.white,
+                      letterSpacing: -0.4,
+                    ),
+                    children: [
+                      TextSpan(text: '${l.offerWelcomeGift}\n'),
+                      TextSpan(
+                        text: l.offerDiscount,
+                        style: const TextStyle(color: Color(0xFFF5A623)),
                       ),
                     ],
                   ),
                 ),
+                const SizedBox(height: 14),
+                Row(
+                  children: [
+                    Text(
+                      l.offerCodeLabel,
+                      style: TextStyle(
+                        fontSize: 9,
+                        color: Colors.white.withOpacity(0.45),
+                      ),
+                    ),
+                    const SizedBox(width: 6),
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 9, vertical: 4),
+                      decoration: BoxDecoration(
+                        color: Colors.white.withOpacity(0.08),
+                        borderRadius: BorderRadius.circular(6),
+                        border: Border.all(
+                          color: Colors.white.withOpacity(0.2),
+                          width: 1,
+                        ),
+                      ),
+                      child: const Text(
+                        'RAHAL20',
+                        style: TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w800,
+                          letterSpacing: 2,
+                          color: Colors.white,
+                          fontFamily: 'monospace',
+                        ),
+                      ),
+                    ),
+                    const Spacer(),
+                    GestureDetector(
+                      onTap: () {
+                        Clipboard.setData(
+                            const ClipboardData(text: 'RAHAL20'));
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(l.offerCodeCopied),
+                            duration: Duration(seconds: 2),
+                          ),
+                        );
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 16, vertical: 8),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFF5A623),
+                          borderRadius: BorderRadius.circular(20),
+                          boxShadow: [
+                            BoxShadow(
+                              color: const Color(0xFFF5A623).withOpacity(0.5),
+                              blurRadius: 14,
+                              offset: const Offset(0, 4),
+                            ),
+                          ],
+                        ),
+                        child: Text(
+                          l.offerCopyCode,
+                          style: TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w800,
+                            color: Color(0xFF1A1000),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ],
             ),
-          ),
+          ],
         ),
-      ],
+      ),
     );
   }
 
