@@ -6,7 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
 import 'package:mobile_app/l10n/app_localizations.dart';
-import 'package:mobile_app/widgets/payment_section.dart';
+import 'package:mobile_app/screens/shared/success_screen.dart';
+import 'package:mobile_app/screens/home/home_screen.dart';
 import 'package:mobile_app/theme.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -45,8 +46,6 @@ class _HotelBookingState extends State<HotelBooking> {
   bool summaryExpanded = false;
   String token = '';
   List<Map<String, dynamic>> guestList = [];
-
-  final _paymentKey = GlobalKey<PaymentSectionState>();
 
   @override
   void initState() {
@@ -294,7 +293,6 @@ class _HotelBookingState extends State<HotelBooking> {
   }
 
   Future<void> _submitBooking(AppLocalizations l) async {
-    // Validate guests
     final unfilled = guestList.where((g) => !g['filled']).length;
     if (unfilled > 0) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -302,9 +300,6 @@ class _HotelBookingState extends State<HotelBooking> {
       );
       return;
     }
-
-    // Validate payment
-    if (!(_paymentKey.currentState?.validate() ?? false)) return;
 
     setState(() => isSubmitting = true);
 
@@ -335,15 +330,22 @@ class _HotelBookingState extends State<HotelBooking> {
       );
 
       if (response.statusCode == 200 || response.statusCode == 201) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(l.hotelBookedSuccess),
-            backgroundColor: Colors.green,
+        if (!mounted) return;
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (_) => SuccessScreen(
+              title: 'Booking Confirmed!',
+              message: 'Your hotel has been booked successfully.\nEnjoy your stay!',
+              onContinue: () => Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(builder: (_) => HomeScreen()),
+                    (route) => false,
+              ),
+            ),
           ),
         );
-        Navigator.pop(context);
-        Navigator.pop(context);
-      } else {
+      }else {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text(_bookingErrorMessage(response, l))),
         );
@@ -528,10 +530,6 @@ class _HotelBookingState extends State<HotelBooking> {
                                 child: _buildGuestCard(i, l),
                               ),
                             ),
-                            SizedBox(height: 6),
-                            _sectionHeader(l.paymentTitle, ''),
-                            SizedBox(height: 10),
-                            PaymentSection(key: _paymentKey),
                           ],
                         ),
                       ),
@@ -700,7 +698,7 @@ class _HotelBookingState extends State<HotelBooking> {
           ),
           SizedBox(width: 8),
           _pillButton(
-            label: filled ? l.edit : l.add,
+            label: filled ? l.done : l.next,
             filled: filled,
             icon: filled ? Icons.edit_outlined : Icons.add_rounded,
             onTap: () => _openGuestSheet(index, l),
