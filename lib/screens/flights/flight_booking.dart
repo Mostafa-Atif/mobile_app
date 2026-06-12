@@ -2,6 +2,9 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:mobile_app/l10n/app_localizations.dart';
+import 'package:mobile_app/screens/shared/confirmation_screen.dart';
+import 'package:mobile_app/screens/shared/success_screen.dart';
+import 'package:mobile_app/screens/home/home_screen.dart';
 import 'package:mobile_app/theme.dart';
 import 'package:mobile_app/widgets/payment_section.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -617,10 +620,21 @@ class _FlightBookingState extends State<FlightBooking> {
       final allSuccess = results.every((r) => r.statusCode == 200 || r.statusCode == 201);
 
       if (allSuccess) {
-        ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(l.flightBookedSuccess), backgroundColor: Colors.green));
-        Navigator.pop(context);
-        Navigator.pop(context);
+        if (!mounted) return;
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (_) => SuccessScreen(
+              title: 'Flight Booked!',
+              message: 'Your flight has been booked successfully.\nHave a great trip!',
+              onContinue: () => Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(builder: (_) => HomeScreen()),
+                    (route) => false,
+              ),
+            ),
+          ),
+        );
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text(l.someBookingsFailed)));

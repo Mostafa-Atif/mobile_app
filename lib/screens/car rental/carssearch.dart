@@ -7,6 +7,8 @@ import 'package:mobile_app/l10n/app_localizations.dart';
 import 'package:mobile_app/theme.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:mobile_app/screens/shared/success_screen.dart';
+import 'package:mobile_app/screens/home/home_screen.dart';
 import '../../config.dart';
 import 'package:mobile_app/widgets/payment_section.dart';
 
@@ -141,10 +143,7 @@ class _CarsSearchState extends State<CarsSearch> {
 
   String _formatDateTime(DateTime? dt, AppLocalizations l) {
     if (dt == null) return l.selectDateTime;
-    final date = '${dt.day}/${dt.month}/${dt.year}';
-    final time =
-        '${dt.hour.toString().padLeft(2, '0')}:${dt.minute.toString().padLeft(2, '0')}';
-    return l.dateTimeAt(date, time);
+    return '${dt.day}/${dt.month}/${dt.year} at ${dt.hour.toString().padLeft(2, '0')}:${dt.minute.toString().padLeft(2, '0')}';
   }
 
   int get totalDays {
@@ -215,7 +214,13 @@ class _CarsSearchState extends State<CarsSearch> {
           context,
           MaterialPageRoute(
             builder: (_) => SuccessScreen(
-              onContinue: () => Navigator.pop(context),
+              title: 'Ride Confirmed!',
+              message: 'Your car has been booked successfully.\nEnjoy your ride!',
+              onContinue: () => Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(builder: (_) => HomeScreen()),
+                    (route) => false,
+              ),
             ),
           ),
         );
@@ -225,31 +230,30 @@ class _CarsSearchState extends State<CarsSearch> {
         );
       }
     } catch (e) {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text(l.errorWithMessage('$e'))));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error: $e')));
     }
     setState(() => isSubmitting = false);
   }
 
   // ── UI Helpers ──────────────────────────────────────────────────────────────
 
-  Widget _buildError(AppThemeExtension t, AppLocalizations l) {
+  Widget _buildError(AppThemeExtension t) {
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Icon(Icons.wifi_off, size: 60, color: t.cardBorder),
           const SizedBox(height: 16),
-          Text(l.unableToConnect,
+          Text('Unable to connect',
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: t.title)),
           const SizedBox(height: 8),
-          Text(l.checkConnectionRetry,
+          Text('Please check your connection and try again',
               style: TextStyle(color: t.label, fontSize: 13), textAlign: TextAlign.center),
           const SizedBox(height: 24),
           ElevatedButton.icon(
             onPressed: fetchCars,
             icon: const Icon(Icons.refresh),
-            label: Text(l.retry),
+            label: const Text('Retry'),
             style: ElevatedButton.styleFrom(
               shape: const StadiumBorder(),
               backgroundColor: t.accent,
@@ -397,7 +401,7 @@ class _CarsSearchState extends State<CarsSearch> {
       backgroundColor: t.bg,
       body: SafeArea(
         child: hasError
-            ? _buildError(t, l)
+            ? _buildError(t)
             : Column(
                 children: [
                   // ── Header ──
@@ -1031,7 +1035,6 @@ class SuccessScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final t = Theme.of(context).extension<AppThemeExtension>()!;
-    final l = AppLocalizations.of(context)!;
 
     return Scaffold(
       backgroundColor: t.bg,
@@ -1111,9 +1114,9 @@ class SuccessScreen extends StatelessWidget {
                     ),
                     elevation: 0,
                   ),
-                  child: Text(
-                    l.continue_,
-                    style: const TextStyle(
+                  child: const Text(
+                    'Continue',
+                    style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w600,
                       letterSpacing: 0.5,
