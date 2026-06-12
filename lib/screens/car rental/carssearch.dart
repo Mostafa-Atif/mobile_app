@@ -391,7 +391,6 @@ class _CarsSearchState extends State<CarsSearch> {
   Widget build(BuildContext context) {
     final t = Theme.of(context).extension<AppThemeExtension>()!;
     final l = AppLocalizations.of(context)!;
-    final l = AppLocalizations.of(context)!;
     final isAr = Localizations.localeOf(context).languageCode == 'ar';
 
     return Scaffold(
@@ -1032,6 +1031,7 @@ class SuccessScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final t = Theme.of(context).extension<AppThemeExtension>()!;
+    final l = AppLocalizations.of(context)!;
 
     return Scaffold(
       backgroundColor: t.bg,
