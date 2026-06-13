@@ -686,11 +686,11 @@ abstract class AppLocalizations {
   /// **'Total'**
   String get total;
 
-  /// No description provided for @confirmBooking.
+  /// No description provided for @proceedToPayment.
   ///
   /// In en, this message translates to:
-  /// **'Confirm Booking'**
-  String get confirmBooking;
+  /// **'Proceed To Payment'**
+  String get proceedToPayment;
 
   /// No description provided for @bookingConfirmed.
   ///

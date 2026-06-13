@@ -326,7 +326,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get total => 'Total';
 
   @override
-  String get confirmBooking => 'Confirm Booking';
+  String get proceedToPayment => 'Proceed To Payment';
 
   @override
   String get bookingConfirmed => 'Booking confirmed! 🎉';

@@ -7,7 +7,7 @@ import 'package:mobile_app/l10n/app_localizations.dart';
 import 'package:mobile_app/theme.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:mobile_app/screens/shared/success_screen.dart';
+// import 'package:mobile_app/screens/shared/success_screen.dart';
 import 'package:mobile_app/screens/home/home_screen.dart';
 import '../../config.dart';
 import 'package:mobile_app/widgets/payment_section.dart';
@@ -26,7 +26,7 @@ class _CarsSearchState extends State<CarsSearch> {
   bool isSubmitting = false;
   bool _submitted = false;
   int visibleCount = 3;
-  final _paymentKey = GlobalKey<PaymentSectionState>();
+  // final _paymentKey = GlobalKey<PaymentSectionState>();
 
   Map<String, dynamic>? selectedCar;
   String? pickupLocation;
@@ -175,16 +175,22 @@ class _CarsSearchState extends State<CarsSearch> {
       return;
     }
     // Validate payment fields
-    if (selectedCar != null && totalDays > 0) {
-      final paymentValid = _paymentKey.currentState?.validate() ?? false;
-      if (!paymentValid) return;
-    }
+    // if (selectedCar != null && totalDays > 0) {
+    //   final paymentValid = _paymentKey.currentState?.validate() ?? false;
+    //   if (!paymentValid) return;
+    // }
     if (token.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l.signInFirst)));
       return;
     }
     setState(() => isSubmitting = true);
     try {
+
+
+      final totalAmount = ((selectedCar!['pricePerDay'] * totalDays) + (privateDriver ? totalDays * 100 : 0)) * 100;
+      await pay(totalAmount.toInt());
+
+
       final response = await http.post(
         Uri.parse('${Config.baseUrl}/api/car-bookings'),
         headers: {'Content-Type': 'application/json', 'Authorization': 'Bearer $token'},
@@ -929,10 +935,10 @@ class _CarsSearchState extends State<CarsSearch> {
                           const SizedBox(height: 24),
 
                           // ── Payment ──
-                          if (selectedCar != null && totalDays > 0)
-                            PaymentSection(key: _paymentKey),
+                          // if (selectedCar != null && totalDays > 0)
+                          //   PaymentSection(key: _paymentKey),
 
-                          const SizedBox(height: 24),
+                          // const SizedBox(height: 24),
 
                           // ── Confirm button ──
                           GestureDetector(
@@ -956,7 +962,7 @@ class _CarsSearchState extends State<CarsSearch> {
                                     ? const CircularProgressIndicator(
                                         color: Colors.white)
                                     : Text(
-                                        l.confirmBooking,
+                                        l.proceedToPayment,
                                         style: const TextStyle(
                                           color: Colors.white,
                                           fontSize: 16,

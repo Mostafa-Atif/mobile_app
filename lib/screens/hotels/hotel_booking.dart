@@ -9,6 +9,7 @@ import 'package:mobile_app/l10n/app_localizations.dart';
 import 'package:mobile_app/screens/shared/success_screen.dart';
 import 'package:mobile_app/screens/home/home_screen.dart';
 import 'package:mobile_app/theme.dart';
+import 'package:mobile_app/widgets/payment_section.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../config.dart';
@@ -304,6 +305,11 @@ class _HotelBookingState extends State<HotelBooking> {
     setState(() => isSubmitting = true);
 
     try {
+
+
+      await pay((totalPrice * 100).toInt());
+
+
       final response = await http.post(
         Uri.parse('${Config.baseUrl}/api/hotels'),
         headers: {
@@ -780,7 +786,7 @@ class _HotelBookingState extends State<HotelBooking> {
                           ),
                         )
                       : Text(
-                          l.confirmBooking,
+                          l.proceedToPayment,
                           style: TextStyle(fontSize: 14, fontWeight: FontWeight.w800),
                         ),
                 ),

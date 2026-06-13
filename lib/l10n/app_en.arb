@@ -128,7 +128,7 @@
     }
   },
   "total": "Total",
-  "confirmBooking": "Confirm Booking",
+  "proceedToPayment": "Proceed To Payment",
   "bookingConfirmed": "Booking confirmed! 🎉",
   "bookingFailed": "Booking failed",
   "selectCarError": "Please select a car first",

@@ -4,6 +4,7 @@ const express = require("express");
 const cors = require("cors");
 const connectDB = require("./config/db");
 const carRoutes = require("./routes/carRoutes");
+const stripeRoutes = require('./stripe');
 const dns = require("dns");
 dns.setServers(["8.8.8.8", "1.1.1.1"]);
 
@@ -74,6 +75,8 @@ app.use("/api/my-bookings", require("./routes/myBookingRoutes"));
 
 //   res.send("Welcome Admin");
 // });
+
+app.use('/api/payments', stripeRoutes);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

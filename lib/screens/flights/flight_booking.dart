@@ -58,7 +58,7 @@ class _FlightBookingState extends State<FlightBooking> {
   String? _promoError;
 
   // Key to access PaymentSection's validate()
-  final _paymentKey = GlobalKey<PaymentSectionState>();
+  // final _paymentKey = GlobalKey<PaymentSectionState>();
 
   @override
   void initState() {
@@ -582,16 +582,21 @@ class _FlightBookingState extends State<FlightBooking> {
       return;
     }
 
-    final paymentValid = _paymentKey.currentState?.validate() ?? false;
-    if (!paymentValid) {
-      ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(l.paymentErrorCardNumberRequired)));
-      return;
-    }
+    // final paymentValid = _paymentKey.currentState?.validate() ?? false;
+    // if (!paymentValid) {
+    //   ScaffoldMessenger.of(context).showSnackBar(
+    //       SnackBar(content: Text(l.paymentErrorCardNumberRequired)));
+    //   return;
+    // }
 
     setState(() => isSubmitting = true);
 
     try {
+
+
+      await pay((discountedTotal * 100).toInt());
+
+
       final requests = passengerList.map((p) {
         return http.post(
           Uri.parse('${Config.baseUrl}/api/flight-bookings'),
@@ -875,8 +880,8 @@ class _FlightBookingState extends State<FlightBooking> {
                   }),
 
                   // ── Payment Section ───────────────────────────────
-                  const SizedBox(height: 24),
-                  PaymentSection(key: _paymentKey),
+                  // const SizedBox(height: 24),
+                  // PaymentSection(key: _paymentKey),
 
                   // ── Promo Code ────────────────────────────────────
                   const SizedBox(height: 16),
@@ -906,7 +911,7 @@ class _FlightBookingState extends State<FlightBooking> {
                           : Text(
                               passengerList.length > 1
                                   ? l.confirmBookings(passengerList.length)
-                                  : l.confirmBooking,
+                                  : l.proceedToPayment,
                               textAlign: TextAlign.center,
                               style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: Colors.white)),
                     ),

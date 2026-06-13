@@ -1,7 +1,9 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:mobile_app/l10n/app_localizations.dart';
 import 'package:mobile_app/screens/auth/sign_in.dart';
 import 'package:mobile_app/screens/home/admin_dashboard_screen.dart';
@@ -26,6 +28,11 @@ void main() async {
   } else {
     startScreen = const TempHome();
   }
+
+
+  // Stripe.publishableKey = 'pk_test_51ThYmaEJd6SsMZnj5VoFLlSyCoB3jTjgC6oOblHzdEqW2GsGRj3fKZvnv005jwUh8ILcL4lYAuCkCOdqn37FQK5K0095ehkKgq';
+  // await Stripe.instance.applySettings();
+
 
   runApp(
     ChangeNotifierProvider(
