@@ -32,7 +32,6 @@ class HotelDetails extends StatefulWidget {
 class _HotelDetailsState extends State<HotelDetails> {
   AppThemeExtension get _t => Theme.of(context).extension<AppThemeExtension>()!;
 
-  bool isFavorite = false;
   late DateTime checkInDate;
   late DateTime checkOutDate;
   late int numRooms;
@@ -212,17 +211,6 @@ class _HotelDetailsState extends State<HotelDetails> {
                     onTap: () => Navigator.of(context).maybePop(),
                   ),
                 ),
-                actions: [
-                  Padding(
-                    padding: EdgeInsets.only(right: 16, top: 8, bottom: 8),
-                    child: _iconShell(
-                      icon: isFavorite ? Icons.favorite_rounded : Icons.favorite_border_rounded,
-                      iconColor: isFavorite ? AppColors.error : _t.title,
-                      circular: true,
-                      onTap: () => setState(() => isFavorite = !isFavorite),
-                    ),
-                  ),
-                ],
                 flexibleSpace: FlexibleSpaceBar(
                   background: Stack(
                     fit: StackFit.expand,

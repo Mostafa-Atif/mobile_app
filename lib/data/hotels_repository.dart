@@ -65,7 +65,6 @@ class HotelsRepository {
         'price': hotel['price'].toString(),
         'views': List<String>.from(hotel['views'] as List<dynamic>),
         'imgUrl': hotel['image'],
-        'isFavorite': false,
       };
     }).toList();
   }

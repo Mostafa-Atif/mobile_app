@@ -527,8 +527,6 @@ class _HotelResultsState extends State<HotelResults> {
     final rating = hotel["rating"];
     final price = hotel["price"];
     final imgUrl = hotel["imgUrl"];
-    final isFavorite = hotel["isFavorite"] as bool;
-    final allIndex = allHotels.indexOf(hotel);
 
     return GestureDetector(
       onTap: () {
@@ -596,37 +594,6 @@ class _HotelResultsState extends State<HotelResults> {
                         begin: Alignment.topCenter,
                         end: Alignment.bottomCenter,
                         colors: [Colors.transparent, Colors.black.withOpacity(0.18)],
-                      ),
-                    ),
-                  ),
-                ),
-                Positioned(
-                  top: 12,
-                  right: 12,
-                  child: Material(
-                    color: Colors.transparent,
-                    child: InkWell(
-                      borderRadius: BorderRadius.circular(20),
-                      onTap: () {
-                        setState(() {
-                          if (allIndex != -1) {
-                            allHotels[allIndex]["isFavorite"] = !isFavorite;
-                          }
-                          hotel["isFavorite"] = !isFavorite;
-                        });
-                      },
-                      child: Ink(
-                        width: 40,
-                        height: 40,
-                        decoration: BoxDecoration(
-                          color: Colors.white.withOpacity(0.88),
-                          shape: BoxShape.circle,
-                        ),
-                        child: Icon(
-                          isFavorite ? Icons.favorite_rounded : Icons.favorite_border_rounded,
-                          color: isFavorite ? AppColors.error : _t.title,
-                          size: 22,
-                        ),
                       ),
                     ),
                   ),
