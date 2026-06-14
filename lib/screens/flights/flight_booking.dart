@@ -50,6 +50,9 @@ class _FlightBookingState extends State<FlightBooking> {
   String token = '';
   List<Map<String, dynamic>> passengerList = [];
 
+
+
+
   // Promo code state
   final _promoCtrl = TextEditingController();
   String? _appliedPromo;
@@ -60,10 +63,17 @@ class _FlightBookingState extends State<FlightBooking> {
   // Key to access PaymentSection's validate()
   // final _paymentKey = GlobalKey<PaymentSectionState>();
 
+  late SharedPreferences prefs;
+
   @override
   void initState() {
     super.initState();
     _initPassengers();
+    _loadPrefs();
+  }
+
+  Future<void> _loadPrefs() async {
+    prefs = await SharedPreferences.getInstance();
   }
 
   @override
@@ -163,27 +173,29 @@ class _FlightBookingState extends State<FlightBooking> {
     setState(() { _promoLoading = true; _promoError = null; });
 
     try {
-      // Replace with your real API call, e.g.:
-      // final res = await http.post(
-      //   Uri.parse('${Config.baseUrl}/api/promo-codes/validate'),
-      //   headers: {'Content-Type': 'application/json', 'Authorization': 'Bearer $token'},
-      //   body: json.encode({'code': code, 'totalPrice': totalPrice}),
-      // );
-      // if (res.statusCode == 200) { ... }
+      final token = prefs.getString('token') ?? '';
+      final userId = prefs.getString('userId') ?? '';
 
-      // Mock validation — remove and replace with API response above
-      await Future.delayed(const Duration(seconds: 1));
-      const validCodes = {'RAHAL20': 0.20};
+      final res = await http.post(
+        Uri.parse('${Config.baseUrl}/api/promo/validate'),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $token',
+        },
+        body: json.encode({'code': code, 'userId': userId}),
+      );
 
-      if (validCodes.containsKey(code)) {
+      final data = json.decode(res.body);
+
+      if (res.statusCode == 200) {
         setState(() {
           _appliedPromo = code;
-          _discountAmount = (totalPrice * validCodes[code]!).toDouble();
+          _discountAmount = (totalPrice * (data['discountPercent'] / 100)).toDouble();
           _promoLoading = false;
         });
       } else {
         setState(() {
-          _promoError = l.invalidPromoCode;
+          _promoError = data['message'] ?? l.invalidPromoCode;
           _promoLoading = false;
         });
       }
@@ -594,7 +606,7 @@ class _FlightBookingState extends State<FlightBooking> {
     try {
 
 
-      await pay((discountedTotal * 100).toInt());
+      // await pay((discountedTotal * 100).toInt());
 
 
       final requests = passengerList.map((p) {

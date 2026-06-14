@@ -1,7 +1,8 @@
 const CarBooking = require("../models/CarBooking");
 const Car = require("../models/cars");
 const CarAr = require("../models/carAr");
-
+const { markPromoUsed } = require("./promoController");
+const PromoCode = require("../models/PromoCode");
 // ===================================
 // CREATE CAR BOOKING (USER)
 // ===================================
@@ -70,6 +71,13 @@ const createCarBooking = async (req, res) => {
       totalPrice += driverCost;
     }
 
+    if (req.body.promoCode) {
+      const promo = await PromoCode.findOne({ code: req.body.promoCode.toUpperCase(), isActive: true });
+      if (promo) {
+        totalPrice = totalPrice * (1 - promo.discountPercent / 100);
+      }
+    }
+
     // ✅ create booking
     const booking = await CarBooking.create({
       user: req.user._id,
@@ -97,6 +105,10 @@ const createCarBooking = async (req, res) => {
 
       privateDriver: privateDriver || false,
     });
+
+    if (req.body.promoCode) {
+      await markPromoUsed(req.user._id, req.body.promoCode);
+    }
 
     res.status(201).json({
       success: true,

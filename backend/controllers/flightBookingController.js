@@ -1,4 +1,5 @@
 const FlightBooking = require("../models/FlightBooking");
+const { markPromoUsed } = require("./promoController");
 
 exports.createFlightBooking = async (req, res) => {
   try {
@@ -9,6 +10,11 @@ exports.createFlightBooking = async (req, res) => {
     });
 
     await booking.save();
+
+    // after booking is saved:
+    if (req.body.promoCode) {
+      await markPromoUsed(req.user._id, req.body.promoCode);
+    }
 
     res.status(201).json({
       message: "Flight booked successfully",

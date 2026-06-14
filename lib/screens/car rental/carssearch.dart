@@ -28,12 +28,20 @@ class _CarsSearchState extends State<CarsSearch> {
   int visibleCount = 3;
   // final _paymentKey = GlobalKey<PaymentSectionState>();
 
+  String? _appliedPromo;
+  double _discountAmount = 0;
+  String? _promoError;
+  bool _promoLoading = false;
+  final TextEditingController _promoCtrl = TextEditingController();
+
+
   Map<String, dynamic>? selectedCar;
   String? pickupLocation;
   String? dropoffLocation;
   DateTime? pickupDateTime;
   DateTime? dropoffDateTime;
   bool privateDriver = false;
+  double _discountPercent = 0;
 
   String userId = '';
   String token = '';
@@ -85,6 +93,170 @@ class _CarsSearchState extends State<CarsSearch> {
     fetchCars();
     loadUserInfo();
   }
+
+  // ── Promo code logic ───────────────────────────────────────────────────────
+
+  Future<void> _applyPromo(AppLocalizations l, AppThemeExtension t) async {
+    final code = _promoCtrl.text.trim().toUpperCase();
+    if (code.isEmpty) return;
+
+    setState(() { _promoLoading = true; _promoError = null; });
+
+    try {
+
+      final res = await http.post(
+        Uri.parse('${Config.baseUrl}/api/promo/validate'),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $token',
+        },
+        body: json.encode({'code': code, 'userId': userId}),
+      );
+
+      final data = json.decode(res.body);
+
+      if (res.statusCode == 200) {
+        final totalDays = (dropoffDateTime != null && pickupDateTime != null)
+            ? (dropoffDateTime!.difference(pickupDateTime!).inHours / 24).ceil()
+            : 1;
+        final estimatedPrice = ((selectedCar?['pricePerDay'] ?? 0) * totalDays + (privateDriver ? totalDays * 100 : 0)).toDouble();
+        setState(() {
+          _appliedPromo = code;
+          _discountPercent = data['discountPercent'] / 100;
+          _discountAmount = estimatedPrice * _discountPercent;
+          _promoLoading = false;
+        });
+      } else {
+        setState(() {
+          _promoError = data['message'] ?? l.invalidPromoCode;
+          _promoLoading = false;
+        });
+      }
+    } catch (e) {
+      setState(() {
+        _promoError = l.promoValidateFailed;
+        _promoLoading = false;
+      });
+    }
+  }
+
+  void _removePromo() {
+    setState(() {
+      _appliedPromo = null;
+      _discountAmount = 0;
+      _promoError = null;
+      _promoCtrl.clear();
+    });
+  }
+
+  void _recalculateDiscount() {
+    if (_appliedPromo == null) return;
+    final totalDays = (dropoffDateTime != null && pickupDateTime != null)
+        ? (dropoffDateTime!.difference(pickupDateTime!).inHours / 24).ceil()
+        : 1;
+    final estimatedPrice = ((selectedCar?['pricePerDay'] ?? 0) * totalDays + (privateDriver ? totalDays * 100 : 0)).toDouble();
+    setState(() => _discountAmount = estimatedPrice * _discountPercent);
+  }
+
+  Widget _promoSection(AppLocalizations l, AppThemeExtension t) {
+    return Container(
+      padding: const EdgeInsets.all(14),
+      decoration: BoxDecoration(
+        color: t.card,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: t.cardBorder.withOpacity(0.5)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(children: [
+            Icon(Icons.local_offer_outlined, size: 18, color: t.accent),
+            const SizedBox(width: 8),
+            Text(l.promoCode,
+                style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600, color: t.title)),
+          ]),
+          const SizedBox(height: 12),
+
+          if (_appliedPromo == null) ...[
+            Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              Expanded(
+                child: TextField(
+                  controller: _promoCtrl,
+                  textCapitalization: TextCapitalization.characters,
+                  style: TextStyle(color: t.title, letterSpacing: 1.2),
+                  onChanged: (_) { if (_promoError != null) setState(() => _promoError = null); },
+                  decoration: InputDecoration(
+                    hintText: l.enterCode,
+                    hintStyle: TextStyle(color: t.label, fontSize: 14),
+                    filled: true,
+                    fillColor: t.field,
+                    errorText: _promoError,
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide(color: t.fieldBorder)),
+                    enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide(
+                            color: _promoError != null ? Colors.red.shade300 : t.fieldBorder)),
+                    focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide(color: t.accent, width: 1.5)),
+                    contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+                  ),
+                ),
+              ),
+              const SizedBox(width: 10),
+              GestureDetector(
+                onTap: _promoLoading ? null : () => _applyPromo(l, t),
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 15),
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(colors: t.btnGradient),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: _promoLoading
+                      ? const SizedBox(width: 18, height: 18,
+                          child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2))
+                      : Text(l.apply,
+                          style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w600)),
+                ),
+              ),
+            ]),
+          ] else ...[
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+              decoration: BoxDecoration(
+                color: Colors.green.withOpacity(0.08),
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(color: Colors.green.withOpacity(0.3)),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(children: [
+                    const Icon(Icons.check_circle_outline, color: Colors.green, size: 18),
+                    const SizedBox(width: 8),
+                    Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                      Text(_appliedPromo!,
+                          style: const TextStyle(
+                              fontWeight: FontWeight.w700, letterSpacing: 1.1, color: Colors.green)),
+                      Text('﷼ ${_discountAmount.toStringAsFixed(2)}',
+                          style: TextStyle(fontSize: 12, color: Colors.green.shade700)),
+                    ]),
+                  ]),
+                  GestureDetector(
+                    onTap: _removePromo,
+                    child: Icon(Icons.close, size: 20, color: t.label),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ],
+      ),
+    );
+  }
+
 
   Future<void> loadUserInfo() async {
     final prefs = await SharedPreferences.getInstance();
@@ -139,6 +311,7 @@ class _CarsSearchState extends State<CarsSearch> {
       if (isPickup) pickupDateTime = combined;
       else dropoffDateTime = combined;
     });
+    _recalculateDiscount();
   }
 
   String _formatDateTime(DateTime? dt, AppLocalizations l) {
@@ -186,9 +359,9 @@ class _CarsSearchState extends State<CarsSearch> {
     setState(() => isSubmitting = true);
     try {
 
-
-      final totalAmount = ((selectedCar!['pricePerDay'] * totalDays) + (privateDriver ? totalDays * 100 : 0)) * 100;
-      await pay(totalAmount.toInt());
+      // final basePrice = (selectedCar!['pricePerDay'] * totalDays) + (privateDriver ? totalDays * 100 : 0);
+      // final totalAmount = (basePrice - _discountAmount) * 100;
+      // await pay(totalAmount.toInt());
 
 
       final response = await http.post(
@@ -202,6 +375,7 @@ class _CarsSearchState extends State<CarsSearch> {
           'dropoffDateTime': dropoffDateTime!.toIso8601String(),
           'privateDriver': privateDriver,
           'lang': 'en',
+          'promoCode': _appliedPromo,
         }),
       );
       final data = json.decode(response.body);
@@ -214,7 +388,10 @@ class _CarsSearchState extends State<CarsSearch> {
           dropoffDateTime = null;
           privateDriver = false;
           _submitted = false;
+          _appliedPromo = null;
+          _discountAmount = 0;
         });
+        _promoCtrl.clear();
         if (!mounted) return;
         Navigator.push(
           context,
@@ -872,8 +1049,10 @@ class _CarsSearchState extends State<CarsSearch> {
                                   style: TextStyle(
                                       fontSize: 12, color: t.label)),
                               value: privateDriver,
-                              onChanged: (val) =>
-                                  setState(() => privateDriver = val),
+                              onChanged: (val) {
+                                setState(() => privateDriver = val);
+                                _recalculateDiscount();
+                              },
                               activeThumbColor: t.accent,
                             ),
                           ),
@@ -904,6 +1083,15 @@ class _CarsSearchState extends State<CarsSearch> {
                                       t,
                                     ),
                                   ],
+                                  if (_appliedPromo != null) ...[
+                                    const SizedBox(height: 8),
+                                    _summaryRow(
+                                      _appliedPromo!,
+                                      '−﷼ ${_discountAmount.toStringAsFixed(0)}',
+                                      t,
+                                      color: Colors.green,
+                                    ),
+                                  ],
                                   Padding(
                                     padding: const EdgeInsets.symmetric(vertical: 12),
                                     child: Divider(color: t.divider, height: 1),
@@ -918,7 +1106,7 @@ class _CarsSearchState extends State<CarsSearch> {
                                               fontSize: 16,
                                               color: t.title)),
                                       Text(
-                                        '﷼ ${((selectedCar!['pricePerDay'] * totalDays) + (privateDriver ? totalDays * 100 : 0)).toStringAsFixed(0)}',
+                                        '﷼ ${((selectedCar!['pricePerDay'] * totalDays) + (privateDriver ? totalDays * 100 : 0) - _discountAmount).toStringAsFixed(0)}',
                                         style: TextStyle(
                                           fontWeight: FontWeight.bold,
                                           fontSize: 18,
@@ -931,6 +1119,8 @@ class _CarsSearchState extends State<CarsSearch> {
                               ),
                             ),
                           ],
+                          const SizedBox(height: 12),
+                          _promoSection(l, t),
 
                           const SizedBox(height: 24),
 
@@ -1012,17 +1202,14 @@ class _CarsSearchState extends State<CarsSearch> {
     );
   }
 
-  Widget _summaryRow(String label, String value, AppThemeExtension t) {
+  Widget _summaryRow(String label, String value, AppThemeExtension t, {Color? color}) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(label, style: TextStyle(color: t.label, fontSize: 14)),
-        Text(value,
-            style: TextStyle(
-                color: t.title, fontSize: 14, fontWeight: FontWeight.w600)),
+        Text(label, style: TextStyle(color: color ?? t.label, fontSize: 14)),
+        Text(value, style: TextStyle(color: color ?? t.title, fontSize: 14, fontWeight: FontWeight.w600)),
       ],
     );
-
   }
 
 }

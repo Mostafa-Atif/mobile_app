@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const Booking = require("../models/Booking");
 const protect = require("../middleware/authMiddleware");
+const { markPromoUsed } = require("../controllers/promoController");
 // =====================
 // CREATE BOOKING
 // =====================
@@ -23,6 +24,10 @@ router.post("/", protect, async (req, res) => {
       ...data,
       user: req.user._id   // 🔥 أهم سطر
     });
+  
+    if (data.promoCode) {
+      await markPromoUsed(req.user._id, data.promoCode);
+    }
 
     res.status(201).json({
       message: "تم الحجز بنجاح",

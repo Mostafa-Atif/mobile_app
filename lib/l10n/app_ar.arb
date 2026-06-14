@@ -128,7 +128,7 @@
     }
   },
   "total": "الإجمالي",
-  "confirmBooking": "تأكيد الحجز",
+  "proceedToPayment": "انتقل إلى الدفع",
   "bookingConfirmed": "تم الحجز بنجاح! 🎉",
   "bookingFailed": "فشل الحجز",
   "selectCarError": "يرجى اختيار سيارة أولاً",

@@ -325,7 +325,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get total => 'الإجمالي';
 
   @override
-  String get proceedToPayment => 'Proceed To Payment';
+  String get proceedToPayment => 'انتقل إلى الدفع';
 
   @override
   String get bookingConfirmed => 'تم الحجز بنجاح! 🎉';

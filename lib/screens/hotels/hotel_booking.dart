@@ -47,15 +47,217 @@ class _HotelBookingState extends State<HotelBooking> {
   bool summaryExpanded = false;
   String token = '';
   List<Map<String, dynamic>> guestList = [];
+  String? _appliedPromo;
+  double _discountAmount = 0;
+  String? _promoError;
+  bool _promoLoading = false;
+  final TextEditingController _promoCtrl = TextEditingController();
+  late SharedPreferences prefs;
 
   @override
   void initState() {
     super.initState();
     _initGuests();
+    _loadPrefs();
+  }
+
+  Future<void> _loadPrefs() async {
+    prefs = await SharedPreferences.getInstance();
+    token = prefs.getString('token') ?? '';
   }
 
   int get numPeople => widget.numAdults + widget.numChildren;
   int get totalPrice => widget.pricePerNight * widget.nights * widget.numRooms;
+  double get discountedTotal => totalPrice - _discountAmount;
+
+
+  // ── Promo code logic ───────────────────────────────────────────────────────
+
+  Future<void> _applyPromo(AppLocalizations l, AppThemeExtension t) async {
+    final code = _promoCtrl.text.trim().toUpperCase();
+    if (code.isEmpty) return;
+
+    setState(() { _promoLoading = true; _promoError = null; });
+
+    try {
+      final token = prefs.getString('token') ?? '';
+      final userId = prefs.getString('userId') ?? '';
+
+      final res = await http.post(
+        Uri.parse('${Config.baseUrl}/api/promo/validate'),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $token',
+        },
+        body: json.encode({'code': code, 'userId': userId}),
+      );
+
+      final data = json.decode(res.body);
+
+      if (res.statusCode == 200) {
+        setState(() {
+          _appliedPromo = code;
+          _discountAmount = (totalPrice.toDouble() * (data['discountPercent'] / 100)).toDouble();
+          _promoLoading = false;
+        });
+      } else {
+        setState(() {
+          _promoError = data['message'] ?? l.invalidPromoCode;
+          _promoLoading = false;
+        });
+      }
+    } catch (e) {
+      setState(() {
+        _promoError = l.promoValidateFailed;
+        _promoLoading = false;
+      });
+    }
+  }
+
+  void _removePromo() {
+    setState(() {
+      _appliedPromo = null;
+      _discountAmount = 0;
+      _promoError = null;
+      _promoCtrl.clear();
+    });
+  }
+
+  // ── Promo section widget ───────────────────────────────────────────────────
+
+  Widget _promoSection(AppLocalizations l, AppThemeExtension t) {
+    return Container(
+      padding: const EdgeInsets.all(14),
+      decoration: BoxDecoration(
+        color: t.card,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: t.cardBorder.withOpacity(0.5)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(children: [
+            Icon(Icons.local_offer_outlined, size: 18, color: t.accent),
+            const SizedBox(width: 8),
+            Text(l.promoCode,
+                style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600, color: t.title)),
+          ]),
+          const SizedBox(height: 12),
+
+          if (_appliedPromo == null) ...[
+            Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              Expanded(
+                child: TextField(
+                  controller: _promoCtrl,
+                  textCapitalization: TextCapitalization.characters,
+                  style: TextStyle(color: t.title, letterSpacing: 1.2),
+                  onChanged: (_) { if (_promoError != null) setState(() => _promoError = null); },
+                  decoration: InputDecoration(
+                    hintText: l.enterCode,
+                    hintStyle: TextStyle(color: t.label, fontSize: 14),
+                    filled: true,
+                    fillColor: t.field,
+                    errorText: _promoError,
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide(color: t.fieldBorder)),
+                    enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide(
+                            color: _promoError != null ? Colors.red.shade300 : t.fieldBorder)),
+                    focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide(color: t.accent, width: 1.5)),
+                    contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+                  ),
+                ),
+              ),
+              const SizedBox(width: 10),
+              GestureDetector(
+                onTap: _promoLoading ? null : () => _applyPromo(l, t),
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 15),
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(colors: t.btnGradient),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: _promoLoading
+                      ? const SizedBox(width: 18, height: 18,
+                          child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2))
+                      : Text(l.apply,
+                          style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w600)),
+                ),
+              ),
+            ]),
+          ] else ...[
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+              decoration: BoxDecoration(
+                color: Colors.green.withOpacity(0.08),
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(color: Colors.green.withOpacity(0.3)),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(children: [
+                    const Icon(Icons.check_circle_outline, color: Colors.green, size: 18),
+                    const SizedBox(width: 8),
+                    Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                      Text(_appliedPromo!,
+                          style: const TextStyle(
+                              fontWeight: FontWeight.w700, letterSpacing: 1.1, color: Colors.green)),
+                      Text('−SAR ${_discountAmount.toStringAsFixed(2)}',
+                          style: TextStyle(fontSize: 12, color: Colors.green.shade700)),
+                    ]),
+                  ]),
+                  GestureDetector(
+                    onTap: _removePromo,
+                    child: Icon(Icons.close, size: 20, color: t.label),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ],
+      ),
+    );
+  }
+
+  // ── Price breakdown widget (shown when promo is active) ────────────────────
+
+  Widget _priceBreakdown(AppLocalizations l, AppThemeExtension t) {
+    return Container(
+      padding: const EdgeInsets.all(14),
+      decoration: BoxDecoration(
+        color: t.card,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: t.cardBorder.withOpacity(0.5)),
+      ),
+      child: Column(children: [
+        Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+          Text(l.subtotal, style: TextStyle(color: t.label, fontSize: 13)),
+          Text('SAR $totalPrice', style: TextStyle(color: t.title, fontSize: 13)),
+        ]),
+        const SizedBox(height: 6),
+        Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+          Text(l.discountWithCode(_appliedPromo!),
+              style: const TextStyle(color: Colors.green, fontSize: 13)),
+          Text('−SAR ${_discountAmount.toStringAsFixed(2)}',
+              style: const TextStyle(color: Colors.green, fontSize: 13)),
+        ]),
+        Divider(color: t.divider, height: 16),
+        Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+          Text('Total',
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color: t.title)),
+          Text('SAR ${discountedTotal.toStringAsFixed(2)}',
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color: t.price)),
+        ]),
+      ]),
+    );
+  }
+
+
 
   Future<void> _initGuests() async {
     final prefs = await SharedPreferences.getInstance();
@@ -307,7 +509,7 @@ class _HotelBookingState extends State<HotelBooking> {
     try {
 
 
-      await pay((totalPrice * 100).toInt());
+      // await pay((discountedTotal * 100).toInt());
 
 
       final response = await http.post(
@@ -324,6 +526,8 @@ class _HotelBookingState extends State<HotelBooking> {
           'checkOutTime': '12:00',
           'numRooms': widget.numRooms,
           'numPeople': numPeople,
+          'promoCode': _appliedPromo,
+          'totalPrice': discountedTotal,
           'guests': guestList
               .map((g) => {
                     'name': g['name'],
@@ -536,6 +740,13 @@ class _HotelBookingState extends State<HotelBooking> {
                                 child: _buildGuestCard(i, l),
                               ),
                             ),
+                            SizedBox(height: 18),
+                            _promoSection(l, _t),
+                            SizedBox(height: 12),
+                            if (_appliedPromo != null) ...[
+                              _priceBreakdown(l, _t),
+                              SizedBox(height: 12),
+                            ],
                           ],
                         ),
                       ),
@@ -580,7 +791,7 @@ class _HotelBookingState extends State<HotelBooking> {
                       ),
                       SizedBox(height: 8),
                       Text(
-                        'SAR $totalPrice',
+                        'SAR ${_appliedPromo != null ? discountedTotal.toStringAsFixed(2) : totalPrice}',
                         style: TextStyle(
                           color: _t.accent,
                           fontSize: 18,
@@ -641,8 +852,11 @@ class _HotelBookingState extends State<HotelBooking> {
                 children: [
                   _priceLine(l.pricePerNight, 'SAR ${widget.pricePerNight}'),
                   SizedBox(height: 8),
-                  _priceLine(l.total, 'SAR $totalPrice', strong: true),
-                ],
+                  if (_appliedPromo != null) ...[
+                    _priceLine(l.discountWithCode(_appliedPromo!), '−SAR ${_discountAmount.toStringAsFixed(2)}', color: Colors.green),
+                    SizedBox(height: 8),
+                  ],
+                  _priceLine(l.total, 'SAR ${_appliedPromo != null ? discountedTotal.toStringAsFixed(2) : totalPrice}', strong: true),                ],
               ),
             ),
           ],
@@ -737,7 +951,7 @@ class _HotelBookingState extends State<HotelBooking> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'SAR $totalPrice',
+                      'SAR ${_appliedPromo != null ? discountedTotal.toStringAsFixed(2) : totalPrice}',
                       style: TextStyle(
                         color: _t.title,
                         fontSize: 24,
@@ -836,14 +1050,14 @@ class _HotelBookingState extends State<HotelBooking> {
     );
   }
 
-  Widget _priceLine(String label, String value, {bool strong = false}) {
+  Widget _priceLine(String label, String value, {bool strong = false, Color? color}) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(
           label,
           style: TextStyle(
-            color: strong ? _t.title : _t.label,
+            color: color ?? (strong ? _t.title : _t.label),
             fontSize: strong ? 14 : 12,
             fontWeight: strong ? FontWeight.w800 : FontWeight.w700,
           ),
@@ -851,7 +1065,7 @@ class _HotelBookingState extends State<HotelBooking> {
         Text(
           value,
           style: TextStyle(
-            color: strong ? _t.accent : _t.title,
+            color: color ?? (strong ? _t.accent : _t.title),
             fontSize: strong ? 14 : 12,
             fontWeight: strong ? FontWeight.w900 : FontWeight.w700,
           ),

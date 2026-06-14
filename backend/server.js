@@ -67,6 +67,7 @@ app.use("/api/carsar", carRoutes);
 app.use("/api/flights", require("./routes/flights"));
 app.use("/api/flight-bookings", require("./routes/flightBookingRoutes"));
 app.use("/api/my-bookings", require("./routes/myBookingRoutes"));
+app.use("/api/promo", require("./routes/promoRoutes"));
 
 // app.get("/", (req, res) => {
 //   if (!req.user || !req.user.isAdmin) {
