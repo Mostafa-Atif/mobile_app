@@ -517,7 +517,7 @@ class _CarsSearchState extends State<CarsSearch> {
         border: Border.all(color: t.fieldBorder.withOpacity(0.5)),
       ),
       child: DropdownButtonFormField<String>(
-        value: value,
+        initialValue: value,
         dropdownColor: t.card,
         style: TextStyle(color: t.title, fontSize: 15),
         decoration: InputDecoration(
@@ -1053,7 +1053,7 @@ class _CarsSearchState extends State<CarsSearch> {
                                 setState(() => privateDriver = val);
                                 _recalculateDiscount();
                               },
-                              // activeThumbColor: t.accent,
+                              activeThumbColor: t.accent,
                             ),
                           ),
 
