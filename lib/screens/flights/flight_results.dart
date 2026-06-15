@@ -46,7 +46,10 @@ class _FlightResultsState extends State<FlightResults> {
   }
 
   Future<void> fetchFlights() async {
-    setState(() { isLoading = true; hasError = false; });
+    setState(() {
+      isLoading = true;
+      hasError = false;
+    });
     try {
       final uri = Uri.parse('${Config.baseUrl}/api/flights').replace(
         queryParameters: {
@@ -57,18 +60,40 @@ class _FlightResultsState extends State<FlightResults> {
       );
       final response = await http.get(uri);
       if (response.statusCode == 200) {
-        setState(() { flights = json.decode(response.body); isLoading = false; });
+        setState(() {
+          flights = json.decode(response.body);
+          isLoading = false;
+        });
       } else {
-        setState(() { isLoading = false; hasError = true; });
+        setState(() {
+          isLoading = false;
+          hasError = true;
+        });
       }
     } catch (e) {
-      setState(() { isLoading = false; hasError = true; });
+      setState(() {
+        isLoading = false;
+        hasError = true;
+      });
     }
   }
 
   String _formatDate(DateTime date) {
-    List<String> months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-    List<String> days = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+    List<String> months = [
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec'
+    ];
+    List<String> days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
     return '${days[date.weekday - 1]}, ${date.day} ${months[date.month - 1]} ${date.year}';
   }
 
@@ -85,7 +110,9 @@ class _FlightResultsState extends State<FlightResults> {
       int finalHour = (totalMins ~/ 60) % 24;
       int finalMin = totalMins % 60;
       return '${finalHour.toString().padLeft(2, '0')}:${finalMin.toString().padLeft(2, '0')}';
-    } catch (_) { return '--:--'; }
+    } catch (_) {
+      return '--:--';
+    }
   }
 
   @override
@@ -93,15 +120,17 @@ class _FlightResultsState extends State<FlightResults> {
     final l = AppLocalizations.of(context)!;
     final t = Theme.of(context).extension<AppThemeExtension>()!;
 
-    if (isLoading) return Scaffold(
-      backgroundColor: t.bg,
-      body: Center(child: CircularProgressIndicator(color: t.accent)),
-    );
+    if (isLoading)
+      return Scaffold(
+        backgroundColor: t.bg,
+        body: Center(child: CircularProgressIndicator(color: t.accent)),
+      );
 
-    if (hasError) return Scaffold(
-      backgroundColor: t.bg,
-      body: _buildError(l, t),
-    );
+    if (hasError)
+      return Scaffold(
+        backgroundColor: t.bg,
+        body: _buildError(l, t),
+      );
 
     return Scaffold(
       backgroundColor: t.bg,
@@ -120,18 +149,25 @@ class _FlightResultsState extends State<FlightResults> {
               children: [
                 Text(
                   '${widget.fromCity} → ${widget.toCity}',
-                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: t.title),
+                  style: TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.bold,
+                      color: t.title),
                 ),
                 if (isRoundTrip) ...[
                   const SizedBox(width: 6),
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                     decoration: BoxDecoration(
                       color: t.accentLight,
                       borderRadius: BorderRadius.circular(10),
                     ),
-                    child: Text('RT', style: TextStyle(fontSize: 10,
-                        color: t.accent, fontWeight: FontWeight.bold)),
+                    child: Text('RT',
+                        style: TextStyle(
+                            fontSize: 10,
+                            color: t.accent,
+                            fontWeight: FontWeight.bold)),
                   ),
                 ],
               ],
@@ -146,7 +182,9 @@ class _FlightResultsState extends State<FlightResults> {
         ),
         centerTitle: true,
         actions: [
-          IconButton(icon: Icon(Icons.refresh, color: t.accent), onPressed: fetchFlights),
+          IconButton(
+              icon: Icon(Icons.refresh, color: t.accent),
+              onPressed: fetchFlights),
         ],
       ),
       body: flights.isEmpty
@@ -156,7 +194,8 @@ class _FlightResultsState extends State<FlightResults> {
                 children: [
                   Icon(Icons.airplanemode_off, size: 60, color: t.label),
                   const SizedBox(height: 16),
-                  Text(l.noFlightsFound, style: TextStyle(fontSize: 18, color: t.title)),
+                  Text(l.noFlightsFound,
+                      style: TextStyle(fontSize: 18, color: t.title)),
                   const SizedBox(height: 8),
                   Text(l.tryDifferentDates, style: TextStyle(color: t.label)),
                 ],
@@ -165,7 +204,8 @@ class _FlightResultsState extends State<FlightResults> {
           : ListView.builder(
               padding: const EdgeInsets.all(16),
               itemCount: flights.length,
-              itemBuilder: (context, index) => _buildFlightCard(flights[index], l, t),
+              itemBuilder: (context, index) =>
+                  _buildFlightCard(flights[index], l, t),
             ),
     );
   }
@@ -178,10 +218,12 @@ class _FlightResultsState extends State<FlightResults> {
           Icon(Icons.wifi_off, size: 60, color: t.label),
           const SizedBox(height: 16),
           Text(l.unableToConnect,
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: t.title)),
+              style: TextStyle(
+                  fontSize: 18, fontWeight: FontWeight.bold, color: t.title)),
           const SizedBox(height: 8),
           Text(l.checkConnectionRetry,
-              style: TextStyle(color: t.label, fontSize: 13), textAlign: TextAlign.center),
+              style: TextStyle(color: t.label, fontSize: 13),
+              textAlign: TextAlign.center),
           const SizedBox(height: 24),
           GestureDetector(
             onTap: fetchFlights,
@@ -196,7 +238,9 @@ class _FlightResultsState extends State<FlightResults> {
                 children: [
                   const Icon(Icons.refresh, color: Colors.white, size: 18),
                   const SizedBox(width: 8),
-                  Text(l.retry, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w600)),
+                  Text(l.retry,
+                      style: const TextStyle(
+                          color: Colors.white, fontWeight: FontWeight.w600)),
                 ],
               ),
             ),
@@ -206,22 +250,31 @@ class _FlightResultsState extends State<FlightResults> {
     );
   }
 
-  Widget _buildFlightCard(Map<String, dynamic> flight, AppLocalizations l, AppThemeExtension t) {
+  Widget _buildFlightCard(
+      Map<String, dynamic> flight, AppLocalizations l, AppThemeExtension t) {
     final bool hasLuggage = flight['hasLuggage'] ?? false;
     final String currency = flight['currency'] ?? 'QAR';
     final String stops = flight['stops'] ?? 'Direct';
     final String returnTime = flight['returnTime'] ?? '';
 
     return GestureDetector(
-      onTap: () => Navigator.push(context, MaterialPageRoute(
-          builder: (context) => FlightDetails(flight: flight, passengers: widget.passengers))),
+      onTap: () => Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => FlightDetails(
+                  flight: flight,
+                  passengers: widget.passengers,
+                  departureDate: widget.departureDate,
+                  returnDate: widget.returnDate))),
       child: Container(
         margin: const EdgeInsets.only(bottom: 12),
         decoration: BoxDecoration(
           color: t.card,
           borderRadius: BorderRadius.circular(16),
           border: Border.all(color: t.cardBorder.withOpacity(0.5)),
-          boxShadow: [BoxShadow(color: t.cardBorder.withOpacity(0.15), blurRadius: 10)],
+          boxShadow: [
+            BoxShadow(color: t.cardBorder.withOpacity(0.15), blurRadius: 10)
+          ],
         ),
         child: Column(
           children: [
@@ -234,7 +287,8 @@ class _FlightResultsState extends State<FlightResults> {
                   Row(
                     children: [
                       Container(
-                        width: 36, height: 36,
+                        width: 36,
+                        height: 36,
                         decoration: BoxDecoration(
                           color: t.accentLight,
                           borderRadius: BorderRadius.circular(8),
@@ -242,10 +296,17 @@ class _FlightResultsState extends State<FlightResults> {
                         child: Icon(Icons.flight, color: t.accent, size: 20),
                       ),
                       const SizedBox(width: 10),
-                      Expanded(child: Text(flight['airline'] ?? '',
-                          style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: t.title))),
+                      Expanded(
+                          child: Text(flight['airline'] ?? '',
+                              style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w600,
+                                  color: t.title))),
                       Text('$currency ${flight['price']}',
-                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: t.price)),
+                          style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: t.price)),
                     ],
                   ),
                   const SizedBox(height: 16),
@@ -269,8 +330,11 @@ class _FlightResultsState extends State<FlightResults> {
                     Row(children: [
                       Icon(Icons.event_repeat, size: 14, color: t.accent),
                       const SizedBox(width: 4),
-                      Text(l.returnFlight, style: TextStyle(fontSize: 12,
-                          color: t.accent, fontWeight: FontWeight.w600)),
+                      Text(l.returnFlight,
+                          style: TextStyle(
+                              fontSize: 12,
+                              color: t.accent,
+                              fontWeight: FontWeight.w600)),
                     ]),
                     const SizedBox(height: 8),
                     _timesRow(
@@ -292,7 +356,8 @@ class _FlightResultsState extends State<FlightResults> {
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
               decoration: BoxDecoration(
                 color: t.accentLight.withOpacity(0.4),
-                borderRadius: const BorderRadius.vertical(bottom: Radius.circular(16)),
+                borderRadius:
+                    const BorderRadius.vertical(bottom: Radius.circular(16)),
                 border: Border(top: BorderSide(color: t.divider)),
               ),
               child: Row(
@@ -301,7 +366,9 @@ class _FlightResultsState extends State<FlightResults> {
                       size: 16, color: hasLuggage ? t.accent : t.label),
                   const SizedBox(width: 6),
                   Text(hasLuggage ? l.checkedBaggage : 'No checked baggage',
-                      style: TextStyle(fontSize: 12, color: hasLuggage ? t.accent : t.label)),
+                      style: TextStyle(
+                          fontSize: 12,
+                          color: hasLuggage ? t.accent : t.label)),
                   const Spacer(),
                   Text(flight['flightClass'] ?? '',
                       style: TextStyle(fontSize: 12, color: t.label)),
@@ -319,7 +386,9 @@ class _FlightResultsState extends State<FlightResults> {
     return Row(
       children: [
         Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Text(dep, style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: t.title)),
+          Text(dep,
+              style: TextStyle(
+                  fontSize: 20, fontWeight: FontWeight.bold, color: t.title)),
           Text(fromCode, style: TextStyle(fontSize: 12, color: t.label)),
         ]),
         Expanded(
@@ -335,7 +404,9 @@ class _FlightResultsState extends State<FlightResults> {
           ]),
         ),
         Column(crossAxisAlignment: CrossAxisAlignment.end, children: [
-          Text(arr, style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: t.title)),
+          Text(arr,
+              style: TextStyle(
+                  fontSize: 20, fontWeight: FontWeight.bold, color: t.title)),
           Text(toCode, style: TextStyle(fontSize: 12, color: t.label)),
         ]),
       ],

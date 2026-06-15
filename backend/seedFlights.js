@@ -17436,15 +17436,17 @@ const flights = [
     "fromCode": "LXR",
     "toCode": "HBE",
     "departDate": "2026-12-07",
+    "returnDate": "2026-03-17",
     "departTime": "03:30",
     "arrivalTime": "05:06",
+    "returnTime": "14:00",
     "duration": "1س 36د",
     "stops": "مباشر",
     "flightClass": "اقتصادي",
     "price": 110,
     "currency": "جنيه",
     "hasLuggage": true,
-    "tripType": "oneway"
+    "tripType": "roundtrip"
   },
   {
     "airline": "EgyptAir",

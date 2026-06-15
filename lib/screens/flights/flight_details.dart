@@ -8,8 +8,15 @@ import 'package:mobile_app/theme.dart';
 class FlightDetails extends StatelessWidget {
   final Map<String, dynamic> flight;
   final int passengers;
+  final DateTime departureDate;
+  final DateTime? returnDate;
 
-  const FlightDetails({super.key, required this.flight, required this.passengers});
+  const FlightDetails(
+      {super.key,
+      required this.flight,
+      required this.passengers,
+      required this.departureDate,
+      required this.returnDate});
 
   String _calcArrival(String departTime, String duration) {
     try {
@@ -24,7 +31,9 @@ class FlightDetails extends StatelessWidget {
       int finalHour = (totalMins ~/ 60) % 24;
       int finalMin = totalMins % 60;
       return '${finalHour.toString().padLeft(2, '0')}:${finalMin.toString().padLeft(2, '0')}';
-    } catch (_) { return '--:--'; }
+    } catch (_) {
+      return '--:--';
+    }
   }
 
   @override
@@ -49,21 +58,36 @@ class FlightDetails extends StatelessWidget {
     final String tripType = flight['tripType'] ?? '';
     final bool isRoundTrip = tripType == 'roundtrip';
 
-    List<String> months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-    List<String> days = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+    List<String> months = [
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec'
+    ];
+    List<String> days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 
     String formattedDepartDate = '';
     String formattedReturnDate = '';
 
     if (flight['departDate'] != null) {
-      final date = DateTime.tryParse(flight['departDate'].toString());
+      final date = DateTime.tryParse(departureDate.toString());
       if (date != null)
-        formattedDepartDate = '${days[date.weekday - 1]}, ${date.day} ${months[date.month - 1]} ${date.year}';
+        formattedDepartDate =
+            '${days[date.weekday - 1]}, ${date.day} ${months[date.month - 1]} ${date.year}';
     }
     if (flight['returnDate'] != null) {
-      final date = DateTime.tryParse(flight['returnDate'].toString());
+      final date = DateTime.tryParse(returnDate.toString());
       if (date != null)
-        formattedReturnDate = '${days[date.weekday - 1]}, ${date.day} ${months[date.month - 1]} ${date.year}';
+        formattedReturnDate =
+            '${days[date.weekday - 1]}, ${date.day} ${months[date.month - 1]} ${date.year}';
     }
 
     return Scaffold(
@@ -76,7 +100,8 @@ class FlightDetails extends StatelessWidget {
           onPressed: () => Navigator.pop(context),
         ),
         title: Text(l.reviewTrip,
-            style: TextStyle(fontSize: 17, fontWeight: FontWeight.w500, color: t.title)),
+            style: TextStyle(
+                fontSize: 17, fontWeight: FontWeight.w500, color: t.title)),
         centerTitle: true,
       ),
       body: Column(
@@ -91,15 +116,23 @@ class FlightDetails extends StatelessWidget {
                   Row(
                     children: [
                       Text('$fromCity → $toCity',
-                          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: t.title)),
+                          style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              color: t.title)),
                       const SizedBox(width: 10),
                       if (isRoundTrip)
                         Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 8, vertical: 3),
                           decoration: BoxDecoration(
-                              color: t.accentLight, borderRadius: BorderRadius.circular(20)),
-                          child: Text(l.roundTrip, style: TextStyle(fontSize: 11,
-                              color: t.accent, fontWeight: FontWeight.w600)),
+                              color: t.accentLight,
+                              borderRadius: BorderRadius.circular(20)),
+                          child: Text(l.roundTrip,
+                              style: TextStyle(
+                                  fontSize: 11,
+                                  color: t.accent,
+                                  fontWeight: FontWeight.w600)),
                         ),
                     ],
                   ),
@@ -107,8 +140,10 @@ class FlightDetails extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(duration, style: TextStyle(fontSize: 13, color: t.label)),
-                      Text(formattedDepartDate, style: TextStyle(fontSize: 13, color: t.label)),
+                      Text(duration,
+                          style: TextStyle(fontSize: 13, color: t.label)),
+                      Text(formattedDepartDate,
+                          style: TextStyle(fontSize: 13, color: t.label)),
                     ],
                   ),
 
@@ -121,10 +156,14 @@ class FlightDetails extends StatelessWidget {
                       child: Row(children: [
                         Icon(Icons.flight_takeoff, size: 16, color: t.accent),
                         const SizedBox(width: 6),
-                        Text(l.outboundFlight, style: TextStyle(fontSize: 14,
-                            fontWeight: FontWeight.bold, color: t.accent)),
+                        Text(l.outboundFlight,
+                            style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.bold,
+                                color: t.accent)),
                         const SizedBox(width: 8),
-                        Text(formattedDepartDate, style: TextStyle(fontSize: 12, color: t.label)),
+                        Text(formattedDepartDate,
+                            style: TextStyle(fontSize: 12, color: t.label)),
                       ]),
                     ),
 
@@ -139,14 +178,27 @@ class FlightDetails extends StatelessWidget {
                     Row(children: [
                       Icon(Icons.flight_land, size: 16, color: t.accent),
                       const SizedBox(width: 6),
-                      Text(l.returnFlight, style: TextStyle(fontSize: 14,
-                          fontWeight: FontWeight.bold, color: t.accent)),
+                      Text(l.returnFlight,
+                          style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                              color: t.accent)),
                       const SizedBox(width: 8),
-                      Text(formattedReturnDate, style: TextStyle(fontSize: 12, color: t.label)),
+                      Text(formattedReturnDate,
+                          style: TextStyle(fontSize: 12, color: t.label)),
                     ]),
                     const SizedBox(height: 12),
-                    _buildTimeline(context, t, toCity, fromCity, toCode, fromCode,
-                        returnTime, _calcArrival(returnTime, duration), airline, stops),
+                    _buildTimeline(
+                        context,
+                        t,
+                        toCity,
+                        fromCity,
+                        toCode,
+                        fromCode,
+                        returnTime,
+                        _calcArrival(returnTime, duration),
+                        airline,
+                        stops),
                   ],
 
                   const SizedBox(height: 24),
@@ -163,9 +215,13 @@ class FlightDetails extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(l.flightDetails,
-                            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: t.title)),
+                            style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: t.title)),
                         const SizedBox(height: 12),
-                        _infoRow(t, Icons.airline_seat_recline_normal, l.class_, flightClass),
+                        _infoRow(t, Icons.airline_seat_recline_normal, l.class_,
+                            flightClass),
                         const SizedBox(height: 10),
                         _infoRow(t, Icons.swap_calls, l.tripType,
                             isRoundTrip ? l.roundTrip : l.oneWay),
@@ -174,7 +230,8 @@ class FlightDetails extends StatelessWidget {
                             hasLuggage ? l.included : 'Not included'),
                         if (isRoundTrip && formattedReturnDate.isNotEmpty) ...[
                           const SizedBox(height: 10),
-                          _infoRow(t, Icons.event_repeat, l.returnDate, formattedReturnDate),
+                          _infoRow(t, Icons.event_repeat, l.returnDate,
+                              formattedReturnDate),
                         ],
                       ],
                     ),
@@ -192,25 +249,46 @@ class FlightDetails extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(l.priceSummary, style: TextStyle(fontSize: 16,
-                            fontWeight: FontWeight.bold, color: t.accent)),
+                        Text(l.priceSummary,
+                            style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: t.accent)),
                         const SizedBox(height: 12),
-                        Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                          Text(l.baseFare, style: TextStyle(color: t.accent)),
-                          Text('$currency $price', style: TextStyle(color: t.accent, fontWeight: FontWeight.w600)),
-                        ]),
+                        Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(l.baseFare,
+                                  style: TextStyle(color: t.accent)),
+                              Text('$currency $price',
+                                  style: TextStyle(
+                                      color: t.accent,
+                                      fontWeight: FontWeight.w600)),
+                            ]),
                         const SizedBox(height: 8),
-                        Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                          Text(l.taxesAndFees, style: TextStyle(color: t.accent)),
-                          Text(l.included, style: TextStyle(color: t.accent)),
-                        ]),
+                        Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(l.taxesAndFees,
+                                  style: TextStyle(color: t.accent)),
+                              Text(l.included,
+                                  style: TextStyle(color: t.accent)),
+                            ]),
                         Divider(color: t.accent.withOpacity(0.2)),
-                        Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                          Text(l.total, style: TextStyle(fontWeight: FontWeight.bold,
-                              fontSize: 15, color: t.accent)),
-                          Text('$currency $price', style: TextStyle(fontWeight: FontWeight.bold,
-                              fontSize: 15, color: t.accent)),
-                        ]),
+                        Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(l.total,
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 15,
+                                      color: t.accent)),
+                              Text('$currency $price',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 15,
+                                      color: t.accent)),
+                            ]),
                       ],
                     ),
                   ),
@@ -233,14 +311,21 @@ class FlightDetails extends StatelessWidget {
                     ),
                     child: Row(
                       children: [
-                        Icon(hasLuggage ? Icons.check_circle : Icons.info_outline,
+                        Icon(
+                            hasLuggage
+                                ? Icons.check_circle
+                                : Icons.info_outline,
                             color: hasLuggage ? Colors.green : Colors.orange),
                         const SizedBox(width: 12),
                         Expanded(
                           child: Text(
-                            hasLuggage ? l.checkedBaggageIncluded : l.noBaggageIncluded,
+                            hasLuggage
+                                ? l.checkedBaggageIncluded
+                                : l.noBaggageIncluded,
                             style: TextStyle(
-                                color: hasLuggage ? Colors.green[800] : Colors.orange[800],
+                                color: hasLuggage
+                                    ? Colors.green[800]
+                                    : Colors.orange[800],
                                 fontSize: 13),
                           ),
                         ),
@@ -260,7 +345,12 @@ class FlightDetails extends StatelessWidget {
             decoration: BoxDecoration(
               color: t.header,
               border: Border(top: BorderSide(color: t.divider)),
-              boxShadow: [BoxShadow(color: t.divider.withOpacity(0.3), blurRadius: 8, offset: const Offset(0, -2))],
+              boxShadow: [
+                BoxShadow(
+                    color: t.divider.withOpacity(0.3),
+                    blurRadius: 8,
+                    offset: const Offset(0, -2))
+              ],
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -269,40 +359,57 @@ class FlightDetails extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(l.totalPrice, style: TextStyle(fontSize: 12, color: t.label)),
+                    Text(l.totalPrice,
+                        style: TextStyle(fontSize: 12, color: t.label)),
                     Text('$currency $price',
-                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: t.title)),
+                        style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: t.title)),
                   ],
                 ),
                 GestureDetector(
                   onTap: () {
-                    Navigator.push(context, MaterialPageRoute(
-                      builder: (context) => FlightBooking(
-                        fromCity: fromCity,
-                        toCity: toCity,
-                        departureDate: DateTime.tryParse(flight['departDate'] ?? '') ?? DateTime.now(),
-                        returnDate: flight['returnDate'] != null
-                            ? DateTime.tryParse(flight['returnDate'].toString()) : null,
-                        tripType: isRoundTrip ? 'Round trip' : 'One-way',
-                        passengers: passengers,
-                        price: flight['price'] ?? 0,
-                        currency: flight['currency'] ?? '',
-                        airline: flight['airline'] ?? '',
-                        duration: flight['duration'] ?? '',
-                        stops: flight['stops'] ?? '',
-                        flightClass: flight['flightClass'] ?? '',
-                      ),
-                    ));
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => FlightBooking(
+                            fromCity: fromCity,
+                            toCity: toCity,
+                            departureDate: departureDate,
+                            returnDate: returnDate != null
+                                ? DateTime.tryParse(
+                                    returnDate.toString())
+                                : null,
+                            tripType: isRoundTrip ? 'Round trip' : 'One-way',
+                            passengers: passengers,
+                            price: flight['price'] ?? 0,
+                            currency: flight['currency'] ?? '',
+                            airline: flight['airline'] ?? '',
+                            duration: flight['duration'] ?? '',
+                            stops: flight['stops'] ?? '',
+                            flightClass: flight['flightClass'] ?? '',
+                          ),
+                        ));
                   },
                   child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 14),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 32, vertical: 14),
                     decoration: BoxDecoration(
                       gradient: LinearGradient(colors: t.btnGradient),
                       borderRadius: BorderRadius.circular(30),
-                      boxShadow: [BoxShadow(color: t.accent.withOpacity(0.3), blurRadius: 10, offset: const Offset(0, 4))],
+                      boxShadow: [
+                        BoxShadow(
+                            color: t.accent.withOpacity(0.3),
+                            blurRadius: 10,
+                            offset: const Offset(0, 4))
+                      ],
                     ),
                     child: Text(l.continue_,
-                        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: Colors.white)),
+                        style: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.white)),
                   ),
                 ),
               ],
@@ -313,43 +420,75 @@ class FlightDetails extends StatelessWidget {
     );
   }
 
-  Widget _buildTimeline(BuildContext context, AppThemeExtension t,
-      String fromCity, String toCity, String fromCode, String toCode,
-      String departTime, String arrivalTime, String airline, String stops) {
+  Widget _buildTimeline(
+      BuildContext context,
+      AppThemeExtension t,
+      String fromCity,
+      String toCity,
+      String fromCode,
+      String toCode,
+      String departTime,
+      String arrivalTime,
+      String airline,
+      String stops) {
     return IntrinsicHeight(
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          SizedBox(width: 72, child: Column(children: [
-            _timeLabel(t, departTime), const SizedBox(height: 60), _timeLabel(t, arrivalTime),
-          ])),
+          SizedBox(
+              width: 72,
+              child: Column(children: [
+                _timeLabel(t, departTime),
+                const SizedBox(height: 60),
+                _timeLabel(t, arrivalTime),
+              ])),
           const SizedBox(width: 8),
-          SizedBox(width: 20, child: Column(children: [
-            _dot(t.accent), _line(height: 80, color: t.accent), _dot(t.accent),
-          ])),
+          SizedBox(
+              width: 20,
+              child: Column(children: [
+                _dot(t.accent),
+                _line(height: 80, color: t.accent),
+                _dot(t.accent),
+              ])),
           const SizedBox(width: 10),
           Expanded(
-            child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            child:
+                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                Text(fromCity, style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: t.title)),
+                Text(fromCity,
+                    style: TextStyle(
+                        fontSize: 13,
+                        fontWeight: FontWeight.w600,
+                        color: t.title)),
                 Text(fromCode, style: TextStyle(fontSize: 12, color: t.label)),
               ]),
               const SizedBox(height: 12),
               Row(children: [
                 Container(
-                  width: 36, height: 36,
-                  decoration: BoxDecoration(color: t.accentLight, borderRadius: BorderRadius.circular(6)),
+                  width: 36,
+                  height: 36,
+                  decoration: BoxDecoration(
+                      color: t.accentLight,
+                      borderRadius: BorderRadius.circular(6)),
                   child: Icon(Icons.flight_takeoff, color: t.accent, size: 20),
                 ),
                 const SizedBox(width: 10),
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                  Text(airline, style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: t.title)),
+                  Text(airline,
+                      style: TextStyle(
+                          fontSize: 13,
+                          fontWeight: FontWeight.w600,
+                          color: t.title)),
                   Text(stops, style: TextStyle(fontSize: 12, color: t.label)),
                 ]),
               ]),
               const SizedBox(height: 12),
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                Text(toCity, style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: t.title)),
+                Text(toCity,
+                    style: TextStyle(
+                        fontSize: 13,
+                        fontWeight: FontWeight.w600,
+                        color: t.title)),
                 Text(toCode, style: TextStyle(fontSize: 12, color: t.label)),
               ]),
             ]),
@@ -359,20 +498,26 @@ class FlightDetails extends StatelessWidget {
     );
   }
 
-  Widget _timeLabel(AppThemeExtension t, String time) =>
-      Text(time, style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: t.title));
+  Widget _timeLabel(AppThemeExtension t, String time) => Text(time,
+      style:
+          TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: t.title));
 
-  Widget _dot(Color color) => Container(width: 10, height: 10,
+  Widget _dot(Color color) => Container(
+      width: 10,
+      height: 10,
       decoration: BoxDecoration(color: color, shape: BoxShape.circle));
 
   Widget _line({required double height, required Color color}) =>
       Container(width: 2, height: height, color: color);
 
-  Widget _infoRow(AppThemeExtension t, IconData icon, String label, String value) =>
+  Widget _infoRow(
+          AppThemeExtension t, IconData icon, String label, String value) =>
       Row(children: [
         Icon(icon, size: 18, color: t.label),
         const SizedBox(width: 10),
         Text('$label: ', style: TextStyle(color: t.label, fontSize: 13)),
-        Text(value, style: TextStyle(fontWeight: FontWeight.w600, fontSize: 13, color: t.title)),
+        Text(value,
+            style: TextStyle(
+                fontWeight: FontWeight.w600, fontSize: 13, color: t.title)),
       ]);
 }
