@@ -10,7 +10,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 // import 'package:mobile_app/screens/shared/success_screen.dart';
 import 'package:mobile_app/screens/home/home_screen.dart';
 import '../../config.dart';
-import 'package:mobile_app/widgets/payment_section.dart';
 
 class CarsSearch extends StatefulWidget {
   const CarsSearch({super.key});
@@ -359,9 +358,7 @@ class _CarsSearchState extends State<CarsSearch> {
     setState(() => isSubmitting = true);
     try {
 
-      // final basePrice = (selectedCar!['pricePerDay'] * totalDays) + (privateDriver ? totalDays * 100 : 0);
-      // final totalAmount = (basePrice - _discountAmount) * 100;
-      // await pay(totalAmount.toInt());
+
 
 
       final response = await http.post(

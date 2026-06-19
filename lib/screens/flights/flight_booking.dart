@@ -6,7 +6,6 @@ import 'package:mobile_app/screens/shared/confirmation_screen.dart';
 import 'package:mobile_app/screens/shared/success_screen.dart';
 import 'package:mobile_app/screens/home/home_screen.dart';
 import 'package:mobile_app/theme.dart';
-import 'package:mobile_app/widgets/payment_section.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../config.dart';
 
@@ -606,7 +605,6 @@ class _FlightBookingState extends State<FlightBooking> {
     try {
 
 
-      // await pay((discountedTotal * 100).toInt());
 
 
       final requests = passengerList.map((p) {
