@@ -42,8 +42,10 @@ class _HotelDetailsState extends State<HotelDetails> {
   @override
   void initState() {
     super.initState();
-    checkInDate = DateTime(widget.checkIn.year, widget.checkIn.month, widget.checkIn.day);
-    checkOutDate = DateTime(widget.checkOut.year, widget.checkOut.month, widget.checkOut.day);
+    checkInDate =
+        DateTime(widget.checkIn.year, widget.checkIn.month, widget.checkIn.day);
+    checkOutDate = DateTime(
+        widget.checkOut.year, widget.checkOut.month, widget.checkOut.day);
     numRooms = widget.numRooms;
     numAdults = widget.numAdults;
     numChildren = widget.numChildren;
@@ -79,8 +81,7 @@ class _HotelDetailsState extends State<HotelDetails> {
     }
   }
 
-  String _viewLabel(String view) =>
-      switch (view) {
+  String _viewLabel(String view) => switch (view) {
         'sea' => AppLocalizations.of(context)!.hotelViewSea,
         'pool' => AppLocalizations.of(context)!.hotelViewPool,
         'garden' => AppLocalizations.of(context)!.hotelViewGarden,
@@ -222,7 +223,8 @@ class _HotelDetailsState extends State<HotelDetails> {
                         errorBuilder: (_, __, ___) => Container(
                           color: _t.accentLight,
                           child: Center(
-                            child: Icon(Icons.hotel_rounded, size: 56, color: _t.accent),
+                            child: Icon(Icons.hotel_rounded,
+                                size: 56, color: _t.accent),
                           ),
                         ),
                       ),
@@ -429,7 +431,8 @@ class _HotelDetailsState extends State<HotelDetails> {
                     color: _t.accentLight,
                     borderRadius: BorderRadius.circular(12),
                   ),
-                  child: Icon(Icons.arrow_forward_rounded, color: _t.accent, size: 18),
+                  child: Icon(Icons.arrow_forward_rounded,
+                      color: _t.accent, size: 18),
                 ),
               ),
               Expanded(
@@ -645,7 +648,8 @@ class _HotelDetailsState extends State<HotelDetails> {
         decoration: BoxDecoration(
           color: _t.card.withOpacity(0.97),
           borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
-          border: Border(top: BorderSide(color: _t.cardBorder.withOpacity(0.4))),
+          border:
+              Border(top: BorderSide(color: _t.cardBorder.withOpacity(0.4))),
           boxShadow: _cardShadows(stronger: true),
         ),
         child: SafeArea(

@@ -108,17 +108,24 @@ class _HotelResultsState extends State<HotelResults> {
           .toList();
     }
     if (selectedRating != null) {
-      result = result.where((h) => h['rating'].toString() == selectedRating).toList();
+      result = result
+          .where((h) => h['rating'].toString() == selectedRating)
+          .toList();
     }
     if (selectedView != null) {
-      result = result.where((h) => (h['views'] as List).contains(selectedView)).toList();
+      result = result
+          .where((h) => (h['views'] as List).contains(selectedView))
+          .toList();
     }
     if (sortOption == 'priceLow') {
-      result.sort((a, b) => int.parse(a['price']).compareTo(int.parse(b['price'])));
+      result.sort(
+          (a, b) => int.parse(a['price']).compareTo(int.parse(b['price'])));
     } else if (sortOption == 'priceHigh') {
-      result.sort((a, b) => int.parse(b['price']).compareTo(int.parse(a['price'])));
+      result.sort(
+          (a, b) => int.parse(b['price']).compareTo(int.parse(a['price'])));
     } else if (sortOption == 'rating') {
-      result.sort((a, b) => int.parse(b['rating']).compareTo(int.parse(a['rating'])));
+      result.sort(
+          (a, b) => int.parse(b['rating']).compareTo(int.parse(a['rating'])));
     }
 
     setState(() => filteredHotels = result);
@@ -145,9 +152,12 @@ class _HotelResultsState extends State<HotelResults> {
                   contentPadding: EdgeInsets.zero,
                   title: Text(
                     e.value,
-                    style: TextStyle(color: _t.title, fontWeight: FontWeight.w700),
+                    style:
+                        TextStyle(color: _t.title, fontWeight: FontWeight.w700),
                   ),
-                  trailing: selected ? Icon(Icons.check_rounded, color: _t.accent) : null,
+                  trailing: selected
+                      ? Icon(Icons.check_rounded, color: _t.accent)
+                      : null,
                   onTap: () {
                     setState(() => sortOption = selected ? null : e.key);
                     applyFilters();
@@ -163,7 +173,12 @@ class _HotelResultsState extends State<HotelResults> {
   }
 
   void showFilterSheet(AppLocalizations l) {
-    final views = allHotels.expand((h) => h['views'] as List).toSet().cast<String>().toList()..sort();
+    final views = allHotels
+        .expand((h) => h['views'] as List)
+        .toSet()
+        .cast<String>()
+        .toList()
+      ..sort();
 
     showModalBottomSheet(
       context: context,
@@ -183,7 +198,8 @@ class _HotelResultsState extends State<HotelResults> {
                   _sheetHeader(l.filter),
                   Text(
                     l.propertyRating,
-                    style: TextStyle(color: _t.title, fontWeight: FontWeight.w700),
+                    style:
+                        TextStyle(color: _t.title, fontWeight: FontWeight.w700),
                   ),
                   SizedBox(height: 8),
                   Wrap(
@@ -201,14 +217,16 @@ class _HotelResultsState extends State<HotelResults> {
                           color: selected ? Colors.white : _t.title,
                           fontWeight: FontWeight.w700,
                         ),
-                        onSelected: (_) => setSheet(() => tempRating = selected ? null : r),
+                        onSelected: (_) =>
+                            setSheet(() => tempRating = selected ? null : r),
                       );
                     }).toList(),
                   ),
                   SizedBox(height: 16),
                   Text(
                     l.view,
-                    style: TextStyle(color: _t.title, fontWeight: FontWeight.w700),
+                    style:
+                        TextStyle(color: _t.title, fontWeight: FontWeight.w700),
                   ),
                   SizedBox(height: 8),
                   Wrap(
@@ -226,7 +244,8 @@ class _HotelResultsState extends State<HotelResults> {
                           color: selected ? Colors.white : _t.title,
                           fontWeight: FontWeight.w700,
                         ),
-                        onSelected: (_) => setSheet(() => tempView = selected ? null : v),
+                        onSelected: (_) =>
+                            setSheet(() => tempView = selected ? null : v),
                       );
                     }).toList(),
                   ),
@@ -245,7 +264,8 @@ class _HotelResultsState extends State<HotelResults> {
                           },
                           style: OutlinedButton.styleFrom(
                             foregroundColor: _t.accent,
-                            side: BorderSide(color: _t.cardBorder.withOpacity(0.6)),
+                            side: BorderSide(
+                                color: _t.cardBorder.withOpacity(0.6)),
                             minimumSize: Size.fromHeight(48),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(16),
@@ -296,7 +316,8 @@ class _HotelResultsState extends State<HotelResults> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Icons.wifi_off_rounded, size: 60, color: _t.label.withOpacity(0.6)),
+            Icon(Icons.wifi_off_rounded,
+                size: 60, color: _t.label.withOpacity(0.6)),
             SizedBox(height: 16),
             Text(
               l.unableToConnect,
@@ -398,7 +419,8 @@ class _HotelResultsState extends State<HotelResults> {
                           decoration: BoxDecoration(
                             color: _t.card,
                             borderRadius: BorderRadius.circular(18),
-                            border: Border.all(color: _t.cardBorder.withOpacity(0.45)),
+                            border: Border.all(
+                                color: _t.cardBorder.withOpacity(0.45)),
                             boxShadow: _cardShadows(),
                           ),
                           child: TextField(
@@ -412,11 +434,14 @@ class _HotelResultsState extends State<HotelResults> {
                               hintText: l.searchByHotelName,
                               hintStyle: TextStyle(color: _t.label),
                               border: InputBorder.none,
-                              prefixIcon: Icon(Icons.search_rounded, color: _t.label),
-                              contentPadding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+                              prefixIcon:
+                                  Icon(Icons.search_rounded, color: _t.label),
+                              contentPadding: EdgeInsets.symmetric(
+                                  horizontal: 8, vertical: 16),
                               suffixIcon: searchQuery.isNotEmpty
                                   ? IconButton(
-                                      icon: Icon(Icons.clear_rounded, color: _t.label),
+                                      icon: Icon(Icons.clear_rounded,
+                                          color: _t.label),
                                       onPressed: () {
                                         searchController.clear();
                                         searchQuery = '';
@@ -451,8 +476,12 @@ class _HotelResultsState extends State<HotelResults> {
                         ),
                         SizedBox(height: 10),
                         Text(
-                          l.propertiesFound(filteredHotels.length, widget.destination),
-                          style: TextStyle(color: _t.label, fontSize: 12, fontWeight: FontWeight.w600),
+                          l.propertiesFound(
+                              filteredHotels.length, widget.destination),
+                          style: TextStyle(
+                              color: _t.label,
+                              fontSize: 12,
+                              fontWeight: FontWeight.w600),
                         ),
                       ],
                     ),
@@ -464,9 +493,11 @@ class _HotelResultsState extends State<HotelResults> {
                             child: Column(
                               mainAxisSize: MainAxisSize.min,
                               children: [
-                                Icon(Icons.search_off_rounded, size: 48, color: _t.label.withOpacity(0.5)),
+                                Icon(Icons.search_off_rounded,
+                                    size: 48, color: _t.label.withOpacity(0.5)),
                                 SizedBox(height: 12),
-                                Text(l.noPropertiesMatch, style: TextStyle(color: _t.label)),
+                                Text(l.noPropertiesMatch,
+                                    style: TextStyle(color: _t.label)),
                               ],
                             ),
                           )
@@ -486,7 +517,8 @@ class _HotelResultsState extends State<HotelResults> {
     );
   }
 
-  Widget _actionChip(IconData icon, String label, bool active, VoidCallback onTap) {
+  Widget _actionChip(
+      IconData icon, String label, bool active, VoidCallback onTap) {
     return Material(
       color: Colors.transparent,
       child: InkWell(
@@ -589,11 +621,15 @@ class _HotelResultsState extends State<HotelResults> {
                 Positioned.fill(
                   child: DecoratedBox(
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.vertical(top: Radius.circular(22)),
+                      borderRadius:
+                          BorderRadius.vertical(top: Radius.circular(22)),
                       gradient: LinearGradient(
                         begin: Alignment.topCenter,
                         end: Alignment.bottomCenter,
-                        colors: [Colors.transparent, Colors.black.withOpacity(0.18)],
+                        colors: [
+                          Colors.transparent,
+                          Colors.black.withOpacity(0.18)
+                        ],
                       ),
                     ),
                   ),
@@ -621,7 +657,8 @@ class _HotelResultsState extends State<HotelResults> {
                       ),
                       SizedBox(width: 12),
                       Container(
-                        padding: EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 8, vertical: 6),
                         decoration: BoxDecoration(
                           color: _t.accentLight,
                           borderRadius: BorderRadius.circular(10),
@@ -630,10 +667,13 @@ class _HotelResultsState extends State<HotelResults> {
                           children: [
                             Text(
                               rating,
-                              style: TextStyle(color: _t.accent, fontWeight: FontWeight.w800),
+                              style: TextStyle(
+                                  color: _t.accent,
+                                  fontWeight: FontWeight.w800),
                             ),
                             SizedBox(width: 4),
-                            Icon(Icons.star_rounded, color: _t.accent, size: 14),
+                            Icon(Icons.star_rounded,
+                                color: _t.accent, size: 14),
                           ],
                         ),
                       ),
@@ -642,7 +682,10 @@ class _HotelResultsState extends State<HotelResults> {
                   SizedBox(height: 4),
                   Text(
                     subTitle,
-                    style: TextStyle(color: _t.label, fontSize: 13, fontWeight: FontWeight.w600),
+                    style: TextStyle(
+                        color: _t.label,
+                        fontSize: 13,
+                        fontWeight: FontWeight.w600),
                   ),
                   SizedBox(height: 12),
                   Text(
@@ -735,7 +778,9 @@ class _HotelResultsState extends State<HotelResults> {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     return [
       BoxShadow(
-        color: isDark ? Colors.black.withOpacity(0.22) : _t.cardBorder.withOpacity(0.16),
+        color: isDark
+            ? Colors.black.withOpacity(0.22)
+            : _t.cardBorder.withOpacity(0.16),
         blurRadius: isDark ? 18 : 22,
         offset: Offset(0, 10),
       ),

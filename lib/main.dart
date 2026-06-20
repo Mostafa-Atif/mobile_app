@@ -28,10 +28,8 @@ void main() async {
     startScreen = const TempHome();
   }
 
-
   // Stripe.publishableKey = 'pk_test_51ThYmaEJd6SsMZnj5VoFLlSyCoB3jTjgC6oOblHzdEqW2GsGRj3fKZvnv005jwUh8ILcL4lYAuCkCOdqn37FQK5K0095ehkKgq';
   // await Stripe.instance.applySettings();
-
 
   runApp(
     ChangeNotifierProvider(

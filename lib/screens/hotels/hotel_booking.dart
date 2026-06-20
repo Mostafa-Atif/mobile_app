@@ -69,14 +69,16 @@ class _HotelBookingState extends State<HotelBooking> {
   int get totalPrice => widget.pricePerNight * widget.nights * widget.numRooms;
   double get discountedTotal => totalPrice - _discountAmount;
 
-
   // ── Promo code logic ───────────────────────────────────────────────────────
 
   Future<void> _applyPromo(AppLocalizations l, AppThemeExtension t) async {
     final code = _promoCtrl.text.trim().toUpperCase();
     if (code.isEmpty) return;
 
-    setState(() { _promoLoading = true; _promoError = null; });
+    setState(() {
+      _promoLoading = true;
+      _promoError = null;
+    });
 
     try {
       final token = prefs.getString('token') ?? '';
@@ -96,7 +98,9 @@ class _HotelBookingState extends State<HotelBooking> {
       if (res.statusCode == 200) {
         setState(() {
           _appliedPromo = code;
-          _discountAmount = (totalPrice.toDouble() * (data['discountPercent'] / 100)).toDouble();
+          _discountAmount =
+              (totalPrice.toDouble() * (data['discountPercent'] / 100))
+                  .toDouble();
           _promoLoading = false;
         });
       } else {
@@ -139,10 +143,10 @@ class _HotelBookingState extends State<HotelBooking> {
             Icon(Icons.local_offer_outlined, size: 18, color: t.accent),
             const SizedBox(width: 8),
             Text(l.promoCode,
-                style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600, color: t.title)),
+                style: TextStyle(
+                    fontSize: 15, fontWeight: FontWeight.w600, color: t.title)),
           ]),
           const SizedBox(height: 12),
-
           if (_appliedPromo == null) ...[
             Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
               Expanded(
@@ -150,7 +154,9 @@ class _HotelBookingState extends State<HotelBooking> {
                   controller: _promoCtrl,
                   textCapitalization: TextCapitalization.characters,
                   style: TextStyle(color: t.title, letterSpacing: 1.2),
-                  onChanged: (_) { if (_promoError != null) setState(() => _promoError = null); },
+                  onChanged: (_) {
+                    if (_promoError != null) setState(() => _promoError = null);
+                  },
                   decoration: InputDecoration(
                     hintText: l.enterCode,
                     hintStyle: TextStyle(color: t.label, fontSize: 14),
@@ -163,11 +169,14 @@ class _HotelBookingState extends State<HotelBooking> {
                     enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(8),
                         borderSide: BorderSide(
-                            color: _promoError != null ? Colors.red.shade300 : t.fieldBorder)),
+                            color: _promoError != null
+                                ? Colors.red.shade300
+                                : t.fieldBorder)),
                     focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(8),
                         borderSide: BorderSide(color: t.accent, width: 1.5)),
-                    contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+                    contentPadding: const EdgeInsets.symmetric(
+                        horizontal: 14, vertical: 14),
                   ),
                 ),
               ),
@@ -175,16 +184,22 @@ class _HotelBookingState extends State<HotelBooking> {
               GestureDetector(
                 onTap: _promoLoading ? null : () => _applyPromo(l, t),
                 child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 15),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 18, vertical: 15),
                   decoration: BoxDecoration(
                     gradient: LinearGradient(colors: t.btnGradient),
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: _promoLoading
-                      ? const SizedBox(width: 18, height: 18,
-                          child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2))
+                      ? const SizedBox(
+                          width: 18,
+                          height: 18,
+                          child: CircularProgressIndicator(
+                              color: Colors.white, strokeWidth: 2))
                       : Text(l.apply,
-                          style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w600)),
+                          style: const TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.w600)),
                 ),
               ),
             ]),
@@ -200,15 +215,21 @@ class _HotelBookingState extends State<HotelBooking> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Row(children: [
-                    const Icon(Icons.check_circle_outline, color: Colors.green, size: 18),
+                    const Icon(Icons.check_circle_outline,
+                        color: Colors.green, size: 18),
                     const SizedBox(width: 8),
-                    Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                      Text(_appliedPromo!,
-                          style: const TextStyle(
-                              fontWeight: FontWeight.w700, letterSpacing: 1.1, color: Colors.green)),
-                      Text('−SAR ${_discountAmount.toStringAsFixed(2)}',
-                          style: TextStyle(fontSize: 12, color: Colors.green.shade700)),
-                    ]),
+                    Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(_appliedPromo!,
+                              style: const TextStyle(
+                                  fontWeight: FontWeight.w700,
+                                  letterSpacing: 1.1,
+                                  color: Colors.green)),
+                          Text('−SAR ${_discountAmount.toStringAsFixed(2)}',
+                              style: TextStyle(
+                                  fontSize: 12, color: Colors.green.shade700)),
+                        ]),
                   ]),
                   GestureDetector(
                     onTap: _removePromo,
@@ -236,7 +257,8 @@ class _HotelBookingState extends State<HotelBooking> {
       child: Column(children: [
         Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
           Text(l.subtotal, style: TextStyle(color: t.label, fontSize: 13)),
-          Text('SAR $totalPrice', style: TextStyle(color: t.title, fontSize: 13)),
+          Text('SAR $totalPrice',
+              style: TextStyle(color: t.title, fontSize: 13)),
         ]),
         const SizedBox(height: 6),
         Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
@@ -248,15 +270,15 @@ class _HotelBookingState extends State<HotelBooking> {
         Divider(color: t.divider, height: 16),
         Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
           Text('Total',
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color: t.title)),
+              style: TextStyle(
+                  fontWeight: FontWeight.bold, fontSize: 15, color: t.title)),
           Text('SAR ${discountedTotal.toStringAsFixed(2)}',
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color: t.price)),
+              style: TextStyle(
+                  fontWeight: FontWeight.bold, fontSize: 15, color: t.price)),
         ]),
       ]),
     );
   }
-
-
 
   Future<void> _initGuests() async {
     final prefs = await SharedPreferences.getInstance();
@@ -294,7 +316,8 @@ class _HotelBookingState extends State<HotelBooking> {
 
   String? _validateName(String val) {
     if (val.trim().isEmpty) return 'required';
-    if (!RegExp(r'^[a-zA-Z\u0600-\u06FF\s]+$').hasMatch(val.trim())) return 'lettersOnly';
+    if (!RegExp(r'^[a-zA-Z\u0600-\u06FF\s]+$').hasMatch(val.trim()))
+      return 'lettersOnly';
     return null;
   }
 
@@ -410,7 +433,8 @@ class _HotelBookingState extends State<HotelBooking> {
                       child: SingleChildScrollView(
                         child: Column(
                           children: [
-                            _validatedField(nameCtrl, '${l.fullName} *', nameError, setSheet),
+                            _validatedField(nameCtrl, '${l.fullName} *',
+                                nameError, setSheet),
                             SizedBox(height: 12),
                             _validatedField(
                               emailCtrl,
@@ -449,9 +473,15 @@ class _HotelBookingState extends State<HotelBooking> {
 
                             if (nErr != null || eErr != null || pErr != null) {
                               setSheet(() {
-                                nameError = nErr != null ? _resolveError(nErr, l) : null;
-                                emailError = eErr != null ? _resolveError(eErr, l) : null;
-                                phoneError = pErr != null ? _resolveError(pErr, l) : null;
+                                nameError = nErr != null
+                                    ? _resolveError(nErr, l)
+                                    : null;
+                                emailError = eErr != null
+                                    ? _resolveError(eErr, l)
+                                    : null;
+                                phoneError = pErr != null
+                                    ? _resolveError(pErr, l)
+                                    : null;
                               });
                               return;
                             }
@@ -479,7 +509,8 @@ class _HotelBookingState extends State<HotelBooking> {
                           ),
                           child: Text(
                             l.saveGuest(index + 1),
-                            style: TextStyle(fontSize: 15, fontWeight: FontWeight.w800),
+                            style: TextStyle(
+                                fontSize: 15, fontWeight: FontWeight.w800),
                           ),
                         ),
                       ),
@@ -506,10 +537,6 @@ class _HotelBookingState extends State<HotelBooking> {
     setState(() => isSubmitting = true);
 
     try {
-
-
-
-
       final response = await http.post(
         Uri.parse('${Config.baseUrl}/api/hotels'),
         headers: {
@@ -544,16 +571,17 @@ class _HotelBookingState extends State<HotelBooking> {
           MaterialPageRoute(
             builder: (_) => SuccessScreen(
               title: 'Booking Confirmed!',
-              message: 'Your hotel has been booked successfully.\nEnjoy your stay!',
+              message:
+                  'Your hotel has been booked successfully.\nEnjoy your stay!',
               onContinue: () => Navigator.pushAndRemoveUntil(
                 context,
                 MaterialPageRoute(builder: (_) => HomeScreen()),
-                    (route) => false,
+                (route) => false,
               ),
             ),
           ),
         );
-      }else {
+      } else {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text(_bookingErrorMessage(response, l))),
         );
@@ -614,7 +642,8 @@ class _HotelBookingState extends State<HotelBooking> {
   }
 
   InputDecoration _inputDecoration(String label, {String? errorText}) {
-    final borderColor = errorText != null ? AppColors.error.withOpacity(0.5) : _t.fieldBorder;
+    final borderColor =
+        errorText != null ? AppColors.error.withOpacity(0.5) : _t.fieldBorder;
     return InputDecoration(
       labelText: label,
       labelStyle: TextStyle(
@@ -834,9 +863,12 @@ class _HotelBookingState extends State<HotelBooking> {
             SizedBox(height: 16),
             Divider(color: _t.divider.withOpacity(0.45)),
             SizedBox(height: 12),
-            _summaryRow(Icons.calendar_today_outlined, l.checkInLabel, _formatDate(widget.checkIn)),
-            _summaryRow(Icons.calendar_today_outlined, l.checkOutLabel, _formatDate(widget.checkOut)),
-            _summaryRow(Icons.nights_stay_outlined, l.nightsLabel, '${widget.nights}'),
+            _summaryRow(Icons.calendar_today_outlined, l.checkInLabel,
+                _formatDate(widget.checkIn)),
+            _summaryRow(Icons.calendar_today_outlined, l.checkOutLabel,
+                _formatDate(widget.checkOut)),
+            _summaryRow(
+                Icons.nights_stay_outlined, l.nightsLabel, '${widget.nights}'),
             _summaryRow(Icons.bed_outlined, l.roomsLabel, '${widget.numRooms}'),
             _summaryRow(Icons.people_outline, l.guestsLabel, '$numPeople'),
             SizedBox(height: 8),
@@ -851,10 +883,15 @@ class _HotelBookingState extends State<HotelBooking> {
                   _priceLine(l.pricePerNight, 'SAR ${widget.pricePerNight}'),
                   SizedBox(height: 8),
                   if (_appliedPromo != null) ...[
-                    _priceLine(l.discountWithCode(_appliedPromo!), '−SAR ${_discountAmount.toStringAsFixed(2)}', color: Colors.green),
+                    _priceLine(l.discountWithCode(_appliedPromo!),
+                        '−SAR ${_discountAmount.toStringAsFixed(2)}',
+                        color: Colors.green),
                     SizedBox(height: 8),
                   ],
-                  _priceLine(l.total, 'SAR ${_appliedPromo != null ? discountedTotal.toStringAsFixed(2) : totalPrice}', strong: true),                ],
+                  _priceLine(l.total,
+                      'SAR ${_appliedPromo != null ? discountedTotal.toStringAsFixed(2) : totalPrice}',
+                      strong: true),
+                ],
               ),
             ),
           ],
@@ -904,7 +941,9 @@ class _HotelBookingState extends State<HotelBooking> {
                 ),
                 SizedBox(height: 4),
                 Text(
-                  filled && (g['name'] as String).isNotEmpty ? g['name'] : l.guestDetails,
+                  filled && (g['name'] as String).isNotEmpty
+                      ? g['name']
+                      : l.guestDetails,
                   style: TextStyle(
                     color: _t.label,
                     fontSize: 12,
@@ -936,7 +975,8 @@ class _HotelBookingState extends State<HotelBooking> {
         decoration: BoxDecoration(
           color: _t.card.withOpacity(0.97),
           borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
-          border: Border(top: BorderSide(color: _t.cardBorder.withOpacity(0.4))),
+          border:
+              Border(top: BorderSide(color: _t.cardBorder.withOpacity(0.4))),
           boxShadow: _cardShadows(stronger: true),
         ),
         child: SafeArea(
@@ -958,7 +998,8 @@ class _HotelBookingState extends State<HotelBooking> {
                     ),
                     SizedBox(height: 4),
                     Text(
-                      l.totalNightsRooms(totalPrice, widget.nights, widget.numRooms),
+                      l.totalNightsRooms(
+                          totalPrice, widget.nights, widget.numRooms),
                       style: TextStyle(
                         color: _t.label,
                         fontSize: 11,
@@ -999,7 +1040,8 @@ class _HotelBookingState extends State<HotelBooking> {
                         )
                       : Text(
                           l.proceedToPayment,
-                          style: TextStyle(fontSize: 14, fontWeight: FontWeight.w800),
+                          style: TextStyle(
+                              fontSize: 14, fontWeight: FontWeight.w800),
                         ),
                 ),
               ),
@@ -1048,7 +1090,8 @@ class _HotelBookingState extends State<HotelBooking> {
     );
   }
 
-  Widget _priceLine(String label, String value, {bool strong = false, Color? color}) {
+  Widget _priceLine(String label, String value,
+      {bool strong = false, Color? color}) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [

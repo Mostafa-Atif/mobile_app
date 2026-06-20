@@ -14,7 +14,8 @@ class AllDestinationsScreen extends StatefulWidget {
 enum DestinationViewMode { popular, all }
 
 class _AllDestinationsScreenState extends State<AllDestinationsScreen> {
-  final DestinationsRepository _destinationsRepository = DestinationsRepository();
+  final DestinationsRepository _destinationsRepository =
+      DestinationsRepository();
   final TextEditingController _searchController = TextEditingController();
   DestinationViewMode _viewMode = DestinationViewMode.popular;
 

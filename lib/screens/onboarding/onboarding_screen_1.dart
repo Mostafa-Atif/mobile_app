@@ -11,14 +11,14 @@ class OnboardingScreen1 extends StatelessWidget {
     final l = AppLocalizations.of(context)!;
     return OnboardingPage(
       imagePath: 'assets/images/onboarding/onboarding1.png',
-      title:     l.onboarding1Title,
-      body:      l.onboarding1Body,
-      dotIndex:  0,
+      title: l.onboarding1Title,
+      body: l.onboarding1Body,
+      dotIndex: 0,
       onNext: () => Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (_) => const OnboardingScreen2()),
       ),
-      nextLabel:      l.next,
+      nextLabel: l.next,
       // secondaryLabel: l.skip,
       onSecondary: () {
         // navigate to sign-in / home as needed
@@ -43,23 +43,23 @@ class OnboardingPage extends StatelessWidget {
     this.totalDots = 3,
   });
 
-  final String        imagePath;
-  final String        title;
-  final String        body;
-  final int           dotIndex;
-  final int           totalDots;
-  final VoidCallback  onNext;
-  final String        nextLabel;
+  final String imagePath;
+  final String title;
+  final String body;
+  final int dotIndex;
+  final int totalDots;
+  final VoidCallback onNext;
+  final String nextLabel;
   final VoidCallback? onSecondary;
-  final String?       secondaryLabel;
+  final String? secondaryLabel;
 
   @override
   Widget build(BuildContext context) {
-    final t          = Theme.of(context).extension<AppThemeExtension>()!;
-    final isAr       = Localizations.localeOf(context).languageCode == 'ar';
-    final h          = MediaQuery.sizeOf(context).height;
-    final compact    = h < 760;
-    final hasSkip    = onSecondary != null && secondaryLabel != null;
+    final t = Theme.of(context).extension<AppThemeExtension>()!;
+    final isAr = Localizations.localeOf(context).languageCode == 'ar';
+    final h = MediaQuery.sizeOf(context).height;
+    final compact = h < 760;
+    final hasSkip = onSecondary != null && secondaryLabel != null;
 
     return Scaffold(
       backgroundColor: t.bg,
@@ -74,7 +74,10 @@ class OnboardingPage extends StatelessWidget {
                 bottom: false,
                 child: Padding(
                   padding: EdgeInsets.fromLTRB(
-                    20, compact ? 16 : 22, 20, compact ? 12 : 16,
+                    20,
+                    compact ? 16 : 22,
+                    20,
+                    compact ? 12 : 16,
                   ),
                   child: _ImageCard(imagePath: imagePath, t: t),
                 ),
@@ -85,18 +88,18 @@ class OnboardingPage extends StatelessWidget {
             Expanded(
               flex: 4,
               child: _BottomSheet(
-                title:          title,
-                body:           body,
-                dotIndex:       dotIndex,
-                totalDots:      totalDots,
-                nextLabel:      nextLabel,
-                onNext:         onNext,
-                hasSkip:        hasSkip,
+                title: title,
+                body: body,
+                dotIndex: dotIndex,
+                totalDots: totalDots,
+                nextLabel: nextLabel,
+                onNext: onNext,
+                hasSkip: hasSkip,
                 secondaryLabel: secondaryLabel,
-                onSecondary:    onSecondary,
-                isAr:           isAr,
-                compact:        compact,
-                t:              t,
+                onSecondary: onSecondary,
+                isAr: isAr,
+                compact: compact,
+                t: t,
               ),
             ),
           ],
@@ -111,22 +114,22 @@ class OnboardingPage extends StatelessWidget {
 class _ImageCard extends StatelessWidget {
   const _ImageCard({required this.imagePath, required this.t});
 
-  final String            imagePath;
+  final String imagePath;
   final AppThemeExtension t;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      width:  double.infinity,
+      width: double.infinity,
       decoration: BoxDecoration(
-        color:        t.card,
+        color: t.card,
         borderRadius: BorderRadius.circular(28),
-        border:       Border.all(color: t.cardBorder.withOpacity(0.5)),
+        border: Border.all(color: t.cardBorder.withOpacity(0.5)),
         boxShadow: [
           BoxShadow(
-            color:      t.cardBorder.withOpacity(0.14),
+            color: t.cardBorder.withOpacity(0.14),
             blurRadius: 20,
-            offset:     const Offset(0, 8),
+            offset: const Offset(0, 8),
           ),
         ],
       ),
@@ -154,17 +157,17 @@ class _BottomSheet extends StatelessWidget {
     this.onSecondary,
   });
 
-  final String            title;
-  final String            body;
-  final int               dotIndex;
-  final int               totalDots;
-  final String            nextLabel;
-  final VoidCallback      onNext;
-  final bool              hasSkip;
-  final String?           secondaryLabel;
-  final VoidCallback?     onSecondary;
-  final bool              isAr;
-  final bool              compact;
+  final String title;
+  final String body;
+  final int dotIndex;
+  final int totalDots;
+  final String nextLabel;
+  final VoidCallback onNext;
+  final bool hasSkip;
+  final String? secondaryLabel;
+  final VoidCallback? onSecondary;
+  final bool isAr;
+  final bool compact;
   final AppThemeExtension t;
 
   @override
@@ -172,7 +175,10 @@ class _BottomSheet extends StatelessWidget {
     return Container(
       width: double.infinity,
       padding: EdgeInsets.fromLTRB(
-        22, compact ? 20 : 26, 22, compact ? 18 : 28,
+        22,
+        compact ? 20 : 26,
+        22,
+        compact ? 18 : 28,
       ),
       decoration: BoxDecoration(
         color: t.card,
@@ -187,10 +193,10 @@ class _BottomSheet extends StatelessWidget {
         children: [
           // Dots
           _DotIndicator(
-            dotIndex:  dotIndex,
+            dotIndex: dotIndex,
             totalDots: totalDots,
-            isAr:      isAr,
-            t:         t,
+            isAr: isAr,
+            t: t,
           ),
           SizedBox(height: compact ? 14 : 20),
 
@@ -199,10 +205,10 @@ class _BottomSheet extends StatelessWidget {
             title,
             textAlign: isAr ? TextAlign.right : TextAlign.left,
             style: TextStyle(
-              fontSize:   compact ? 24.0 : 28.0,
+              fontSize: compact ? 24.0 : 28.0,
               fontWeight: FontWeight.w900,
-              color:      t.title,
-              height:     1.1,
+              color: t.title,
+              height: 1.1,
             ),
           ),
           SizedBox(height: compact ? 8 : 10),
@@ -212,10 +218,10 @@ class _BottomSheet extends StatelessWidget {
             body,
             textAlign: isAr ? TextAlign.right : TextAlign.left,
             style: TextStyle(
-              fontSize:   compact ? 13.5 : 14.5,
-              color:      t.sub,
+              fontSize: compact ? 13.5 : 14.5,
+              color: t.sub,
               fontWeight: FontWeight.w600,
-              height:     1.55,
+              height: 1.55,
             ),
           ),
 
@@ -223,13 +229,13 @@ class _BottomSheet extends StatelessWidget {
 
           // Primary button
           SizedBox(
-            width:  double.infinity,
+            width: double.infinity,
             height: compact ? 50.0 : 54.0,
             child: DecoratedBox(
               decoration: BoxDecoration(
                 gradient: LinearGradient(
-                  begin:  Alignment.topLeft,
-                  end:    Alignment.bottomRight,
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
                   colors: t.btnGradient,
                 ),
                 borderRadius: BorderRadius.circular(16),
@@ -238,7 +244,7 @@ class _BottomSheet extends StatelessWidget {
                 onPressed: onNext,
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.transparent,
-                  shadowColor:     Colors.transparent,
+                  shadowColor: Colors.transparent,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(16),
                   ),
@@ -246,9 +252,9 @@ class _BottomSheet extends StatelessWidget {
                 child: Text(
                   nextLabel,
                   style: TextStyle(
-                    color:         Colors.white,
-                    fontSize:      compact ? 14.5 : 15.5,
-                    fontWeight:    FontWeight.w800,
+                    color: Colors.white,
+                    fontSize: compact ? 14.5 : 15.5,
+                    fontWeight: FontWeight.w800,
                     letterSpacing: 0.2,
                   ),
                 ),
@@ -266,13 +272,13 @@ class _BottomSheet extends StatelessWidget {
                   foregroundColor: t.accent,
                   padding: EdgeInsets.symmetric(
                     horizontal: 12,
-                    vertical:   compact ? 4 : 8,
+                    vertical: compact ? 4 : 8,
                   ),
                 ),
                 child: Text(
                   secondaryLabel!,
                   style: TextStyle(
-                    fontSize:   compact ? 12.5 : 13.5,
+                    fontSize: compact ? 12.5 : 13.5,
                     fontWeight: FontWeight.w700,
                   ),
                 ),
@@ -295,28 +301,25 @@ class _DotIndicator extends StatelessWidget {
     required this.t,
   });
 
-  final int               dotIndex;
-  final int               totalDots;
-  final bool              isAr;
+  final int dotIndex;
+  final int totalDots;
+  final bool isAr;
   final AppThemeExtension t;
 
   @override
   Widget build(BuildContext context) {
     return Row(
-      mainAxisAlignment:
-          isAr ? MainAxisAlignment.end : MainAxisAlignment.start,
+      mainAxisAlignment: isAr ? MainAxisAlignment.end : MainAxisAlignment.start,
       children: List.generate(totalDots, (i) {
         final active = i == dotIndex;
         return AnimatedContainer(
           duration: const Duration(milliseconds: 260),
-          curve:    Curves.easeInOut,
-          margin:   const EdgeInsetsDirectional.only(end: 6),
-          width:    active ? 22 : 7,
-          height:   7,
+          curve: Curves.easeInOut,
+          margin: const EdgeInsetsDirectional.only(end: 6),
+          width: active ? 22 : 7,
+          height: 7,
           decoration: BoxDecoration(
-            color:        active
-                ? t.accent
-                : t.fieldBorder.withOpacity(0.45),
+            color: active ? t.accent : t.fieldBorder.withOpacity(0.45),
             borderRadius: BorderRadius.circular(4),
           ),
         );

@@ -21,8 +21,8 @@ class _ForgotPasswordState extends State<ForgotPassword> {
   bool _submitted = false;
   bool _success = false;
 
-  bool get _emailValid =>
-      RegExp(r'^[\w\.-]+@[\w\.-]+\.\w{2,}$').hasMatch(_emailController.text.trim());
+  bool get _emailValid => RegExp(r'^[\w\.-]+@[\w\.-]+\.\w{2,}$')
+      .hasMatch(_emailController.text.trim());
 
   @override
   void dispose() {
@@ -61,9 +61,10 @@ class _ForgotPasswordState extends State<ForgotPassword> {
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text((data['message'] as String?)?.trim().isNotEmpty == true
-                ? data['message'] as String
-                : l.unableToConnect),
+            content: Text(
+                (data['message'] as String?)?.trim().isNotEmpty == true
+                    ? data['message'] as String
+                    : l.unableToConnect),
           ),
         );
       }
@@ -165,8 +166,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                                       disabledBackgroundColor:
                                           Colors.transparent,
                                       shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(18),
+                                        borderRadius: BorderRadius.circular(18),
                                       ),
                                     ),
                                     child: _isLoading

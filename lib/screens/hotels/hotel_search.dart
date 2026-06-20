@@ -67,10 +67,10 @@ class _HotelSearchState extends State<HotelSearch> {
       builder: (context, child) => Theme(
         data: Theme.of(context).copyWith(
           colorScheme: Theme.of(context).colorScheme.copyWith(
-            primary: _t.accent,
-            surface: _t.card,
-            onSurface: _t.title,
-          ),
+                primary: _t.accent,
+                surface: _t.card,
+                onSurface: _t.title,
+              ),
           dialogTheme: DialogThemeData(backgroundColor: _t.card),
         ),
         child: child!,
@@ -195,7 +195,8 @@ class _HotelSearchState extends State<HotelSearch> {
                         icon: Icons.public_rounded,
                         title: entry.key,
                         subtitle: l.entireCountry,
-                        selected: searchType == 'country' && selectedDestination == entry.key,
+                        selected: searchType == 'country' &&
+                            selectedDestination == entry.key,
                         onTap: () {
                           setState(() {
                             selectedDestination = entry.key;
@@ -205,13 +206,14 @@ class _HotelSearchState extends State<HotelSearch> {
                         },
                       ),
                       ...entry.value.map(
-                            (city) => Padding(
+                        (city) => Padding(
                           padding: EdgeInsetsDirectional.only(start: 18),
                           child: _destinationTile(
                             icon: Icons.location_city_rounded,
                             title: city,
                             subtitle: l.cityOnly,
-                            selected: searchType == 'city' && selectedDestination == city,
+                            selected: searchType == 'city' &&
+                                selectedDestination == city,
                             onTap: () {
                               setState(() {
                                 selectedDestination = city;
@@ -289,7 +291,8 @@ class _HotelSearchState extends State<HotelSearch> {
                       decoration: BoxDecoration(
                         color: _t.card,
                         borderRadius: BorderRadius.circular(28),
-                        border: Border.all(color: _t.cardBorder.withOpacity(0.45)),
+                        border:
+                            Border.all(color: _t.cardBorder.withOpacity(0.45)),
                         boxShadow: _cardShadows(),
                       ),
                       child: Column(
@@ -299,8 +302,12 @@ class _HotelSearchState extends State<HotelSearch> {
                           SizedBox(height: 16),
                           _searchTile(
                             icon: Icons.location_on_rounded,
-                            title: selectedDestination.isEmpty ? '...' : selectedDestination,
-                            subtitle: searchType == 'country' ? l.entireCountry : l.cityOnly,
+                            title: selectedDestination.isEmpty
+                                ? '...'
+                                : selectedDestination,
+                            subtitle: searchType == 'country'
+                                ? l.entireCountry
+                                : l.cityOnly,
                             onTap: () => showDestinationPicker(l),
                             trailing: Icons.keyboard_arrow_down_rounded,
                           ),
@@ -326,7 +333,8 @@ class _HotelSearchState extends State<HotelSearch> {
                                     color: _t.accentLight,
                                     borderRadius: BorderRadius.circular(12),
                                   ),
-                                  child: Icon(Icons.arrow_forward_rounded, color: _t.accent, size: 18),
+                                  child: Icon(Icons.arrow_forward_rounded,
+                                      color: _t.accent, size: 18),
                                 ),
                               ),
                               Expanded(
@@ -350,7 +358,7 @@ class _HotelSearchState extends State<HotelSearch> {
                           SizedBox(height: 12),
                           ...List.generate(
                             roomsList.length,
-                                (index) => Padding(
+                            (index) => Padding(
                               padding: EdgeInsets.only(bottom: 12),
                               child: _roomCard(index, l),
                             ),
@@ -358,7 +366,8 @@ class _HotelSearchState extends State<HotelSearch> {
                           SizedBox(height: 4),
                           OutlinedButton.icon(
                             onPressed: addRoom,
-                            icon: Icon(Icons.add_circle_outline, color: _t.accent),
+                            icon: Icon(Icons.add_circle_outline,
+                                color: _t.accent),
                             label: Text(
                               l.addAnotherRoom,
                               style: TextStyle(
@@ -368,7 +377,8 @@ class _HotelSearchState extends State<HotelSearch> {
                             ),
                             style: OutlinedButton.styleFrom(
                               foregroundColor: _t.accent,
-                              side: BorderSide(color: _t.cardBorder.withOpacity(0.55)),
+                              side: BorderSide(
+                                  color: _t.cardBorder.withOpacity(0.55)),
                               minimumSize: Size(double.infinity, 52),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(18),
@@ -401,7 +411,8 @@ class _HotelSearchState extends State<HotelSearch> {
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  Icon(Icons.search_rounded, color: Colors.white, size: 22),
+                                  Icon(Icons.search_rounded,
+                                      color: Colors.white, size: 22),
                                   SizedBox(width: 10),
                                   Text(
                                     l.searchProperties,
@@ -480,12 +491,12 @@ class _HotelSearchState extends State<HotelSearch> {
           _counterRow(
             '${l.adults} (12+)',
             roomsList[index].adults,
-                () {
+            () {
               if (roomsList[index].adults > 1) {
                 setState(() => roomsList[index].adults--);
               }
             },
-                () {
+            () {
               if (roomsList[index].adults + roomsList[index].children < 8) {
                 setState(() => roomsList[index].adults++);
               }
@@ -495,12 +506,12 @@ class _HotelSearchState extends State<HotelSearch> {
           _counterRow(
             '${l.children} (0-11)',
             roomsList[index].children,
-                () {
+            () {
               if (roomsList[index].children > 0) {
                 setState(() => roomsList[index].children--);
               }
             },
-                () {
+            () {
               if (roomsList[index].adults + roomsList[index].children < 8) {
                 setState(() => roomsList[index].children++);
               }
@@ -512,11 +523,11 @@ class _HotelSearchState extends State<HotelSearch> {
   }
 
   Widget _counterRow(
-      String label,
-      int value,
-      VoidCallback onDecrease,
-      VoidCallback onIncrease,
-      ) {
+    String label,
+    int value,
+    VoidCallback onDecrease,
+    VoidCallback onIncrease,
+  ) {
     return Row(
       children: [
         Expanded(
@@ -864,7 +875,9 @@ class _HotelSearchState extends State<HotelSearch> {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     return [
       BoxShadow(
-        color: isDark ? Colors.black.withOpacity(0.22) : _t.cardBorder.withOpacity(0.16),
+        color: isDark
+            ? Colors.black.withOpacity(0.22)
+            : _t.cardBorder.withOpacity(0.16),
         blurRadius: isDark ? 18 : 22,
         offset: Offset(0, 10),
       ),

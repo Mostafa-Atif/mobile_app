@@ -35,7 +35,6 @@ class _CarsSearchState extends State<CarsSearch> {
   bool _promoLoading = false;
   final TextEditingController _promoCtrl = TextEditingController();
 
-
   Map<String, dynamic>? selectedCar;
   String? pickupLocation;
   String? dropoffLocation;
@@ -178,66 +177,61 @@ class _CarsSearchState extends State<CarsSearch> {
   };
 
   List<String> get cities => citiesByCountry.values
-    .expand((list) => list.map((city) => city['name']!))
-    .toList();
-
+      .expand((list) => list.map((city) => city['name']!))
+      .toList();
 
   final List<String> locations = [
-    'Airport', 
-    'Downtown', 
-    'Marina', 
+    'Airport',
+    'Downtown',
+    'Marina',
     'Business District'
   ];
 
-  
-
-
   Map<String, LatLng?> geocodedLocations = {};
-bool mapLoading = true;
-String? selectedPickupLocation;
-String? selectedDropoffLocation;
+  bool mapLoading = true;
+  String? selectedPickupLocation;
+  String? selectedDropoffLocation;
 
-Future<void> _geocodeLocationsForCity(String cityName) async {
-  geocodedLocations.clear();
-  mapLoading = true;
+  Future<void> _geocodeLocationsForCity(String cityName) async {
+    geocodedLocations.clear();
+    mapLoading = true;
 
-  // Find country code
-  String countryCode = '';
-  citiesByCountry.forEach((country, cities) {
-    final found = cities.firstWhere(
-      (c) => c['name'] == cityName,
-      orElse: () => {},
-    );
-    if (found.isNotEmpty) {
-      countryCode = found['code'] ?? '';
-    }
-  });
-
-  try {
-    for (String location in locations) {
-      final query = '${location} ${cityName}, $countryCode';
-      final url = Uri.parse(
-        'https://nominatim.openstreetmap.org/search?q=$query&format=json&limit=1',
+    // Find country code
+    String countryCode = '';
+    citiesByCountry.forEach((country, cities) {
+      final found = cities.firstWhere(
+        (c) => c['name'] == cityName,
+        orElse: () => {},
       );
+      if (found.isNotEmpty) {
+        countryCode = found['code'] ?? '';
+      }
+    });
 
-      final response = await http.get(url);
+    try {
+      for (String location in locations) {
+        final query = '${location} ${cityName}, $countryCode';
+        final url = Uri.parse(
+          'https://nominatim.openstreetmap.org/search?q=$query&format=json&limit=1',
+        );
 
-      if (response.statusCode == 200) {
-        final List<dynamic> results = jsonDecode(response.body);
-        if (results.isNotEmpty) {
-          final lat = double.parse(results[0]['lat']);
-          final lng = double.parse(results[0]['lon']);
-          geocodedLocations[location] = LatLng(lat, lng);
+        final response = await http.get(url);
+
+        if (response.statusCode == 200) {
+          final List<dynamic> results = jsonDecode(response.body);
+          if (results.isNotEmpty) {
+            final lat = double.parse(results[0]['lat']);
+            final lng = double.parse(results[0]['lon']);
+            geocodedLocations[location] = LatLng(lat, lng);
+          }
         }
       }
+    } catch (e) {
+      print('Error geocoding: $e');
     }
-  } catch (e) {
-    print('Error geocoding: $e');
+
+    setState(() => mapLoading = false);
   }
-
-  setState(() => mapLoading = false);
-}
-
 
   String? _validateName(String val) {
     if (val.trim().isEmpty) return 'required';
@@ -247,7 +241,8 @@ Future<void> _geocodeLocationsForCity(String cityName) async {
 
   String? _validateEmail(String val) {
     if (val.trim().isEmpty) return 'required';
-    if (!RegExp(r'^[\w\.-]+@[\w\.-]+\.\w{2,}$').hasMatch(val.trim())) return 'validEmail';
+    if (!RegExp(r'^[\w\.-]+@[\w\.-]+\.\w{2,}$').hasMatch(val.trim()))
+      return 'validEmail';
     return null;
   }
 
@@ -260,21 +255,29 @@ Future<void> _geocodeLocationsForCity(String cityName) async {
   String _resolveError(String? key, AppLocalizations l) {
     if (key == null) return '';
     switch (key) {
-      case 'required': return l.errorRequired;
-      case 'lettersOnly': return l.errorLettersOnly;
-      case 'validEmail': return l.errorValidEmail;
-      case 'validPhone': return l.errorValidPhone;
-      default: return '';
+      case 'required':
+        return l.errorRequired;
+      case 'lettersOnly':
+        return l.errorLettersOnly;
+      case 'validEmail':
+        return l.errorValidEmail;
+      case 'validPhone':
+        return l.errorValidPhone;
+      default:
+        return '';
     }
   }
 
-  String? get _firstNameErrorKey => _submitted ? _validateName(firstNameCtrl.text) : null;
-  String? get _lastNameErrorKey => _submitted ? _validateName(lastNameCtrl.text) : null;
-  String? get _emailErrorKey => _submitted ? _validateEmail(emailCtrl.text) : null;
-  String? get _phoneErrorKey => _submitted ? _validatePhone(phoneCtrl.text) : null;
+  String? get _firstNameErrorKey =>
+      _submitted ? _validateName(firstNameCtrl.text) : null;
+  String? get _lastNameErrorKey =>
+      _submitted ? _validateName(lastNameCtrl.text) : null;
+  String? get _emailErrorKey =>
+      _submitted ? _validateEmail(emailCtrl.text) : null;
+  String? get _phoneErrorKey =>
+      _submitted ? _validatePhone(phoneCtrl.text) : null;
   String? pickupCity;
   String? dropoffCity;
-
 
   @override
   void initState() {
@@ -283,15 +286,11 @@ Future<void> _geocodeLocationsForCity(String cityName) async {
     loadUserInfo();
   }
 
-
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     fetchCars();
   }
-
-
-
 
   // ── Promo code logic ───────────────────────────────────────────────────────
 
@@ -299,10 +298,12 @@ Future<void> _geocodeLocationsForCity(String cityName) async {
     final code = _promoCtrl.text.trim().toUpperCase();
     if (code.isEmpty) return;
 
-    setState(() { _promoLoading = true; _promoError = null; });
+    setState(() {
+      _promoLoading = true;
+      _promoError = null;
+    });
 
     try {
-
       final res = await http.post(
         Uri.parse('${Config.baseUrl}/api/promo/validate'),
         headers: {
@@ -318,7 +319,9 @@ Future<void> _geocodeLocationsForCity(String cityName) async {
         final totalDays = (dropoffDateTime != null && pickupDateTime != null)
             ? (dropoffDateTime!.difference(pickupDateTime!).inHours / 24).ceil()
             : 1;
-        final estimatedPrice = ((selectedCar?['pricePerDay'] ?? 0) * totalDays + (privateDriver ? totalDays * 100 : 0)).toDouble();
+        final estimatedPrice = ((selectedCar?['pricePerDay'] ?? 0) * totalDays +
+                (privateDriver ? totalDays * 100 : 0))
+            .toDouble();
         setState(() {
           _appliedPromo = code;
           _discountPercent = data['discountPercent'] / 100;
@@ -353,7 +356,9 @@ Future<void> _geocodeLocationsForCity(String cityName) async {
     final totalDays = (dropoffDateTime != null && pickupDateTime != null)
         ? (dropoffDateTime!.difference(pickupDateTime!).inHours / 24).ceil()
         : 1;
-    final estimatedPrice = ((selectedCar?['pricePerDay'] ?? 0) * totalDays + (privateDriver ? totalDays * 100 : 0)).toDouble();
+    final estimatedPrice = ((selectedCar?['pricePerDay'] ?? 0) * totalDays +
+            (privateDriver ? totalDays * 100 : 0))
+        .toDouble();
     setState(() => _discountAmount = estimatedPrice * _discountPercent);
   }
 
@@ -372,10 +377,10 @@ Future<void> _geocodeLocationsForCity(String cityName) async {
             Icon(Icons.local_offer_outlined, size: 18, color: t.accent),
             const SizedBox(width: 8),
             Text(l.promoCode,
-                style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600, color: t.title)),
+                style: TextStyle(
+                    fontSize: 15, fontWeight: FontWeight.w600, color: t.title)),
           ]),
           const SizedBox(height: 12),
-
           if (_appliedPromo == null) ...[
             Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
               Expanded(
@@ -383,7 +388,9 @@ Future<void> _geocodeLocationsForCity(String cityName) async {
                   controller: _promoCtrl,
                   textCapitalization: TextCapitalization.characters,
                   style: TextStyle(color: t.title, letterSpacing: 1.2),
-                  onChanged: (_) { if (_promoError != null) setState(() => _promoError = null); },
+                  onChanged: (_) {
+                    if (_promoError != null) setState(() => _promoError = null);
+                  },
                   decoration: InputDecoration(
                     hintText: l.enterCode,
                     hintStyle: TextStyle(color: t.label, fontSize: 14),
@@ -396,11 +403,14 @@ Future<void> _geocodeLocationsForCity(String cityName) async {
                     enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(8),
                         borderSide: BorderSide(
-                            color: _promoError != null ? Colors.red.shade300 : t.fieldBorder)),
+                            color: _promoError != null
+                                ? Colors.red.shade300
+                                : t.fieldBorder)),
                     focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(8),
                         borderSide: BorderSide(color: t.accent, width: 1.5)),
-                    contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+                    contentPadding: const EdgeInsets.symmetric(
+                        horizontal: 14, vertical: 14),
                   ),
                 ),
               ),
@@ -408,16 +418,22 @@ Future<void> _geocodeLocationsForCity(String cityName) async {
               GestureDetector(
                 onTap: _promoLoading ? null : () => _applyPromo(l, t),
                 child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 15),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 18, vertical: 15),
                   decoration: BoxDecoration(
                     gradient: LinearGradient(colors: t.btnGradient),
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: _promoLoading
-                      ? const SizedBox(width: 18, height: 18,
-                          child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2))
+                      ? const SizedBox(
+                          width: 18,
+                          height: 18,
+                          child: CircularProgressIndicator(
+                              color: Colors.white, strokeWidth: 2))
                       : Text(l.apply,
-                          style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w600)),
+                          style: const TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.w600)),
                 ),
               ),
             ]),
@@ -433,15 +449,21 @@ Future<void> _geocodeLocationsForCity(String cityName) async {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Row(children: [
-                    const Icon(Icons.check_circle_outline, color: Colors.green, size: 18),
+                    const Icon(Icons.check_circle_outline,
+                        color: Colors.green, size: 18),
                     const SizedBox(width: 8),
-                    Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                      Text(_appliedPromo!,
-                          style: const TextStyle(
-                              fontWeight: FontWeight.w700, letterSpacing: 1.1, color: Colors.green)),
-                      Text('﷼ ${_discountAmount.toStringAsFixed(2)}',
-                          style: TextStyle(fontSize: 12, color: Colors.green.shade700)),
-                    ]),
+                    Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(_appliedPromo!,
+                              style: const TextStyle(
+                                  fontWeight: FontWeight.w700,
+                                  letterSpacing: 1.1,
+                                  color: Colors.green)),
+                          Text('﷼ ${_discountAmount.toStringAsFixed(2)}',
+                              style: TextStyle(
+                                  fontSize: 12, color: Colors.green.shade700)),
+                        ]),
                   ]),
                   GestureDetector(
                     onTap: _removePromo,
@@ -455,7 +477,6 @@ Future<void> _geocodeLocationsForCity(String cityName) async {
       ),
     );
   }
-
 
   Future<void> loadUserInfo() async {
     final prefs = await SharedPreferences.getInstance();
@@ -479,21 +500,31 @@ Future<void> _geocodeLocationsForCity(String cityName) async {
   }
 
   Future<void> fetchCars() async {
-    setState(() { isLoading = true; hasError = false; });
+    setState(() {
+      isLoading = true;
+      hasError = false;
+    });
     try {
       String lang = Localizations.localeOf(context).languageCode;
-      final response = await http.get(Uri.parse('${Config.baseUrl}/api/cars?lang=$lang'));
+      final response =
+          await http.get(Uri.parse('${Config.baseUrl}/api/cars?lang=$lang'));
       if (response.statusCode == 200) {
         setState(() {
           cars = json.decode(response.body);
           isLoading = false;
         });
       } else {
-        setState(() { isLoading = false; hasError = true; });
+        setState(() {
+          isLoading = false;
+          hasError = true;
+        });
       }
     } catch (e) {
       print('Error fetching cars: $e');
-      setState(() { isLoading = false; hasError = true; });
+      setState(() {
+        isLoading = false;
+        hasError = true;
+      });
     }
   }
 
@@ -505,12 +536,16 @@ Future<void> _geocodeLocationsForCity(String cityName) async {
       lastDate: DateTime(2100),
     );
     if (date == null) return;
-    final time = await showTimePicker(context: context, initialTime: TimeOfDay.now());
+    final time =
+        await showTimePicker(context: context, initialTime: TimeOfDay.now());
     if (time == null) return;
-    final combined = DateTime(date.year, date.month, date.day, time.hour, time.minute);
+    final combined =
+        DateTime(date.year, date.month, date.day, time.hour, time.minute);
     setState(() {
-      if (isPickup) pickupDateTime = combined;
-      else dropoffDateTime = combined;
+      if (isPickup)
+        pickupDateTime = combined;
+      else
+        dropoffDateTime = combined;
     });
     _recalculateDiscount();
   }
@@ -532,20 +567,24 @@ Future<void> _geocodeLocationsForCity(String cityName) async {
         _validateEmail(emailCtrl.text) != null ||
         _validatePhone(phoneCtrl.text) != null;
     if (selectedCar == null) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l.selectCarError)));
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text(l.selectCarError)));
       return;
     }
     if (hasErrors) return;
     if (pickupLocation == null || dropoffLocation == null) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l.selectLocationsError)));
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text(l.selectLocationsError)));
       return;
     }
     if (pickupDateTime == null || dropoffDateTime == null) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l.selectDatesError)));
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text(l.selectDatesError)));
       return;
     }
     if (dropoffDateTime!.isBefore(pickupDateTime!)) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l.dropoffBeforePickup)));
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text(l.dropoffBeforePickup)));
       return;
     }
     // Validate payment fields
@@ -554,19 +593,20 @@ Future<void> _geocodeLocationsForCity(String cityName) async {
     //   if (!paymentValid) return;
     // }
     if (token.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l.signInFirst)));
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text(l.signInFirst)));
       return;
     }
     setState(() => isSubmitting = true);
     try {
+      String lang = Localizations.localeOf(context).languageCode;
 
-
-
-String lang = Localizations.localeOf(context).languageCode;
-
-final response = await http.post(
+      final response = await http.post(
         Uri.parse('${Config.baseUrl}/api/car-bookings'),
-        headers: {'Content-Type': 'application/json', 'Authorization': 'Bearer $token'},
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $token'
+        },
         body: json.encode({
           'carId': selectedCar!['_id'],
           'pickupLocation': pickupLocation,
@@ -598,11 +638,12 @@ final response = await http.post(
           MaterialPageRoute(
             builder: (_) => SuccessScreen(
               title: 'Ride Confirmed!',
-              message: 'Your car has been booked successfully.\nEnjoy your ride!',
+              message:
+                  'Your car has been booked successfully.\nEnjoy your ride!',
               onContinue: () => Navigator.pushAndRemoveUntil(
                 context,
                 MaterialPageRoute(builder: (_) => HomeScreen()),
-                    (route) => false,
+                (route) => false,
               ),
             ),
           ),
@@ -613,7 +654,8 @@ final response = await http.post(
         );
       }
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error: $e')));
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text('Error: $e')));
     }
     setState(() => isSubmitting = false);
   }
@@ -628,10 +670,12 @@ final response = await http.post(
           Icon(Icons.wifi_off, size: 60, color: t.cardBorder),
           const SizedBox(height: 16),
           Text('Unable to connect',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: t.title)),
+              style: TextStyle(
+                  fontSize: 18, fontWeight: FontWeight.bold, color: t.title)),
           const SizedBox(height: 8),
           Text('Please check your connection and try again',
-              style: TextStyle(color: t.label, fontSize: 13), textAlign: TextAlign.center),
+              style: TextStyle(color: t.label, fontSize: 13),
+              textAlign: TextAlign.center),
           const SizedBox(height: 24),
           ElevatedButton.icon(
             onPressed: fetchCars,
@@ -689,7 +733,8 @@ final response = await http.post(
               labelText: label,
               labelStyle: TextStyle(color: t.label, fontSize: 14),
               border: InputBorder.none,
-              contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+              contentPadding:
+                  const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
             ),
           ),
         ),
@@ -722,7 +767,8 @@ final response = await http.post(
         style: TextStyle(color: t.title, fontSize: 15),
         decoration: InputDecoration(
           border: InputBorder.none,
-          contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+          contentPadding:
+              const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
           hintText: hint,
           hintStyle: TextStyle(color: t.label),
         ),
@@ -789,48 +835,51 @@ final response = await http.post(
                 children: [
                   // ── Header ──
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 20, vertical: 16),
                     child: Row(
                       children: [
                         GestureDetector(
                           onTap: () => Navigator.pop(context),
                           child: Container(
-                            width: 36, height: 36,
+                            width: 36,
+                            height: 36,
                             decoration: BoxDecoration(
                               color: t.backBg,
                               borderRadius: BorderRadius.circular(10),
                             ),
                             child: Icon(
                               isAr ? Icons.arrow_forward : Icons.arrow_back,
-                              color: t.backIcon, size: 18,
+                              color: t.backIcon,
+                              size: 18,
                             ),
                           ),
                         ),
                         const SizedBox(width: 12),
                         Expanded(
-                      child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Text(
-                            l.carRentTitle,
-                           textAlign: TextAlign.center,
-                           style: TextStyle(
-                            color: t.title,
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                       ),
-                     ),
-                         Text(
-                       l.carRentSubtitle,
-                        textAlign: TextAlign.center,
-                       style: TextStyle(color: t.label, fontSize: 13),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Text(
+                                l.carRentTitle,
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  color: t.title,
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              Text(
+                                l.carRentSubtitle,
+                                textAlign: TextAlign.center,
+                                style: TextStyle(color: t.label, fontSize: 13),
+                              ),
+                            ],
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
-               ),
+                  ),
 
                   // ── Body ──
                   Expanded(
@@ -839,13 +888,13 @@ final response = await http.post(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-
                           // ── Cars list ──
                           if (isLoading)
                             Padding(
                               padding: const EdgeInsets.symmetric(vertical: 40),
                               child: Center(
-                                child: CircularProgressIndicator(color: t.accent),
+                                child:
+                                    CircularProgressIndicator(color: t.accent),
                               ),
                             )
                           else if (cars.isEmpty)
@@ -866,11 +915,13 @@ final response = await http.post(
                                 final isSelected = selectedCar != null &&
                                     selectedCar!['_id'] == car['_id'];
                                 return GestureDetector(
-                                  onTap: () => setState(() => selectedCar = car),
+                                  onTap: () =>
+                                      setState(() => selectedCar = car),
                                   child: Container(
                                     margin: const EdgeInsets.only(bottom: 12),
                                     decoration: BoxDecoration(
-                                      color: isSelected ? t.accentLight : t.card,
+                                      color:
+                                          isSelected ? t.accentLight : t.card,
                                       borderRadius: BorderRadius.circular(16),
                                       border: Border.all(
                                         color: isSelected
@@ -888,7 +939,8 @@ final response = await http.post(
                                     ),
                                     padding: const EdgeInsets.all(18),
                                     child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
                                         // Name + selected badge
                                         Row(
@@ -905,18 +957,22 @@ final response = await http.post(
                                             ),
                                             if (isSelected)
                                               Container(
-                                                padding: const EdgeInsets.symmetric(
-                                                    horizontal: 10, vertical: 4),
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        horizontal: 10,
+                                                        vertical: 4),
                                                 decoration: BoxDecoration(
                                                   color: t.accent,
-                                                  borderRadius: BorderRadius.circular(20),
+                                                  borderRadius:
+                                                      BorderRadius.circular(20),
                                                 ),
                                                 child: Text(
                                                   l.selected,
                                                   style: const TextStyle(
                                                       color: Colors.white,
                                                       fontSize: 12,
-                                                      fontWeight: FontWeight.bold),
+                                                      fontWeight:
+                                                          FontWeight.bold),
                                                 ),
                                               ),
                                           ],
@@ -932,30 +988,36 @@ final response = await http.post(
                                             const SizedBox(width: 4),
                                             Text('${car['seats'] ?? '-'}',
                                                 style: TextStyle(
-                                                    fontSize: 14, color: t.title)),
+                                                    fontSize: 14,
+                                                    color: t.title)),
                                             const SizedBox(width: 16),
                                             Icon(Icons.work_outline,
                                                 size: 20, color: t.label),
                                             const SizedBox(width: 4),
                                             Text('${car['bags'] ?? '-'}',
                                                 style: TextStyle(
-                                                    fontSize: 14, color: t.title)),
+                                                    fontSize: 14,
+                                                    color: t.title)),
                                             const SizedBox(width: 16),
                                             Icon(Icons.settings,
                                                 size: 20, color: t.label),
                                             const SizedBox(width: 4),
                                             Text(car['transmission'] ?? '-',
                                                 style: TextStyle(
-                                                    fontSize: 14, color: t.title)),
+                                                    fontSize: 14,
+                                                    color: t.title)),
                                             const Spacer(),
                                             ClipRRect(
-                                              borderRadius: BorderRadius.circular(10),
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
                                               child: car['image'] != null
                                                   ? Image.network(
                                                       car['image'],
-                                                      width: 90, height: 56,
+                                                      width: 90,
+                                                      height: 56,
                                                       fit: BoxFit.cover,
-                                                      errorBuilder: (_, __, ___) =>
+                                                      errorBuilder: (_, __,
+                                                              ___) =>
                                                           _carImageFallback(t),
                                                     )
                                                   : _carImageFallback(t),
@@ -1001,13 +1063,16 @@ final response = await http.post(
                             ),
 
                           // ── Show more ──
-                          if (!isLoading && !hasError && visibleCount < cars.length)
+                          if (!isLoading &&
+                              !hasError &&
+                              visibleCount < cars.length)
                             GestureDetector(
                               onTap: () => setState(() => visibleCount += 7),
                               child: Container(
                                 width: double.infinity,
                                 margin: const EdgeInsets.only(bottom: 12),
-                                padding: const EdgeInsets.symmetric(vertical: 14),
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 14),
                                 decoration: BoxDecoration(
                                   color: t.card,
                                   borderRadius: BorderRadius.circular(14),
@@ -1093,7 +1158,8 @@ final response = await http.post(
                               decoration: BoxDecoration(
                                 color: t.accentLight,
                                 borderRadius: BorderRadius.circular(14),
-                                border: Border.all(color: t.accent.withOpacity(0.4)),
+                                border: Border.all(
+                                    color: t.accent.withOpacity(0.4)),
                               ),
                               child: Row(
                                 children: [
@@ -1108,8 +1174,10 @@ final response = await http.post(
                                     ),
                                   ),
                                   GestureDetector(
-                                    onTap: () => setState(() => selectedCar = null),
-                                    child: Icon(Icons.close, color: t.accent, size: 18),
+                                    onTap: () =>
+                                        setState(() => selectedCar = null),
+                                    child: Icon(Icons.close,
+                                        color: t.accent, size: 18),
                                   ),
                                 ],
                               ),
@@ -1118,7 +1186,8 @@ final response = await http.post(
                             Padding(
                               padding: const EdgeInsets.only(bottom: 16),
                               child: Text(l.selectCarFirst,
-                                  style: TextStyle(color: t.label, fontSize: 13)),
+                                  style:
+                                      TextStyle(color: t.label, fontSize: 13)),
                             ),
 
                           // Locations card
@@ -1157,25 +1226,33 @@ final response = await http.post(
                                   },
                                   t: t,
                                 ),
-                                if (pickupCity != null && !mapLoading && geocodedLocations.isNotEmpty) ...[
+                                if (pickupCity != null &&
+                                    !mapLoading &&
+                                    geocodedLocations.isNotEmpty) ...[
                                   const SizedBox(height: 16),
                                   Container(
                                     height: 300,
-                                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(12)),
+                                    decoration: BoxDecoration(
+                                        borderRadius:
+                                            BorderRadius.circular(12)),
                                     clipBehavior: Clip.hardEdge,
                                     child: FlutterMap(
                                       options: MapOptions(
                                         initialCameraFit: CameraFit.bounds(
                                           bounds: LatLngBounds.fromPoints(
-                                            geocodedLocations.values.whereType<LatLng>().toList(),
+                                            geocodedLocations.values
+                                                .whereType<LatLng>()
+                                                .toList(),
                                           ),
                                           padding: EdgeInsets.all(100),
                                         ),
                                       ),
                                       children: [
                                         TileLayer(
-                                          urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-                                          userAgentPackageName: 'com.example.app',
+                                          urlTemplate:
+                                              'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                                          userAgentPackageName:
+                                              'com.example.app',
                                         ),
                                         MarkerLayer(
                                           markers: geocodedLocations.entries
@@ -1185,10 +1262,16 @@ final response = await http.post(
                                                   width: 40,
                                                   height: 40,
                                                   child: GestureDetector(
-                                                    onTap: () => setState(() => selectedPickupLocation = entry.key),
+                                                    onTap: () => setState(() =>
+                                                        selectedPickupLocation =
+                                                            entry.key),
                                                     child: Icon(
                                                       Icons.location_on,
-                                                      color: selectedPickupLocation == entry.key ? Colors.blue : Colors.red,
+                                                      color:
+                                                          selectedPickupLocation ==
+                                                                  entry.key
+                                                              ? Colors.blue
+                                                              : Colors.red,
                                                       size: 40,
                                                     ),
                                                   ),
@@ -1207,9 +1290,11 @@ final response = await http.post(
                                         .map(
                                           (location) => FilterChip(
                                             label: Text(location),
-                                            selected: selectedPickupLocation == location,
-                                            onSelected: (selected) =>
-                                                setState(() => selectedPickupLocation = location),
+                                            selected: selectedPickupLocation ==
+                                                location,
+                                            onSelected: (selected) => setState(
+                                                () => selectedPickupLocation =
+                                                    location),
                                           ),
                                         )
                                         .toList(),
@@ -1258,7 +1343,8 @@ final response = await http.post(
                                 _dateTimeButton(
                                   value: pickupDateTime,
                                   onTap: () => _pickDateTime(true),
-                                  l: l, t: t,
+                                  l: l,
+                                  t: t,
                                   icon: Icons.flight_takeoff_rounded,
                                 ),
                                 const SizedBox(height: 16),
@@ -1269,7 +1355,8 @@ final response = await http.post(
                                 _dateTimeButton(
                                   value: dropoffDateTime,
                                   onTap: () => _pickDateTime(false),
-                                  l: l, t: t,
+                                  l: l,
+                                  t: t,
                                   icon: Icons.flight_land_rounded,
                                 ),
                                 if (totalDays > 0) ...[
@@ -1311,8 +1398,8 @@ final response = await http.post(
                                       fontWeight: FontWeight.w600,
                                       color: t.title)),
                               subtitle: Text(l.privateDriverExtra,
-                                  style: TextStyle(
-                                      fontSize: 12, color: t.label)),
+                                  style:
+                                      TextStyle(fontSize: 12, color: t.label)),
                               value: privateDriver,
                               onChanged: (val) {
                                 setState(() => privateDriver = val);
@@ -1358,7 +1445,8 @@ final response = await http.post(
                                     ),
                                   ],
                                   Padding(
-                                    padding: const EdgeInsets.symmetric(vertical: 12),
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 12),
                                     child: Divider(color: t.divider, height: 1),
                                   ),
                                   Row(
@@ -1397,7 +1485,8 @@ final response = await http.post(
 
                           // ── Confirm button ──
                           GestureDetector(
-                            onTap: isSubmitting ? null : () => _submitBooking(l),
+                            onTap:
+                                isSubmitting ? null : () => _submitBooking(l),
                             child: Container(
                               width: double.infinity,
                               padding: const EdgeInsets.symmetric(vertical: 18),
@@ -1442,7 +1531,8 @@ final response = await http.post(
 
   Widget _carImageFallback(AppThemeExtension t) {
     return Container(
-      width: 90, height: 56,
+      width: 90,
+      height: 56,
       decoration: BoxDecoration(
         color: t.accentLight,
         borderRadius: BorderRadius.circular(10),
@@ -1467,17 +1557,22 @@ final response = await http.post(
     );
   }
 
-  Widget _summaryRow(String label, String value, AppThemeExtension t, {Color? color}) {
+  Widget _summaryRow(String label, String value, AppThemeExtension t,
+      {Color? color}) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(label, style: TextStyle(color: color ?? t.label, fontSize: 14)),
-        Text(value, style: TextStyle(color: color ?? t.title, fontSize: 14, fontWeight: FontWeight.w600)),
+        Text(value,
+            style: TextStyle(
+                color: color ?? t.title,
+                fontSize: 14,
+                fontWeight: FontWeight.w600)),
       ],
     );
   }
-
 }
+
 class SuccessScreen extends StatelessWidget {
   final String title;
   final String message;

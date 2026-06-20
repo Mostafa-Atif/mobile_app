@@ -8,7 +8,9 @@ class HotelsRepository {
   Future<List<Map<String, dynamic>>> loadHotels() async {
     final jsonString = await rootBundle.loadString(_assetPath);
     final decoded = json.decode(jsonString) as List<dynamic>;
-    return decoded.map((item) => Map<String, dynamic>.from(item as Map)).toList();
+    return decoded
+        .map((item) => Map<String, dynamic>.from(item as Map))
+        .toList();
   }
 
   String localizedValue(dynamic mapOrString, String lang) {

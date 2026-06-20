@@ -378,8 +378,7 @@ class FlightDetails extends StatelessWidget {
                             toCity: toCity,
                             departureDate: departureDate,
                             returnDate: returnDate != null
-                                ? DateTime.tryParse(
-                                    returnDate.toString())
+                                ? DateTime.tryParse(returnDate.toString())
                                 : null,
                             tripType: isRoundTrip ? 'Round trip' : 'One-way',
                             passengers: passengers,

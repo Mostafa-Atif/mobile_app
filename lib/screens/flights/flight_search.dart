@@ -52,7 +52,8 @@ class _FlightSearchState extends State<FlightSearch> {
       hasError = false;
     });
     try {
-      final response = await http.get(Uri.parse('${Config.baseUrl}/api/flights'));
+      final response =
+          await http.get(Uri.parse('${Config.baseUrl}/api/flights'));
       if (response.statusCode == 200) {
         final List<dynamic> flights = json.decode(response.body);
         final Set<String> citySet = {};
@@ -94,10 +95,11 @@ class _FlightSearchState extends State<FlightSearch> {
   }
 
   Future<void> selectDate(BuildContext context, bool isDeparture) async {
-    final DateTime initialDate =
-    isDeparture ? departureDate : (returnDate ?? departureDate.add(Duration(days: 1)));
+    final DateTime initialDate = isDeparture
+        ? departureDate
+        : (returnDate ?? departureDate.add(Duration(days: 1)));
     final DateTime firstDate =
-    isDeparture ? DateTime.now() : departureDate.add(Duration(days: 1));
+        isDeparture ? DateTime.now() : departureDate.add(Duration(days: 1));
     final adjusted = initialDate.isBefore(firstDate) ? firstDate : initialDate;
 
     final DateTime? picked = await showDatePicker(
@@ -108,10 +110,10 @@ class _FlightSearchState extends State<FlightSearch> {
       builder: (context, child) => Theme(
         data: Theme.of(context).copyWith(
           colorScheme: Theme.of(context).colorScheme.copyWith(
-            primary: _t.accent,
-            surface: _t.card,
-            onSurface: _t.title,
-          ),
+                primary: _t.accent,
+                surface: _t.card,
+                onSurface: _t.title,
+              ),
           dialogTheme: DialogThemeData(backgroundColor: _t.card),
         ),
         child: child!,
@@ -218,16 +220,17 @@ class _FlightSearchState extends State<FlightSearch> {
                   itemCount: cities.length,
                   itemBuilder: (context, i) {
                     final city = cities[i];
-                    final isSelected = isFrom
-                        ? fromCity == city
-                        : toCity == city;
+                    final isSelected =
+                        isFrom ? fromCity == city : toCity == city;
                     return _cityTile(
                       city: city,
                       selected: isSelected,
                       onTap: () {
                         setState(() {
-                          if (isFrom) fromCity = city;
-                          else toCity = city;
+                          if (isFrom)
+                            fromCity = city;
+                          else
+                            toCity = city;
                         });
                         Navigator.pop(context);
                       },
@@ -346,7 +349,8 @@ class _FlightSearchState extends State<FlightSearch> {
                         onTap: () => setModalState(() => cabinClass = c),
                         child: AnimatedContainer(
                           duration: Duration(milliseconds: 180),
-                          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 16, vertical: 10),
                           decoration: BoxDecoration(
                             color: isSelected ? _t.accent : _t.accentLight,
                             borderRadius: BorderRadius.circular(14),
@@ -360,7 +364,9 @@ class _FlightSearchState extends State<FlightSearch> {
                             c,
                             style: TextStyle(
                               color: isSelected ? Colors.white : _t.accent,
-                              fontWeight: isSelected ? FontWeight.w700 : FontWeight.w600,
+                              fontWeight: isSelected
+                                  ? FontWeight.w700
+                                  : FontWeight.w600,
                               fontSize: 13,
                             ),
                           ),
@@ -423,250 +429,271 @@ class _FlightSearchState extends State<FlightSearch> {
         child: hasError
             ? _buildError(l)
             : Column(
-          children: [
-            // Header
-            Padding(
-              padding: EdgeInsets.fromLTRB(16, 12, 16, 0),
-              child: Row(
                 children: [
-                  _iconShell(
-                    icon: Icons.chevron_left_rounded,
-                    onTap: () => Navigator.pop(context),
-                  ),
-                  Expanded(
-                    child: Column(
+                  // Header
+                  Padding(
+                    padding: EdgeInsets.fromLTRB(16, 12, 16, 0),
+                    child: Row(
                       children: [
-                        Text(
-                          l.searchFlights,
-                          style: TextStyle(
-                            color: _t.title,
-                            fontSize: 18,
-                            fontWeight: FontWeight.w800,
-                          ),
+                        _iconShell(
+                          icon: Icons.chevron_left_rounded,
+                          onTap: () => Navigator.pop(context),
                         ),
-                        SizedBox(height: 2),
-                        Text(
-                          l.overOneMillion,
-                          style: TextStyle(
-                            color: _t.label,
-                            fontSize: 11,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  SizedBox(width: 42),
-                ],
-              ),
-            ),
-
-            Expanded(
-              child: loadingCities
-                  ? Center(
-                child: CircularProgressIndicator(color: _t.accent),
-              )
-                  : SingleChildScrollView(
-                padding: EdgeInsets.fromLTRB(16, 18, 16, 24),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      l.searchFlights,
-                      style: TextStyle(
-                        color: _t.label,
-                        fontSize: 13,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                    SizedBox(height: 18),
-
-                    // Trip type toggle
-                    Container(
-                      padding: EdgeInsets.all(4),
-                      decoration: BoxDecoration(
-                        color: _t.card,
-                        borderRadius: BorderRadius.circular(16),
-                        border: Border.all(
-                            color: _t.cardBorder.withOpacity(0.45)),
-                      ),
-                      child: Row(
-                        children: [
-                          _tripTypeButton(l.oneWay, 'oneway'),
-                          SizedBox(width: 4),
-                          _tripTypeButton(l.roundTrip, 'roundtrip'),
-                        ],
-                      ),
-                    ),
-                    SizedBox(height: 14),
-
-                    // Main search card
-                    Container(
-                      padding: EdgeInsets.all(18),
-                      decoration: BoxDecoration(
-                        color: _t.card,
-                        borderRadius: BorderRadius.circular(28),
-                        border: Border.all(
-                            color: _t.cardBorder.withOpacity(0.45)),
-                        boxShadow: _cardShadows(),
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          _sectionHeader(l.destination, l.searchFlights),
-                          SizedBox(height: 16),
-
-                          // From
-                          _searchTile(
-                            icon: Icons.flight_takeoff_rounded,
-                            title: fromCity ?? '...',
-                            subtitle: l.from,
-                            onTap: () => showCityPicker(true, l),
-                            trailing: Icons.keyboard_arrow_down_rounded,
-                          ),
-                          SizedBox(height: 10),
-
-                          // Swap indicator
-                          Center(
-                            child: Container(
-                              width: 36,
-                              height: 36,
-                              decoration: BoxDecoration(
-                                color: _t.accentLight,
-                                borderRadius: BorderRadius.circular(12),
-                                border: Border.all(
-                                    color: _t.cardBorder.withOpacity(0.45)),
-                              ),
-                              child: Icon(
-                                Icons.swap_vert_rounded,
-                                color: _t.accent,
-                                size: 20,
-                              ),
-                            ),
-                          ),
-                          SizedBox(height: 10),
-
-                          // To
-                          _searchTile(
-                            icon: Icons.flight_land_rounded,
-                            title: toCity ?? '...',
-                            subtitle: l.to,
-                            onTap: () => showCityPicker(false, l),
-                            trailing: Icons.keyboard_arrow_down_rounded,
-                          ),
-
-                          SizedBox(height: 14),
-                          _fieldLabel(l.dates),
-                          SizedBox(height: 8),
-
-                          // Date row
-                          Row(
+                        Expanded(
+                          child: Column(
                             children: [
-                              Expanded(
-                                child: _dateTile(
-                                  label: l.departure,
-                                  value: formatDate(departureDate),
-                                  icon: Icons.flight_takeoff_rounded,
-                                  onTap: () => selectDate(context, true),
+                              Text(
+                                l.searchFlights,
+                                style: TextStyle(
+                                  color: _t.title,
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w800,
                                 ),
                               ),
-                              Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 8),
-                                child: Container(
-                                  width: 34,
-                                  height: 34,
-                                  decoration: BoxDecoration(
-                                    color: _t.accentLight,
-                                    borderRadius: BorderRadius.circular(12),
-                                  ),
-                                  child: Icon(
-                                    Icons.arrow_forward_rounded,
-                                    color: _t.accent,
-                                    size: 18,
-                                  ),
+                              SizedBox(height: 2),
+                              Text(
+                                l.overOneMillion,
+                                style: TextStyle(
+                                  color: _t.label,
+                                  fontSize: 11,
+                                  fontWeight: FontWeight.w600,
                                 ),
-                              ),
-                              Expanded(
-                                child: selectedTripType == 'roundtrip'
-                                    ? _dateTile(
-                                  label: l.returnDate,
-                                  value: returnDate != null
-                                      ? formatDate(returnDate!)
-                                      : l.selectDate,
-                                  icon: Icons.flight_land_rounded,
-                                  onTap: () => selectDate(context, false),
-                                )
-                                    : _disabledDateTile(label: l.returnDate),
                               ),
                             ],
                           ),
+                        ),
+                        SizedBox(width: 42),
+                      ],
+                    ),
+                  ),
 
-                          SizedBox(height: 14),
-                          _fieldLabel(l.passengersAndClass),
-                          SizedBox(height: 8),
+                  Expanded(
+                    child: loadingCities
+                        ? Center(
+                            child: CircularProgressIndicator(color: _t.accent),
+                          )
+                        : SingleChildScrollView(
+                            padding: EdgeInsets.fromLTRB(16, 18, 16, 24),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  l.searchFlights,
+                                  style: TextStyle(
+                                    color: _t.label,
+                                    fontSize: 13,
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                ),
+                                SizedBox(height: 18),
 
-                          // Passengers summary
-                          _summaryTile(
-                            icon: Icons.people_alt_outlined,
-                            title: formatPassengers(l),
-                            subtitle:
-                            '$adults ${l.adults}, $children ${l.children}, $infants ${l.infants}',
-                            onTap: () => showPassengersPicker(l),
-                          ),
+                                // Trip type toggle
+                                Container(
+                                  padding: EdgeInsets.all(4),
+                                  decoration: BoxDecoration(
+                                    color: _t.card,
+                                    borderRadius: BorderRadius.circular(16),
+                                    border: Border.all(
+                                        color: _t.cardBorder.withOpacity(0.45)),
+                                  ),
+                                  child: Row(
+                                    children: [
+                                      _tripTypeButton(l.oneWay, 'oneway'),
+                                      SizedBox(width: 4),
+                                      _tripTypeButton(l.roundTrip, 'roundtrip'),
+                                    ],
+                                  ),
+                                ),
+                                SizedBox(height: 14),
 
-                          SizedBox(height: 18),
+                                // Main search card
+                                Container(
+                                  padding: EdgeInsets.all(18),
+                                  decoration: BoxDecoration(
+                                    color: _t.card,
+                                    borderRadius: BorderRadius.circular(28),
+                                    border: Border.all(
+                                        color: _t.cardBorder.withOpacity(0.45)),
+                                    boxShadow: _cardShadows(),
+                                  ),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      _sectionHeader(
+                                          l.destination, l.searchFlights),
+                                      SizedBox(height: 16),
 
-                          // Search button
-                          DecoratedBox(
-                            decoration: BoxDecoration(
-                              gradient: LinearGradient(
-                                  colors: _t.btnGradient),
-                              borderRadius: BorderRadius.circular(20),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: _t.accent.withOpacity(0.28),
-                                  blurRadius: 18,
-                                  offset: Offset(0, 8),
+                                      // From
+                                      _searchTile(
+                                        icon: Icons.flight_takeoff_rounded,
+                                        title: fromCity ?? '...',
+                                        subtitle: l.from,
+                                        onTap: () => showCityPicker(true, l),
+                                        trailing:
+                                            Icons.keyboard_arrow_down_rounded,
+                                      ),
+                                      SizedBox(height: 10),
+
+                                      // Swap indicator
+                                      Center(
+                                        child: Container(
+                                          width: 36,
+                                          height: 36,
+                                          decoration: BoxDecoration(
+                                            color: _t.accentLight,
+                                            borderRadius:
+                                                BorderRadius.circular(12),
+                                            border: Border.all(
+                                                color: _t.cardBorder
+                                                    .withOpacity(0.45)),
+                                          ),
+                                          child: Icon(
+                                            Icons.swap_vert_rounded,
+                                            color: _t.accent,
+                                            size: 20,
+                                          ),
+                                        ),
+                                      ),
+                                      SizedBox(height: 10),
+
+                                      // To
+                                      _searchTile(
+                                        icon: Icons.flight_land_rounded,
+                                        title: toCity ?? '...',
+                                        subtitle: l.to,
+                                        onTap: () => showCityPicker(false, l),
+                                        trailing:
+                                            Icons.keyboard_arrow_down_rounded,
+                                      ),
+
+                                      SizedBox(height: 14),
+                                      _fieldLabel(l.dates),
+                                      SizedBox(height: 8),
+
+                                      // Date row
+                                      Row(
+                                        children: [
+                                          Expanded(
+                                            child: _dateTile(
+                                              label: l.departure,
+                                              value: formatDate(departureDate),
+                                              icon:
+                                                  Icons.flight_takeoff_rounded,
+                                              onTap: () =>
+                                                  selectDate(context, true),
+                                            ),
+                                          ),
+                                          Padding(
+                                            padding: EdgeInsets.symmetric(
+                                                horizontal: 8),
+                                            child: Container(
+                                              width: 34,
+                                              height: 34,
+                                              decoration: BoxDecoration(
+                                                color: _t.accentLight,
+                                                borderRadius:
+                                                    BorderRadius.circular(12),
+                                              ),
+                                              child: Icon(
+                                                Icons.arrow_forward_rounded,
+                                                color: _t.accent,
+                                                size: 18,
+                                              ),
+                                            ),
+                                          ),
+                                          Expanded(
+                                            child: selectedTripType ==
+                                                    'roundtrip'
+                                                ? _dateTile(
+                                                    label: l.returnDate,
+                                                    value: returnDate != null
+                                                        ? formatDate(
+                                                            returnDate!)
+                                                        : l.selectDate,
+                                                    icon: Icons
+                                                        .flight_land_rounded,
+                                                    onTap: () => selectDate(
+                                                        context, false),
+                                                  )
+                                                : _disabledDateTile(
+                                                    label: l.returnDate),
+                                          ),
+                                        ],
+                                      ),
+
+                                      SizedBox(height: 14),
+                                      _fieldLabel(l.passengersAndClass),
+                                      SizedBox(height: 8),
+
+                                      // Passengers summary
+                                      _summaryTile(
+                                        icon: Icons.people_alt_outlined,
+                                        title: formatPassengers(l),
+                                        subtitle:
+                                            '$adults ${l.adults}, $children ${l.children}, $infants ${l.infants}',
+                                        onTap: () => showPassengersPicker(l),
+                                      ),
+
+                                      SizedBox(height: 18),
+
+                                      // Search button
+                                      DecoratedBox(
+                                        decoration: BoxDecoration(
+                                          gradient: LinearGradient(
+                                              colors: _t.btnGradient),
+                                          borderRadius:
+                                              BorderRadius.circular(20),
+                                          boxShadow: [
+                                            BoxShadow(
+                                              color:
+                                                  _t.accent.withOpacity(0.28),
+                                              blurRadius: 18,
+                                              offset: Offset(0, 8),
+                                            ),
+                                          ],
+                                        ),
+                                        child: ElevatedButton(
+                                          onPressed: () => _handleSearch(l),
+                                          style: ElevatedButton.styleFrom(
+                                            backgroundColor: Colors.transparent,
+                                            shadowColor: Colors.transparent,
+                                            minimumSize:
+                                                Size(double.infinity, 58),
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(20),
+                                            ),
+                                          ),
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              Icon(Icons.search_rounded,
+                                                  color: Colors.white,
+                                                  size: 22),
+                                              SizedBox(width: 10),
+                                              Text(
+                                                l.searchFlights,
+                                                style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.w800,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ],
                             ),
-                            child: ElevatedButton(
-                              onPressed: () => _handleSearch(l),
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.transparent,
-                                shadowColor: Colors.transparent,
-                                minimumSize: Size(double.infinity, 58),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(20),
-                                ),
-                              ),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Icon(Icons.search_rounded,
-                                      color: Colors.white, size: 22),
-                                  SizedBox(width: 10),
-                                  Text(
-                                    l.searchFlights,
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w800,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
                           ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
+                  ),
+                ],
               ),
-            ),
-          ],
-        ),
       ),
     );
   }
@@ -891,8 +918,8 @@ class _FlightSearchState extends State<FlightSearch> {
         children: [
           Row(
             children: [
-              Icon(Icons.flight_land_rounded, size: 14,
-                  color: _t.label.withOpacity(0.4)),
+              Icon(Icons.flight_land_rounded,
+                  size: 14, color: _t.label.withOpacity(0.4)),
               SizedBox(width: 4),
               Text(
                 label,
@@ -1131,8 +1158,8 @@ class _FlightSearchState extends State<FlightSearch> {
               icon: Icon(Icons.refresh_rounded, color: Colors.white, size: 18),
               label: Text(
                 l.retry,
-                style: TextStyle(
-                    color: Colors.white, fontWeight: FontWeight.w700),
+                style:
+                    TextStyle(color: Colors.white, fontWeight: FontWeight.w700),
               ),
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.transparent,
@@ -1162,6 +1189,7 @@ class _FlightSearchState extends State<FlightSearch> {
     ];
   }
 }
+
 class SuccessScreen extends StatelessWidget {
   final String title;
   final String message;

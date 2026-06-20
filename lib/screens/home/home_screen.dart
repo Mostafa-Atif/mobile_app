@@ -158,8 +158,7 @@ class _HomeScreenState extends State<HomeScreen> {
             line2Label: 'Departs',
             line2Value: _formatTime(m['departureDate']),
             line3Label: 'Passenger',
-            line3Value:
-                (m['fullName'] as String? ?? '-').split(' ').first,
+            line3Value: (m['fullName'] as String? ?? '-').split(' ').first,
           );
         }
       }
@@ -286,12 +285,11 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       backgroundColor: t.bg,
       body: FutureBuilder<List<List<Map<String, dynamic>>>>(
-        future: Future.wait(
-            [_heroDestinationsFuture, _featuredDestinationsFuture]),
+        future:
+            Future.wait([_heroDestinationsFuture, _featuredDestinationsFuture]),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
-            return Center(
-                child: CircularProgressIndicator(color: t.accent));
+            return Center(child: CircularProgressIndicator(color: t.accent));
           }
 
           final heroDestinations = snapshot.data![0];
@@ -317,12 +315,11 @@ class _HomeScreenState extends State<HomeScreen> {
           return CustomScrollView(
             slivers: [
               SliverToBoxAdapter(
-                child: _buildHero(
-                    context, t, l, isDark, isAr, heroDestinations),
+                child:
+                    _buildHero(context, t, l, isDark, isAr, heroDestinations),
               ),
               SliverToBoxAdapter(
-                child: _buildBody(
-                    context, t, l, isAr, featuredDestinations),
+                child: _buildBody(context, t, l, isAr, featuredDestinations),
               ),
             ],
           );
@@ -430,9 +427,7 @@ class _HomeScreenState extends State<HomeScreen> {
   ) {
     final displayLetter = firstName.isNotEmpty
         ? firstName.characters.first
-        : (email.isNotEmpty
-            ? email.characters.first.toUpperCase()
-            : '?');
+        : (email.isNotEmpty ? email.characters.first.toUpperCase() : '?');
 
     return SizedBox(
       height: 340,
@@ -584,8 +579,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       builder: (_) => const AllDestinationsScreen()),
                 ),
                 child: Container(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 12, vertical: 5),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
                   decoration: BoxDecoration(
                     color: t.accentLight,
                     borderRadius: BorderRadius.circular(20),
@@ -641,8 +636,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 decoration: BoxDecoration(
                   color: t.card,
                   borderRadius: BorderRadius.circular(18),
-                  border:
-                      Border.all(color: t.cardBorder.withOpacity(0.45)),
+                  border: Border.all(color: t.cardBorder.withOpacity(0.45)),
                 ),
                 child: Center(
                   child: CircularProgressIndicator(
@@ -654,9 +648,7 @@ class _HomeScreenState extends State<HomeScreen> {
         }
 
         // no upcoming booking → hide section entirely
-        if (snapshot.hasError ||
-            !snapshot.hasData ||
-            snapshot.data == null) {
+        if (snapshot.hasError || !snapshot.hasData || snapshot.data == null) {
           return const SizedBox.shrink();
         }
 
@@ -684,8 +676,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 GestureDetector(
                   onTap: _openDashboard,
                   child: Container(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 12, vertical: 5),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
                     decoration: BoxDecoration(
                       color: t.accentLight,
                       borderRadius: BorderRadius.circular(20),
@@ -710,8 +702,7 @@ class _HomeScreenState extends State<HomeScreen> {
               decoration: BoxDecoration(
                 color: t.card,
                 borderRadius: BorderRadius.circular(18),
-                border:
-                    Border.all(color: t.cardBorder.withOpacity(0.45)),
+                border: Border.all(color: t.cardBorder.withOpacity(0.45)),
                 boxShadow: [
                   BoxShadow(
                     color: t.cardBorder.withOpacity(0.15),
@@ -791,28 +782,19 @@ class _HomeScreenState extends State<HomeScreen> {
                   // Meta row
                   Row(
                     children: [
-                      _TripMeta(
-                          label: b.line1Label,
-                          value: b.line1Value,
-                          t: t),
+                      _TripMeta(label: b.line1Label, value: b.line1Value, t: t),
                       const SizedBox(width: 18),
-                      _TripMeta(
-                          label: b.line2Label,
-                          value: b.line2Value,
-                          t: t),
+                      _TripMeta(label: b.line2Label, value: b.line2Value, t: t),
                       const SizedBox(width: 18),
-                      _TripMeta(
-                          label: b.line3Label,
-                          value: b.line3Value,
-                          t: t),
+                      _TripMeta(label: b.line3Label, value: b.line3Value, t: t),
                     ],
                   ),
                   const SizedBox(height: 14),
 
                   // Footer
                   Container(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 12, vertical: 9),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 12, vertical: 9),
                     decoration: BoxDecoration(
                       color: t.bg,
                       borderRadius: BorderRadius.circular(10),
@@ -844,8 +826,8 @@ class _HomeScreenState extends State<HomeScreen> {
                             padding: const EdgeInsets.symmetric(
                                 horizontal: 14, vertical: 5),
                             decoration: BoxDecoration(
-                              border: Border.all(
-                                  color: t.accent.withOpacity(0.60)),
+                              border:
+                                  Border.all(color: t.accent.withOpacity(0.60)),
                               borderRadius: BorderRadius.circular(20),
                             ),
                             child: Text(
@@ -1004,8 +986,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     const Spacer(),
                     GestureDetector(
                       onTap: () {
-                        Clipboard.setData(
-                            const ClipboardData(text: 'RAHAL20'));
+                        Clipboard.setData(const ClipboardData(text: 'RAHAL20'));
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
                             content: Text(l.offerCodeCopied),
@@ -1073,8 +1054,7 @@ class _HomeScreenState extends State<HomeScreen> {
           onTap: () => Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (_) =>
-                  DestinationDetailScreen(destinationData: dest),
+              builder: (_) => DestinationDetailScreen(destinationData: dest),
             ),
           ),
         );
@@ -1236,8 +1216,7 @@ class _DestinationCardState extends State<_DestinationCard> {
               Image.network(
                 widget.destination['imageUrl'] as String,
                 fit: BoxFit.cover,
-                errorBuilder: (_, __, ___) =>
-                    Container(color: widget.t.card),
+                errorBuilder: (_, __, ___) => Container(color: widget.t.card),
               ),
               Container(
                 decoration: const BoxDecoration(
@@ -1353,11 +1332,9 @@ class _ProfileMenuOverlayState extends State<_ProfileMenuOverlay>
     final emailCol = isDark
         ? Colors.white.withOpacity(0.72)
         : const Color(0xFF234B72).withOpacity(0.65);
-    final iconBg =
-        isDark ? Colors.white.withOpacity(0.06) : t.accentLight;
-    final iconCol = isDark
-        ? Colors.white.withOpacity(0.50)
-        : t.accent.withOpacity(0.70);
+    final iconBg = isDark ? Colors.white.withOpacity(0.06) : t.accentLight;
+    final iconCol =
+        isDark ? Colors.white.withOpacity(0.50) : t.accent.withOpacity(0.70);
     final labelCol = isDark
         ? Colors.white.withOpacity(0.65)
         : const Color(0xFF194164).withOpacity(0.70);
@@ -1371,8 +1348,7 @@ class _ProfileMenuOverlayState extends State<_ProfileMenuOverlay>
     const menuWidth = 232.0;
     const avatarWidth = 40.0;
     final offsetX = widget.isRtl ? 0.0 : -(menuWidth - avatarWidth);
-    final scaleOrigin =
-        widget.isRtl ? Alignment.topLeft : Alignment.topRight;
+    final scaleOrigin = widget.isRtl ? Alignment.topLeft : Alignment.topRight;
 
     return Stack(
       children: [
@@ -1406,8 +1382,8 @@ class _ProfileMenuOverlayState extends State<_ProfileMenuOverlay>
                         border: Border.all(color: borderCol),
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.black
-                                .withOpacity(isDark ? 0.48 : 0.12),
+                            color:
+                                Colors.black.withOpacity(isDark ? 0.48 : 0.12),
                             blurRadius: 32,
                             offset: const Offset(0, 8),
                           ),
@@ -1417,12 +1393,10 @@ class _ProfileMenuOverlayState extends State<_ProfileMenuOverlay>
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Container(
-                            padding: const EdgeInsets.fromLTRB(
-                                16, 20, 16, 16),
+                            padding: const EdgeInsets.fromLTRB(16, 20, 16, 16),
                             decoration: BoxDecoration(
                               border: Border(
-                                  bottom: BorderSide(
-                                      color: headerBorderCol)),
+                                  bottom: BorderSide(color: headerBorderCol)),
                             ),
                             child: Column(
                               children: [
@@ -1441,8 +1415,7 @@ class _ProfileMenuOverlayState extends State<_ProfileMenuOverlay>
                                     ),
                                     boxShadow: [
                                       BoxShadow(
-                                        color:
-                                            t.accent.withOpacity(0.28),
+                                        color: t.accent.withOpacity(0.28),
                                         blurRadius: 0,
                                         spreadRadius: 3,
                                       ),
@@ -1488,8 +1461,7 @@ class _ProfileMenuOverlayState extends State<_ProfileMenuOverlay>
                             ),
                           ),
                           Padding(
-                            padding:
-                                const EdgeInsets.symmetric(vertical: 6),
+                            padding: const EdgeInsets.symmetric(vertical: 6),
                             child: Column(
                               children: [
                                 _MenuRow(
@@ -1500,8 +1472,7 @@ class _ProfileMenuOverlayState extends State<_ProfileMenuOverlay>
                                   labelColor: labelCol,
                                   chevronColor: chevronCol,
                                   isDark: isDark,
-                                  onTap: () =>
-                                      widget.onSelected('settings'),
+                                  onTap: () => widget.onSelected('settings'),
                                 ),
                                 _MenuRow(
                                   icon: Icons.info_outline_rounded,
@@ -1511,29 +1482,26 @@ class _ProfileMenuOverlayState extends State<_ProfileMenuOverlay>
                                   labelColor: labelCol,
                                   chevronColor: chevronCol,
                                   isDark: isDark,
-                                  onTap: () =>
-                                      widget.onSelected('about'),
+                                  onTap: () => widget.onSelected('about'),
                                 ),
                                 Padding(
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 14, vertical: 3),
-                                  child: Divider(
-                                      height: 1, color: dividerCol),
+                                  child: Divider(height: 1, color: dividerCol),
                                 ),
                                 _MenuRow(
                                   icon: Icons.logout_rounded,
                                   label: l.menuLogout,
-                                  iconBg: const Color(0xFFFB7185)
-                                      .withOpacity(0.08),
-                                  iconColor: const Color(0xFFFB7185)
-                                      .withOpacity(0.70),
-                                  labelColor: const Color(0xFFDC4545)
-                                      .withOpacity(0.78),
+                                  iconBg:
+                                      const Color(0xFFFB7185).withOpacity(0.08),
+                                  iconColor:
+                                      const Color(0xFFFB7185).withOpacity(0.70),
+                                  labelColor:
+                                      const Color(0xFFDC4545).withOpacity(0.78),
                                   chevronColor: Colors.transparent,
                                   isDark: isDark,
                                   showChevron: false,
-                                  onTap: () =>
-                                      widget.onSelected('logout'),
+                                  onTap: () => widget.onSelected('logout'),
                                 ),
                               ],
                             ),
@@ -1602,8 +1570,7 @@ class _MenuRowState extends State<_MenuRow> {
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 100),
         margin: const EdgeInsets.symmetric(horizontal: 6, vertical: 1),
-        padding:
-            const EdgeInsets.symmetric(horizontal: 10, vertical: 9),
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 9),
         decoration: BoxDecoration(
           color: _pressed ? hoverBg : Colors.transparent,
           borderRadius: BorderRadius.circular(12),
@@ -1617,8 +1584,7 @@ class _MenuRowState extends State<_MenuRow> {
                 color: widget.iconBg,
                 borderRadius: BorderRadius.circular(9),
               ),
-              child: Icon(widget.icon,
-                  color: widget.iconColor, size: 15),
+              child: Icon(widget.icon, color: widget.iconColor, size: 15),
             ),
             const SizedBox(width: 11),
             Expanded(

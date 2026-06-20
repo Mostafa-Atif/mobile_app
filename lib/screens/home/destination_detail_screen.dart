@@ -16,7 +16,7 @@ class DestinationDetailScreen extends StatelessWidget {
   final String? destinationName;
   final Map<String, dynamic>? destinationData;
   static final DestinationsRepository _destinationsRepository =
-  DestinationsRepository();
+      DestinationsRepository();
 
   Future<Map<String, dynamic>> _loadDestination() async {
     if (destinationData != null) return destinationData!;
@@ -147,13 +147,13 @@ class _DestinationDetailViewState extends State<_DestinationDetailView> {
         scrolledUnderElevation: 0,
         bottom: _appBarSolid
             ? PreferredSize(
-          preferredSize: Size.fromHeight(1),
-          child: Divider(
-            height: 1,
-            thickness: 1,
-            color: t.cardBorder.withOpacity(0.35),
-          ),
-        )
+                preferredSize: Size.fromHeight(1),
+                child: Divider(
+                  height: 1,
+                  thickness: 1,
+                  color: t.cardBorder.withOpacity(0.35),
+                ),
+              )
             : null,
         systemOverlayStyle: _appBarSolid
             ? (isDark ? SystemUiOverlayStyle.light : SystemUiOverlayStyle.dark)
@@ -166,13 +166,13 @@ class _DestinationDetailViewState extends State<_DestinationDetailView> {
         // Title only appears once the bar is solid — no fade artifact
         title: _appBarSolid
             ? Text(
-          name,
-          style: TextStyle(
-            color: t.title,
-            fontSize: 16,
-            fontWeight: FontWeight.w800,
-          ),
-        )
+                name,
+                style: TextStyle(
+                  color: t.title,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w800,
+                ),
+              )
             : null,
       ),
 
@@ -218,8 +218,8 @@ class _DestinationDetailViewState extends State<_DestinationDetailView> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Container(
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 10, vertical: 5),
+                          padding:
+                              EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                           decoration: BoxDecoration(
                             color: t.accent.withOpacity(0.9),
                             borderRadius: BorderRadius.circular(20),
@@ -282,8 +282,7 @@ class _DestinationDetailViewState extends State<_DestinationDetailView> {
 
                   // Section label
                   Text(
-                    l.destinationAttractionsTitle
-                        .toUpperCase(),
+                    l.destinationAttractionsTitle.toUpperCase(),
                     style: TextStyle(
                       color: t.accent,
                       fontSize: 10,
@@ -305,7 +304,7 @@ class _DestinationDetailViewState extends State<_DestinationDetailView> {
                   SizedBox(height: 14),
 
                   ...infoSections.map(
-                        (s) => Padding(
+                    (s) => Padding(
                       padding: EdgeInsets.only(bottom: 10),
                       child: _InfoCard(
                         icon: s['icon'] as IconData,
@@ -338,7 +337,7 @@ class _BackButton extends StatelessWidget {
       color: Colors.transparent,
       child: InkWell(
         customBorder:
-        RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         onTap: () => Navigator.pop(context),
         child: Ink(
           width: 42,

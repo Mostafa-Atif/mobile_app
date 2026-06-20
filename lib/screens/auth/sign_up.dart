@@ -40,13 +40,17 @@ class _SignUpState extends State<SignUp> {
   bool get _hasUppercase => _passwordController.text.contains(RegExp(r'[A-Z]'));
   bool get _hasLowercase => _passwordController.text.contains(RegExp(r'[a-z]'));
   bool get _hasDigit => _passwordController.text.contains(RegExp(r'[0-9]'));
-  bool get _hasSpecial =>
-      _passwordController.text.contains(RegExp(r'[!@#$%^&*(),.?":{}|<>\[\]\-_]'));
+  bool get _hasSpecial => _passwordController.text
+      .contains(RegExp(r'[!@#$%^&*(),.?":{}|<>\[\]\-_]'));
   bool get _passwordValid =>
-      _hasMinLength && _hasUppercase && _hasLowercase && _hasDigit && _hasSpecial;
+      _hasMinLength &&
+      _hasUppercase &&
+      _hasLowercase &&
+      _hasDigit &&
+      _hasSpecial;
 
-  bool get _emailValid =>
-      RegExp(r'^[\w\.-]+@[\w\.-]+\.\w{2,}$').hasMatch(_emailController.text.trim());
+  bool get _emailValid => RegExp(r'^[\w\.-]+@[\w\.-]+\.\w{2,}$')
+      .hasMatch(_emailController.text.trim());
 
   bool get _phoneValid => _phonePattern.hasMatch(_phoneController.text.trim());
 
@@ -65,12 +69,16 @@ class _SignUpState extends State<SignUp> {
 
   bool get _firstNameValid {
     final value = _firstNameController.text.trim();
-    return value.length >= 2 && value.length <= 50 && _namePattern.hasMatch(value);
+    return value.length >= 2 &&
+        value.length <= 50 &&
+        _namePattern.hasMatch(value);
   }
 
   bool get _lastNameValid {
     final value = _lastNameController.text.trim();
-    return value.length >= 2 && value.length <= 50 && _namePattern.hasMatch(value);
+    return value.length >= 2 &&
+        value.length <= 50 &&
+        _namePattern.hasMatch(value);
   }
 
   @override
@@ -138,9 +146,10 @@ class _SignUpState extends State<SignUp> {
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text((data['message'] as String?)?.trim().isNotEmpty == true
-                ? data['message'] as String
-                : l.unableToConnect),
+            content: Text(
+                (data['message'] as String?)?.trim().isNotEmpty == true
+                    ? data['message'] as String
+                    : l.unableToConnect),
           ),
         );
       }
@@ -622,9 +631,8 @@ class _AuthTextField extends StatelessWidget {
           obscureText: obscureText,
           inputFormatters: inputFormatters,
           maxLength: maxLength,
-          maxLengthEnforcement: maxLength != null
-              ? MaxLengthEnforcement.enforced
-              : null,
+          maxLengthEnforcement:
+              maxLength != null ? MaxLengthEnforcement.enforced : null,
           onChanged: (_) => onChanged(),
           style: TextStyle(
             color: t.title,

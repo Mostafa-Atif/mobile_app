@@ -8,7 +8,9 @@ class DestinationsRepository {
   Future<List<Map<String, dynamic>>> loadDestinations() async {
     final jsonString = await rootBundle.loadString(_assetPath);
     final decoded = json.decode(jsonString) as List<dynamic>;
-    return decoded.map((item) => Map<String, dynamic>.from(item as Map)).toList();
+    return decoded
+        .map((item) => Map<String, dynamic>.from(item as Map))
+        .toList();
   }
 
   Future<List<Map<String, dynamic>>> loadFeaturedDestinations() async {
@@ -29,7 +31,8 @@ class DestinationsRepository {
     return heroDestinations.take(limit).toList();
   }
 
-  Future<Map<String, dynamic>> loadDestinationByName(String destinationName) async {
+  Future<Map<String, dynamic>> loadDestinationByName(
+      String destinationName) async {
     final destinations = await loadDestinations();
     return destinations.firstWhere(
       (item) =>

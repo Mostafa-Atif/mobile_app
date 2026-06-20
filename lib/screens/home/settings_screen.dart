@@ -32,7 +32,8 @@ class SettingsScreen extends StatelessWidget {
                       decoration: BoxDecoration(
                         color: t.card,
                         borderRadius: BorderRadius.circular(14),
-                        border: Border.all(color: t.cardBorder.withOpacity(0.45)),
+                        border:
+                            Border.all(color: t.cardBorder.withOpacity(0.45)),
                       ),
                       child: Icon(
                         isAr ? Icons.arrow_forward : Icons.arrow_back,
@@ -95,7 +96,8 @@ class SettingsScreen extends StatelessWidget {
                       child: _ChoiceTile(
                         label: 'English',
                         selected: !isAr,
-                        onTap: () => MyApp.setLocale(context, const Locale('en')),
+                        onTap: () =>
+                            MyApp.setLocale(context, const Locale('en')),
                       ),
                     ),
                     const SizedBox(width: 12),
@@ -103,7 +105,8 @@ class SettingsScreen extends StatelessWidget {
                       child: _ChoiceTile(
                         label: 'العربية',
                         selected: isAr,
-                        onTap: () => MyApp.setLocale(context, const Locale('ar')),
+                        onTap: () =>
+                            MyApp.setLocale(context, const Locale('ar')),
                       ),
                     ),
                   ],

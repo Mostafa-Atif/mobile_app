@@ -54,13 +54,15 @@ class _UserDashboardScreenState extends State<UserDashboardScreen> {
 
       final data = json.decode(response.body) as Map<String, dynamic>;
       final hotels = (data['hotelBookings'] as List<dynamic>? ?? const [])
-          .map((item) => _BookingCardData.fromHotel(item as Map<String, dynamic>))
+          .map((item) =>
+              _BookingCardData.fromHotel(item as Map<String, dynamic>))
           .toList();
       final cars = (data['carBookings'] as List<dynamic>? ?? const [])
           .map((item) => _BookingCardData.fromCar(item as Map<String, dynamic>))
           .toList();
       final flights = (data['flightBookings'] as List<dynamic>? ?? const [])
-          .map((item) => _BookingCardData.fromFlight(item as Map<String, dynamic>))
+          .map((item) =>
+              _BookingCardData.fromFlight(item as Map<String, dynamic>))
           .toList();
 
       final merged = [...flights, ...hotels, ...cars]
@@ -162,7 +164,9 @@ class _UserDashboardScreenState extends State<UserDashboardScreen> {
             .where((item) => item.type == BookingFilter.hotel)
             .toList();
       case BookingFilter.car:
-        return _bookings.where((item) => item.type == BookingFilter.car).toList();
+        return _bookings
+            .where((item) => item.type == BookingFilter.car)
+            .toList();
       case BookingFilter.all:
         return _bookings;
     }
@@ -255,8 +259,10 @@ class _StatsRow extends StatelessWidget {
   Widget build(BuildContext context) {
     final l = AppLocalizations.of(context)!;
     final t = Theme.of(context).extension<AppThemeExtension>()!;
-    final confirmed = bookings.where((item) => item.status == 'confirmed').length;
-    final completed = bookings.where((item) => item.status == 'completed').length;
+    final confirmed =
+        bookings.where((item) => item.status == 'confirmed').length;
+    final completed =
+        bookings.where((item) => item.status == 'completed').length;
     final pending = bookings.where((item) => item.status == 'pending').length;
 
     final stats = [
@@ -726,7 +732,8 @@ class _FilterCounts {
   factory _FilterCounts.fromBookings(List<_BookingCardData> bookings) {
     return _FilterCounts(
       all: bookings.length,
-      flights: bookings.where((item) => item.type == BookingFilter.flight).length,
+      flights:
+          bookings.where((item) => item.type == BookingFilter.flight).length,
       hotels: bookings.where((item) => item.type == BookingFilter.hotel).length,
       cars: bookings.where((item) => item.type == BookingFilter.car).length,
     );

@@ -107,7 +107,8 @@ class ConfirmationScreen extends StatelessWidget {
                               height: 66,
                               decoration: BoxDecoration(
                                 shape: BoxShape.circle,
-                                color: Colors.white.withOpacity(isDark ? 0.10 : 0.24),
+                                color: Colors.white
+                                    .withOpacity(isDark ? 0.10 : 0.24),
                               ),
                               child: const Icon(
                                 Icons.check_rounded,
@@ -157,7 +158,8 @@ class ConfirmationScreen extends StatelessWidget {
                                 foregroundColor: Colors.white,
                                 shadowColor: Colors.transparent,
                                 elevation: 0,
-                                padding: const EdgeInsets.symmetric(vertical: 16),
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 16),
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(18),
                                 ),

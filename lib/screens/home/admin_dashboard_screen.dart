@@ -132,7 +132,8 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
         Uri.parse('${Config.baseUrl}${booking.basePath}/${booking.id}'),
         headers: headers,
       ),
-      onSuccess: (items) => items.where((item) => item.id != booking.id).toList(),
+      onSuccess: (items) =>
+          items.where((item) => item.id != booking.id).toList(),
       successMessage: AppLocalizations.of(context)!.adminBookingDeleted,
     );
   }
@@ -252,7 +253,8 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                 padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
                 child: _AdminSectionRow(
                   activeSection: _activeSection,
-                  onChanged: (section) => setState(() => _activeSection = section),
+                  onChanged: (section) =>
+                      setState(() => _activeSection = section),
                 ),
               ),
             ),
@@ -940,8 +942,10 @@ class _AdminBooking {
       icon: Icons.hotel_rounded,
       details: [
         _AdminBookingDetail(l.phone, '${guest['phone'] ?? '-'}'),
-        _AdminBookingDetail(l.userDashboardCheckIn, _formatDate(item['checkInDate'])),
-        _AdminBookingDetail(l.userDashboardCheckOut, _formatDate(item['checkOutDate'])),
+        _AdminBookingDetail(
+            l.userDashboardCheckIn, _formatDate(item['checkInDate'])),
+        _AdminBookingDetail(
+            l.userDashboardCheckOut, _formatDate(item['checkOutDate'])),
         _AdminBookingDetail(l.userDashboardRooms, '${item['numRooms'] ?? '-'}'),
       ],
     );
@@ -971,7 +975,8 @@ class _AdminBooking {
           l.userDashboardReturnDate,
           item['returnDate'] == null ? '-' : _formatDate(item['returnDate']),
         ),
-        _AdminBookingDetail(l.userDashboardTripType, '${item['tripType'] ?? '-'}'),
+        _AdminBookingDetail(
+            l.userDashboardTripType, '${item['tripType'] ?? '-'}'),
       ],
     );
   }

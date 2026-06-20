@@ -62,7 +62,6 @@ class AboutUsScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-
               // ── Hero banner ──
               Stack(
                 children: [
@@ -101,15 +100,18 @@ class AboutUsScreen extends StatelessWidget {
                         (route) => false,
                       ),
                       child: Container(
-                        width: 36, height: 36,
+                        width: 36,
+                        height: 36,
                         decoration: BoxDecoration(
                           color: Colors.black.withOpacity(0.3),
                           borderRadius: BorderRadius.circular(10),
-                          border: Border.all(color: Colors.white.withOpacity(0.2)),
+                          border:
+                              Border.all(color: Colors.white.withOpacity(0.2)),
                         ),
                         child: Icon(
                           isAr ? Icons.arrow_forward : Icons.arrow_back,
-                          color: Colors.white, size: 18,
+                          color: Colors.white,
+                          size: 18,
                         ),
                       ),
                     ),
@@ -117,7 +119,8 @@ class AboutUsScreen extends StatelessWidget {
                   // Hero text
                   Positioned(
                     bottom: 24,
-                    left: 24, right: 24,
+                    left: 24,
+                    right: 24,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -152,7 +155,6 @@ class AboutUsScreen extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-
                     // ── Mission ──
                     _sectionLabel(isAr ? 'مهمّتنا' : 'Our Mission', t),
                     const SizedBox(height: 10),
@@ -235,48 +237,49 @@ class AboutUsScreen extends StatelessWidget {
                     _sectionLabel(isAr ? 'ما نقدّمه' : 'What We Offer', t),
                     const SizedBox(height: 10),
                     ...features.map((f) => Container(
-                      margin: const EdgeInsets.only(bottom: 12),
-                      padding: const EdgeInsets.all(18),
-                      decoration: _cardDecoration(t),
-                      child: Row(
-                        children: [
-                          Container(
-                            width: 48, height: 48,
-                            decoration: BoxDecoration(
-                              color: t.accentLight,
-                              borderRadius: BorderRadius.circular(14),
-                            ),
-                            child: Icon(f['icon'] as IconData,
-                                color: t.accent, size: 24),
-                          ),
-                          const SizedBox(width: 16),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  f['title'] as String,
-                                  style: TextStyle(
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.bold,
-                                    color: t.title,
-                                  ),
+                          margin: const EdgeInsets.only(bottom: 12),
+                          padding: const EdgeInsets.all(18),
+                          decoration: _cardDecoration(t),
+                          child: Row(
+                            children: [
+                              Container(
+                                width: 48,
+                                height: 48,
+                                decoration: BoxDecoration(
+                                  color: t.accentLight,
+                                  borderRadius: BorderRadius.circular(14),
                                 ),
-                                const SizedBox(height: 4),
-                                Text(
-                                  f['desc'] as String,
-                                  style: TextStyle(
-                                    fontSize: 13,
-                                    color: t.label,
-                                    height: 1.5,
-                                  ),
+                                child: Icon(f['icon'] as IconData,
+                                    color: t.accent, size: 24),
+                              ),
+                              const SizedBox(width: 16),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      f['title'] as String,
+                                      style: TextStyle(
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.bold,
+                                        color: t.title,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 4),
+                                    Text(
+                                      f['desc'] as String,
+                                      style: TextStyle(
+                                        fontSize: 13,
+                                        color: t.label,
+                                        height: 1.5,
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                              ],
-                            ),
+                              ),
+                            ],
                           ),
-                        ],
-                      ),
-                    )),
+                        )),
 
                     const SizedBox(height: 28),
 
@@ -293,7 +296,8 @@ class AboutUsScreen extends StatelessWidget {
                             value: 'rahaltour53@gmail.com',
                             t: t,
                             showDivider: true,
-                            onTap: () => _launchUrl('mailto:rahaltour53@gmail.com'),
+                            onTap: () =>
+                                _launchUrl('mailto:rahaltour53@gmail.com'),
                           ),
                           _contactRow(
                             icon: Icons.phone_outlined,
@@ -303,7 +307,6 @@ class AboutUsScreen extends StatelessWidget {
                             showDivider: true,
                             onTap: () => _launchUrl('tel:+201287754201'),
                           ),
-                          
                           _contactRow(
                             icon: Icons.facebook_rounded,
                             label: 'Facebook',
@@ -425,7 +428,8 @@ class AboutUsScreen extends StatelessWidget {
             child: Row(
               children: [
                 Container(
-                  width: 40, height: 40,
+                  width: 40,
+                  height: 40,
                   decoration: BoxDecoration(
                     color: t.accentLight,
                     borderRadius: BorderRadius.circular(12),
