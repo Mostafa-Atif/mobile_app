@@ -504,46 +504,50 @@ class _HotelDetailsState extends State<HotelDetails> {
   }
 
   Widget _guestsCard(AppLocalizations l) {
-    return Container(
-      padding: EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: _t.card,
-        borderRadius: BorderRadius.circular(22),
-        border: Border.all(color: _t.cardBorder.withOpacity(0.45)),
-        boxShadow: _cardShadows(),
-      ),
-      child: Column(
-        children: [
-          _counterRow(
-            l.rooms,
-            numRooms,
-            () {
-              if (numRooms > 1) setState(() => numRooms--);
-            },
-            () => setState(() => numRooms++),
-          ),
-          Divider(color: _t.divider.withOpacity(0.45), height: 20),
-          _counterRow(
-            '${l.adults} (12+)',
-            numAdults,
-            () {
-              if (numAdults > 1) setState(() => numAdults--);
-            },
-            () => setState(() => numAdults++),
-          ),
-          Divider(color: _t.divider.withOpacity(0.45), height: 20),
-          _counterRow(
-            '${l.children} (0-11)',
-            numChildren,
-            () {
-              if (numChildren > 0) setState(() => numChildren--);
-            },
-            () => setState(() => numChildren++),
-          ),
-        ],
-      ),
-    );
-  }
+  return Container(
+    padding: EdgeInsets.all(16),
+    decoration: BoxDecoration(
+      color: _t.card,
+      borderRadius: BorderRadius.circular(22),
+      border: Border.all(color: _t.cardBorder.withOpacity(0.45)),
+      boxShadow: _cardShadows(),
+    ),
+    child: Column(
+      children: [
+        _counterRow(
+          l.rooms,
+          numRooms,
+          () {
+            if (numRooms > 1) setState(() => numRooms--);
+          },
+          () => setState(() => numRooms++),
+        ),
+        Divider(color: _t.divider.withOpacity(0.45), height: 20),
+        _counterRow(
+          '${l.adults} (12+)',
+          numAdults,
+          () {
+            if (numAdults > 1) setState(() => numAdults--);
+          },
+          () {
+            if (numAdults + numChildren < 4) setState(() => numAdults++);
+          },
+        ),
+        Divider(color: _t.divider.withOpacity(0.45), height: 20),
+        _counterRow(
+          '${l.children} (0-11)',
+          numChildren,
+          () {
+            if (numChildren > 0) setState(() => numChildren--);
+          },
+          () {
+            if (numAdults + numChildren < 4) setState(() => numChildren++);
+          },
+        ),
+      ],
+    ),
+  );
+}
 
   Widget _counterRow(
     String label,

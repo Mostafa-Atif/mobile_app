@@ -159,32 +159,34 @@ class _HotelSearchState extends State<HotelSearch> {
               ),
               SizedBox(height: 18),
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      l.destination.toUpperCase(),
-                      style: TextStyle(
-                        color: _t.accent,
-                        fontSize: 10,
-                        letterSpacing: 2,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                    SizedBox(height: 6),
-                    Text(
-                      l.whereToQuestion,
-                      style: TextStyle(
-                        color: _t.title,
-                        fontSize: 28,
-                        fontWeight: FontWeight.w400,
-                        fontFamily: 'DM Serif Display',
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+  padding: EdgeInsets.symmetric(horizontal: 20),
+  child: Column(
+    crossAxisAlignment: CrossAxisAlignment.center,
+    children: [
+      Text(
+        l.destination.toUpperCase(),
+        style: TextStyle(
+          color: _t.accent,
+          fontSize: 10,
+          letterSpacing: 2,
+          fontWeight: FontWeight.w700,
+        ),
+        textAlign: TextAlign.center,
+      ),
+      SizedBox(height: 6),
+      Text(
+        l.whereToQuestion,
+        style: TextStyle(
+          color: _t.title,
+          fontSize: 28,
+          fontWeight: FontWeight.w400,
+          fontFamily: 'DM Serif Display',
+        ),
+        textAlign: TextAlign.center,
+      ),
+    ],
+  ),
+),
               SizedBox(height: 12),
               Expanded(
                 child: ListView(
@@ -486,7 +488,7 @@ class _HotelSearchState extends State<HotelSearch> {
               }
             },
                 () {
-              if (roomsList[index].adults + roomsList[index].children < 8) {
+              if (roomsList[index].adults + roomsList[index].children < 4) {
                 setState(() => roomsList[index].adults++);
               }
             },
@@ -501,7 +503,7 @@ class _HotelSearchState extends State<HotelSearch> {
               }
             },
                 () {
-              if (roomsList[index].adults + roomsList[index].children < 8) {
+              if (roomsList[index].adults + roomsList[index].children < 4) {
                 setState(() => roomsList[index].children++);
               }
             },
