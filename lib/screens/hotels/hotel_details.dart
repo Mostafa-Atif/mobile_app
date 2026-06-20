@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:mobile_app/l10n/app_localizations.dart';
 import 'package:mobile_app/theme.dart';
+import 'package:mobile_app/widgets/maps_widget.dart';
 
 import 'hotel_booking.dart';
 
@@ -263,6 +264,11 @@ class _HotelDetailsState extends State<HotelDetails> {
                         _sectionTitle(l.views),
                         SizedBox(height: 10),
                         _viewsCard(views),
+                        SizedBox(height: 14),
+                        HotelMapWidget(
+                          hotel: hotel,
+                          appTheme: Theme.of(context),
+                        ),
                       ],
                     ],
                   ),

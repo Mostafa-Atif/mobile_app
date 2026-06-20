@@ -93,6 +93,14 @@ class _CarsSearchState extends State<CarsSearch> {
     loadUserInfo();
   }
 
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    fetchCars();
+  }
+
+
   // ── Promo code logic ───────────────────────────────────────────────────────
 
   Future<void> _applyPromo(AppLocalizations l, AppThemeExtension t) async {
@@ -281,7 +289,8 @@ class _CarsSearchState extends State<CarsSearch> {
   Future<void> fetchCars() async {
     setState(() { isLoading = true; hasError = false; });
     try {
-      final response = await http.get(Uri.parse('${Config.baseUrl}/api/cars'));
+      String lang = Localizations.localeOf(context).languageCode;
+      final response = await http.get(Uri.parse('${Config.baseUrl}/api/cars?lang=$lang'));
       if (response.statusCode == 200) {
         setState(() {
           cars = json.decode(response.body);
@@ -291,6 +300,7 @@ class _CarsSearchState extends State<CarsSearch> {
         setState(() { isLoading = false; hasError = true; });
       }
     } catch (e) {
+      print('Error fetching cars: $e');
       setState(() { isLoading = false; hasError = true; });
     }
   }
@@ -360,8 +370,9 @@ class _CarsSearchState extends State<CarsSearch> {
 
 
 
+String lang = Localizations.localeOf(context).languageCode;
 
-      final response = await http.post(
+final response = await http.post(
         Uri.parse('${Config.baseUrl}/api/car-bookings'),
         headers: {'Content-Type': 'application/json', 'Authorization': 'Bearer $token'},
         body: json.encode({
@@ -371,7 +382,7 @@ class _CarsSearchState extends State<CarsSearch> {
           'pickupDateTime': pickupDateTime!.toIso8601String(),
           'dropoffDateTime': dropoffDateTime!.toIso8601String(),
           'privateDriver': privateDriver,
-          'lang': 'en',
+          'lang': lang,
           'promoCode': _appliedPromo,
         }),
       );
