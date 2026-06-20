@@ -181,7 +181,7 @@
   "addAnotherRoom": "Add another room",
   "done": "Done",
   "remove": "Remove",
-  "maxGuestsPerRoom": "The maximum number of guests allowed per room is 8.",
+  "maxGuestsPerRoom": "The maximum number of guests allowed per room is 4.",
   "propertiesFound": "{count} properties found in {destination}",
   "@propertiesFound": {
     "placeholders": {

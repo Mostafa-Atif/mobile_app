@@ -181,7 +181,7 @@
   "addAnotherRoom": "إضافة غرفة أخرى",
   "done": "تم",
   "remove": "إزالة",
-  "maxGuestsPerRoom": "الحد الأقصى لعدد النزلاء في الغرفة هو 8.",
+  "maxGuestsPerRoom": "الحد الأقصى لعدد النزلاء في الغرفة هو 4.",
   "propertiesFound": "{count} عقار في {destination}",
   "@propertiesFound": {
     "placeholders": {

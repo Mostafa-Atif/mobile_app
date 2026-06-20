@@ -442,7 +442,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get remove => 'إزالة';
 
   @override
-  String get maxGuestsPerRoom => 'الحد الأقصى لعدد النزلاء في الغرفة هو 8.';
+  String get maxGuestsPerRoom => 'الحد الأقصى لعدد النزلاء في الغرفة هو 4.';
 
   @override
   String propertiesFound(int count, String destination) {

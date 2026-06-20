@@ -446,7 +446,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get maxGuestsPerRoom =>
-      'The maximum number of guests allowed per room is 8.';
+      'The maximum number of guests allowed per room is 4.';
 
   @override
   String propertiesFound(int count, String destination) {
