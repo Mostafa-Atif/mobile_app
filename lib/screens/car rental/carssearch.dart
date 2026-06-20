@@ -2,7 +2,9 @@
 
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter_map/flutter_map.dart';
 import 'package:http/http.dart' as http;
+import 'package:latlong2/latlong.dart';
 import 'package:mobile_app/l10n/app_localizations.dart';
 import 'package:mobile_app/theme.dart';
 import 'package:provider/provider.dart';
@@ -50,7 +52,192 @@ class _CarsSearchState extends State<CarsSearch> {
   final TextEditingController emailCtrl = TextEditingController();
   final TextEditingController phoneCtrl = TextEditingController();
 
-  final List<String> locations = ['Dubai', 'Abu Dhabi', 'Riyadh', 'Jeddah', 'Cairo'];
+  final Map<String, List<Map<String, String>>> citiesByCountry = {
+    'UAE': [
+      {'name': 'Dubai', 'code': 'ae'},
+      {'name': 'Abu Dhabi', 'code': 'ae'},
+      {'name': 'Sharjah', 'code': 'ae'},
+      {'name': 'Ajman', 'code': 'ae'},
+    ],
+    'Saudi Arabia': [
+      {'name': 'Riyadh', 'code': 'sa'},
+      {'name': 'Jeddah', 'code': 'sa'},
+      {'name': 'Dammam', 'code': 'sa'},
+      {'name': 'Mecca', 'code': 'sa'},
+    ],
+    'Egypt': [
+      {'name': 'Cairo', 'code': 'eg'},
+      {'name': 'Alexandria', 'code': 'eg'},
+      {'name': 'Giza', 'code': 'eg'},
+      {'name': 'Aswan', 'code': 'eg'},
+    ],
+    'Qatar': [
+      {'name': 'Doha', 'code': 'qa'},
+      {'name': 'Al Rayyan', 'code': 'qa'},
+    ],
+    'Bahrain': [
+      {'name': 'Manama', 'code': 'bh'},
+      {'name': 'Muharraq', 'code': 'bh'},
+    ],
+    'Oman': [
+      {'name': 'Muscat', 'code': 'om'},
+      {'name': 'Salalah', 'code': 'om'},
+    ],
+    'Kuwait': [
+      {'name': 'Kuwait City', 'code': 'kw'},
+      {'name': 'Salmiya', 'code': 'kw'},
+    ],
+    'Jordan': [
+      {'name': 'Amman', 'code': 'jo'},
+      {'name': 'Zarqa', 'code': 'jo'},
+    ],
+    'Lebanon': [
+      {'name': 'Beirut', 'code': 'lb'},
+      {'name': 'Tripoli', 'code': 'lb'},
+    ],
+    'Turkey': [
+      {'name': 'Istanbul', 'code': 'tr'},
+      {'name': 'Ankara', 'code': 'tr'},
+      {'name': 'Izmir', 'code': 'tr'},
+    ],
+    'United Kingdom': [
+      {'name': 'London', 'code': 'gb'},
+      {'name': 'Manchester', 'code': 'gb'},
+      {'name': 'Birmingham', 'code': 'gb'},
+    ],
+    'France': [
+      {'name': 'Paris', 'code': 'fr'},
+      {'name': 'Lyon', 'code': 'fr'},
+      {'name': 'Marseille', 'code': 'fr'},
+    ],
+    'Spain': [
+      {'name': 'Madrid', 'code': 'es'},
+      {'name': 'Barcelona', 'code': 'es'},
+      {'name': 'Seville', 'code': 'es'},
+    ],
+    'Italy': [
+      {'name': 'Rome', 'code': 'it'},
+      {'name': 'Milan', 'code': 'it'},
+      {'name': 'Venice', 'code': 'it'},
+    ],
+    'Germany': [
+      {'name': 'Berlin', 'code': 'de'},
+      {'name': 'Munich', 'code': 'de'},
+      {'name': 'Hamburg', 'code': 'de'},
+    ],
+    'Japan': [
+      {'name': 'Tokyo', 'code': 'jp'},
+      {'name': 'Osaka', 'code': 'jp'},
+      {'name': 'Kyoto', 'code': 'jp'},
+    ],
+    'Singapore': [
+      {'name': 'Singapore', 'code': 'sg'},
+    ],
+    'Thailand': [
+      {'name': 'Bangkok', 'code': 'th'},
+      {'name': 'Phuket', 'code': 'th'},
+      {'name': 'Chiang Mai', 'code': 'th'},
+    ],
+    'India': [
+      {'name': 'Delhi', 'code': 'in'},
+      {'name': 'Mumbai', 'code': 'in'},
+      {'name': 'Bangalore', 'code': 'in'},
+    ],
+    'South Korea': [
+      {'name': 'Seoul', 'code': 'kr'},
+      {'name': 'Busan', 'code': 'kr'},
+      {'name': 'Incheon', 'code': 'kr'},
+    ],
+    'United States': [
+      {'name': 'New York', 'code': 'us'},
+      {'name': 'Los Angeles', 'code': 'us'},
+      {'name': 'Chicago', 'code': 'us'},
+      {'name': 'Miami', 'code': 'us'},
+      {'name': 'Las Vegas', 'code': 'us'},
+    ],
+    'Canada': [
+      {'name': 'Toronto', 'code': 'ca'},
+      {'name': 'Vancouver', 'code': 'ca'},
+      {'name': 'Montreal', 'code': 'ca'},
+    ],
+    'Mexico': [
+      {'name': 'Mexico City', 'code': 'mx'},
+      {'name': 'Cancun', 'code': 'mx'},
+      {'name': 'Playa del Carmen', 'code': 'mx'},
+    ],
+    'Brazil': [
+      {'name': 'São Paulo', 'code': 'br'},
+      {'name': 'Rio de Janeiro', 'code': 'br'},
+      {'name': 'Salvador', 'code': 'br'},
+    ],
+    'Australia': [
+      {'name': 'Sydney', 'code': 'au'},
+      {'name': 'Melbourne', 'code': 'au'},
+      {'name': 'Brisbane', 'code': 'au'},
+    ],
+  };
+
+  List<String> get cities => citiesByCountry.values
+    .expand((list) => list.map((city) => city['name']!))
+    .toList();
+
+
+  final List<String> locations = [
+    'Airport', 
+    'Downtown', 
+    'Marina', 
+    'Business District'
+  ];
+
+  
+
+
+  Map<String, LatLng?> geocodedLocations = {};
+bool mapLoading = true;
+String? selectedPickupLocation;
+String? selectedDropoffLocation;
+
+Future<void> _geocodeLocationsForCity(String cityName) async {
+  geocodedLocations.clear();
+  mapLoading = true;
+
+  // Find country code
+  String countryCode = '';
+  citiesByCountry.forEach((country, cities) {
+    final found = cities.firstWhere(
+      (c) => c['name'] == cityName,
+      orElse: () => {},
+    );
+    if (found.isNotEmpty) {
+      countryCode = found['code'] ?? '';
+    }
+  });
+
+  try {
+    for (String location in locations) {
+      final query = '${location} ${cityName}, $countryCode';
+      final url = Uri.parse(
+        'https://nominatim.openstreetmap.org/search?q=$query&format=json&limit=1',
+      );
+
+      final response = await http.get(url);
+
+      if (response.statusCode == 200) {
+        final List<dynamic> results = jsonDecode(response.body);
+        if (results.isNotEmpty) {
+          final lat = double.parse(results[0]['lat']);
+          final lng = double.parse(results[0]['lon']);
+          geocodedLocations[location] = LatLng(lat, lng);
+        }
+      }
+    }
+  } catch (e) {
+    print('Error geocoding: $e');
+  }
+
+  setState(() => mapLoading = false);
+}
+
 
   String? _validateName(String val) {
     if (val.trim().isEmpty) return 'required';
@@ -85,6 +272,9 @@ class _CarsSearchState extends State<CarsSearch> {
   String? get _lastNameErrorKey => _submitted ? _validateName(lastNameCtrl.text) : null;
   String? get _emailErrorKey => _submitted ? _validateEmail(emailCtrl.text) : null;
   String? get _phoneErrorKey => _submitted ? _validatePhone(phoneCtrl.text) : null;
+  String? pickupCity;
+  String? dropoffCity;
+
 
   @override
   void initState() {
@@ -99,6 +289,8 @@ class _CarsSearchState extends State<CarsSearch> {
     super.didChangeDependencies();
     fetchCars();
   }
+
+
 
 
   // ── Promo code logic ───────────────────────────────────────────────────────
@@ -951,13 +1143,78 @@ final response = await http.post(
                                 _sectionLabel(l.pickupLocation, t),
                                 const SizedBox(height: 8),
                                 _dropdownField(
-                                  value: pickupLocation,
+                                  value: pickupCity,
                                   hint: l.selectLocation,
-                                  items: locations,
-                                  onChanged: (val) =>
-                                      setState(() => pickupLocation = val),
+                                  items: cities,
+                                  onChanged: (val) {
+                                    if (val != null) {
+                                      setState(() {
+                                        pickupCity = val;
+                                        dropoffCity = val;
+                                      });
+                                      _geocodeLocationsForCity(val);
+                                    }
+                                  },
                                   t: t,
                                 ),
+                                if (pickupCity != null && !mapLoading && geocodedLocations.isNotEmpty) ...[
+                                  const SizedBox(height: 16),
+                                  Container(
+                                    height: 300,
+                                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(12)),
+                                    clipBehavior: Clip.hardEdge,
+                                    child: FlutterMap(
+                                      options: MapOptions(
+                                        initialCameraFit: CameraFit.bounds(
+                                          bounds: LatLngBounds.fromPoints(
+                                            geocodedLocations.values.whereType<LatLng>().toList(),
+                                          ),
+                                          padding: EdgeInsets.all(100),
+                                        ),
+                                      ),
+                                      children: [
+                                        TileLayer(
+                                          urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                                          userAgentPackageName: 'com.example.app',
+                                        ),
+                                        MarkerLayer(
+                                          markers: geocodedLocations.entries
+                                              .map(
+                                                (entry) => Marker(
+                                                  point: entry.value!,
+                                                  width: 40,
+                                                  height: 40,
+                                                  child: GestureDetector(
+                                                    onTap: () => setState(() => selectedPickupLocation = entry.key),
+                                                    child: Icon(
+                                                      Icons.location_on,
+                                                      color: selectedPickupLocation == entry.key ? Colors.blue : Colors.red,
+                                                      size: 40,
+                                                    ),
+                                                  ),
+                                                ),
+                                              )
+                                              .toList(),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  const SizedBox(height: 12),
+                                  Wrap(
+                                    spacing: 8,
+                                    runSpacing: 8,
+                                    children: geocodedLocations.keys
+                                        .map(
+                                          (location) => FilterChip(
+                                            label: Text(location),
+                                            selected: selectedPickupLocation == location,
+                                            onSelected: (selected) =>
+                                                setState(() => selectedPickupLocation = location),
+                                          ),
+                                        )
+                                        .toList(),
+                                  ),
+                                ],
                                 const SizedBox(height: 16),
                                 Divider(color: t.divider, height: 1),
                                 const SizedBox(height: 16),
@@ -966,7 +1223,7 @@ final response = await http.post(
                                 _dropdownField(
                                   value: dropoffLocation,
                                   hint: l.selectLocation,
-                                  items: locations,
+                                  items: cities,
                                   onChanged: (val) =>
                                       setState(() => dropoffLocation = val),
                                   t: t,
