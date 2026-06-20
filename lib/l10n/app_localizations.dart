@@ -911,7 +911,7 @@ abstract class AppLocalizations {
   /// No description provided for @maxGuestsPerRoom.
   ///
   /// In en, this message translates to:
-  /// **'The maximum number of guests allowed per room is 8.'**
+  /// **'The maximum number of guests allowed per room is 4.'**
   String get maxGuestsPerRoom;
 
   /// No description provided for @propertiesFound.
