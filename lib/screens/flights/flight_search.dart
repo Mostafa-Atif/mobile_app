@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
 import 'package:mobile_app/l10n/app_localizations.dart';
 import 'package:mobile_app/screens/flights/flight_results.dart';
+import 'package:mobile_app/services/flight_translation_service.dart';
 import 'package:mobile_app/theme.dart';
 import '../../config.dart';
 
@@ -28,7 +29,7 @@ class _FlightSearchState extends State<FlightSearch> {
   int children = 0;
   int infants = 0;
   String cabinClass = 'Economy';
-
+  
   List<String> cities = [];
   bool loadingCities = true;
   bool hasError = false;
@@ -163,6 +164,7 @@ class _FlightSearchState extends State<FlightSearch> {
   }
 
   void showCityPicker(bool isFrom, AppLocalizations l) {
+    String lang = Localizations.localeOf(context).languageCode;
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -234,6 +236,7 @@ class _FlightSearchState extends State<FlightSearch> {
                         });
                         Navigator.pop(context);
                       },
+                      lang: lang,
                     );
                   },
                 ),
@@ -422,6 +425,7 @@ class _FlightSearchState extends State<FlightSearch> {
   @override
   Widget build(BuildContext context) {
     final l = AppLocalizations.of(context)!;
+    String lang = Localizations.localeOf(context).languageCode;
 
     return Scaffold(
       backgroundColor: _t.bg,
@@ -527,11 +531,12 @@ class _FlightSearchState extends State<FlightSearch> {
                                       // From
                                       _searchTile(
                                         icon: Icons.flight_takeoff_rounded,
-                                        title: fromCity ?? '...',
+                                        title: lang == 'en' && fromCity != null
+                                          ? FlightTranslationService.translateCity(fromCity!)
+                                          : (fromCity ?? '...'),
                                         subtitle: l.from,
                                         onTap: () => showCityPicker(true, l),
-                                        trailing:
-                                            Icons.keyboard_arrow_down_rounded,
+                                        trailing: Icons.keyboard_arrow_down_rounded,
                                       ),
                                       SizedBox(height: 10),
 
@@ -560,11 +565,12 @@ class _FlightSearchState extends State<FlightSearch> {
                                       // To
                                       _searchTile(
                                         icon: Icons.flight_land_rounded,
-                                        title: toCity ?? '...',
+                                        title: lang == 'en' && toCity != null
+                                          ? FlightTranslationService.translateCity(toCity!)
+                                          : (toCity ?? '...'),
                                         subtitle: l.to,
                                         onTap: () => showCityPicker(false, l),
-                                        trailing:
-                                            Icons.keyboard_arrow_down_rounded,
+                                        trailing: Icons.keyboard_arrow_down_rounded,
                                       ),
 
                                       SizedBox(height: 14),
@@ -949,6 +955,7 @@ class _FlightSearchState extends State<FlightSearch> {
     required String city,
     required bool selected,
     required VoidCallback onTap,
+    required String lang,
   }) {
     return Padding(
       padding: EdgeInsets.only(bottom: 10),
@@ -979,7 +986,7 @@ class _FlightSearchState extends State<FlightSearch> {
                 SizedBox(width: 12),
                 Expanded(
                   child: Text(
-                    city,
+                    lang == 'en' ? FlightTranslationService.translateCity(city) : city,  // ← CHANGE THIS
                     style: TextStyle(
                       color: _t.title,
                       fontSize: 15,
@@ -1187,119 +1194,5 @@ class _FlightSearchState extends State<FlightSearch> {
         offset: Offset(0, 10),
       ),
     ];
-  }
-}
-
-class SuccessScreen extends StatelessWidget {
-  final String title;
-  final String message;
-  final VoidCallback onContinue;
-
-  const SuccessScreen({
-    super.key,
-    this.title = 'Success!',
-    this.message = 'Your request has been completed.\nEverything is set!',
-    required this.onContinue,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final t = Theme.of(context).extension<AppThemeExtension>()!;
-
-    return Scaffold(
-      backgroundColor: t.bg,
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Spacer(),
-
-              // ── Circle + Check ──
-              Container(
-                width: 88,
-                height: 88,
-                decoration: BoxDecoration(
-                  color: t.successBg,
-                  shape: BoxShape.circle,
-                ),
-                child: Icon(
-                  Icons.check_rounded,
-                  color: t.success,
-                  size: 48,
-                ),
-              ),
-
-              const SizedBox(height: 28),
-
-              // ── Title ──
-              Text(
-                title,
-                style: TextStyle(
-                  fontSize: 26,
-                  fontWeight: FontWeight.bold,
-                  color: t.title,
-                ),
-              ),
-
-              const SizedBox(height: 12),
-
-              // ── Message ──
-              Text(
-                message,
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 15,
-                  color: t.label,
-                  height: 1.6,
-                ),
-              ),
-
-              const Spacer(),
-
-              // ── Continue Button ──
-              Container(
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(colors: t.btnGradient),
-                  borderRadius: BorderRadius.circular(16),
-                  boxShadow: [
-                    BoxShadow(
-                      color: t.accent.withOpacity(0.3),
-                      blurRadius: 12,
-                      offset: const Offset(0, 4),
-                    ),
-                  ],
-                ),
-                child: ElevatedButton(
-                  onPressed: onContinue,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.transparent,
-                    shadowColor: Colors.transparent,
-                    foregroundColor: Colors.white,
-                    padding: const EdgeInsets.symmetric(vertical: 18),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                    elevation: 0,
-                  ),
-                  child: const Text(
-                    'Continue',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                      letterSpacing: 0.5,
-                    ),
-                  ),
-                ),
-              ),
-
-              const SizedBox(height: 16),
-            ],
-          ),
-        ),
-      ),
-    );
   }
 }

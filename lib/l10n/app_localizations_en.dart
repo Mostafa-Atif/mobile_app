@@ -1151,4 +1151,620 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get add => 'Add';
+
+  @override
+  String get airport => 'Airport';
+
+  @override
+  String get downtown => 'Downtown';
+
+  @override
+  String get trainStation => 'Train Station';
+
+  @override
+  String get hotelDistrict => 'Hotel District';
+
+  @override
+  String get shoppingDistrict => 'Shopping District';
+
+  @override
+  String get industrialZone => 'Industrial Zone';
+
+  @override
+  String get airportRoad => 'Airport Road';
+
+  @override
+  String get dubai => 'Dubai';
+
+  @override
+  String get abuDhabi => 'Abu Dhabi';
+
+  @override
+  String get sharjah => 'Sharjah';
+
+  @override
+  String get riyadh => 'Riyadh';
+
+  @override
+  String get jeddah => 'Jeddah';
+
+  @override
+  String get cairo => 'Cairo';
+
+  @override
+  String get alexandria => 'Alexandria';
+
+  @override
+  String get giza => 'Giza';
+
+  @override
+  String get aswan => 'Aswan';
+
+  @override
+  String get doha => 'Doha';
+
+  @override
+  String get alRayyan => 'Al Rayyan';
+
+  @override
+  String get manama => 'Manama';
+
+  @override
+  String get muharraq => 'Muharraq';
+
+  @override
+  String get muscat => 'Muscat';
+
+  @override
+  String get salalah => 'Salalah';
+
+  @override
+  String get kuwaitCity => 'Kuwait City';
+
+  @override
+  String get salmiya => 'Salmiya';
+
+  @override
+  String get amman => 'Amman';
+
+  @override
+  String get zarqa => 'Zarqa';
+
+  @override
+  String get beirut => 'Beirut';
+
+  @override
+  String get tripoli => 'Tripoli';
+
+  @override
+  String get istanbul => 'Istanbul';
+
+  @override
+  String get ankara => 'Ankara';
+
+  @override
+  String get izmir => 'Izmir';
+
+  @override
+  String get london => 'London';
+
+  @override
+  String get manchester => 'Manchester';
+
+  @override
+  String get birmingham => 'Birmingham';
+
+  @override
+  String get paris => 'Paris';
+
+  @override
+  String get lyon => 'Lyon';
+
+  @override
+  String get marseille => 'Marseille';
+
+  @override
+  String get madrid => 'Madrid';
+
+  @override
+  String get barcelona => 'Barcelona';
+
+  @override
+  String get seville => 'Seville';
+
+  @override
+  String get rome => 'Rome';
+
+  @override
+  String get milan => 'Milan';
+
+  @override
+  String get venice => 'Venice';
+
+  @override
+  String get berlin => 'Berlin';
+
+  @override
+  String get munich => 'Munich';
+
+  @override
+  String get hamburg => 'Hamburg';
+
+  @override
+  String get tokyo => 'Tokyo';
+
+  @override
+  String get osaka => 'Osaka';
+
+  @override
+  String get kyoto => 'Kyoto';
+
+  @override
+  String get singapore => 'Singapore';
+
+  @override
+  String get bangkok => 'Bangkok';
+
+  @override
+  String get phuket => 'Phuket';
+
+  @override
+  String get chiangMai => 'Chiang Mai';
+
+  @override
+  String get delhi => 'Delhi';
+
+  @override
+  String get mumbai => 'Mumbai';
+
+  @override
+  String get bangalore => 'Bangalore';
+
+  @override
+  String get seoul => 'Seoul';
+
+  @override
+  String get busan => 'Busan';
+
+  @override
+  String get incheon => 'Incheon';
+
+  @override
+  String get newYork => 'New York';
+
+  @override
+  String get losAngeles => 'Los Angeles';
+
+  @override
+  String get chicago => 'Chicago';
+
+  @override
+  String get miami => 'Miami';
+
+  @override
+  String get lasVegas => 'Las Vegas';
+
+  @override
+  String get toronto => 'Toronto';
+
+  @override
+  String get vancouver => 'Vancouver';
+
+  @override
+  String get montreal => 'Montreal';
+
+  @override
+  String get mexicoCity => 'Mexico City';
+
+  @override
+  String get cancun => 'Cancun';
+
+  @override
+  String get playaDelCarmen => 'Playa del Carmen';
+
+  @override
+  String get saoPaulo => 'São Paulo';
+
+  @override
+  String get rioDeJaneiro => 'Rio de Janeiro';
+
+  @override
+  String get salvador => 'Salvador';
+
+  @override
+  String get sydney => 'Sydney';
+
+  @override
+  String get melbourne => 'Melbourne';
+
+  @override
+  String get brisbane => 'Brisbane';
+
+  @override
+  String get uae => 'UAE';
+
+  @override
+  String get saudiArabia => 'Saudi Arabia';
+
+  @override
+  String get egypt => 'Egypt';
+
+  @override
+  String get qatar => 'Qatar';
+
+  @override
+  String get bahrain => 'Bahrain';
+
+  @override
+  String get oman => 'Oman';
+
+  @override
+  String get kuwait => 'Kuwait';
+
+  @override
+  String get jordan => 'Jordan';
+
+  @override
+  String get lebanon => 'Lebanon';
+
+  @override
+  String get turkey => 'Turkey';
+
+  @override
+  String get unitedKingdom => 'United Kingdom';
+
+  @override
+  String get france => 'France';
+
+  @override
+  String get spain => 'Spain';
+
+  @override
+  String get italy => 'Italy';
+
+  @override
+  String get germany => 'Germany';
+
+  @override
+  String get japan => 'Japan';
+
+  @override
+  String get thailand => 'Thailand';
+
+  @override
+  String get india => 'India';
+
+  @override
+  String get southKorea => 'South Korea';
+
+  @override
+  String get unitedStates => 'United States';
+
+  @override
+  String get canada => 'Canada';
+
+  @override
+  String get mexico => 'Mexico';
+
+  @override
+  String get brazil => 'Brazil';
+
+  @override
+  String get australia => 'Australia';
+
+  @override
+  String get selectCountry => 'Select Country';
+
+  @override
+  String get selectCity => 'Select City';
+
+  @override
+  String get selectPickupLocation => 'Pickup Location';
+
+  @override
+  String get selectDropoffLocation => 'Dropoff Location';
+
+  @override
+  String get sameCityAsPickup => 'Same city as pickup';
+
+  @override
+  String stepOf(int step) {
+    return 'Step $step of 4';
+  }
+
+  @override
+  String get tripDetails => 'Trip Details';
+
+  @override
+  String get yourInformation => 'Your Information';
+
+  @override
+  String get reviewAndConfirm => 'Review & Confirm';
+
+  @override
+  String get pickupAndDropoff => 'Pickup & Drop-off';
+
+  @override
+  String get airportNotice =>
+      'Pickup and drop-off are always at the city airport';
+
+  @override
+  String get pricePerDayFilter => 'Price/day';
+
+  @override
+  String get noCarsMatch => 'No cars match your filters';
+
+  @override
+  String get clearFilters => 'Clear filters';
+
+  @override
+  String get location => 'Location';
+
+  @override
+  String get until => 'Until';
+
+  @override
+  String get vehicle => 'Vehicle';
+
+  @override
+  String get trip => 'Trip';
+
+  @override
+  String get priceBreakdown => 'Price Breakdown';
+
+  @override
+  String get continuee => 'Continue';
+
+  @override
+  String get day => 'day';
+
+  @override
+  String get days => 'days';
+
+  @override
+  String get total2 => 'total';
+
+  @override
+  String get saved => 'saved';
+
+  @override
+  String get sortPriceLow => 'Price: Low to High';
+
+  @override
+  String get sortPriceHigh => 'Price: High to Low';
+
+  @override
+  String get sortNameAZ => 'Name: A to Z';
+
+  @override
+  String get sortSeatsLow => 'Seats: Fewest First';
+
+  @override
+  String get sortSeatsHigh => 'Seats: Most First';
+
+  @override
+  String get cashOnlyTitle => 'Cash Payment Only';
+
+  @override
+  String get cashOnlyBody =>
+      'We currently don\'t support online payments. Please prepare to pay in cash upon receiving the car.';
+
+  @override
+  String get searchCountry => 'Search country...';
+
+  @override
+  String get searchCity => 'Search city...';
+
+  @override
+  String get sortPriceAsc => 'Price ↑';
+
+  @override
+  String get sortPriceDesc => 'Price ↓';
+
+  @override
+  String get sortNameAz => 'A–Z';
+
+  @override
+  String get car => 'Car';
+
+  @override
+  String get info => 'Your Info';
+
+  @override
+  String get review => 'Review';
+
+  @override
+  String get bookingConfirmedTitle => 'You\'re all set!';
+
+  @override
+  String get bookingConfirmedMessage =>
+      'Your booking is confirmed. Our team will be ready at the airport when you arrive.';
+
+  @override
+  String get cashPaymentTitle => 'Pay at Pickup — No Card Needed';
+
+  @override
+  String get cashPaymentBody =>
+      'Pay in cash when you collect your car — no online forms, no hidden fees, no hassle.';
+
+  @override
+  String get dubaiInternationalAirport => 'Dubai International Airport';
+
+  @override
+  String get abuDhabiInternationalAirport => 'Abu Dhabi International Airport';
+
+  @override
+  String get sharjahInternationalAirport => 'Sharjah International Airport';
+
+  @override
+  String get kingKhalidInternationalAirport =>
+      'King Khalid International Airport';
+
+  @override
+  String get kingAbdulazizInternationalAirport =>
+      'King Abdulaziz International Airport';
+
+  @override
+  String get cairoInternationalAirport => 'Cairo International Airport';
+
+  @override
+  String get elNouzhaAirport => 'El Nouzha Airport';
+
+  @override
+  String get hamadInternationalAirport => 'Hamad International Airport';
+
+  @override
+  String get bahrainInternationalAirport => 'Bahrain International Airport';
+
+  @override
+  String get muscatInternationalAirport => 'Muscat International Airport';
+
+  @override
+  String get kuwaitInternationalAirport => 'Kuwait International Airport';
+
+  @override
+  String get queenAliaInternationalAirport =>
+      'Queen Alia International Airport';
+
+  @override
+  String get beirutRaficHaririInternational =>
+      'Beirut–Rafic Hariri International';
+
+  @override
+  String get istanbulAirport => 'Istanbul Airport';
+
+  @override
+  String get sabihaCokcentInternationalAirport =>
+      'Sabiha Gökçen International Airport';
+
+  @override
+  String get adnanMenderesAirport => 'Adnan Menderes Airport';
+
+  @override
+  String get ankaraEsenbogaAirport => 'Ankara Esenboğa Airport';
+
+  @override
+  String get heathrowAirport => 'Heathrow Airport';
+
+  @override
+  String get gatwickAirport => 'Gatwick Airport';
+
+  @override
+  String get manchesterAirport => 'Manchester Airport';
+
+  @override
+  String get charlesDeGaulleAirport => 'Charles de Gaulle Airport';
+
+  @override
+  String get parisOrlyAirport => 'Paris-Orly Airport';
+
+  @override
+  String get adolfoSuarezMadridBarajasAirport =>
+      'Adolfo Suárez Madrid–Barajas Airport';
+
+  @override
+  String get barcelonaElPratAirport => 'Barcelona–El Prat Airport';
+
+  @override
+  String get leonardoDaVinciFiumicinoAirport =>
+      'Leonardo da Vinci–Fiumicino Airport';
+
+  @override
+  String get milanMalpensaAirport => 'Milan Malpensa Airport';
+
+  @override
+  String get berlinBrandenburgAirport => 'Berlin Brandenburg Airport';
+
+  @override
+  String get munichAirport => 'Munich Airport';
+
+  @override
+  String get hamburgAirport => 'Hamburg Airport';
+
+  @override
+  String get tokyoHanedaAirport => 'Tokyo Haneda Airport';
+
+  @override
+  String get naritaInternationalAirport => 'Narita International Airport';
+
+  @override
+  String get kansaiInternationalAirport => 'Kansai International Airport';
+
+  @override
+  String get singaporeChangiAirport => 'Singapore Changi Airport';
+
+  @override
+  String get suvarnabhumiAirport => 'Suvarnabhumi Airport';
+
+  @override
+  String get phuketInternationalAirport => 'Phuket International Airport';
+
+  @override
+  String get indiraGandhiInternationalAirport =>
+      'Indira Gandhi International Airport';
+
+  @override
+  String get chhatrapatiShivajiInternational =>
+      'Chhatrapati Shivaji International';
+
+  @override
+  String get incheonInternationalAirport => 'Incheon International Airport';
+
+  @override
+  String get gimpoInternationalAirport => 'Gimpo International Airport';
+
+  @override
+  String get johnFKennedyInternationalAirport =>
+      'John F. Kennedy International Airport';
+
+  @override
+  String get laGuardiaAirport => 'LaGuardia Airport';
+
+  @override
+  String get losAngelesInternationalAirport =>
+      'Los Angeles International Airport';
+
+  @override
+  String get ohareInternationalAirport => 'O\'Hare International Airport';
+
+  @override
+  String get miamiInternationalAirport => 'Miami International Airport';
+
+  @override
+  String get harryReidInternationalAirport =>
+      'Harry Reid International Airport';
+
+  @override
+  String get torontoPearsonInternationalAirport =>
+      'Toronto Pearson International Airport';
+
+  @override
+  String get vancouverInternationalAirport => 'Vancouver International Airport';
+
+  @override
+  String get mexicoCityInternationalAirport =>
+      'Mexico City International Airport';
+
+  @override
+  String get cancunInternationalAirport => 'Cancún International Airport';
+
+  @override
+  String get saoPauloGuarulhosInternational =>
+      'São Paulo–Guarulhos International';
+
+  @override
+  String get rioDeJaneiroGaleaoInternational =>
+      'Rio de Janeiro–Galeão International';
+
+  @override
+  String get sydneyKingsfordSmithAirport => 'Sydney Kingsford Smith Airport';
+
+  @override
+  String get melbourneAirport => 'Melbourne Airport';
+
+  @override
+  String get brisbaneAirport => 'Brisbane Airport';
+
+  @override
+  String get all => 'all';
 }

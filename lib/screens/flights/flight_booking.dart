@@ -1155,7 +1155,7 @@ class _FlightBookingState extends State<FlightBooking> {
                           : Text(
                               passengerList.length > 1
                                   ? l.confirmBookings(passengerList.length)
-                                  : l.proceedToPayment,
+                                  : l.bookNow,
                               textAlign: TextAlign.center,
                               style: const TextStyle(
                                   fontSize: 16,

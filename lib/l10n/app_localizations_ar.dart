@@ -1143,4 +1143,607 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get add => 'إضافة';
+
+  @override
+  String get airport => 'المطار';
+
+  @override
+  String get downtown => 'وسط المدينة';
+
+  @override
+  String get trainStation => 'محطة القطار';
+
+  @override
+  String get hotelDistrict => 'حي الفنادق';
+
+  @override
+  String get shoppingDistrict => 'حي التسوق';
+
+  @override
+  String get industrialZone => 'المنطقة الصناعية';
+
+  @override
+  String get airportRoad => 'طريق المطار';
+
+  @override
+  String get dubai => 'دبي';
+
+  @override
+  String get abuDhabi => 'أبوظبي';
+
+  @override
+  String get sharjah => 'الشارقة';
+
+  @override
+  String get riyadh => 'الرياض';
+
+  @override
+  String get jeddah => 'جدة';
+
+  @override
+  String get cairo => 'القاهرة';
+
+  @override
+  String get alexandria => 'الإسكندرية';
+
+  @override
+  String get giza => 'الجيزة';
+
+  @override
+  String get aswan => 'أسوان';
+
+  @override
+  String get doha => 'الدوحة';
+
+  @override
+  String get alRayyan => 'الريان';
+
+  @override
+  String get manama => 'المنامة';
+
+  @override
+  String get muharraq => 'المحرق';
+
+  @override
+  String get muscat => 'مسقط';
+
+  @override
+  String get salalah => 'صلالة';
+
+  @override
+  String get kuwaitCity => 'مدينة الكويت';
+
+  @override
+  String get salmiya => 'السالمية';
+
+  @override
+  String get amman => 'عمّان';
+
+  @override
+  String get zarqa => 'الزرقاء';
+
+  @override
+  String get beirut => 'بيروت';
+
+  @override
+  String get tripoli => 'طرابلس';
+
+  @override
+  String get istanbul => 'إسطنبول';
+
+  @override
+  String get ankara => 'أنقرة';
+
+  @override
+  String get izmir => 'إزمير';
+
+  @override
+  String get london => 'لندن';
+
+  @override
+  String get manchester => 'مانشستر';
+
+  @override
+  String get birmingham => 'برمنغهام';
+
+  @override
+  String get paris => 'باريس';
+
+  @override
+  String get lyon => 'ليون';
+
+  @override
+  String get marseille => 'مرسيليا';
+
+  @override
+  String get madrid => 'مدريد';
+
+  @override
+  String get barcelona => 'برشلونة';
+
+  @override
+  String get seville => 'إشبيلية';
+
+  @override
+  String get rome => 'روما';
+
+  @override
+  String get milan => 'ميلانو';
+
+  @override
+  String get venice => 'البندقية';
+
+  @override
+  String get berlin => 'برلين';
+
+  @override
+  String get munich => 'ميونخ';
+
+  @override
+  String get hamburg => 'هامبورغ';
+
+  @override
+  String get tokyo => 'طوكيو';
+
+  @override
+  String get osaka => 'أوساكا';
+
+  @override
+  String get kyoto => 'كيوتو';
+
+  @override
+  String get singapore => 'سنغافورة';
+
+  @override
+  String get bangkok => 'بانكوك';
+
+  @override
+  String get phuket => 'فوكيت';
+
+  @override
+  String get chiangMai => 'شيانغ ماي';
+
+  @override
+  String get delhi => 'دلهي';
+
+  @override
+  String get mumbai => 'مومباي';
+
+  @override
+  String get bangalore => 'بنغالور';
+
+  @override
+  String get seoul => 'سيول';
+
+  @override
+  String get busan => 'بوسان';
+
+  @override
+  String get incheon => 'إنتشون';
+
+  @override
+  String get newYork => 'نيويورك';
+
+  @override
+  String get losAngeles => 'لوس أنجلوس';
+
+  @override
+  String get chicago => 'شيكاغو';
+
+  @override
+  String get miami => 'ميامي';
+
+  @override
+  String get lasVegas => 'لاس فيغاس';
+
+  @override
+  String get toronto => 'تورنتو';
+
+  @override
+  String get vancouver => 'فانكوفر';
+
+  @override
+  String get montreal => 'مونتريال';
+
+  @override
+  String get mexicoCity => 'مكسيكو سيتي';
+
+  @override
+  String get cancun => 'كانكون';
+
+  @override
+  String get playaDelCarmen => 'بلايا ديل كارمن';
+
+  @override
+  String get saoPaulo => 'ساو باولو';
+
+  @override
+  String get rioDeJaneiro => 'ريو دي جانيرو';
+
+  @override
+  String get salvador => 'سالفادور';
+
+  @override
+  String get sydney => 'سيدني';
+
+  @override
+  String get melbourne => 'ملبورن';
+
+  @override
+  String get brisbane => 'بريزبن';
+
+  @override
+  String get uae => 'الإمارات';
+
+  @override
+  String get saudiArabia => 'المملكة العربية السعودية';
+
+  @override
+  String get egypt => 'مصر';
+
+  @override
+  String get qatar => 'قطر';
+
+  @override
+  String get bahrain => 'البحرين';
+
+  @override
+  String get oman => 'عُمان';
+
+  @override
+  String get kuwait => 'الكويت';
+
+  @override
+  String get jordan => 'الأردن';
+
+  @override
+  String get lebanon => 'لبنان';
+
+  @override
+  String get turkey => 'تركيا';
+
+  @override
+  String get unitedKingdom => 'المملكة المتحدة';
+
+  @override
+  String get france => 'فرنسا';
+
+  @override
+  String get spain => 'إسبانيا';
+
+  @override
+  String get italy => 'إيطاليا';
+
+  @override
+  String get germany => 'ألمانيا';
+
+  @override
+  String get japan => 'اليابان';
+
+  @override
+  String get thailand => 'تايلاند';
+
+  @override
+  String get india => 'الهند';
+
+  @override
+  String get southKorea => 'كوريا الجنوبية';
+
+  @override
+  String get unitedStates => 'الولايات المتحدة';
+
+  @override
+  String get canada => 'كندا';
+
+  @override
+  String get mexico => 'المكسيك';
+
+  @override
+  String get brazil => 'البرازيل';
+
+  @override
+  String get australia => 'أستراليا';
+
+  @override
+  String get selectCountry => 'اختر الدولة';
+
+  @override
+  String get selectCity => 'اختر المدينة';
+
+  @override
+  String get selectPickupLocation => 'موقع الاستلام';
+
+  @override
+  String get selectDropoffLocation => 'موقع التسليم';
+
+  @override
+  String get sameCityAsPickup => 'نفس مدينة الاستلام';
+
+  @override
+  String stepOf(int step) {
+    return 'الخطوة $step من 4';
+  }
+
+  @override
+  String get tripDetails => 'تفاصيل الرحلة';
+
+  @override
+  String get yourInformation => 'معلوماتك';
+
+  @override
+  String get reviewAndConfirm => 'المراجعة والتأكيد';
+
+  @override
+  String get pickupAndDropoff => 'الاستلام والتسليم';
+
+  @override
+  String get airportNotice => 'الاستلام والتسليم دائماً في مطار المدينة';
+
+  @override
+  String get pricePerDayFilter => 'السعر/يوم';
+
+  @override
+  String get noCarsMatch => 'لا توجد سيارات تطابق الفلاتر';
+
+  @override
+  String get clearFilters => 'مسح الفلاتر';
+
+  @override
+  String get location => 'الموقع';
+
+  @override
+  String get until => 'حتى';
+
+  @override
+  String get vehicle => 'السيارة';
+
+  @override
+  String get trip => 'الرحلة';
+
+  @override
+  String get priceBreakdown => 'تفاصيل السعر';
+
+  @override
+  String get continuee => 'متابعة';
+
+  @override
+  String get day => 'يوم';
+
+  @override
+  String get days => 'أيام';
+
+  @override
+  String get total2 => 'المجموع';
+
+  @override
+  String get saved => 'وفّرت';
+
+  @override
+  String get sortPriceLow => 'السعر: من الأقل';
+
+  @override
+  String get sortPriceHigh => 'السعر: من الأعلى';
+
+  @override
+  String get sortNameAZ => 'الاسم: أ إلى ي';
+
+  @override
+  String get sortSeatsLow => 'المقاعد: الأقل أولاً';
+
+  @override
+  String get sortSeatsHigh => 'المقاعد: الأكثر أولاً';
+
+  @override
+  String get cashOnlyTitle => 'الدفع نقدًا فقط';
+
+  @override
+  String get cashOnlyBody =>
+      'لا ندعم الدفع الإلكتروني حاليًا. يُرجى تجهيز المبلغ نقدًا عند استلام السيارة.';
+
+  @override
+  String get searchCountry => 'ابحث عن دولة...';
+
+  @override
+  String get searchCity => 'ابحث عن مدينة...';
+
+  @override
+  String get sortPriceAsc => 'السعر ↑';
+
+  @override
+  String get sortPriceDesc => 'السعر ↓';
+
+  @override
+  String get sortNameAz => 'أ–ي';
+
+  @override
+  String get car => 'السيارة';
+
+  @override
+  String get info => 'معلوماتك';
+
+  @override
+  String get review => 'مراجعة';
+
+  @override
+  String get bookingConfirmedTitle => 'كل شيء جاهز!';
+
+  @override
+  String get bookingConfirmedMessage =>
+      'تم تأكيد حجزك. سيكون فريقنا في المطار بانتظارك عند وصولك.';
+
+  @override
+  String get cashPaymentTitle => 'الدفع عند الاستلام — بدون بطاقة';
+
+  @override
+  String get cashPaymentBody =>
+      'ادفع نقداً عند استلام سيارتك — بدون نماذج إلكترونية، بدون رسوم خفية، بدون تعقيد.';
+
+  @override
+  String get dubaiInternationalAirport => 'مطار دبي الدولي';
+
+  @override
+  String get abuDhabiInternationalAirport => 'مطار أبوظبي الدولي';
+
+  @override
+  String get sharjahInternationalAirport => 'مطار الشارقة الدولي';
+
+  @override
+  String get kingKhalidInternationalAirport => 'مطار الملك خالد الدولي';
+
+  @override
+  String get kingAbdulazizInternationalAirport => 'مطار الملك عبدالعزيز الدولي';
+
+  @override
+  String get cairoInternationalAirport => 'مطار القاهرة الدولي';
+
+  @override
+  String get elNouzhaAirport => 'مطار النزهة';
+
+  @override
+  String get hamadInternationalAirport => 'مطار حمد الدولي';
+
+  @override
+  String get bahrainInternationalAirport => 'مطار البحرين الدولي';
+
+  @override
+  String get muscatInternationalAirport => 'مطار مسقط الدولي';
+
+  @override
+  String get kuwaitInternationalAirport => 'مطار الكويت الدولي';
+
+  @override
+  String get queenAliaInternationalAirport => 'مطار الملكة علياء الدولي';
+
+  @override
+  String get beirutRaficHaririInternational => 'مطار بيروت رفيق الحريري الدولي';
+
+  @override
+  String get istanbulAirport => 'مطار إسطنبول';
+
+  @override
+  String get sabihaCokcentInternationalAirport => 'مطار صبيحة كوكجن الدولي';
+
+  @override
+  String get adnanMenderesAirport => 'مطار عدنان مندريس';
+
+  @override
+  String get ankaraEsenbogaAirport => 'مطار أنقرة إسنبوغا';
+
+  @override
+  String get heathrowAirport => 'مطار هيثرو';
+
+  @override
+  String get gatwickAirport => 'مطار غاتويك';
+
+  @override
+  String get manchesterAirport => 'مطار مانشستر';
+
+  @override
+  String get charlesDeGaulleAirport => 'مطار شارل ديغول';
+
+  @override
+  String get parisOrlyAirport => 'مطار باريس أورلي';
+
+  @override
+  String get adolfoSuarezMadridBarajasAirport =>
+      'مطار أدولفو سواريز مدريد باراخاس';
+
+  @override
+  String get barcelonaElPratAirport => 'مطار برشلونة إل برات';
+
+  @override
+  String get leonardoDaVinciFiumicinoAirport =>
+      'مطار ليوناردو دا فينشي فيوميتشينو';
+
+  @override
+  String get milanMalpensaAirport => 'مطار ميلانو مالبينسا';
+
+  @override
+  String get berlinBrandenburgAirport => 'مطار برلين براندنبورغ';
+
+  @override
+  String get munichAirport => 'مطار ميونخ';
+
+  @override
+  String get hamburgAirport => 'مطار هامبورغ';
+
+  @override
+  String get tokyoHanedaAirport => 'مطار طوكيو هانيدا';
+
+  @override
+  String get naritaInternationalAirport => 'مطار ناريتا الدولي';
+
+  @override
+  String get kansaiInternationalAirport => 'مطار كانساي الدولي';
+
+  @override
+  String get singaporeChangiAirport => 'مطار سنغافورة تشانغي';
+
+  @override
+  String get suvarnabhumiAirport => 'مطار سوفارنابهومي';
+
+  @override
+  String get phuketInternationalAirport => 'مطار فوكيت الدولي';
+
+  @override
+  String get indiraGandhiInternationalAirport => 'مطار إنديرا غاندي الدولي';
+
+  @override
+  String get chhatrapatiShivajiInternational => 'مطار شاتراباتي شيفاجي الدولي';
+
+  @override
+  String get incheonInternationalAirport => 'مطار إنتشون الدولي';
+
+  @override
+  String get gimpoInternationalAirport => 'مطار غيمبو الدولي';
+
+  @override
+  String get johnFKennedyInternationalAirport => 'مطار جون إف كينيدي الدولي';
+
+  @override
+  String get laGuardiaAirport => 'مطار لاغوارديا';
+
+  @override
+  String get losAngelesInternationalAirport => 'مطار لوس أنجلوس الدولي';
+
+  @override
+  String get ohareInternationalAirport => 'مطار أوهير الدولي';
+
+  @override
+  String get miamiInternationalAirport => 'مطار ميامي الدولي';
+
+  @override
+  String get harryReidInternationalAirport => 'مطار هاري ريد الدولي';
+
+  @override
+  String get torontoPearsonInternationalAirport => 'مطار تورنتو بيرسون الدولي';
+
+  @override
+  String get vancouverInternationalAirport => 'مطار فانكوفر الدولي';
+
+  @override
+  String get mexicoCityInternationalAirport => 'مطار مكسيكو سيتي الدولي';
+
+  @override
+  String get cancunInternationalAirport => 'مطار كانكون الدولي';
+
+  @override
+  String get saoPauloGuarulhosInternational =>
+      'مطار ساو باولو غوارولهوس الدولي';
+
+  @override
+  String get rioDeJaneiroGaleaoInternational =>
+      'مطار ريو دي جانيرو غاليان الدولي';
+
+  @override
+  String get sydneyKingsfordSmithAirport => 'مطار سيدني كينغسفورد سميث';
+
+  @override
+  String get melbourneAirport => 'مطار ملبورن';
+
+  @override
+  String get brisbaneAirport => 'مطار بريزبن';
+
+  @override
+  String get all => 'الكل';
 }

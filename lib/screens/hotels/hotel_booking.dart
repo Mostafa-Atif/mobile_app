@@ -1039,7 +1039,7 @@ class _HotelBookingState extends State<HotelBooking> {
                           ),
                         )
                       : Text(
-                          l.proceedToPayment,
+                          l.bookNow,
                           style: TextStyle(
                               fontSize: 14, fontWeight: FontWeight.w800),
                         ),

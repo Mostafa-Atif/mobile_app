@@ -705,7 +705,7 @@ class _HotelDetailsState extends State<HotelDetails> {
                     ),
                   ),
                   child: Text(
-                    l.bookNow,
+                    l.continue_,
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 14,
