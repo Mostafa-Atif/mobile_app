@@ -3116,17 +3116,41 @@ abstract class AppLocalizations {
   /// **'Your booking is confirmed. Our team will be ready at the airport when you arrive.'**
   String get bookingConfirmedMessage;
 
-  /// No description provided for @cashPaymentTitle.
+  /// No description provided for @carsCashPaymentTitle.
   ///
   /// In en, this message translates to:
   /// **'Pay at Pickup — No Card Needed'**
-  String get cashPaymentTitle;
+  String get carsCashPaymentTitle;
 
-  /// No description provided for @cashPaymentBody.
+  /// No description provided for @carsCashPaymentBody.
   ///
   /// In en, this message translates to:
   /// **'Pay in cash when you collect your car — no online forms, no hidden fees, no hassle.'**
-  String get cashPaymentBody;
+  String get carsCashPaymentBody;
+
+  /// No description provided for @flightsCashPaymentTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Book Now — Pay in Cash'**
+  String get flightsCashPaymentTitle;
+
+  /// No description provided for @flightsCashPaymentBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Reserve your seat today and pay in cash — no card needed, no online forms, no hassle.'**
+  String get flightsCashPaymentBody;
+
+  /// No description provided for @hotelsCashPaymentTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Book Now — Pay at Check-In'**
+  String get hotelsCashPaymentTitle;
+
+  /// No description provided for @hotelsCashPaymentBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Reserve your room today and pay in cash at check-in — no card needed, no online forms, no hassle.'**
+  String get hotelsCashPaymentBody;
 
   /// No description provided for @dubaiInternationalAirport.
   ///

@@ -1581,11 +1581,25 @@ class AppLocalizationsEn extends AppLocalizations {
       'Your booking is confirmed. Our team will be ready at the airport when you arrive.';
 
   @override
-  String get cashPaymentTitle => 'Pay at Pickup — No Card Needed';
+  String get carsCashPaymentTitle => 'Pay at Pickup — No Card Needed';
 
   @override
-  String get cashPaymentBody =>
+  String get carsCashPaymentBody =>
       'Pay in cash when you collect your car — no online forms, no hidden fees, no hassle.';
+
+  @override
+  String get flightsCashPaymentTitle => 'Book Now — Pay in Cash';
+
+  @override
+  String get flightsCashPaymentBody =>
+      'Reserve your seat today and pay in cash — no card needed, no online forms, no hassle.';
+
+  @override
+  String get hotelsCashPaymentTitle => 'Book Now — Pay at Check-In';
+
+  @override
+  String get hotelsCashPaymentBody =>
+      'Reserve your room today and pay in cash at check-in — no card needed, no online forms, no hassle.';
 
   @override
   String get dubaiInternationalAirport => 'Dubai International Airport';

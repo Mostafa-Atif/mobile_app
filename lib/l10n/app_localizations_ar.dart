@@ -1572,11 +1572,25 @@ class AppLocalizationsAr extends AppLocalizations {
       'تم تأكيد حجزك. سيكون فريقنا في المطار بانتظارك عند وصولك.';
 
   @override
-  String get cashPaymentTitle => 'الدفع عند الاستلام — بدون بطاقة';
+  String get carsCashPaymentTitle => 'الدفع عند الاستلام — بدون بطاقة';
 
   @override
-  String get cashPaymentBody =>
+  String get carsCashPaymentBody =>
       'ادفع نقداً عند استلام سيارتك — بدون نماذج إلكترونية، بدون رسوم خفية، بدون تعقيد.';
+
+  @override
+  String get flightsCashPaymentTitle => 'احجز الآن — وادفع نقداً';
+
+  @override
+  String get flightsCashPaymentBody =>
+      'احجز مقعدك الآن وادفع نقداً — بدون بطاقة، بدون نماذج إلكترونية، بدون تعقيد.';
+
+  @override
+  String get hotelsCashPaymentTitle => 'احجز الآن — وادفع عند الوصول';
+
+  @override
+  String get hotelsCashPaymentBody =>
+      'احجز غرفتك الآن وادفع نقداً عند وصولك — بدون بطاقة، بدون نماذج إلكترونية، بدون تعقيد.';
 
   @override
   String get dubaiInternationalAirport => 'مطار دبي الدولي';

@@ -1158,10 +1158,10 @@ class _CarsSearchState extends State<CarsSearch> with TickerProviderStateMixin {
             ),
             const SizedBox(width: 12),
             Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Text(l.cashPaymentTitle,
+              Text(l.carsCashPaymentTitle,
                   style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: t.accent)),
               const SizedBox(height: 4),
-              Text(l.cashPaymentBody,
+              Text(l.carsCashPaymentBody,
                   style: TextStyle(fontSize: 12, color: t.sub, height: 1.5)),
             ])),
           ]),
@@ -1587,7 +1587,7 @@ class SuccessScreen extends StatelessWidget {
               child: Row(children: [
                 Icon(Icons.payments_outlined, color: t.accent, size: 20),
                 const SizedBox(width: 10),
-                Expanded(child: Text(l.cashPaymentTitle,
+                Expanded(child: Text("l.carsCashPaymentTitle",
                     style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: t.accent))),
               ]),
             ),
