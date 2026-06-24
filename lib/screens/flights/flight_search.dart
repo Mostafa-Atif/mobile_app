@@ -88,16 +88,16 @@ class _FlightSearchState extends State<FlightSearch> {
     String lang = Localizations.localeOf(context).languageCode;
     final jsonString = await rootBundle.loadString('data/countries.json');
     final json = jsonDecode(jsonString);
-    
+
     flightCtryCityMap.clear();
-    
+
     json['cities'].forEach((cityAr, data) {
       final country = lang == 'ar' ? data['country_ar'] : data['country_en'];
       final city = lang == 'ar' ? cityAr : data['city_en'];
-      
+
       flightCtryCityMap.putIfAbsent(country, () => []).add(city);
     });
-    
+
     setState(() {});
   }
 
@@ -184,7 +184,8 @@ class _FlightSearchState extends State<FlightSearch> {
   void showCityPicker(bool isFrom, AppLocalizations l) {
     String lang = Localizations.localeOf(context).languageCode;
     // Flatten all cities from the map
-    final allCities = flightCtryCityMap.values.expand((cities) => cities).toList();
+    final allCities =
+        flightCtryCityMap.values.expand((cities) => cities).toList();
     final searchController = TextEditingController();
 
     showModalBottomSheet(
@@ -250,8 +251,9 @@ class _FlightSearchState extends State<FlightSearch> {
                       onChanged: (query) {
                         setModalState(() {
                           allCities
-                              .where((city) =>
-                                  city.toLowerCase().contains(query.toLowerCase()))
+                              .where((city) => city
+                                  .toLowerCase()
+                                  .contains(query.toLowerCase()))
                               .toList();
                         });
                       },
@@ -273,8 +275,9 @@ class _FlightSearchState extends State<FlightSearch> {
                       padding: EdgeInsets.symmetric(horizontal: 16),
                       children: flightCtryCityMap.entries.expand((entry) {
                         final countryCities = entry.value
-                            .where((city) =>
-                                city.toLowerCase().contains(searchController.text.toLowerCase()))
+                            .where((city) => city
+                                .toLowerCase()
+                                .contains(searchController.text.toLowerCase()))
                             .toList();
 
                         if (countryCities.isEmpty) return <Widget>[];
@@ -282,7 +285,8 @@ class _FlightSearchState extends State<FlightSearch> {
                         return [
                           // Country header (not tappable)
                           Padding(
-                            padding: EdgeInsets.only(top: 18, bottom: 6, left: 4, right: 4),
+                            padding: EdgeInsets.only(
+                                top: 18, bottom: 6, left: 4, right: 4),
                             child: Text(
                               entry.key.toUpperCase(),
                               style: TextStyle(
@@ -319,7 +323,8 @@ class _FlightSearchState extends State<FlightSearch> {
         );
       },
     );
-  }  
+  }
+
   void showPassengersPicker(AppLocalizations l, List<String> cabinClasses) {
     showModalBottomSheet(
       context: context,
@@ -421,7 +426,8 @@ class _FlightSearchState extends State<FlightSearch> {
                     children: cabinClasses.map((c) {
                       final isSelected = cabinClasses[selectedCabinIndex] == c;
                       return GestureDetector(
-                        onTap: () => setModalState(() => selectedCabinIndex = cabinClasses.indexOf(c)),
+                        onTap: () => setModalState(
+                            () => selectedCabinIndex = cabinClasses.indexOf(c)),
                         child: AnimatedContainer(
                           duration: Duration(milliseconds: 180),
                           padding: EdgeInsets.symmetric(
@@ -610,11 +616,13 @@ class _FlightSearchState extends State<FlightSearch> {
                                       _searchTile(
                                         icon: Icons.flight_takeoff_rounded,
                                         title: lang == 'en' && fromCity != null
-                                          ? FlightTranslationService.translateCity(fromCity!)
-                                          : (fromCity ?? '...'),
+                                            ? FlightTranslationService
+                                                .translateCity(fromCity!)
+                                            : (fromCity ?? '...'),
                                         subtitle: l.from,
                                         onTap: () => showCityPicker(true, l),
-                                        trailing: Icons.keyboard_arrow_down_rounded,
+                                        trailing:
+                                            Icons.keyboard_arrow_down_rounded,
                                       ),
                                       SizedBox(height: 10),
 
@@ -644,11 +652,13 @@ class _FlightSearchState extends State<FlightSearch> {
                                       _searchTile(
                                         icon: Icons.flight_land_rounded,
                                         title: lang == 'en' && toCity != null
-                                          ? FlightTranslationService.translateCity(toCity!)
-                                          : (toCity ?? '...'),
+                                            ? FlightTranslationService
+                                                .translateCity(toCity!)
+                                            : (toCity ?? '...'),
                                         subtitle: l.to,
                                         onTap: () => showCityPicker(false, l),
-                                        trailing: Icons.keyboard_arrow_down_rounded,
+                                        trailing:
+                                            Icons.keyboard_arrow_down_rounded,
                                       ),
 
                                       SizedBox(height: 14),
@@ -713,10 +723,12 @@ class _FlightSearchState extends State<FlightSearch> {
                                       // Passengers summary
                                       _summaryTile(
                                         icon: Icons.people_alt_outlined,
-                                        title: formatPassengers(l, cabinClasses),
+                                        title:
+                                            formatPassengers(l, cabinClasses),
                                         subtitle:
                                             '$adults ${l.adults}, $children ${l.children}, $infants ${l.infants}',
-                                        onTap: () => showPassengersPicker(l, cabinClasses),
+                                        onTap: () => showPassengersPicker(
+                                            l, cabinClasses),
                                       ),
 
                                       SizedBox(height: 18),
@@ -738,7 +750,8 @@ class _FlightSearchState extends State<FlightSearch> {
                                           ],
                                         ),
                                         child: ElevatedButton(
-                                          onPressed: () => _handleSearch(l, cabinClasses),
+                                          onPressed: () =>
+                                              _handleSearch(l, cabinClasses),
                                           style: ElevatedButton.styleFrom(
                                             backgroundColor: Colors.transparent,
                                             shadowColor: Colors.transparent,
@@ -1064,7 +1077,9 @@ class _FlightSearchState extends State<FlightSearch> {
                 SizedBox(width: 12),
                 Expanded(
                   child: Text(
-                    lang == 'en' ? FlightTranslationService.translateCity(city) : city,  // ← CHANGE THIS
+                    lang == 'en'
+                        ? FlightTranslationService.translateCity(city)
+                        : city, // ← CHANGE THIS
                     style: TextStyle(
                       color: _t.title,
                       fontSize: 15,

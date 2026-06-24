@@ -674,7 +674,6 @@ class _HotelBookingState extends State<HotelBooking> {
     final l = AppLocalizations.of(context)!;
     final t = Theme.of(context).extension<AppThemeExtension>()!;
 
-
     return Scaffold(
       backgroundColor: _t.bg,
       body: guestList.isEmpty
@@ -758,38 +757,56 @@ class _HotelBookingState extends State<HotelBooking> {
                             _buildSummaryCard(l),
                             SizedBox(height: 18),
 
-                          // ── Pay at pickup — framed as an advantage ──
-                          Container(
-                            padding: const EdgeInsets.all(16),
-                            margin: const EdgeInsets.only(bottom: 14),
-                            decoration: BoxDecoration(
-                              gradient: LinearGradient(
-                                colors: [t.accent.withOpacity(0.08), t.accent.withOpacity(0.03)],
-                                begin: Alignment.topLeft, end: Alignment.bottomRight,
-                              ),
-                              borderRadius: BorderRadius.circular(16),
-                              border: Border.all(color: t.accent.withOpacity(0.2)),
-                            ),
-                            child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                              Container(
-                                width: 40, height: 40,
-                                decoration: BoxDecoration(
-                                  color: t.accent.withOpacity(0.12),
-                                  borderRadius: BorderRadius.circular(10),
+                            // ── Pay at pickup — framed as an advantage ──
+                            Container(
+                              padding: const EdgeInsets.all(16),
+                              margin: const EdgeInsets.only(bottom: 14),
+                              decoration: BoxDecoration(
+                                gradient: LinearGradient(
+                                  colors: [
+                                    t.accent.withOpacity(0.08),
+                                    t.accent.withOpacity(0.03)
+                                  ],
+                                  begin: Alignment.topLeft,
+                                  end: Alignment.bottomRight,
                                 ),
-                                child: Icon(Icons.payments_outlined, color: t.accent, size: 22),
+                                borderRadius: BorderRadius.circular(16),
+                                border: Border.all(
+                                    color: t.accent.withOpacity(0.2)),
                               ),
-                              const SizedBox(width: 12),
-                              Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                                Text(l.hotelsCashPaymentTitle,
-                                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: t.accent)),
-                                const SizedBox(height: 4),
-                                Text(l.hotelsCashPaymentBody,
-                                    style: TextStyle(fontSize: 12, color: t.sub, height: 1.5)),
-                              ])),
-                            ]),
-                          ),
-
+                              child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Container(
+                                      width: 40,
+                                      height: 40,
+                                      decoration: BoxDecoration(
+                                        color: t.accent.withOpacity(0.12),
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                      child: Icon(Icons.payments_outlined,
+                                          color: t.accent, size: 22),
+                                    ),
+                                    const SizedBox(width: 12),
+                                    Expanded(
+                                        child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                          Text(l.hotelsCashPaymentTitle,
+                                              style: TextStyle(
+                                                  fontSize: 14,
+                                                  fontWeight: FontWeight.bold,
+                                                  color: t.accent)),
+                                          const SizedBox(height: 4),
+                                          Text(l.hotelsCashPaymentBody,
+                                              style: TextStyle(
+                                                  fontSize: 12,
+                                                  color: t.sub,
+                                                  height: 1.5)),
+                                        ])),
+                                  ]),
+                            ),
 
                             _sectionHeader(
                               l.guestDetails,

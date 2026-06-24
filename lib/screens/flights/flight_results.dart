@@ -278,8 +278,7 @@ class _FlightResultsState extends State<FlightResults> {
     String lang = Localizations.localeOf(context).languageCode;
     final bool hasLuggage = flight['hasLuggage'] ?? false;
     final String currency = lang == 'en'
-        ? FlightTranslationService.translateCurrency(
-            flight['currency'])
+        ? FlightTranslationService.translateCurrency(flight['currency'])
         : (flight['currency']);
     final String stops = lang == 'en'
         ? FlightTranslationService.translateStops(flight['stops'] ?? 'مباشر')
