@@ -259,7 +259,7 @@
   "departure": "المغادرة",
   "returnDate": "العودة",
   "passengersAndClass": "الركاب والدرجة",
-  "passengers": "الركاب",
+  "passengers": "ركاب",
   "age12Plus": "12 سنة فأكثر",
   "age211": "2-11 سنة",
   "underTwo": "أقل من سنتين",
@@ -754,5 +754,10 @@
   "sydneyKingsfordSmithAirport": "مطار سيدني كينغسفورد سميث",
   "melbourneAirport": "مطار ملبورن",
   "brisbaneAirport": "مطار بريزبن",
-  "all": "الكل"
+  "all": "الكل",
+  "economy": "اقتصادي",
+  "premiumEconomy": "اقتصادي مميز",
+  "business": "رجال الأعمال",
+  "firstClass": "الدرجة الأولى",
+  "searchCity": "ابحث عن مدينة..."
 }

@@ -754,5 +754,10 @@
   "sydneyKingsfordSmithAirport": "Sydney Kingsford Smith Airport",
   "melbourneAirport": "Melbourne Airport",
   "brisbaneAirport": "Brisbane Airport",
-  "all": "all"
+  "all": "all",
+  "economy": "Economy",
+  "premiumEconomy": "Premium Economy",
+  "business": "Business",
+  "firstClass": "First Class",
+  "searchCity": "Search cities..."
 }

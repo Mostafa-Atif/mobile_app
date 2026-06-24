@@ -3065,7 +3065,7 @@ abstract class AppLocalizations {
   /// No description provided for @searchCity.
   ///
   /// In en, this message translates to:
-  /// **'Search city...'**
+  /// **'Search cities...'**
   String get searchCity;
 
   /// No description provided for @sortPriceAsc.
@@ -3457,6 +3457,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'all'**
   String get all;
+
+  /// No description provided for @economy.
+  ///
+  /// In en, this message translates to:
+  /// **'Economy'**
+  String get economy;
+
+  /// No description provided for @premiumEconomy.
+  ///
+  /// In en, this message translates to:
+  /// **'Premium Economy'**
+  String get premiumEconomy;
+
+  /// No description provided for @business.
+  ///
+  /// In en, this message translates to:
+  /// **'Business'**
+  String get business;
+
+  /// No description provided for @firstClass.
+  ///
+  /// In en, this message translates to:
+  /// **'First Class'**
+  String get firstClass;
 }
 
 class _AppLocalizationsDelegate

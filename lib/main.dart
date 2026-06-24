@@ -3,11 +3,13 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:mobile_app/Archive/test.dart';
 import 'package:mobile_app/l10n/app_localizations.dart';
 import 'package:mobile_app/screens/auth/sign_in.dart';
 import 'package:mobile_app/screens/home/admin_dashboard_screen.dart';
 import 'package:mobile_app/screens/home/home_screen.dart';
 import 'package:mobile_app/screens/onboarding/onboarding_screen_1.dart';
+import 'package:mobile_app/services/flight_translation_service.dart';
 import '../Archive/temp_home.dart';
 import 'package:mobile_app/theme.dart';
 import 'package:provider/provider.dart';
@@ -18,6 +20,7 @@ void main() async {
   final prefs = await SharedPreferences.getInstance();
   final bool onboardingDone = prefs.getBool('onboardingDone') ?? false;
   final String token = prefs.getString('token') ?? '';
+  await FlightTranslationService.init();
 
   Widget startScreen;
   if (!onboardingDone) {

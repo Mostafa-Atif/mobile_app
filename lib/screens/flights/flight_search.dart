@@ -2,6 +2,7 @@
 
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
 import 'package:mobile_app/l10n/app_localizations.dart';
@@ -28,23 +29,23 @@ class _FlightSearchState extends State<FlightSearch> {
   int adults = 1;
   int children = 0;
   int infants = 0;
-  String cabinClass = 'Economy';
-  
+  int selectedCabinIndex = 0;
+  Map<String, List<String>> flightCtryCityMap = {};
+
   List<String> cities = [];
   bool loadingCities = true;
   bool hasError = false;
-
-  final List<String> cabinClasses = [
-    'Economy',
-    'Premium Economy',
-    'Business',
-    'First Class',
-  ];
 
   @override
   void initState() {
     super.initState();
     fetchCities();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _buildFlightCityMap();
   }
 
   Future<void> fetchCities() async {
@@ -65,8 +66,8 @@ class _FlightSearchState extends State<FlightSearch> {
         final sorted = citySet.toList()..sort();
         setState(() {
           cities = sorted;
-          fromCity = sorted.isNotEmpty ? sorted.first : null;
-          toCity = sorted.length > 1 ? sorted[1] : null;
+          fromCity = sorted.isNotEmpty ? sorted[16] : null;
+          toCity = sorted.length > 1 ? sorted[3] : null;
           loadingCities = false;
         });
       } else {
@@ -83,6 +84,23 @@ class _FlightSearchState extends State<FlightSearch> {
     }
   }
 
+  void _buildFlightCityMap() async {
+    String lang = Localizations.localeOf(context).languageCode;
+    final jsonString = await rootBundle.loadString('data/countries.json');
+    final json = jsonDecode(jsonString);
+    
+    flightCtryCityMap.clear();
+    
+    json['cities'].forEach((cityAr, data) {
+      final country = lang == 'ar' ? data['country_ar'] : data['country_en'];
+      final city = lang == 'ar' ? cityAr : data['city_en'];
+      
+      flightCtryCityMap.putIfAbsent(country, () => []).add(city);
+    });
+    
+    setState(() {});
+  }
+
   String formatDate(DateTime date) {
     final locale = Localizations.localeOf(context).languageCode;
     final pattern = locale == 'ar' ? 'd MMM y' : 'd MMM, y';
@@ -91,8 +109,8 @@ class _FlightSearchState extends State<FlightSearch> {
 
   int get totalPassengers => adults + children + infants;
 
-  String formatPassengers(AppLocalizations l) {
-    return '$totalPassengers ${l.passengers}, $cabinClass';
+  String formatPassengers(AppLocalizations l, List<String> cabinClasses) {
+    return '$totalPassengers ${totalPassengers > 1 ? l.passengers : l.passenger}, ${cabinClasses[selectedCabinIndex]}';
   }
 
   Future<void> selectDate(BuildContext context, bool isDeparture) async {
@@ -135,7 +153,7 @@ class _FlightSearchState extends State<FlightSearch> {
     }
   }
 
-  void _handleSearch(AppLocalizations l) {
+  void _handleSearch(AppLocalizations l, List<String> cabinClasses) {
     if (fromCity == null || toCity == null) {
       ScaffoldMessenger.of(context)
           .showSnackBar(SnackBar(content: Text(l.selectCitiesError)));
@@ -157,7 +175,7 @@ class _FlightSearchState extends State<FlightSearch> {
           departureDate: departureDate,
           returnDate: selectedTripType == 'roundtrip' ? returnDate : null,
           passengers: totalPassengers,
-          cabinClass: cabinClass,
+          cabinClass: cabinClasses[selectedCabinIndex],
         ),
       ),
     );
@@ -165,90 +183,144 @@ class _FlightSearchState extends State<FlightSearch> {
 
   void showCityPicker(bool isFrom, AppLocalizations l) {
     String lang = Localizations.localeOf(context).languageCode;
+    // Flatten all cities from the map
+    final allCities = flightCtryCityMap.values.expand((cities) => cities).toList();
+    final searchController = TextEditingController();
+
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
       builder: (context) {
-        return Container(
-          height: MediaQuery.of(context).size.height * 0.75,
-          decoration: BoxDecoration(
-            color: _t.bg,
-            borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
-          ),
-          child: Column(
-            children: [
-              SizedBox(height: 12),
-              Container(
-                width: 42,
-                height: 5,
-                decoration: BoxDecoration(
-                  color: _t.label.withOpacity(0.35),
-                  borderRadius: BorderRadius.circular(999),
-                ),
+        return StatefulBuilder(
+          builder: (context, setModalState) {
+            return Container(
+              height: MediaQuery.of(context).size.height * 0.75,
+              decoration: BoxDecoration(
+                color: _t.bg,
+                borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
               ),
-              SizedBox(height: 18),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      (isFrom ? l.from : l.to).toUpperCase(),
-                      style: TextStyle(
-                        color: _t.accent,
-                        fontSize: 10,
-                        letterSpacing: 2,
-                        fontWeight: FontWeight.w700,
-                      ),
+              child: Column(
+                children: [
+                  SizedBox(height: 12),
+                  Container(
+                    width: 42,
+                    height: 5,
+                    decoration: BoxDecoration(
+                      color: _t.label.withOpacity(0.35),
+                      borderRadius: BorderRadius.circular(999),
                     ),
-                    SizedBox(height: 6),
-                    Text(
-                      isFrom ? l.selectDepartureCity : l.selectArrivalCity,
-                      style: TextStyle(
-                        color: _t.title,
-                        fontSize: 28,
-                        fontWeight: FontWeight.w400,
-                        fontFamily: 'DM Serif Display',
-                      ),
+                  ),
+                  SizedBox(height: 18),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 20),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text(
+                          (isFrom ? l.from : l.to).toUpperCase(),
+                          style: TextStyle(
+                            color: _t.accent,
+                            fontSize: 10,
+                            letterSpacing: 2,
+                            fontWeight: FontWeight.w700,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                        SizedBox(height: 6),
+                        Text(
+                          isFrom ? l.selectDepartureCity : l.selectArrivalCity,
+                          style: TextStyle(
+                            color: _t.title,
+                            fontSize: 28,
+                            fontWeight: FontWeight.w400,
+                            fontFamily: 'DM Serif Display',
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
                     ),
-                  ],
-                ),
-              ),
-              SizedBox(height: 12),
-              Expanded(
-                child: ListView.builder(
-                  padding: EdgeInsets.symmetric(horizontal: 16),
-                  itemCount: cities.length,
-                  itemBuilder: (context, i) {
-                    final city = cities[i];
-                    final isSelected =
-                        isFrom ? fromCity == city : toCity == city;
-                    return _cityTile(
-                      city: city,
-                      selected: isSelected,
-                      onTap: () {
-                        setState(() {
-                          if (isFrom)
-                            fromCity = city;
-                          else
-                            toCity = city;
+                  ),
+                  SizedBox(height: 12),
+                  // Search bar
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 16),
+                    child: TextField(
+                      controller: searchController,
+                      onChanged: (query) {
+                        setModalState(() {
+                          allCities
+                              .where((city) =>
+                                  city.toLowerCase().contains(query.toLowerCase()))
+                              .toList();
                         });
-                        Navigator.pop(context);
                       },
-                      lang: lang,
-                    );
-                  },
-                ),
+                      decoration: InputDecoration(
+                        hintText: l.searchCity,
+                        prefixIcon: Icon(Icons.search, color: _t.label),
+                        filled: true,
+                        fillColor: _t.label.withOpacity(0.07),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(14),
+                          borderSide: BorderSide.none,
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 10),
+                  Expanded(
+                    child: ListView(
+                      padding: EdgeInsets.symmetric(horizontal: 16),
+                      children: flightCtryCityMap.entries.expand((entry) {
+                        final countryCities = entry.value
+                            .where((city) =>
+                                city.toLowerCase().contains(searchController.text.toLowerCase()))
+                            .toList();
+
+                        if (countryCities.isEmpty) return <Widget>[];
+
+                        return [
+                          // Country header (not tappable)
+                          Padding(
+                            padding: EdgeInsets.only(top: 18, bottom: 6, left: 4, right: 4),
+                            child: Text(
+                              entry.key.toUpperCase(),
+                              style: TextStyle(
+                                color: _t.label.withOpacity(0.5),
+                                fontSize: 11,
+                                fontWeight: FontWeight.w700,
+                                letterSpacing: 1.5,
+                              ),
+                            ),
+                          ),
+                          // Cities under this country
+                          ...countryCities.map((city) => _cityTile(
+                                city: city,
+                                selected: (isFrom ? fromCity : toCity) == city,
+                                onTap: () {
+                                  setState(() {
+                                    if (isFrom)
+                                      fromCity = city;
+                                    else
+                                      toCity = city;
+                                  });
+                                  Navigator.pop(context);
+                                },
+                                lang: lang,
+                              )),
+                        ];
+                      }).toList(),
+                    ),
+                  ),
+                ],
               ),
-            ],
-          ),
+            );
+          },
         );
       },
     );
-  }
-
-  void showPassengersPicker(AppLocalizations l) {
+  }  
+  void showPassengersPicker(AppLocalizations l, List<String> cabinClasses) {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -347,9 +419,9 @@ class _FlightSearchState extends State<FlightSearch> {
                     spacing: 8,
                     runSpacing: 8,
                     children: cabinClasses.map((c) {
-                      final isSelected = cabinClass == c;
+                      final isSelected = cabinClasses[selectedCabinIndex] == c;
                       return GestureDetector(
-                        onTap: () => setModalState(() => cabinClass = c),
+                        onTap: () => setModalState(() => selectedCabinIndex = cabinClasses.indexOf(c)),
                         child: AnimatedContainer(
                           duration: Duration(milliseconds: 180),
                           padding: EdgeInsets.symmetric(
@@ -426,6 +498,12 @@ class _FlightSearchState extends State<FlightSearch> {
   Widget build(BuildContext context) {
     final l = AppLocalizations.of(context)!;
     String lang = Localizations.localeOf(context).languageCode;
+    final List<String> cabinClasses = [
+      l.economy,
+      l.premiumEconomy,
+      l.business,
+      l.firstClass,
+    ];
 
     return Scaffold(
       backgroundColor: _t.bg,
@@ -635,10 +713,10 @@ class _FlightSearchState extends State<FlightSearch> {
                                       // Passengers summary
                                       _summaryTile(
                                         icon: Icons.people_alt_outlined,
-                                        title: formatPassengers(l),
+                                        title: formatPassengers(l, cabinClasses),
                                         subtitle:
                                             '$adults ${l.adults}, $children ${l.children}, $infants ${l.infants}',
-                                        onTap: () => showPassengersPicker(l),
+                                        onTap: () => showPassengersPicker(l, cabinClasses),
                                       ),
 
                                       SizedBox(height: 18),
@@ -660,7 +738,7 @@ class _FlightSearchState extends State<FlightSearch> {
                                           ],
                                         ),
                                         child: ElevatedButton(
-                                          onPressed: () => _handleSearch(l),
+                                          onPressed: () => _handleSearch(l, cabinClasses),
                                           style: ElevatedButton.styleFrom(
                                             backgroundColor: Colors.transparent,
                                             shadowColor: Colors.transparent,

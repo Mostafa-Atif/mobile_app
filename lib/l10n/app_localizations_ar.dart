@@ -628,7 +628,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get passengersAndClass => 'الركاب والدرجة';
 
   @override
-  String get passengers => 'الركاب';
+  String get passengers => 'ركاب';
 
   @override
   String get age12Plus => '12 سنة فأكثر';
@@ -1746,4 +1746,16 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get all => 'الكل';
+
+  @override
+  String get economy => 'اقتصادي';
+
+  @override
+  String get premiumEconomy => 'اقتصادي مميز';
+
+  @override
+  String get business => 'رجال الأعمال';
+
+  @override
+  String get firstClass => 'الدرجة الأولى';
 }

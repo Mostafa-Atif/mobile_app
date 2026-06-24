@@ -5,6 +5,7 @@ import 'package:mobile_app/l10n/app_localizations.dart';
 import 'package:mobile_app/screens/shared/confirmation_screen.dart';
 import 'package:mobile_app/screens/shared/success_screen.dart';
 import 'package:mobile_app/screens/home/home_screen.dart';
+import 'package:mobile_app/services/flight_translation_service.dart';
 import 'package:mobile_app/theme.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../config.dart';
@@ -758,7 +759,7 @@ class _FlightBookingState extends State<FlightBooking> {
             'toCity': widget.toCity,
             'departureDate': widget.departureDate.toIso8601String(),
             'returnDate': widget.returnDate?.toIso8601String(),
-            'tripType': widget.tripType == 'One-way' ? 'oneway' : 'roundtrip',
+            'tripType': widget.tripType == 'One-way' ? l.oneWay : l.roundTrip,
             'fullName': '${p['firstName']} ${p['lastName']}',
             'dateOfBirth': (p['dateOfBirth'] as DateTime).toIso8601String(),
             'gender': p['gender'],
@@ -889,6 +890,7 @@ class _FlightBookingState extends State<FlightBooking> {
   Widget build(BuildContext context) {
     final l = AppLocalizations.of(context)!;
     final t = Theme.of(context).extension<AppThemeExtension>()!;
+    String lang = Localizations.localeOf(context).languageCode;
 
     return Scaffold(
       backgroundColor: t.bg,
@@ -932,7 +934,7 @@ class _FlightBookingState extends State<FlightBooking> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                        '${widget.fromCity} → ${widget.toCity}',
+                                        '${lang == 'en' ? FlightTranslationService.translateCity(widget.fromCity) : widget.fromCity} ${lang == 'en' ? '→' : '←'} ${lang == 'en' ? FlightTranslationService.translateCity(widget.toCity) : widget.toCity}',
                                         style: TextStyle(
                                             fontWeight: FontWeight.bold,
                                             fontSize: 15,

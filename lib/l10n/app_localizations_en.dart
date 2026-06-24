@@ -1553,7 +1553,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get searchCountry => 'Search country...';
 
   @override
-  String get searchCity => 'Search city...';
+  String get searchCity => 'Search cities...';
 
   @override
   String get sortPriceAsc => 'Price ↑';
@@ -1767,4 +1767,16 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get all => 'all';
+
+  @override
+  String get economy => 'Economy';
+
+  @override
+  String get premiumEconomy => 'Premium Economy';
+
+  @override
+  String get business => 'Business';
+
+  @override
+  String get firstClass => 'First Class';
 }

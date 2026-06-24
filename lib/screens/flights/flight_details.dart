@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_app/l10n/app_localizations.dart';
 import 'package:mobile_app/screens/flights/flight_booking.dart';
+import 'package:mobile_app/services/flight_translation_service.dart';
 import 'package:mobile_app/theme.dart';
 
 class FlightDetails extends StatelessWidget {
@@ -10,13 +11,15 @@ class FlightDetails extends StatelessWidget {
   final int passengers;
   final DateTime departureDate;
   final DateTime? returnDate;
+  final dynamic cabinClass;
 
   const FlightDetails(
       {super.key,
       required this.flight,
       required this.passengers,
       required this.departureDate,
-      required this.returnDate});
+      required this.returnDate,
+      required this.cabinClass});
 
   String _calcArrival(String departTime, String duration) {
     try {
@@ -40,6 +43,7 @@ class FlightDetails extends StatelessWidget {
   Widget build(BuildContext context) {
     final l = AppLocalizations.of(context)!;
     final t = Theme.of(context).extension<AppThemeExtension>()!;
+    String lang = Localizations.localeOf(context).languageCode;
 
     final String airline = flight['airline'] ?? '';
     final String fromCity = flight['fromCity'] ?? '';
@@ -50,9 +54,13 @@ class FlightDetails extends StatelessWidget {
     final String arrivalTime = flight['arrivalTime'] ?? '--:--';
     final String returnTime = flight['returnTime'] ?? '';
     final String duration = flight['duration'] ?? '';
-    final String stops = flight['stops'] ?? '';
-    final String flightClass = flight['flightClass'] ?? '';
-    final String currency = flight['currency'] ?? '';
+    final String stops = lang == 'en'
+        ? FlightTranslationService.translateStops(flight['stops'] ?? 'مباشر')
+        : (flight['stops'] ?? 'مباشر');
+    final String flightClass = cabinClass;
+    final String currency = lang == 'en'
+        ? FlightTranslationService.translateCurrency(flight['currency'])
+        : (flight['currency']);
     final num price = flight['price'] ?? 0;
     final bool hasLuggage = flight['hasLuggage'] ?? false;
     final String tripType = flight['tripType'] ?? '';
@@ -115,7 +123,8 @@ class FlightDetails extends StatelessWidget {
                   // Route header
                   Row(
                     children: [
-                      Text('$fromCity → $toCity',
+                      Text(
+                          '${lang == 'en' ? FlightTranslationService.translateCity(fromCity) : fromCity} ${lang == 'en' ? '→' : '←'} ${lang == 'en' ? FlightTranslationService.translateCity(toCity) : toCity}',
                           style: TextStyle(
                               fontSize: 20,
                               fontWeight: FontWeight.bold,
@@ -167,8 +176,24 @@ class FlightDetails extends StatelessWidget {
                       ]),
                     ),
 
-                  _buildTimeline(context, t, fromCity, toCity, fromCode, toCode,
-                      departTime, arrivalTime, airline, stops),
+                  _buildTimeline(
+                      context,
+                      t,
+                      lang == 'en'
+                          ? FlightTranslationService.translateCity(fromCity)
+                          : fromCity,
+                      lang == 'en'
+                          ? FlightTranslationService.translateCity(toCity)
+                          : toCity,
+                      fromCode,
+                      toCode,
+                      departTime,
+                      arrivalTime,
+                      airline,
+                      lang == 'en'
+                          ? FlightTranslationService.translateStops(
+                              flight['stops'] ?? 'مباشر')
+                          : (flight['stops'] ?? 'مباشر')),
 
                   // Return flight
                   if (isRoundTrip && returnTime.isNotEmpty) ...[
@@ -191,8 +216,12 @@ class FlightDetails extends StatelessWidget {
                     _buildTimeline(
                         context,
                         t,
-                        toCity,
-                        fromCity,
+                        lang == 'en'
+                            ? FlightTranslationService.translateCity(toCity)
+                            : toCity,
+                        lang == 'en'
+                            ? FlightTranslationService.translateCity(fromCity)
+                            : fromCity,
                         toCode,
                         fromCode,
                         returnTime,
@@ -383,11 +412,17 @@ class FlightDetails extends StatelessWidget {
                             tripType: isRoundTrip ? 'Round trip' : 'One-way',
                             passengers: passengers,
                             price: flight['price'] ?? 0,
-                            currency: flight['currency'] ?? '',
+                            currency: lang == 'en'
+                                ? FlightTranslationService.translateCurrency(
+                                    flight['currency'])
+                                : (flight['currency']),
                             airline: flight['airline'] ?? '',
                             duration: flight['duration'] ?? '',
-                            stops: flight['stops'] ?? '',
-                            flightClass: flight['flightClass'] ?? '',
+                            stops: lang == 'en'
+                                ? FlightTranslationService.translateStops(
+                                    flight['stops'] ?? 'مباشر')
+                                : (flight['stops'] ?? 'مباشر'),
+                            flightClass: cabinClass,
                           ),
                         ));
                   },

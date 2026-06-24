@@ -2,9 +2,11 @@
 
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:mobile_app/l10n/app_localizations.dart';
 import 'package:mobile_app/screens/flights/flight_details.dart';
+import 'package:mobile_app/services/flight_translation_service.dart';
 import 'package:mobile_app/theme.dart';
 import '../../config.dart';
 
@@ -34,6 +36,7 @@ class FlightResults extends StatefulWidget {
 
 class _FlightResultsState extends State<FlightResults> {
   List<dynamic> flights = [];
+  Map<String, String> englishToArabic = {};
   bool isLoading = true;
   bool hasError = false;
 
@@ -42,7 +45,21 @@ class _FlightResultsState extends State<FlightResults> {
   @override
   void initState() {
     super.initState();
-    fetchFlights();
+    _initData();
+  }
+
+  Future<void> _loadMapping() async {
+    final jsonString =
+        await rootBundle.loadString('assets/data/flight_translations.json');
+    final json = jsonDecode(jsonString);
+
+    json['cities'].forEach((arabicCity, englishCity) {
+      englishToArabic[englishCity] = arabicCity;
+    });
+  }
+
+  String getArabicCity(String city) {
+    return englishToArabic[city] ?? city;
   }
 
   Future<void> fetchFlights() async {
@@ -53,8 +70,8 @@ class _FlightResultsState extends State<FlightResults> {
     try {
       final uri = Uri.parse('${Config.baseUrl}/api/flights').replace(
         queryParameters: {
-          'from': widget.fromCity,
-          'to': widget.toCity,
+          'from': getArabicCity(widget.fromCity),
+          'to': getArabicCity(widget.toCity),
           'tripType': isRoundTrip ? 'roundtrip' : 'oneway',
         },
       );
@@ -76,6 +93,11 @@ class _FlightResultsState extends State<FlightResults> {
         hasError = true;
       });
     }
+  }
+
+  Future<void> _initData() async {
+    await _loadMapping();
+    fetchFlights();
   }
 
   String _formatDate(DateTime date) {
@@ -119,6 +141,7 @@ class _FlightResultsState extends State<FlightResults> {
   Widget build(BuildContext context) {
     final l = AppLocalizations.of(context)!;
     final t = Theme.of(context).extension<AppThemeExtension>()!;
+    String lang = Localizations.localeOf(context).languageCode;
 
     if (isLoading)
       return Scaffold(
@@ -148,7 +171,7 @@ class _FlightResultsState extends State<FlightResults> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
-                  '${widget.fromCity} → ${widget.toCity}',
+                  '${lang == 'en' ? FlightTranslationService.translateCity(widget.fromCity) : widget.fromCity} ${lang == 'en' ? '→' : '←'} ${lang == 'en' ? FlightTranslationService.translateCity(widget.toCity) : widget.toCity}',
                   style: TextStyle(
                       fontSize: 15,
                       fontWeight: FontWeight.bold,
@@ -175,7 +198,7 @@ class _FlightResultsState extends State<FlightResults> {
             Text(
               isRoundTrip
                   ? '${_formatDate(widget.departureDate)} · ${widget.returnDate != null ? _formatDate(widget.returnDate!) : ''} · ${widget.passengers} pax'
-                  : '${widget.passengers} passenger${widget.passengers > 1 ? 's' : ''} · ${widget.cabinClass} · ${_formatDate(widget.departureDate)}',
+                  : '${widget.passengers} ${widget.passengers > 1 ? l.passengers : l.passenger} · ${widget.cabinClass} · ${_formatDate(widget.departureDate)}',
               style: TextStyle(fontSize: 10, color: t.label),
             ),
           ],
@@ -252,9 +275,15 @@ class _FlightResultsState extends State<FlightResults> {
 
   Widget _buildFlightCard(
       Map<String, dynamic> flight, AppLocalizations l, AppThemeExtension t) {
+    String lang = Localizations.localeOf(context).languageCode;
     final bool hasLuggage = flight['hasLuggage'] ?? false;
-    final String currency = flight['currency'] ?? 'QAR';
-    final String stops = flight['stops'] ?? 'Direct';
+    final String currency = lang == 'en'
+        ? FlightTranslationService.translateCurrency(
+            flight['currency'])
+        : (flight['currency']);
+    final String stops = lang == 'en'
+        ? FlightTranslationService.translateStops(flight['stops'] ?? 'مباشر')
+        : (flight['stops'] ?? 'مباشر');
     final String returnTime = flight['returnTime'] ?? '';
 
     return GestureDetector(
@@ -265,7 +294,8 @@ class _FlightResultsState extends State<FlightResults> {
                   flight: flight,
                   passengers: widget.passengers,
                   departureDate: widget.departureDate,
-                  returnDate: widget.returnDate))),
+                  returnDate: widget.returnDate,
+                  cabinClass: widget.cabinClass))),
       child: Container(
         margin: const EdgeInsets.only(bottom: 12),
         decoration: BoxDecoration(
@@ -370,7 +400,7 @@ class _FlightResultsState extends State<FlightResults> {
                           fontSize: 12,
                           color: hasLuggage ? t.accent : t.label)),
                   const Spacer(),
-                  Text(flight['flightClass'] ?? '',
+                  Text(widget.cabinClass,
                       style: TextStyle(fontSize: 12, color: t.label)),
                 ],
               ),
