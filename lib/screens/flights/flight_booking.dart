@@ -6,6 +6,7 @@ import 'package:mobile_app/screens/shared/confirmation_screen.dart';
 import 'package:mobile_app/screens/shared/success_screen.dart';
 import 'package:mobile_app/screens/home/home_screen.dart';
 import 'package:mobile_app/services/flight_translation_service.dart';
+import 'package:mobile_app/widgets/nationality_selector.dart';
 import 'package:mobile_app/theme.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../config.dart';
@@ -410,7 +411,7 @@ class _FlightBookingState extends State<FlightBooking> {
     final lastNameCtrl = TextEditingController(text: p['lastName']);
     final emailCtrl = TextEditingController(text: p['email']);
     final phoneCtrl = TextEditingController(text: p['phone']);
-    final nationalityCtrl = TextEditingController(text: p['nationality']);
+    String? selectedNationality = p['nationality']?.isNotEmpty == true ? p['nationality'] : null;
     final passportCtrl = TextEditingController(text: p['passportNumber']);
     String? gender = p['gender'];
     DateTime? dob = p['dateOfBirth'];
@@ -466,8 +467,13 @@ class _FlightBookingState extends State<FlightBooking> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             const SizedBox(height: 8),
-                            _validatedField(t, firstNameCtrl,
-                                '${l.firstName} *', firstNameError, setSheet),
+                            _validatedField(t, firstNameCtrl, '${l.firstName} *', firstNameError, setSheet),
+if (showError && (selectedNationality == null || selectedNationality!.isEmpty))
+  Padding(
+    padding: const EdgeInsets.only(left: 4, top: 4),
+    child: Text(l.errorRequired,
+        style: TextStyle(color: Colors.red.shade400, fontSize: 12)),
+  ),
                             const SizedBox(height: 12),
                             _validatedField(t, lastNameCtrl, '${l.lastName} *',
                                 lastNameError, setSheet),
@@ -535,12 +541,22 @@ class _FlightBookingState extends State<FlightBooking> {
                                           fontSize: 12))),
                             const SizedBox(height: 12),
 
-                            _validatedField(
-                                t,
-                                nationalityCtrl,
-                                '${l.nationality} *',
-                                nationalityError,
-                                setSheet),
+                            NationalityField(
+  t: t,
+  value: selectedNationality,
+  onSelected: (country) {
+    setSheet(() {
+      selectedNationality = country.name;
+      nationalityError = null;
+    });
+  },
+),
+if (showError && (selectedNationality == null || selectedNationality!.isEmpty))
+  Padding(
+    padding: const EdgeInsets.only(left: 4, top: 4),
+    child: Text(l.errorRequired,
+        style: TextStyle(color: Colors.red.shade400, fontSize: 12)),
+  ),
                             const SizedBox(height: 16),
 
                             Text(l.travelDocument,
@@ -656,7 +672,7 @@ class _FlightBookingState extends State<FlightBooking> {
                         final lErr = _validateName(lastNameCtrl.text);
                         final eErr = _validateEmail(emailCtrl.text);
                         final pErr = _validatePhone(phoneCtrl.text);
-                        final nErr = _validateName(nationalityCtrl.text);
+                        final nErr = (selectedNationality == null || selectedNationality!.isEmpty) ? 'required' : null;
                         final ppErr = _validatePassport(passportCtrl.text);
 
                         if (fErr != null ||
@@ -678,8 +694,7 @@ class _FlightBookingState extends State<FlightBooking> {
                                 eErr != null ? _resolveError(eErr, l) : null;
                             phoneError =
                                 pErr != null ? _resolveError(pErr, l) : null;
-                            nationalityError =
-                                nErr != null ? _resolveError(nErr, l) : null;
+                            nationalityError = nErr != null ? l.errorRequired : null;
                             passportError =
                                 ppErr != null ? _resolveError(ppErr, l) : null;
                           });
@@ -693,7 +708,7 @@ class _FlightBookingState extends State<FlightBooking> {
                             'lastName': lastNameCtrl.text.trim(),
                             'email': emailCtrl.text.trim(),
                             'phone': phoneCtrl.text.trim(),
-                            'nationality': nationalityCtrl.text.trim(),
+                            'nationality': selectedNationality ?? '',
                             'passportNumber':
                                 passportCtrl.text.trim().toUpperCase(),
                             'gender': gender,
