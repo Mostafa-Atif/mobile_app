@@ -6,7 +6,7 @@ import 'package:mobile_app/screens/shared/confirmation_screen.dart';
 import 'package:mobile_app/screens/shared/success_screen.dart';
 import 'package:mobile_app/screens/home/home_screen.dart';
 import 'package:mobile_app/services/flight_translation_service.dart';
-import 'package:mobile_app/widgets/nationality_selector.dart';
+import 'package:mobile_app/widgets/Nationality_selector.dart';
 import 'package:mobile_app/theme.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../config.dart';
