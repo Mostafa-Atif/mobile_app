@@ -37,6 +37,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   String firstName = '';
   String email = '';
+  bool isAdmin = false;
 
   late final Future<List<Map<String, dynamic>>> _heroDestinationsFuture;
   late final Future<List<Map<String, dynamic>>> _featuredDestinationsFuture;
@@ -95,121 +96,106 @@ class _HomeScreenState extends State<HomeScreen> {
     _heroPageController.dispose();
     super.dispose();
   }
-Widget _buildCashPaymentBanner(BuildContext context, dynamic t, bool isAr) {
-  return Padding(
-    padding: const EdgeInsets.symmetric(horizontal: 16),
-    child: Container(
+
+  // ── Concept D — Dark gradient card ───────────────────────────────────────────
+  // btnGradient (deep navy → steel blue) as surface, white text on top.
+  Widget cashBanner(BuildContext context) {
+    final l = AppLocalizations.of(context)!;
+    final t = Theme.of(context).extension<AppThemeExtension>()!;
+    const white = AppColors.white;
+    final chipBg = Colors.white.withOpacity(0.15);
+
+    return Container(
       decoration: BoxDecoration(
-        color: const Color(0xFF0F6E56),
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: const Color(0xFF9FE1CB), width: 0.5),
+        borderRadius: BorderRadius.circular(12),
+        gradient: LinearGradient(
+          begin: Alignment.centerLeft,
+          end: Alignment.centerRight,
+          colors: t.btnGradient,
+        ),
       ),
-      child: Column(
+      padding: const EdgeInsets.all(20),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Top accent strip
           Container(
-            height: 4,
-            decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                colors: [Color(0xFF085041), Color(0xFF1D9E75), Color(0xFF5DCAA5)],
-              ),
-              borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+            width: 44,
+            height: 44,
+            decoration: BoxDecoration(
+              color: Colors.white.withOpacity(0.15),
+              borderRadius: BorderRadius.circular(8),
             ),
+            child: const Icon(Icons.payments_outlined, size: 22, color: white),
           ),
-          Padding(
-            padding: const EdgeInsets.all(16),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
+          const SizedBox(width: 14),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Icon circle
-                Container(
-                  width: 46,
-                  height: 46,
-                  decoration: BoxDecoration(
-                    color: const Color(0xFF085041),
-                    borderRadius: BorderRadius.circular(23),
-                  ),
-                  child: const Icon(
-                    Icons.account_balance_wallet_outlined,
-                    color: Color(0xFF085041),
-                    size: 22,
-                  ),
+                Text(
+                  l.cashBannerTitle,
+                  style: TextStyle(
+                      fontSize: 15, fontWeight: FontWeight.w500, color: white),
                 ),
-                const SizedBox(width: 14),
-                // Text block
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Cash only — always on delivery', // or your localized key
-                        style: const TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w600,
-                          color: Color(0xFFE1F5EE),
-                        ),
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        'Forget card details. Book your flight, hotel, or car and pay cash when you arrive — secure and hassle-free.',
-                        style: const TextStyle(
-                          fontSize: 12,
-                          color: Color(0xFF9FE1CB),
-                          height: 1.4,
-                        ),
-                      ),
-                      const SizedBox(height: 10),
-                      // Service tags
-                      Wrap(
-                        spacing: 6,
-                        children: [
-                          _cashTag(Icons.flight_outlined, 'Flights'),
-                          _cashTag(Icons.hotel_outlined, 'Hotels'),
-                          _cashTag(Icons.directions_car_outlined, 'Cars'),
-                        ],
-                      ),
-                    ],
-                  ),
+                const SizedBox(height: 4),
+                Text(
+                  l.cashBannerBody,
+                  style: TextStyle(
+                      fontSize: 13,
+                      color: Colors.white.withOpacity(0.75),
+                      height: 1.55),
+                ),
+                const SizedBox(height: 12),
+                Wrap(
+                  spacing: 6,
+                  runSpacing: 6,
+                  children: [
+                    _Chip(Icons.flight, l.flights, chipBg, white),
+                    _Chip(Icons.apartment_outlined, l.hotels, chipBg, white),
+                    _Chip(Icons.directions_car_outlined, l.userDashboardCars,
+                        chipBg, white),
+                  ],
                 ),
               ],
             ),
           ),
         ],
       ),
-    ),
-  );
-}
+    );
+  }
 
-Widget _cashTag(IconData icon, String label) {
-  return Container(
-    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-    decoration: BoxDecoration(
-      color: const Color(0xFF085041),
-      borderRadius: BorderRadius.circular(999),
-    ),
-    child: Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Icon(icon, size: 11, color: const Color(0xFF5DCAA5)),
-        const SizedBox(width: 4),
-        Text(
-          label,
-          style: const TextStyle(
-            fontSize: 11,
-            color: Color(0xFF5DCAA5),
-            fontWeight: FontWeight.w500,
+  Widget _Chip(IconData icon, String label, Color bg, Color fg) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+      decoration: BoxDecoration(
+        color: bg,
+        borderRadius: BorderRadius.circular(999),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(icon, size: 12, color: fg),
+          const SizedBox(width: 4),
+          Text(
+            label,
+            style: TextStyle(
+              fontSize: 11,
+              fontWeight: FontWeight.w500,
+              color: fg,
+            ),
           ),
-        ),
-      ],
-    ),
-  );
-}
+        ],
+      ),
+    );
+  }
+
   Future<void> _loadUser() async {
     final prefs = await SharedPreferences.getInstance();
     if (!mounted) return;
     setState(() {
       firstName = prefs.getString('firstName') ?? '';
       email = prefs.getString('email') ?? '';
+      isAdmin = prefs.getBool('isAdmin') ?? false;
     });
   }
 
@@ -340,6 +326,11 @@ Widget _cashTag(IconData icon, String label) {
             case 'about':
               Navigator.push(context,
                   MaterialPageRoute(builder: (_) => const AboutUsScreen()));
+            case 'bookings':
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (_) => const UserDashboardScreen()));
             case 'settings':
               Navigator.push(context,
                   MaterialPageRoute(builder: (_) => const SettingsScreen()));
@@ -350,6 +341,7 @@ Widget _cashTag(IconData icon, String label) {
         },
         firstName: firstName,
         email: email,
+        isAdmin: isAdmin,
       ),
     );
     Overlay.of(context).insert(_profileMenuEntry!);
@@ -436,7 +428,7 @@ Widget _cashTag(IconData icon, String label) {
     );
   }
 
-  // ── Category buttons (replaces bottom nav bar) ───────────────────────────
+  // ── Category buttons ───────────────────────────
 
   Widget _buildCategoryButtons(
     BuildContext context,
@@ -575,15 +567,6 @@ Widget _cashTag(IconData icon, String label) {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
-                        isAr ? l.appTitle : l.appTitle.toUpperCase(),
-                        style: TextStyle(
-                          color: Colors.white.withOpacity(0.88),
-                          fontSize: 13,
-                          fontWeight: FontWeight.w300,
-                          letterSpacing: 4,
-                        ),
-                      ),
                       CompositedTransformTarget(
                         link: _profileMenuLink,
                         child: GestureDetector(
@@ -609,6 +592,15 @@ Widget _cashTag(IconData icon, String label) {
                               ),
                             ),
                           ),
+                        ),
+                      ),
+                      Text(
+                        isAr ? l.appTitle : l.appTitle.toUpperCase(),
+                        style: TextStyle(
+                          color: Colors.white.withOpacity(0.88),
+                          fontSize: 13,
+                          fontWeight: FontWeight.w300,
+                          letterSpacing: 4,
                         ),
                       ),
                     ],
@@ -663,9 +655,9 @@ Widget _cashTag(IconData icon, String label) {
         children: [
           _buildCategoryButtons(context, t, l),
           const SizedBox(height: 24),
-          _buildUpcomingTrip(context, t, l),
-          const SizedBox(height: 32),
-          _buildCashPaymentBanner(context, t, isAr),
+          // _buildUpcomingTrip(context, t, l),
+          // const SizedBox(height: 32),
+          cashBanner(context),
           const SizedBox(height: 32),
           _buildSpecialOffers(context, t, l),
           const SizedBox(height: 32),
@@ -1375,6 +1367,7 @@ class _ProfileMenuOverlay extends StatefulWidget {
   final ValueChanged<String> onSelected;
   final String firstName;
   final String email;
+  final bool isAdmin;
   final bool isRtl;
 
   const _ProfileMenuOverlay({
@@ -1383,6 +1376,7 @@ class _ProfileMenuOverlay extends StatefulWidget {
     required this.onSelected,
     required this.firstName,
     required this.email,
+    required this.isAdmin,
     required this.isRtl,
   });
 
@@ -1422,6 +1416,7 @@ class _ProfileMenuOverlayState extends State<_ProfileMenuOverlay>
     final t = Theme.of(context).extension<AppThemeExtension>()!;
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final l = AppLocalizations.of(context)!;
+    bool isAdmin = widget.isAdmin;
 
     final displayLetter = widget.firstName.isNotEmpty
         ? widget.firstName.characters.first
@@ -1457,7 +1452,7 @@ class _ProfileMenuOverlayState extends State<_ProfileMenuOverlay>
 
     const menuWidth = 232.0;
     const avatarWidth = 40.0;
-    final offsetX = widget.isRtl ? 0.0 : -(menuWidth - avatarWidth);
+    final offsetX = widget.isRtl ? -(menuWidth - avatarWidth) : 0.0;
     final scaleOrigin = widget.isRtl ? Alignment.topLeft : Alignment.topRight;
 
     return Stack(
@@ -1574,6 +1569,18 @@ class _ProfileMenuOverlayState extends State<_ProfileMenuOverlay>
                             padding: const EdgeInsets.symmetric(vertical: 6),
                             child: Column(
                               children: [
+                                _MenuRow(
+                                  icon: Icons.dashboard_outlined,
+                                  label: isAdmin
+                                      ? l.menuAdminDashboard
+                                      : l.menuDashboard,
+                                  iconBg: iconBg,
+                                  iconColor: iconCol,
+                                  labelColor: labelCol,
+                                  chevronColor: chevronCol,
+                                  isDark: isDark,
+                                  onTap: () => widget.onSelected('dashboard'),
+                                ),
                                 _MenuRow(
                                   icon: Icons.settings_outlined,
                                   label: l.menuSettings,

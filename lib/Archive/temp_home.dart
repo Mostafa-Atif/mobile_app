@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_app/l10n/app_localizations.dart';
+import 'package:mobile_app/screens/chatbot/travel_chat.dart';
 import '../main.dart';
 import '../theme.dart';
 import '../screens/auth/sign_in.dart';
@@ -188,7 +189,13 @@ class TempHome extends StatelessWidget {
                     ),
                   ),
                 ],
-              ),
+              ),              const SizedBox(height: 12),
+
+              _card(context, t,
+  label: 'Travel Assistant',
+  icon: Icons.travel_explore,
+  page: () => TravelChatScreen(),
+),
 
               const SizedBox(height: 36),
 
