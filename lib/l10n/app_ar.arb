@@ -281,6 +281,13 @@
   "mobileNumber": "رقم الهاتف المحمول",
   "travelDocument": "وثيقة السفر",
   "contactDetails": "بيانات التواصل",
+  "nationalityLabel": "الجنسية *",
+  "selectNationality": "اختر الجنسية",
+  "searchCountry": "ابحث عن دولة...",
+  "noCountryFound": "لا توجد دولة",
+  "selectCountryCode": "اختر رمز الدولة",
+  "searchCountryOrCode": "ابحث عن دولة أو رمز...",
+  "noCodeFound": "لا يوجد رمز",
   "savePassenger": "حفظ الراكب {number}",
   "@savePassenger": {
     "placeholders": {

@@ -686,6 +686,27 @@ class AppLocalizationsEn extends AppLocalizations {
   String get contactDetails => 'Contact details';
 
   @override
+  String get nationalityLabel => 'Nationality *';
+
+  @override
+  String get selectNationality => 'Select Nationality';
+
+  @override
+  String get searchCountry => 'Search country...';
+
+  @override
+  String get noCountryFound => 'No country found';
+
+  @override
+  String get selectCountryCode => 'Select Country Code';
+
+  @override
+  String get searchCountryOrCode => 'Search country or code…';
+
+  @override
+  String get noCodeFound => 'No code found';
+
+  @override
   String savePassenger(int number) {
     return 'Save Passenger $number';
   }
@@ -1550,9 +1571,6 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get cashOnlyBody =>
       'We currently don\'t support online payments. Please prepare to pay in cash upon receiving the car.';
-
-  @override
-  String get searchCountry => 'Search country...';
 
   @override
   String get searchCity => 'Search cities...';

@@ -1370,6 +1370,48 @@ abstract class AppLocalizations {
   /// **'Contact details'**
   String get contactDetails;
 
+  /// No description provided for @nationalityLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Nationality *'**
+  String get nationalityLabel;
+
+  /// No description provided for @selectNationality.
+  ///
+  /// In en, this message translates to:
+  /// **'Select Nationality'**
+  String get selectNationality;
+
+  /// No description provided for @searchCountry.
+  ///
+  /// In en, this message translates to:
+  /// **'Search country...'**
+  String get searchCountry;
+
+  /// No description provided for @noCountryFound.
+  ///
+  /// In en, this message translates to:
+  /// **'No country found'**
+  String get noCountryFound;
+
+  /// No description provided for @selectCountryCode.
+  ///
+  /// In en, this message translates to:
+  /// **'Select Country Code'**
+  String get selectCountryCode;
+
+  /// No description provided for @searchCountryOrCode.
+  ///
+  /// In en, this message translates to:
+  /// **'Search country or code…'**
+  String get searchCountryOrCode;
+
+  /// No description provided for @noCodeFound.
+  ///
+  /// In en, this message translates to:
+  /// **'No code found'**
+  String get noCodeFound;
+
   /// No description provided for @savePassenger.
   ///
   /// In en, this message translates to:
@@ -3055,12 +3097,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'We currently don\'t support online payments. Please prepare to pay in cash upon receiving the car.'**
   String get cashOnlyBody;
-
-  /// No description provided for @searchCountry.
-  ///
-  /// In en, this message translates to:
-  /// **'Search country...'**
-  String get searchCountry;
 
   /// No description provided for @searchCity.
   ///

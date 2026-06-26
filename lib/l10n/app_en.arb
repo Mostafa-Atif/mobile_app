@@ -281,6 +281,13 @@
   "mobileNumber": "Mobile number",
   "travelDocument": "Travel document",
   "contactDetails": "Contact details",
+  "nationalityLabel": "Nationality *",
+  "selectNationality": "Select Nationality",
+  "searchCountry": "Search country…",
+  "noCountryFound": "No country found",
+  "selectCountryCode": "Select Country Code",
+  "searchCountryOrCode": "Search country or code…",
+  "noCodeFound": "No code found",
   "savePassenger": "Save Passenger {number}",
   "@savePassenger": {
     "placeholders": {

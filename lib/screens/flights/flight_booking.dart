@@ -548,6 +548,7 @@ class _FlightBookingState extends State<FlightBooking> {
 
                             NationalityField(
                               t: t,
+                              l: l,
                               value: selectedNationality,
                               onSelected: (country) {
                                 setSheet(() {
@@ -615,41 +616,14 @@ class _FlightBookingState extends State<FlightBooking> {
                             Row(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Container(
-                                  height: 56,
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 10),
-                                  decoration: BoxDecoration(
-                                    color: t.field,
-                                    border: Border.all(color: t.fieldBorder),
-                                    borderRadius: BorderRadius.circular(8),
-                                  ),
-                                  child: DropdownButtonHideUnderline(
-                                    child: DropdownButton<String>(
-                                      value: countryCode,
-                                      dropdownColor: t.card,
-                                      items: [
-                                        '+20',
-                                        '+966',
-                                        '+971',
-                                        '+1',
-                                        '+44'
-                                      ]
-                                          .map((c) => DropdownMenuItem(
-                                              value: c,
-                                              child: Text(c,
-                                                  style: TextStyle(
-                                                      color: t.title))))
-                                          .toList(),
-                                      onChanged: (val) =>
-                                          setSheet(() => countryCode = val!),
-                                      icon: Icon(Icons.keyboard_arrow_down,
-                                          size: 20, color: t.label),
-                                      style: TextStyle(
-                                          fontSize: 14, color: t.title),
-                                    ),
-                                  ),
-                                ),
+                                PhoneCodeField(
+                                     t: t,
+                                     l: l,
+                                  dialCode: countryCode,
+                                  onSelected: (item) {
+                                 setSheet(() => countryCode = item.dialCode);
+                                        },
+                                      ),
                                 const SizedBox(width: 10),
                                 Expanded(
                                   child: _validatedField(

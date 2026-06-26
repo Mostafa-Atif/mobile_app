@@ -681,6 +681,27 @@ class AppLocalizationsAr extends AppLocalizations {
   String get contactDetails => 'بيانات التواصل';
 
   @override
+  String get nationalityLabel => 'الجنسية *';
+
+  @override
+  String get selectNationality => 'اختر الجنسية';
+
+  @override
+  String get searchCountry => 'ابحث عن دولة...';
+
+  @override
+  String get noCountryFound => 'لا توجد دولة';
+
+  @override
+  String get selectCountryCode => 'اختر رمز الدولة';
+
+  @override
+  String get searchCountryOrCode => 'ابحث عن دولة أو رمز...';
+
+  @override
+  String get noCodeFound => 'لا يوجد رمز';
+
+  @override
   String savePassenger(int number) {
     return 'حفظ الراكب $number';
   }
@@ -1541,9 +1562,6 @@ class AppLocalizationsAr extends AppLocalizations {
   @override
   String get cashOnlyBody =>
       'لا ندعم الدفع الإلكتروني حاليًا. يُرجى تجهيز المبلغ نقدًا عند استلام السيارة.';
-
-  @override
-  String get searchCountry => 'ابحث عن دولة...';
 
   @override
   String get searchCity => 'ابحث عن مدينة...';
