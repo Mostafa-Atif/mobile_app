@@ -671,8 +671,8 @@ abstract class AppLocalizations {
   /// No description provided for @privateDriverExtra.
   ///
   /// In en, this message translates to:
-  /// **'Extra ﷼100/day'**
-  String get privateDriverExtra;
+  /// **'Extra {amount}/day'**
+  String privateDriverExtra(String amount);
 
   /// No description provided for @carRentalDays.
   ///
@@ -1037,8 +1037,8 @@ abstract class AppLocalizations {
   /// No description provided for @totalNightsRooms.
   ///
   /// In en, this message translates to:
-  /// **'SAR {total} total ({nights} nights, {rooms} room(s))'**
-  String totalNightsRooms(int total, int nights, int rooms);
+  /// **'{total} ({nights} nights, {rooms} room(s))'**
+  String totalNightsRooms(String total, int nights, int rooms);
 
   /// No description provided for @guestDetails.
   ///
@@ -3505,6 +3505,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'First Class'**
   String get firstClass;
+
+  /// No description provided for @settingsCurrencyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Currency'**
+  String get settingsCurrencyTitle;
+
+  /// No description provided for @settingsCurrencySubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose your preferred currency'**
+  String get settingsCurrencySubtitle;
+
+  /// No description provided for @promoAlreadyUsed.
+  ///
+  /// In en, this message translates to:
+  /// **'Promo code already used'**
+  String get promoAlreadyUsed;
 }
 
 class _AppLocalizationsDelegate

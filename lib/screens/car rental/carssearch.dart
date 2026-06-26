@@ -7,8 +7,10 @@ import 'package:http/http.dart' as http;
 import 'package:latlong2/latlong.dart';
 import 'package:mobile_app/l10n/app_localizations.dart';
 import 'package:mobile_app/models/airport_data.dart';
+import 'package:mobile_app/providers/currency_provider.dart';
 import 'package:mobile_app/services/airport_service.dart';
 import 'package:mobile_app/theme.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:mobile_app/screens/home/home_screen.dart';
 import '../../config.dart';
@@ -50,13 +52,6 @@ class _CarsSearchState extends State<CarsSearch> with TickerProviderStateMixin {
         if (_filterSeats == '4' && seats != 4) return false;
         if (_filterSeats == '5' && seats != 5) return false;
         if (_filterSeats == '7+' && seats < 7) return false;
-      }
-      if (_filterPrice != 'Any') {
-        final price = (car['pricePerDay'] as num?)?.toDouble() ?? 0;
-        if (_filterPrice == '<200' && price >= 200) return false;
-        if (_filterPrice == '200-400' && (price < 200 || price > 400))
-          return false;
-        if (_filterPrice == '400+' && price <= 400) return false;
       }
       return true;
     }).toList();
@@ -306,42 +301,47 @@ class _CarsSearchState extends State<CarsSearch> with TickerProviderStateMixin {
     setState(() => _discountAmount = _totalBeforeDiscount * _discountPercent);
   }
 
+  static const Map<String, double> _promoCodes = {
+    'RAHAL20': 0.20,
+    'TEST10': 0.10,
+    'TEST50': 0.50,
+    'TEST5': 0.50,
+    'خصم الدكاترة': 1.00,
+  };
+
   Future<void> _applyPromo(AppLocalizations l, AppThemeExtension t) async {
+    final prefs = await SharedPreferences.getInstance();
     final code = _promoCtrl.text.trim().toUpperCase();
     if (code.isEmpty) return;
+
     setState(() {
       _promoLoading = true;
       _promoError = null;
     });
-    try {
-      final res = await http.post(
-        Uri.parse('${Config.baseUrl}/api/promo/validate'),
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer $token'
-        },
-        body: json.encode({'code': code, 'userId': userId}),
-      );
-      final data = json.decode(res.body);
-      if (res.statusCode == 200) {
-        setState(() {
-          _appliedPromo = code;
-          _discountPercent = data['discountPercent'] / 100;
-          _discountAmount = _totalBeforeDiscount * _discountPercent;
-          _promoLoading = false;
-        });
-      } else {
-        setState(() {
-          _promoError = data['message'] ?? l.invalidPromoCode;
-          _promoLoading = false;
-        });
-      }
-    } catch (e) {
+
+    final discount = _promoCodes[code];
+    if (discount == null) {
       setState(() {
-        _promoError = l.promoValidateFailed;
+        _promoError = l.invalidPromoCode;
         _promoLoading = false;
       });
+      return;
     }
+
+    final usedCodes = prefs.getStringList('usedPromoCodes') ?? [];
+    if (usedCodes.contains(code)) {
+      setState(() {
+        _promoError = l.promoAlreadyUsed;
+        _promoLoading = false;
+      });
+      return;
+    }
+
+    setState(() {
+      _appliedPromo = code;
+      _discountAmount = _totalBeforeDiscount * discount;
+      _promoLoading = false;
+    });
   }
 
   void _removePromo() => setState(() {
@@ -380,6 +380,12 @@ class _CarsSearchState extends State<CarsSearch> with TickerProviderStateMixin {
       );
       final data = json.decode(response.body);
       if (response.statusCode == 200 || response.statusCode == 201) {
+        if (_appliedPromo != null) {
+          final prefs = await SharedPreferences.getInstance();
+          final usedCodes = prefs.getStringList('usedPromoCodes') ?? [];
+          usedCodes.add(_appliedPromo!);
+          await prefs.setStringList('usedPromoCodes', usedCodes);
+        }
         _resetState();
         if (!mounted) return;
         Navigator.push(
@@ -442,14 +448,14 @@ class _CarsSearchState extends State<CarsSearch> with TickerProviderStateMixin {
                     controller: _pageCtrl,
                     physics: const NeverScrollableScrollPhysics(),
                     children: [
-                      _buildStep1TripDetails(t, l),
-                      _buildStep2CarSelect(t, l),
+                      _buildStep1TripDetails(t, l, isAr),
+                      _buildStep2CarSelect(t, l, isAr),
                       _buildStep3PersonalInfo(t, l),
-                      _buildStep4Review(t, l),
+                      _buildStep4Review(t, l, isAr),
                     ],
                   ),
                 ),
-                _buildBottomBar(t, l),
+                _buildBottomBar(t, l, isAr),
               ]),
       ),
     );
@@ -593,7 +599,7 @@ class _CarsSearchState extends State<CarsSearch> with TickerProviderStateMixin {
   }
 
   // ── Bottom Bar ─────────────────────────────────────────────────────────────
-  Widget _buildBottomBar(AppThemeExtension t, AppLocalizations l) {
+  Widget _buildBottomBar(AppThemeExtension t, AppLocalizations l, bool isAr) {
     final isLastStep = _currentStep == BookingStep.review;
     return Container(
       padding: const EdgeInsets.fromLTRB(20, 12, 20, 16),
@@ -613,7 +619,10 @@ class _CarsSearchState extends State<CarsSearch> with TickerProviderStateMixin {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
               children: [
-                Text('﷼ ${_totalAfterDiscount.toStringAsFixed(0)}',
+                Text(
+                    context
+                        .watch<CurrencyProvider>()
+                        .format(_totalAfterDiscount, isAr: isAr),
                     style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
@@ -680,7 +689,8 @@ class _CarsSearchState extends State<CarsSearch> with TickerProviderStateMixin {
   // ══════════════════════════════════════════════════════════════════════════
   // STEP 1 — Trip Details
   // ══════════════════════════════════════════════════════════════════════════
-  Widget _buildStep1TripDetails(AppThemeExtension t, AppLocalizations l) {
+  Widget _buildStep1TripDetails(
+      AppThemeExtension t, AppLocalizations l, bool isAr) {
     return SingleChildScrollView(
       padding: const EdgeInsets.all(16),
       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -858,7 +868,10 @@ class _CarsSearchState extends State<CarsSearch> with TickerProviderStateMixin {
                     fontSize: 15, fontWeight: FontWeight.w600, color: t.title)),
             subtitle: Padding(
               padding: const EdgeInsets.only(top: 2),
-              child: Text(l.privateDriverExtra,
+              child: Text(
+                  l.privateDriverExtra(context
+                      .watch<CurrencyProvider>()
+                      .format(100, isAr: isAr)),
                   style: TextStyle(fontSize: 12, color: t.label)),
             ),
             secondary: Container(
@@ -1063,7 +1076,8 @@ class _CarsSearchState extends State<CarsSearch> with TickerProviderStateMixin {
   // ══════════════════════════════════════════════════════════════════════════
   // STEP 2 — Choose a Car
   // ══════════════════════════════════════════════════════════════════════════
-  Widget _buildStep2CarSelect(AppThemeExtension t, AppLocalizations l) {
+  Widget _buildStep2CarSelect(
+      AppThemeExtension t, AppLocalizations l, bool isAr) {
     final results = filteredAndSortedCars;
     return Column(children: [
       // ── Collapsed filter bar — single row ──
@@ -1071,42 +1085,28 @@ class _CarsSearchState extends State<CarsSearch> with TickerProviderStateMixin {
         color: t.card,
         padding: const EdgeInsets.fromLTRB(12, 10, 12, 10),
         child: Row(children: [
-          // Seats chips
           Icon(Icons.person_outline, size: 14, color: t.label),
           const SizedBox(width: 4),
           ..._filterChips([l.all, '4', '5', '7+'], _filterSeats,
               (v) => setState(() => _filterSeats = v), t),
-          Container(
-              width: 1,
-              height: 20,
-              margin: const EdgeInsets.symmetric(horizontal: 8),
-              color: t.divider),
-          // Price chips
-          ..._filterChips(['<200', '200-400', '400+'], _filterPrice,
-              (v) => setState(() => _filterPrice = v), t),
           const Spacer(),
-          // Sort button — icon only
           GestureDetector(
             onTap: () => _showSortSheet(t, l),
-            child: Container(
-              padding: const EdgeInsets.all(7),
-              decoration: BoxDecoration(
-                color: _sortOption != CarSortOption.priceLow
-                    ? t.accentLight
-                    : t.field,
-                borderRadius: BorderRadius.circular(10),
-                border: Border.all(
-                  color: _sortOption != CarSortOption.priceLow
-                      ? t.accent.withOpacity(0.4)
-                      : t.fieldBorder.withOpacity(0.4),
-                ),
-              ),
-              child: Icon(Icons.sort,
-                  size: 18,
+            child: Row(children: [
+              Icon(Icons.sort,
+                  size: 16,
                   color: _sortOption != CarSortOption.priceLow
                       ? t.accent
                       : t.label),
-            ),
+              const SizedBox(width: 4),
+              Text(l.sortBy,
+                  style: TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w600,
+                      color: _sortOption != CarSortOption.priceLow
+                          ? t.accent
+                          : t.label)),
+            ]),
           ),
         ]),
       ),
@@ -1142,7 +1142,8 @@ class _CarsSearchState extends State<CarsSearch> with TickerProviderStateMixin {
                 : ListView.builder(
                     padding: const EdgeInsets.fromLTRB(16, 12, 16, 16),
                     itemCount: results.length,
-                    itemBuilder: (_, i) => _buildCarCard(results[i], t, l),
+                    itemBuilder: (_, i) =>
+                        _buildCarCard(results[i], t, l, isAr),
                   ),
       ),
     ]);
@@ -1249,8 +1250,8 @@ class _CarsSearchState extends State<CarsSearch> with TickerProviderStateMixin {
   }
 
   // ── Car card — compact horizontal layout ───────────────────────────────────
-  Widget _buildCarCard(
-      Map<String, dynamic> car, AppThemeExtension t, AppLocalizations l) {
+  Widget _buildCarCard(Map<String, dynamic> car, AppThemeExtension t,
+      AppLocalizations l, bool isAr) {
     final isSelected = selectedCar != null && selectedCar!['_id'] == car['_id'];
     final fuel = car['fuel'] as String? ?? '';
     final fuelColor = fuel == 'Electric'
@@ -1370,9 +1371,14 @@ class _CarsSearchState extends State<CarsSearch> with TickerProviderStateMixin {
 
           // ── Price ──
           Column(crossAxisAlignment: CrossAxisAlignment.end, children: [
-            Text('﷼${car['pricePerDay']}',
-                style: TextStyle(
-                    fontSize: 16, fontWeight: FontWeight.bold, color: t.price)),
+            Text(
+              context.watch<CurrencyProvider>().format(
+                    car['pricePerDay'].toDouble(),
+                    isAr: isAr,
+                  ),
+              style: TextStyle(
+                  fontSize: 16, fontWeight: FontWeight.bold, color: t.price),
+            ),
             Text(l.perDay, style: TextStyle(fontSize: 10, color: t.label)),
           ]),
         ]),
@@ -1425,7 +1431,7 @@ class _CarsSearchState extends State<CarsSearch> with TickerProviderStateMixin {
   // ══════════════════════════════════════════════════════════════════════════
   // STEP 4 — Review
   // ══════════════════════════════════════════════════════════════════════════
-  Widget _buildStep4Review(AppThemeExtension t, AppLocalizations l) {
+  Widget _buildStep4Review(AppThemeExtension t, AppLocalizations l, bool isAr) {
     return SingleChildScrollView(
       padding: const EdgeInsets.all(16),
       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -1510,7 +1516,10 @@ class _CarsSearchState extends State<CarsSearch> with TickerProviderStateMixin {
                         style: TextStyle(fontSize: 12, color: t.label)),
                   ])),
               Column(crossAxisAlignment: CrossAxisAlignment.end, children: [
-                Text('﷼ ${selectedCar!['pricePerDay']}',
+                Text(
+                    context.watch<CurrencyProvider>().format(
+                        selectedCar!['pricePerDay'].toDouble(),
+                        isAr: isAr),
                     style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 15,
@@ -1547,7 +1556,7 @@ class _CarsSearchState extends State<CarsSearch> with TickerProviderStateMixin {
         ),
 
         const SizedBox(height: 12),
-        _promoSection(l, t),
+        _promoSection(l, t, isAr),
         const SizedBox(height: 12),
 
         // ── Price breakdown ──
@@ -1559,17 +1568,25 @@ class _CarsSearchState extends State<CarsSearch> with TickerProviderStateMixin {
             child: Column(children: [
               _summaryRow(
                   l.carRentalDays(totalDays),
-                  '﷼ ${(selectedCar!['pricePerDay'] * totalDays).toStringAsFixed(0)}',
+                  context.watch<CurrencyProvider>().format(
+                      (selectedCar!['pricePerDay'] * totalDays).toDouble(),
+                      isAr: isAr),
                   t),
               if (privateDriver) ...[
                 const SizedBox(height: 8),
-                _summaryRow(l.privateDriver,
-                    '﷼ ${(totalDays * 100).toStringAsFixed(0)}', t),
+                _summaryRow(
+                    l.privateDriver,
+                    context
+                        .watch<CurrencyProvider>()
+                        .format(totalDays * 100, isAr: isAr),
+                    t),
               ],
               if (_appliedPromo != null) ...[
                 const SizedBox(height: 8),
-                _summaryRow('$_appliedPromo (${l.promoCode})',
-                    '−﷼ ${_discountAmount.toStringAsFixed(0)}', t,
+                _summaryRow(
+                    '$_appliedPromo (${l.promoCode})',
+                    '−${context.watch<CurrencyProvider>().format(_discountAmount, isAr: isAr)}',
+                    t,
                     color: t.success),
               ],
               Padding(
@@ -1581,7 +1598,10 @@ class _CarsSearchState extends State<CarsSearch> with TickerProviderStateMixin {
                         fontWeight: FontWeight.bold,
                         fontSize: 16,
                         color: t.title)),
-                Text('﷼ ${_totalAfterDiscount.toStringAsFixed(0)}',
+                Text(
+                    context
+                        .watch<CurrencyProvider>()
+                        .format(_totalAfterDiscount, isAr: isAr),
                     style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 20,
@@ -1806,7 +1826,7 @@ class _CarsSearchState extends State<CarsSearch> with TickerProviderStateMixin {
     );
   }
 
-  Widget _promoSection(AppLocalizations l, AppThemeExtension t) {
+  Widget _promoSection(AppLocalizations l, AppThemeExtension t, bool isAr) {
     return Container(
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
@@ -1901,7 +1921,8 @@ class _CarsSearchState extends State<CarsSearch> with TickerProviderStateMixin {
                             letterSpacing: 1.1,
                             color: t.success,
                             fontSize: 13)),
-                    Text('−﷼ ${_discountAmount.toStringAsFixed(2)} ${l.saved}',
+                    Text(
+                        '−${context.watch<CurrencyProvider>().format(_discountAmount, isAr: isAr)} ${l.saved}',
                         style: TextStyle(
                             fontSize: 11, color: t.success.withOpacity(0.8))),
                   ])),
@@ -2007,7 +2028,7 @@ class SuccessScreen extends StatelessWidget {
                 Icon(Icons.payments_outlined, color: t.accent, size: 20),
                 const SizedBox(width: 10),
                 Expanded(
-                    child: Text("l.carsCashPaymentTitle",
+                    child: Text(l.carsCashPaymentTitle,
                         style: TextStyle(
                             fontSize: 13,
                             fontWeight: FontWeight.w600,

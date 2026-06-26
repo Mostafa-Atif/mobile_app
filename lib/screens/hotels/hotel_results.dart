@@ -3,8 +3,10 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_app/data/hotels_repository.dart';
 import 'package:mobile_app/l10n/app_localizations.dart';
+import 'package:mobile_app/providers/currency_provider.dart';
 import 'package:mobile_app/screens/hotels/hotel_details.dart';
 import 'package:mobile_app/theme.dart';
+import 'package:provider/provider.dart';
 
 class HotelResults extends StatefulWidget {
   final String destination;
@@ -353,6 +355,7 @@ class _HotelResultsState extends State<HotelResults> {
   @override
   Widget build(BuildContext context) {
     final l = AppLocalizations.of(context)!;
+    final bool isAr = Localizations.localeOf(context).languageCode == 'ar';
 
     if (isLoading) {
       return Scaffold(
@@ -505,7 +508,7 @@ class _HotelResultsState extends State<HotelResults> {
                             padding: EdgeInsets.fromLTRB(16, 0, 16, 20),
                             itemCount: filteredHotels.length,
                             itemBuilder: (context, index) =>
-                                _buildHotelCard(filteredHotels[index], l),
+                                _buildHotelCard(filteredHotels[index], l, isAr),
                           ),
                   ),
                 ],
@@ -553,11 +556,11 @@ class _HotelResultsState extends State<HotelResults> {
     );
   }
 
-  Widget _buildHotelCard(Map<String, dynamic> hotel, AppLocalizations l) {
+  Widget _buildHotelCard(Map<String, dynamic> hotel, AppLocalizations l, bool isAr) {
     final title = hotel["title"];
     final subTitle = hotel["subTitle"];
     final rating = hotel["rating"];
-    final price = hotel["price"];
+    final price = double.tryParse(hotel['price'].toString()) ?? 0.0;
     final imgUrl = hotel["imgUrl"];
 
     return GestureDetector(
@@ -689,7 +692,7 @@ class _HotelResultsState extends State<HotelResults> {
                   ),
                   SizedBox(height: 12),
                   Text(
-                    'SAR $price',
+                    context.watch<CurrencyProvider>().format(price, isAr: isAr),
                     style: TextStyle(
                       fontSize: 22,
                       fontWeight: FontWeight.w900,

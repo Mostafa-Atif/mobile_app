@@ -194,6 +194,16 @@ class _FlightBookingState extends State<FlightBooking> {
 
   // ── Promo code logic ───────────────────────────────────────────────────────
 
+  static const Map<String, double> _promoCodes = {
+    'RAHAL20': 0.20,
+    'TEST10': 0.10,
+    'TEST2': 0.10,
+    'TEST3': 0.10,
+    '2': 0.10,
+    'TEST50': 0.50,
+    'خصم الدكاترة': 1.00,
+  };
+
   Future<void> _applyPromo(AppLocalizations l, AppThemeExtension t) async {
     final code = _promoCtrl.text.trim().toUpperCase();
     if (code.isEmpty) return;
@@ -203,40 +213,29 @@ class _FlightBookingState extends State<FlightBooking> {
       _promoError = null;
     });
 
-    try {
-      final token = prefs.getString('token') ?? '';
-      final userId = prefs.getString('userId') ?? '';
-
-      final res = await http.post(
-        Uri.parse('${Config.baseUrl}/api/promo/validate'),
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer $token',
-        },
-        body: json.encode({'code': code, 'userId': userId}),
-      );
-
-      final data = json.decode(res.body);
-
-      if (res.statusCode == 200) {
-        setState(() {
-          _appliedPromo = code;
-          _discountAmount =
-              (totalPrice * (data['discountPercent'] / 100)).toDouble();
-          _promoLoading = false;
-        });
-      } else {
-        setState(() {
-          _promoError = data['message'] ?? l.invalidPromoCode;
-          _promoLoading = false;
-        });
-      }
-    } catch (e) {
+    final discount = _promoCodes[code];
+    if (discount == null) {
       setState(() {
-        _promoError = l.promoValidateFailed;
+        _promoError = l.invalidPromoCode;
         _promoLoading = false;
       });
+      return;
     }
+
+    final usedCodes = prefs.getStringList('usedPromoCodes') ?? [];
+    if (usedCodes.contains(code)) {
+      setState(() {
+        _promoError = l.promoAlreadyUsed;
+        _promoLoading = false;
+      });
+      return;
+    }
+
+    setState(() {
+      _appliedPromo = code;
+      _discountAmount = totalPrice.toDouble() * discount;
+      _promoLoading = false;
+    });
   }
 
   void _removePromo() {
@@ -411,7 +410,8 @@ class _FlightBookingState extends State<FlightBooking> {
     final lastNameCtrl = TextEditingController(text: p['lastName']);
     final emailCtrl = TextEditingController(text: p['email']);
     final phoneCtrl = TextEditingController(text: p['phone']);
-    String? selectedNationality = p['nationality']?.isNotEmpty == true ? p['nationality'] : null;
+    String? selectedNationality =
+        p['nationality']?.isNotEmpty == true ? p['nationality'] : null;
     final passportCtrl = TextEditingController(text: p['passportNumber']);
     String? gender = p['gender'];
     DateTime? dob = p['dateOfBirth'];
@@ -467,13 +467,18 @@ class _FlightBookingState extends State<FlightBooking> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             const SizedBox(height: 8),
-                            _validatedField(t, firstNameCtrl, '${l.firstName} *', firstNameError, setSheet),
-if (showError && (selectedNationality == null || selectedNationality!.isEmpty))
-  Padding(
-    padding: const EdgeInsets.only(left: 4, top: 4),
-    child: Text(l.errorRequired,
-        style: TextStyle(color: Colors.red.shade400, fontSize: 12)),
-  ),
+                            _validatedField(t, firstNameCtrl,
+                                '${l.firstName} *', firstNameError, setSheet),
+                            if (showError &&
+                                (selectedNationality == null ||
+                                    selectedNationality!.isEmpty))
+                              Padding(
+                                padding: const EdgeInsets.only(left: 4, top: 4),
+                                child: Text(l.errorRequired,
+                                    style: TextStyle(
+                                        color: Colors.red.shade400,
+                                        fontSize: 12)),
+                              ),
                             const SizedBox(height: 12),
                             _validatedField(t, lastNameCtrl, '${l.lastName} *',
                                 lastNameError, setSheet),
@@ -542,21 +547,25 @@ if (showError && (selectedNationality == null || selectedNationality!.isEmpty))
                             const SizedBox(height: 12),
 
                             NationalityField(
-  t: t,
-  value: selectedNationality,
-  onSelected: (country) {
-    setSheet(() {
-      selectedNationality = country.name;
-      nationalityError = null;
-    });
-  },
-),
-if (showError && (selectedNationality == null || selectedNationality!.isEmpty))
-  Padding(
-    padding: const EdgeInsets.only(left: 4, top: 4),
-    child: Text(l.errorRequired,
-        style: TextStyle(color: Colors.red.shade400, fontSize: 12)),
-  ),
+                              t: t,
+                              value: selectedNationality,
+                              onSelected: (country) {
+                                setSheet(() {
+                                  selectedNationality = country.name;
+                                  nationalityError = null;
+                                });
+                              },
+                            ),
+                            if (showError &&
+                                (selectedNationality == null ||
+                                    selectedNationality!.isEmpty))
+                              Padding(
+                                padding: const EdgeInsets.only(left: 4, top: 4),
+                                child: Text(l.errorRequired,
+                                    style: TextStyle(
+                                        color: Colors.red.shade400,
+                                        fontSize: 12)),
+                              ),
                             const SizedBox(height: 16),
 
                             Text(l.travelDocument,
@@ -672,7 +681,10 @@ if (showError && (selectedNationality == null || selectedNationality!.isEmpty))
                         final lErr = _validateName(lastNameCtrl.text);
                         final eErr = _validateEmail(emailCtrl.text);
                         final pErr = _validatePhone(phoneCtrl.text);
-                        final nErr = (selectedNationality == null || selectedNationality!.isEmpty) ? 'required' : null;
+                        final nErr = (selectedNationality == null ||
+                                selectedNationality!.isEmpty)
+                            ? 'required'
+                            : null;
                         final ppErr = _validatePassport(passportCtrl.text);
 
                         if (fErr != null ||
@@ -694,7 +706,8 @@ if (showError && (selectedNationality == null || selectedNationality!.isEmpty))
                                 eErr != null ? _resolveError(eErr, l) : null;
                             phoneError =
                                 pErr != null ? _resolveError(pErr, l) : null;
-                            nationalityError = nErr != null ? l.errorRequired : null;
+                            nationalityError =
+                                nErr != null ? l.errorRequired : null;
                             passportError =
                                 ppErr != null ? _resolveError(ppErr, l) : null;
                           });
@@ -752,13 +765,6 @@ if (showError && (selectedNationality == null || selectedNationality!.isEmpty))
       return;
     }
 
-    // final paymentValid = _paymentKey.currentState?.validate() ?? false;
-    // if (!paymentValid) {
-    //   ScaffoldMessenger.of(context).showSnackBar(
-    //       SnackBar(content: Text(l.paymentErrorCardNumberRequired)));
-    //   return;
-    // }
-
     setState(() => isSubmitting = true);
 
     try {
@@ -795,6 +801,12 @@ if (showError && (selectedNationality == null || selectedNationality!.isEmpty))
           results.every((r) => r.statusCode == 200 || r.statusCode == 201);
 
       if (allSuccess) {
+        if (_appliedPromo != null) {
+          final prefs = await SharedPreferences.getInstance();
+          final usedCodes = prefs.getStringList('usedPromoCodes') ?? [];
+          usedCodes.add(_appliedPromo!);
+          await prefs.setStringList('usedPromoCodes', usedCodes);
+        }
         if (!mounted) return;
         Navigator.push(
           context,

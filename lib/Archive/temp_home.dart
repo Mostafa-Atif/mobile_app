@@ -7,9 +7,9 @@ import '../screens/auth/sign_up.dart';
 import '../screens/car rental/carssearch.dart';
 import '../screens/flights/flight_search.dart';
 import '../screens/hotels/hotel_search.dart';
-import '../screens/home/admin_dashboard_screen.dart';
+import '../screens/dashboards/admin_dashboard_screen.dart';
 import '../screens/home/home_screen.dart';
-import '../screens/home/user_dashboard_screen.dart';
+import '../screens/dashboards/user_dashboard_screen.dart';
 import '../screens/onboarding/onboarding_screen_1.dart';
 import 'package:provider/provider.dart';
 

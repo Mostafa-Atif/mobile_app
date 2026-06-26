@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_app/l10n/app_localizations.dart';
 import 'package:mobile_app/main.dart';
+import 'package:mobile_app/providers/currency_provider.dart';
 import 'package:mobile_app/theme.dart';
 import 'package:provider/provider.dart';
 
@@ -110,6 +111,40 @@ class SettingsScreen extends StatelessWidget {
                       ),
                     ),
                   ],
+                ),
+              ),
+              const SizedBox(height: 18),
+              _SectionCard(
+                title: l.settingsCurrencyTitle,
+                subtitle: l.settingsCurrencySubtitle,
+                child: DropdownButtonFormField<String>(
+                  value: context.watch<CurrencyProvider>().currency,
+                  decoration: InputDecoration(
+                    contentPadding: const EdgeInsets.symmetric(
+                        horizontal: 16, vertical: 14),
+                    filled: true,
+                    fillColor: t.accentLight,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(14),
+                      borderSide:
+                          BorderSide(color: t.cardBorder.withOpacity(0.45)),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(14),
+                      borderSide:
+                          BorderSide(color: t.cardBorder.withOpacity(0.45)),
+                    ),
+                  ),
+                  items: CurrencyProvider.supportedCurrencies.map((code) {
+                    final label = isAr
+                        ? '${CurrencyProvider.arabicNames[code]!} ($code)'
+                        : '${CurrencyProvider.englishNames[code]!} ($code)';
+                    return DropdownMenuItem(value: code, child: Text(label));
+                  }).toList(),
+                  onChanged: (value) {
+                    if (value != null)
+                      context.read<CurrencyProvider>().setCurrency(value);
+                  },
                 ),
               ),
             ],

@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:mobile_app/config.dart';
 import 'package:mobile_app/l10n/app_localizations.dart';
+import 'package:mobile_app/providers/currency_provider.dart';
 import 'package:mobile_app/theme.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 enum AdminSection { cars, hotels, flights }
@@ -65,12 +67,14 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
           throw Exception('Failed to load admin dashboard');
         }
       }
-
+      final bool isAr = Localizations.localeOf(context).languageCode == 'ar';
       final cars = (json.decode(responses[0].body) as List<dynamic>)
           .map(
             (item) => _AdminBooking.fromCar(
               item as Map<String, dynamic>,
               AppLocalizations.of(context)!,
+              isAr,
+              context.read<CurrencyProvider>()
             ),
           )
           .toList();
@@ -890,6 +894,8 @@ class _AdminBooking {
   factory _AdminBooking.fromCar(
     Map<String, dynamic> item,
     AppLocalizations l,
+    bool isAr,
+    CurrencyProvider currency,
   ) {
     final customerName =
         '${item['firstName'] ?? ''} ${item['lastName'] ?? ''}'.trim();
@@ -915,7 +921,7 @@ class _AdminBooking {
           l.userDashboardDropOff,
           _formatDate(item['dropoffDateTime']),
         ),
-        _AdminBookingDetail(l.total, '\$${item['totalPrice'] ?? '-'}'),
+        _AdminBookingDetail(l.total, currency.format((item['totalPrice'] ?? 0).toDouble(), isAr: isAr)),
       ],
     );
   }

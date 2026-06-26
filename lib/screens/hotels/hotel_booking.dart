@@ -6,9 +6,11 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
 import 'package:mobile_app/l10n/app_localizations.dart';
+import 'package:mobile_app/providers/currency_provider.dart';
 import 'package:mobile_app/screens/shared/success_screen.dart';
 import 'package:mobile_app/screens/home/home_screen.dart';
 import 'package:mobile_app/theme.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../config.dart';
@@ -20,7 +22,7 @@ class HotelBooking extends StatefulWidget {
   final int numRooms;
   final int numAdults;
   final int numChildren;
-  final int pricePerNight;
+  final double pricePerNight;
   final int nights;
 
   const HotelBooking({
@@ -66,10 +68,19 @@ class _HotelBookingState extends State<HotelBooking> {
   }
 
   int get numPeople => widget.numAdults + widget.numChildren;
-  int get totalPrice => widget.pricePerNight * widget.nights * widget.numRooms;
+  double get totalPrice =>
+      widget.pricePerNight * widget.nights * widget.numRooms;
   double get discountedTotal => totalPrice - _discountAmount;
 
   // ── Promo code logic ───────────────────────────────────────────────────────
+
+  static const Map<String, double> _promoCodes = {
+    'RAHAL20': 0.20,
+    'TEST10': 0.10,
+    'TEST0': 0.10,
+    'TEST50': 0.50,
+    'خصم الدكاترة': 1.00,
+  };
 
   Future<void> _applyPromo(AppLocalizations l, AppThemeExtension t) async {
     final code = _promoCtrl.text.trim().toUpperCase();
@@ -80,41 +91,29 @@ class _HotelBookingState extends State<HotelBooking> {
       _promoError = null;
     });
 
-    try {
-      final token = prefs.getString('token') ?? '';
-      final userId = prefs.getString('userId') ?? '';
-
-      final res = await http.post(
-        Uri.parse('${Config.baseUrl}/api/promo/validate'),
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer $token',
-        },
-        body: json.encode({'code': code, 'userId': userId}),
-      );
-
-      final data = json.decode(res.body);
-
-      if (res.statusCode == 200) {
-        setState(() {
-          _appliedPromo = code;
-          _discountAmount =
-              (totalPrice.toDouble() * (data['discountPercent'] / 100))
-                  .toDouble();
-          _promoLoading = false;
-        });
-      } else {
-        setState(() {
-          _promoError = data['message'] ?? l.invalidPromoCode;
-          _promoLoading = false;
-        });
-      }
-    } catch (e) {
+    final discount = _promoCodes[code];
+    if (discount == null) {
       setState(() {
-        _promoError = l.promoValidateFailed;
+        _promoError = l.invalidPromoCode;
         _promoLoading = false;
       });
+      return;
     }
+
+    final usedCodes = prefs.getStringList('usedPromoCodes') ?? [];
+    if (usedCodes.contains(code)) {
+      setState(() {
+        _promoError = l.promoAlreadyUsed;
+        _promoLoading = false;
+      });
+      return;
+    }
+
+    setState(() {
+      _appliedPromo = code;
+      _discountAmount = totalPrice * discount;
+      _promoLoading = false;
+    });
   }
 
   void _removePromo() {
@@ -128,7 +127,7 @@ class _HotelBookingState extends State<HotelBooking> {
 
   // ── Promo section widget ───────────────────────────────────────────────────
 
-  Widget _promoSection(AppLocalizations l, AppThemeExtension t) {
+  Widget _promoSection(AppLocalizations l, AppThemeExtension t, bool isAr) {
     return Container(
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
@@ -226,7 +225,7 @@ class _HotelBookingState extends State<HotelBooking> {
                                   fontWeight: FontWeight.w700,
                                   letterSpacing: 1.1,
                                   color: Colors.green)),
-                          Text('−SAR ${_discountAmount.toStringAsFixed(2)}',
+                          Text('−${context.watch<CurrencyProvider>().format(_discountAmount, isAr: isAr)}',
                               style: TextStyle(
                                   fontSize: 12, color: Colors.green.shade700)),
                         ]),
@@ -246,7 +245,7 @@ class _HotelBookingState extends State<HotelBooking> {
 
   // ── Price breakdown widget (shown when promo is active) ────────────────────
 
-  Widget _priceBreakdown(AppLocalizations l, AppThemeExtension t) {
+  Widget _priceBreakdown(AppLocalizations l, AppThemeExtension t, bool isAr) {
     return Container(
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
@@ -257,14 +256,14 @@ class _HotelBookingState extends State<HotelBooking> {
       child: Column(children: [
         Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
           Text(l.subtotal, style: TextStyle(color: t.label, fontSize: 13)),
-          Text('SAR $totalPrice',
+          Text(context.watch<CurrencyProvider>().format(totalPrice, isAr: isAr),
               style: TextStyle(color: t.title, fontSize: 13)),
         ]),
         const SizedBox(height: 6),
         Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
           Text(l.discountWithCode(_appliedPromo!),
               style: const TextStyle(color: Colors.green, fontSize: 13)),
-          Text('−SAR ${_discountAmount.toStringAsFixed(2)}',
+          Text('−${context.watch<CurrencyProvider>().format(_discountAmount, isAr: isAr)}',
               style: const TextStyle(color: Colors.green, fontSize: 13)),
         ]),
         Divider(color: t.divider, height: 16),
@@ -272,7 +271,10 @@ class _HotelBookingState extends State<HotelBooking> {
           Text('Total',
               style: TextStyle(
                   fontWeight: FontWeight.bold, fontSize: 15, color: t.title)),
-          Text('SAR ${discountedTotal.toStringAsFixed(2)}',
+          Text(
+              context
+                  .watch<CurrencyProvider>()
+                  .format(discountedTotal, isAr: isAr),
               style: TextStyle(
                   fontWeight: FontWeight.bold, fontSize: 15, color: t.price)),
         ]),
@@ -565,6 +567,12 @@ class _HotelBookingState extends State<HotelBooking> {
       );
 
       if (response.statusCode == 200 || response.statusCode == 201) {
+        if (_appliedPromo != null) {
+          final prefs = await SharedPreferences.getInstance();
+          final usedCodes = prefs.getStringList('usedPromoCodes') ?? [];
+          usedCodes.add(_appliedPromo!);
+          await prefs.setStringList('usedPromoCodes', usedCodes);
+        }
         if (!mounted) return;
         Navigator.push(
           context,
@@ -673,6 +681,7 @@ class _HotelBookingState extends State<HotelBooking> {
   Widget build(BuildContext context) {
     final l = AppLocalizations.of(context)!;
     final t = Theme.of(context).extension<AppThemeExtension>()!;
+    final bool isAr = Localizations.localeOf(context).languageCode == 'ar';
 
     return Scaffold(
       backgroundColor: _t.bg,
@@ -754,7 +763,7 @@ class _HotelBookingState extends State<HotelBooking> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            _buildSummaryCard(l),
+                            _buildSummaryCard(l, isAr),
                             SizedBox(height: 18),
 
                             // ── Pay at pickup — framed as an advantage ──
@@ -821,10 +830,10 @@ class _HotelBookingState extends State<HotelBooking> {
                               ),
                             ),
                             SizedBox(height: 18),
-                            _promoSection(l, _t),
+                            _promoSection(l, _t, isAr),
                             SizedBox(height: 12),
                             if (_appliedPromo != null) ...[
-                              _priceBreakdown(l, _t),
+                              _priceBreakdown(l, _t, isAr),
                               SizedBox(height: 12),
                             ],
                           ],
@@ -833,13 +842,13 @@ class _HotelBookingState extends State<HotelBooking> {
                     ),
                   ],
                 ),
-                _buildBottomBar(l),
+                _buildBottomBar(l, isAr),
               ],
             ),
     );
   }
 
-  Widget _buildSummaryCard(AppLocalizations l) {
+  Widget _buildSummaryCard(AppLocalizations l, bool isAr) {
     return Container(
       padding: EdgeInsets.all(18),
       decoration: BoxDecoration(
@@ -871,7 +880,11 @@ class _HotelBookingState extends State<HotelBooking> {
                       ),
                       SizedBox(height: 8),
                       Text(
-                        'SAR ${_appliedPromo != null ? discountedTotal.toStringAsFixed(2) : totalPrice}',
+                        context.watch<CurrencyProvider>().format(
+                            _appliedPromo != null
+                                ? discountedTotal
+                                : totalPrice.toDouble(),
+                            isAr: isAr),
                         style: TextStyle(
                           color: _t.accent,
                           fontSize: 18,
@@ -933,16 +946,25 @@ class _HotelBookingState extends State<HotelBooking> {
               ),
               child: Column(
                 children: [
-                  _priceLine(l.pricePerNight, 'SAR ${widget.pricePerNight}'),
+                  _priceLine(
+                      l.pricePerNight,
+                      context
+                          .watch<CurrencyProvider>()
+                          .format(widget.pricePerNight.toDouble(), isAr: isAr)),
                   SizedBox(height: 8),
                   if (_appliedPromo != null) ...[
                     _priceLine(l.discountWithCode(_appliedPromo!),
-                        '−SAR ${_discountAmount.toStringAsFixed(2)}',
+                        '−${context.watch<CurrencyProvider>().format(_discountAmount, isAr: isAr)}',
                         color: Colors.green),
                     SizedBox(height: 8),
                   ],
-                  _priceLine(l.total,
-                      'SAR ${_appliedPromo != null ? discountedTotal.toStringAsFixed(2) : totalPrice}',
+                  _priceLine(
+                      l.total,
+                      context.watch<CurrencyProvider>().format(
+                          _appliedPromo != null
+                              ? discountedTotal
+                              : totalPrice.toDouble(),
+                          isAr: isAr),
                       strong: true),
                 ],
               ),
@@ -1008,7 +1030,7 @@ class _HotelBookingState extends State<HotelBooking> {
           ),
           SizedBox(width: 8),
           _pillButton(
-            label: filled ? l.done : l.next,
+            label: filled ? l.edit : l.add,
             filled: filled,
             icon: filled ? Icons.edit_outlined : Icons.add_rounded,
             onTap: () => _openGuestSheet(index, l),
@@ -1018,7 +1040,7 @@ class _HotelBookingState extends State<HotelBooking> {
     );
   }
 
-  Widget _buildBottomBar(AppLocalizations l) {
+  Widget _buildBottomBar(AppLocalizations l, bool isAr) {
     return Positioned(
       left: 0,
       right: 0,
@@ -1042,7 +1064,11 @@ class _HotelBookingState extends State<HotelBooking> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'SAR ${_appliedPromo != null ? discountedTotal.toStringAsFixed(2) : totalPrice}',
+                      context.watch<CurrencyProvider>().format(
+                          _appliedPromo != null
+                              ? discountedTotal
+                              : totalPrice.toDouble(),
+                          isAr: isAr),
                       style: TextStyle(
                         color: _t.title,
                         fontSize: 24,
@@ -1052,7 +1078,12 @@ class _HotelBookingState extends State<HotelBooking> {
                     SizedBox(height: 4),
                     Text(
                       l.totalNightsRooms(
-                          totalPrice, widget.nights, widget.numRooms),
+                        context
+                            .watch<CurrencyProvider>()
+                            .format(totalPrice, isAr: isAr),
+                        widget.nights,
+                        widget.numRooms,
+                      ),
                       style: TextStyle(
                         color: _t.label,
                         fontSize: 11,

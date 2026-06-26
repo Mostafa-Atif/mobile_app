@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:mobile_app/config.dart';
 import 'package:mobile_app/l10n/app_localizations.dart';
+import 'package:mobile_app/providers/currency_provider.dart';
 import 'package:mobile_app/theme.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 enum BookingFilter { all, flight, hotel, car }
@@ -37,6 +39,7 @@ class _UserDashboardScreenState extends State<UserDashboardScreen> {
     try {
       final prefs = await SharedPreferences.getInstance();
       final token = prefs.getString('token') ?? '';
+      final bool isAr = Localizations.localeOf(context).languageCode == 'ar';
 
       if (token.isEmpty) {
         throw Exception('Missing token');
@@ -58,7 +61,7 @@ class _UserDashboardScreenState extends State<UserDashboardScreen> {
               _BookingCardData.fromHotel(item as Map<String, dynamic>))
           .toList();
       final cars = (data['carBookings'] as List<dynamic>? ?? const [])
-          .map((item) => _BookingCardData.fromCar(item as Map<String, dynamic>))
+          .map((item) => _BookingCardData.fromCar(item as Map<String, dynamic>, isAr, context.read<CurrencyProvider>()))
           .toList();
       final flights = (data['flightBookings'] as List<dynamic>? ?? const [])
           .map((item) =>
@@ -786,7 +789,7 @@ class _BookingCardData {
     );
   }
 
-  factory _BookingCardData.fromCar(Map<String, dynamic> item) {
+  factory _BookingCardData.fromCar(Map<String, dynamic> item, bool isAr, CurrencyProvider currency) {
     return _BookingCardData(
       type: BookingFilter.car,
       title: (item['carName'] ?? '-') as String,
@@ -804,7 +807,7 @@ class _BookingCardData {
           leftLabel: (l) => l.userDashboardRoute,
           leftValue: '${item['pickupLocation'] ?? '-'}',
           rightLabel: (l) => l.total,
-          rightValue: '\$${item['totalPrice'] ?? '-'}',
+          rightValue: currency.format((item['totalPrice'] ?? 0).toDouble(), isAr: isAr),
         ),
       ],
     );

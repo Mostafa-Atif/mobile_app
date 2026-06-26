@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_app/data/destinations_repository.dart';
 import 'package:mobile_app/l10n/app_localizations.dart';
-import 'package:mobile_app/screens/home/destination_detail_screen.dart';
+import 'package:mobile_app/screens/destinations/destination_detail_screen.dart';
 import 'package:mobile_app/theme.dart';
 
 class AllDestinationsScreen extends StatefulWidget {

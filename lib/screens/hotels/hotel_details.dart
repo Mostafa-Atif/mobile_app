@@ -3,8 +3,10 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:mobile_app/l10n/app_localizations.dart';
+import 'package:mobile_app/providers/currency_provider.dart';
 import 'package:mobile_app/theme.dart';
 import 'package:mobile_app/widgets/maps_widget.dart';
+import 'package:provider/provider.dart';
 
 import 'hotel_booking.dart';
 
@@ -162,7 +164,7 @@ class _HotelDetailsState extends State<HotelDetails> {
   void _openBooking() {
     final hotel = widget.hotel;
     final String name = hotel['title'] ?? '';
-    final int price = int.tryParse(hotel['price'].toString()) ?? 0;
+    final double price = double.tryParse(hotel['price'].toString()) ?? 0.0;
 
     Navigator.push(
       context,
@@ -184,14 +186,15 @@ class _HotelDetailsState extends State<HotelDetails> {
   @override
   Widget build(BuildContext context) {
     final l = AppLocalizations.of(context)!;
+    final bool isAr = Localizations.localeOf(context).languageCode == 'ar';
     final hotel = widget.hotel;
     final String name = hotel['title'] ?? '';
     final String subTitle = hotel['subTitle'] ?? '';
     final int rating = int.tryParse(hotel['rating'].toString()) ?? 0;
-    final int price = int.tryParse(hotel['price'].toString()) ?? 0;
+    final double price = double.tryParse(hotel['price'].toString()) ?? 0.0;
     final String imgUrl = hotel['imgUrl'] ?? '';
     final List<dynamic> views = hotel['views'] ?? [];
-    final int totalPrice = price * nightCount * numRooms;
+    final double totalPrice = price * nightCount * numRooms;
 
     return Scaffold(
       backgroundColor: _t.bg,
@@ -252,7 +255,7 @@ class _HotelDetailsState extends State<HotelDetails> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      _heroSummaryCard(name, subTitle, rating, price),
+                      _heroSummaryCard(name, subTitle, rating, price, isAr),
                       SizedBox(height: 14),
                       _sectionTitle(l.yourStay),
                       SizedBox(height: 10),
@@ -278,13 +281,14 @@ class _HotelDetailsState extends State<HotelDetails> {
               ),
             ],
           ),
-          _bottomBar(l, price, totalPrice),
+          _bottomBar(l, price, totalPrice, isAr),
         ],
       ),
     );
   }
 
-  Widget _heroSummaryCard(String name, String subTitle, int rating, int price) {
+  Widget _heroSummaryCard(
+      String name, String subTitle, int rating, double price, bool isAr) {
     return Container(
       padding: EdgeInsets.all(18),
       decoration: BoxDecoration(
@@ -367,7 +371,7 @@ class _HotelDetailsState extends State<HotelDetails> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'SAR $price',
+                  context.watch<CurrencyProvider>().format(price, isAr: isAr),
                   style: TextStyle(
                     color: _t.price,
                     fontSize: 20,
@@ -638,7 +642,8 @@ class _HotelDetailsState extends State<HotelDetails> {
     );
   }
 
-  Widget _bottomBar(AppLocalizations l, int price, int totalPrice) {
+  Widget _bottomBar(
+      AppLocalizations l, double price, double totalPrice, bool isAr) {
     return Positioned(
       left: 0,
       right: 0,
@@ -662,7 +667,7 @@ class _HotelDetailsState extends State<HotelDetails> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'SAR $price${l.perNight}',
+                      '${context.watch<CurrencyProvider>().format(price, isAr: isAr)} ${l.perNight}',
                       style: TextStyle(
                         color: _t.title,
                         fontSize: 20,
@@ -671,7 +676,13 @@ class _HotelDetailsState extends State<HotelDetails> {
                     ),
                     SizedBox(height: 4),
                     Text(
-                      l.totalNightsRooms(totalPrice, nightCount, numRooms),
+                      l.totalNightsRooms(
+                        context
+                            .watch<CurrencyProvider>()
+                            .format(totalPrice, isAr: isAr),
+                        nightCount,
+                        numRooms,
+                      ),
                       style: TextStyle(
                         color: _t.label,
                         fontSize: 11,

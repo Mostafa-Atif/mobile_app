@@ -120,7 +120,12 @@
     }
   },
   "privateDriver": "Private driver",
-  "privateDriverExtra": "Extra ﷼100/day",
+  "privateDriverExtra": "Extra {amount}/day",
+  "@privateDriverExtra": {
+    "placeholders": {
+      "amount": {"type": "String"}
+    }
+  },
   "carRentalDays": "Car rental ({days} days)",
   "@carRentalDays": {
     "placeholders": {
@@ -208,10 +213,10 @@
   "numberOfRooms": "Number of rooms",
   "bookNow": "Book Now",
   "perNight": "/ night",
-  "totalNightsRooms": "SAR {total} total ({nights} nights, {rooms} room(s))",
+  "totalNightsRooms": "{total} ({nights} nights, {rooms} room(s))",
   "@totalNightsRooms": {
     "placeholders": {
-      "total": { "type": "int" },
+      "total": { "type": "String" },
       "nights": { "type": "int" },
       "rooms": { "type": "int" }
     }
@@ -763,5 +768,8 @@
   "premiumEconomy": "Premium Economy",
   "business": "Business",
   "firstClass": "First Class",
-  "searchCity": "Search cities..."
+  "searchCity": "Search cities...",
+  "settingsCurrencyTitle": "Currency",
+  "settingsCurrencySubtitle": "Choose your preferred currency",
+  "promoAlreadyUsed": "Promo code already used"
 }

@@ -8,11 +8,11 @@ import 'package:http/http.dart' as http;
 import 'package:mobile_app/config.dart';
 import 'package:mobile_app/data/destinations_repository.dart';
 import 'package:mobile_app/l10n/app_localizations.dart';
-import 'package:mobile_app/screens/home/all_destinations_screen.dart';
+import 'package:mobile_app/screens/destinations/all_destinations_screen.dart';
 import 'package:mobile_app/screens/home/about_us_screen.dart';
-import 'package:mobile_app/screens/home/admin_dashboard_screen.dart';
+import 'package:mobile_app/screens/dashboards/admin_dashboard_screen.dart';
 import 'package:mobile_app/screens/home/settings_screen.dart';
-import 'package:mobile_app/screens/home/user_dashboard_screen.dart';
+import 'package:mobile_app/screens/dashboards/user_dashboard_screen.dart';
 import 'package:mobile_app/screens/auth/sign_in.dart';
 import 'package:mobile_app/theme.dart';
 import 'package:provider/provider.dart';
@@ -20,7 +20,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../main.dart';
 import '../car rental/carssearch.dart';
-import 'destination_detail_screen.dart';
+import '../destinations/destination_detail_screen.dart';
 import '../flights/flight_search.dart';
 import '../hotels/hotel_search.dart';
 
@@ -95,7 +95,115 @@ class _HomeScreenState extends State<HomeScreen> {
     _heroPageController.dispose();
     super.dispose();
   }
+Widget _buildCashPaymentBanner(BuildContext context, dynamic t, bool isAr) {
+  return Padding(
+    padding: const EdgeInsets.symmetric(horizontal: 16),
+    child: Container(
+      decoration: BoxDecoration(
+        color: const Color(0xFF0F6E56),
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: const Color(0xFF9FE1CB), width: 0.5),
+      ),
+      child: Column(
+        children: [
+          // Top accent strip
+          Container(
+            height: 4,
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                colors: [Color(0xFF085041), Color(0xFF1D9E75), Color(0xFF5DCAA5)],
+              ),
+              borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(16),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                // Icon circle
+                Container(
+                  width: 46,
+                  height: 46,
+                  decoration: BoxDecoration(
+                    color: const Color(0xFF085041),
+                    borderRadius: BorderRadius.circular(23),
+                  ),
+                  child: const Icon(
+                    Icons.account_balance_wallet_outlined,
+                    color: Color(0xFF085041),
+                    size: 22,
+                  ),
+                ),
+                const SizedBox(width: 14),
+                // Text block
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Cash only — always on delivery', // or your localized key
+                        style: const TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
+                          color: Color(0xFFE1F5EE),
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        'Forget card details. Book your flight, hotel, or car and pay cash when you arrive — secure and hassle-free.',
+                        style: const TextStyle(
+                          fontSize: 12,
+                          color: Color(0xFF9FE1CB),
+                          height: 1.4,
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+                      // Service tags
+                      Wrap(
+                        spacing: 6,
+                        children: [
+                          _cashTag(Icons.flight_outlined, 'Flights'),
+                          _cashTag(Icons.hotel_outlined, 'Hotels'),
+                          _cashTag(Icons.directions_car_outlined, 'Cars'),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    ),
+  );
+}
 
+Widget _cashTag(IconData icon, String label) {
+  return Container(
+    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+    decoration: BoxDecoration(
+      color: const Color(0xFF085041),
+      borderRadius: BorderRadius.circular(999),
+    ),
+    child: Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Icon(icon, size: 11, color: const Color(0xFF5DCAA5)),
+        const SizedBox(width: 4),
+        Text(
+          label,
+          style: const TextStyle(
+            fontSize: 11,
+            color: Color(0xFF5DCAA5),
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+      ],
+    ),
+  );
+}
   Future<void> _loadUser() async {
     final prefs = await SharedPreferences.getInstance();
     if (!mounted) return;
@@ -556,6 +664,8 @@ class _HomeScreenState extends State<HomeScreen> {
           _buildCategoryButtons(context, t, l),
           const SizedBox(height: 24),
           _buildUpcomingTrip(context, t, l),
+          const SizedBox(height: 32),
+          _buildCashPaymentBanner(context, t, isAr),
           const SizedBox(height: 32),
           _buildSpecialOffers(context, t, l),
           const SizedBox(height: 32),

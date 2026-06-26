@@ -120,7 +120,12 @@
     }
   },
   "privateDriver": "سائق خاص",
-  "privateDriverExtra": "إضافي ﷼100/يوم",
+  "privateDriverExtra": "إضافي {amount}/يوم",
+  "@privateDriverExtra": {
+    "placeholders": {
+      "amount": {"type": "String"}
+    }
+  },
   "carRentalDays": "تأجير السيارة ({days} أيام)",
   "@carRentalDays": {
     "placeholders": {
@@ -208,10 +213,10 @@
   "numberOfRooms": "عدد الغرف",
   "bookNow": "احجز الآن",
   "perNight": "/ ليلة",
-  "totalNightsRooms": "SAR {total} الإجمالي ({nights} ليلة، {rooms} غرفة)",
+  "totalNightsRooms": "{total} الإجمالي ({nights} ليلة، {rooms} غرفة)",
   "@totalNightsRooms": {
     "placeholders": {
-      "total": { "type": "int" },
+      "total": { "type": "String" },
       "nights": { "type": "int" },
       "rooms": { "type": "int" }
     }
@@ -763,5 +768,8 @@
   "premiumEconomy": "اقتصادي مميز",
   "business": "رجال الأعمال",
   "firstClass": "الدرجة الأولى",
-  "searchCity": "ابحث عن مدينة..."
+  "searchCity": "ابحث عن مدينة...",
+  "settingsCurrencyTitle": "العملة",
+  "settingsCurrencySubtitle": "اختر عملتك المفضلة",
+  "promoAlreadyUsed": "تم استخدام كود الخصم مسبقاً"
 }

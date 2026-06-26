@@ -46,7 +46,6 @@ const List<CountryItem> kCountries = [
   CountryItem('Iran', '🇮🇷', 'IR'),
   CountryItem('Iraq', '🇮🇶', 'IQ'),
   CountryItem('Ireland', '🇮🇪', 'IE'),
-  CountryItem('Israel', '🇮🇱', 'IL'),
   CountryItem('Italy', '🇮🇹', 'IT'),
   CountryItem('Japan', '🇯🇵', 'JP'),
   CountryItem('Jordan', '🇯🇴', 'JO'),

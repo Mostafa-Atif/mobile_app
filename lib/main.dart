@@ -5,8 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:mobile_app/Archive/test.dart';
 import 'package:mobile_app/l10n/app_localizations.dart';
+import 'package:mobile_app/providers/currency_provider.dart';
 import 'package:mobile_app/screens/auth/sign_in.dart';
-import 'package:mobile_app/screens/home/admin_dashboard_screen.dart';
+import 'package:mobile_app/screens/dashboards/admin_dashboard_screen.dart';
 import 'package:mobile_app/screens/home/home_screen.dart';
 import 'package:mobile_app/screens/onboarding/onboarding_screen_1.dart';
 import 'package:mobile_app/services/flight_translation_service.dart';
@@ -21,6 +22,9 @@ void main() async {
   final bool onboardingDone = prefs.getBool('onboardingDone') ?? false;
   final String token = prefs.getString('token') ?? '';
   await FlightTranslationService.init();
+  final bool isDark = prefs.getBool('isDark') ?? false;
+  final String currency = prefs.getString('currency') ?? 'KWD';
+  final String lang = prefs.getString('lang') ?? 'en';
 
   Widget startScreen;
   if (!onboardingDone) {
@@ -31,20 +35,21 @@ void main() async {
     startScreen = const TempHome();
   }
 
-  // Stripe.publishableKey = 'pk_test_51ThYmaEJd6SsMZnj5VoFLlSyCoB3jTjgC6oOblHzdEqW2GsGRj3fKZvnv005jwUh8ILcL4lYAuCkCOdqn37FQK5K0095ehkKgq';
-  // await Stripe.instance.applySettings();
-
   runApp(
-    ChangeNotifierProvider(
-      create: (_) => ThemeProvider(),
-      child: MyApp(startScreen: startScreen),
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => ThemeProvider(isDark)),
+        ChangeNotifierProvider(create: (_) => CurrencyProvider(currency)),
+      ],
+      child: MyApp(startScreen: startScreen, initialLang: lang),
     ),
   );
 }
 
 class MyApp extends StatefulWidget {
   final Widget startScreen;
-  const MyApp({super.key, required this.startScreen});
+  final String initialLang;
+  const MyApp({super.key, required this.startScreen, required this.initialLang});
 
   static void setLocale(BuildContext context, Locale newLocale) {
     _MyAppState? state = context.findAncestorStateOfType<_MyAppState>();
@@ -56,10 +61,18 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  Locale _locale = const Locale('en');
+  late Locale _locale;
 
-  void setLocale(Locale locale) {
+  @override
+  void initState() {
+    super.initState();
+    _locale = Locale(widget.initialLang);
+  }
+
+  void setLocale(Locale locale) async {
     setState(() => _locale = locale);
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('lang', locale.languageCode);
   }
 
   @override

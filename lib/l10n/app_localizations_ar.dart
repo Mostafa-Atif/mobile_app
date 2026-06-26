@@ -314,7 +314,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get privateDriver => 'سائق خاص';
 
   @override
-  String get privateDriverExtra => 'إضافي ﷼100/يوم';
+  String privateDriverExtra(String amount) {
+    return 'إضافي $amount/يوم';
+  }
 
   @override
   String carRentalDays(int days) {
@@ -507,8 +509,8 @@ class AppLocalizationsAr extends AppLocalizations {
   String get perNight => '/ ليلة';
 
   @override
-  String totalNightsRooms(int total, int nights, int rooms) {
-    return 'SAR $total الإجمالي ($nights ليلة، $rooms غرفة)';
+  String totalNightsRooms(String total, int nights, int rooms) {
+    return '$total الإجمالي ($nights ليلة، $rooms غرفة)';
   }
 
   @override
@@ -1772,4 +1774,13 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get firstClass => 'الدرجة الأولى';
+
+  @override
+  String get settingsCurrencyTitle => 'العملة';
+
+  @override
+  String get settingsCurrencySubtitle => 'اختر عملتك المفضلة';
+
+  @override
+  String get promoAlreadyUsed => 'تم استخدام كود الخصم مسبقاً';
 }
