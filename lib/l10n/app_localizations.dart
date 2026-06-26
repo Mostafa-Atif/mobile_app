@@ -1994,6 +1994,12 @@ abstract class AppLocalizations {
   /// **'My Bookings'**
   String get menuDashboard;
 
+  /// No description provided for @menuAdminDashboard.
+  ///
+  /// In en, this message translates to:
+  /// **'Admin Dashboard'**
+  String get menuAdminDashboard;
+
   /// No description provided for @menuSettings.
   ///
   /// In en, this message translates to:
@@ -3523,6 +3529,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Promo code already used'**
   String get promoAlreadyUsed;
+
+  /// No description provided for @cashBannerTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Pay cash on arrival — flights, hotels & cars'**
+  String get cashBannerTitle;
+
+  /// No description provided for @cashBannerBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Book now, no card needed. Just show up and pay cash when you get there.'**
+  String get cashBannerBody;
 }
 
 class _AppLocalizationsDelegate

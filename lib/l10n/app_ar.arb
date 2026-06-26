@@ -400,6 +400,7 @@
   "aboutFeatureSupportTitle": "دعم على مدار الساعة",
   "aboutFeatureSupportDesc": "فريق دعم متاح دائماً لمساعدتك في أي وقت خلال رحلتك.",
   "menuDashboard": "حجوزاتي",
+  "menuAdminDashboard": "إدارة الحجوزات",
   "menuSettings": "الإعدادات",
   "menuAboutUs": "من نحن",
   "menuProfileFallback": "مستخدم رحّال",
@@ -771,5 +772,7 @@
   "searchCity": "ابحث عن مدينة...",
   "settingsCurrencyTitle": "العملة",
   "settingsCurrencySubtitle": "اختر عملتك المفضلة",
-  "promoAlreadyUsed": "تم استخدام كود الخصم مسبقاً"
+  "promoAlreadyUsed": "تم استخدام كود الخصم مسبقاً",
+  "cashBannerTitle": "ادفع نقداً عند الوصول — رحلات وفنادق وسيارات",
+  "cashBannerBody": "احجز الآن بدون بطاقة. فقط احضر وادفع نقداً عند وصولك."
 }

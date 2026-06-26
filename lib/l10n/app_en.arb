@@ -400,6 +400,7 @@
   "aboutFeatureSupportTitle": "24/7 Support",
   "aboutFeatureSupportDesc": "Our support team is always available to assist you throughout your journey.",
   "menuDashboard": "My Bookings",
+  "menuAdminDashboard": "Admin Dashboard",
   "menuSettings": "Settings",
   "menuAboutUs": "About Us",
   "menuProfileFallback": "Rahal User",
@@ -771,5 +772,7 @@
   "searchCity": "Search cities...",
   "settingsCurrencyTitle": "Currency",
   "settingsCurrencySubtitle": "Choose your preferred currency",
-  "promoAlreadyUsed": "Promo code already used"
+  "promoAlreadyUsed": "Promo code already used",
+  "cashBannerTitle": "Pay cash on arrival — flights, hotels & cars",
+  "cashBannerBody": "Book now, no card needed. Just show up and pay cash when you get there."
 }

@@ -1017,6 +1017,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get menuDashboard => 'My Bookings';
 
   @override
+  String get menuAdminDashboard => 'Admin Dashboard';
+
+  @override
   String get menuSettings => 'Settings';
 
   @override
@@ -1804,4 +1807,11 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get promoAlreadyUsed => 'Promo code already used';
+
+  @override
+  String get cashBannerTitle => 'Pay cash on arrival — flights, hotels & cars';
+
+  @override
+  String get cashBannerBody =>
+      'Book now, no card needed. Just show up and pay cash when you get there.';
 }

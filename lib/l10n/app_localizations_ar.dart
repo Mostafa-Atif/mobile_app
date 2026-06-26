@@ -1009,6 +1009,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get menuDashboard => 'حجوزاتي';
 
   @override
+  String get menuAdminDashboard => 'إدارة الحجوزات';
+
+  @override
   String get menuSettings => 'الإعدادات';
 
   @override
@@ -1783,4 +1786,11 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get promoAlreadyUsed => 'تم استخدام كود الخصم مسبقاً';
+
+  @override
+  String get cashBannerTitle => 'ادفع نقداً عند الوصول — رحلات وفنادق وسيارات';
+
+  @override
+  String get cashBannerBody =>
+      'احجز الآن بدون بطاقة. فقط احضر وادفع نقداً عند وصولك.';
 }
