@@ -3577,6 +3577,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Book now, no card needed. Just show up and pay cash when you get there.'**
   String get cashBannerBody;
+
+  /// No description provided for @inputHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Ask about any destination...'**
+  String get inputHint;
+
+  /// No description provided for @welcomeMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Ask me anything about traveling!'**
+  String get welcomeMessage;
+
+  /// No description provided for @chatbotTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Travel Assistant'**
+  String get chatbotTitle;
+
+  /// No description provided for @askRahal.
+  ///
+  /// In en, this message translates to:
+  /// **'Ask Rahal'**
+  String get askRahal;
 }
 
 class _AppLocalizationsDelegate

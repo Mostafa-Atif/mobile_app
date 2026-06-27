@@ -8,6 +8,7 @@ import 'package:http/http.dart' as http;
 import 'package:mobile_app/config.dart';
 import 'package:mobile_app/data/destinations_repository.dart';
 import 'package:mobile_app/l10n/app_localizations.dart';
+import 'package:mobile_app/screens/chatbot/travel_chat.dart';
 import 'package:mobile_app/screens/destinations/all_destinations_screen.dart';
 import 'package:mobile_app/screens/home/about_us_screen.dart';
 import 'package:mobile_app/screens/dashboards/admin_dashboard_screen.dart';
@@ -384,6 +385,16 @@ class _HomeScreenState extends State<HomeScreen> {
 
     return Scaffold(
       backgroundColor: t.bg,
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.only(bottom: 40),
+        child: _ChatFAB(
+          onTap: () => Navigator.push(
+            context,
+            MaterialPageRoute(builder: (_) => const TravelChatScreen()),
+          ),
+        ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
       body: FutureBuilder<List<List<Map<String, dynamic>>>>(
         future:
             Future.wait([_heroDestinationsFuture, _featuredDestinationsFuture]),
@@ -1717,6 +1728,60 @@ class _MenuRowState extends State<_MenuRow> {
             if (widget.showChevron)
               Icon(Icons.chevron_right_rounded,
                   color: widget.chevronColor, size: 16),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _ChatFAB extends StatelessWidget {
+  final VoidCallback onTap;
+  const _ChatFAB({required this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final t = Theme.of(context).extension<AppThemeExtension>()!;
+    final l = AppLocalizations.of(context)!;
+    final bg = isDark ? const Color(0xFF0D1B2A) : const Color(0xFFF0F8FC);
+    final iconColor = const Color(0xFF1f93a0);
+    final textColor =
+        isDark ? const Color(0xFFE8F4FA) : const Color(0xFF1f93a0);
+    final borderColor = isDark
+        ? const Color(0xFF4DB8E8).withOpacity(0.3)
+        : const Color(0xFF1f93a0).withOpacity(0.2);
+
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        height: 48,
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        decoration: BoxDecoration(
+          color: bg,
+          borderRadius: BorderRadius.circular(24),
+          border: Border.all(color: borderColor),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(isDark ? 0.4 : 0.12),
+              blurRadius: 20,
+              offset: const Offset(0, 4),
+            ),
+          ],
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(Icons.auto_awesome_rounded, color: iconColor, size: 18),
+            const SizedBox(width: 8),
+            Text(
+              l.askRahal,
+              style: TextStyle(
+                fontSize: 13,
+                fontWeight: FontWeight.w500,
+                color: textColor,
+              ),
+            ),
           ],
         ),
       ),

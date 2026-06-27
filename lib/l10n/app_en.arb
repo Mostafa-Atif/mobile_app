@@ -781,5 +781,9 @@
   "settingsCurrencySubtitle": "Choose your preferred currency",
   "promoAlreadyUsed": "Promo code already used",
   "cashBannerTitle": "Pay cash on arrival — flights, hotels & cars",
-  "cashBannerBody": "Book now, no card needed. Just show up and pay cash when you get there."
+  "cashBannerBody": "Book now, no card needed. Just show up and pay cash when you get there.",
+  "inputHint": "Ask about any destination...",
+  "welcomeMessage": "Ask me anything about traveling!",
+  "chatbotTitle": "Travel Assistant",
+  "askRahal": "Ask Rahal"
 }

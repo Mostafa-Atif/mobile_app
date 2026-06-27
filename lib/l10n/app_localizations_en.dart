@@ -1832,4 +1832,16 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get cashBannerBody =>
       'Book now, no card needed. Just show up and pay cash when you get there.';
+
+  @override
+  String get inputHint => 'Ask about any destination...';
+
+  @override
+  String get welcomeMessage => 'Ask me anything about traveling!';
+
+  @override
+  String get chatbotTitle => 'Travel Assistant';
+
+  @override
+  String get askRahal => 'Ask Rahal';
 }

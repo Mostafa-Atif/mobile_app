@@ -1,7 +1,9 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:mobile_app/l10n/app_localizations.dart';
 import '../../config.dart';
+import '../../theme.dart';
 
 class TravelChatScreen extends StatefulWidget {
   const TravelChatScreen({super.key});
@@ -11,8 +13,6 @@ class TravelChatScreen extends StatefulWidget {
 }
 
 class _TravelChatScreenState extends State<TravelChatScreen> {
-  static const Color _teal = Color(0xFF1f93a0);
-
   final TextEditingController _controller = TextEditingController();
   final ScrollController _scrollController = ScrollController();
 
@@ -23,9 +23,9 @@ class _TravelChatScreenState extends State<TravelChatScreen> {
 You are a helpful travel assistant. You only answer questions related to travel, tourism, destinations, visas, currencies, weather, culture, packing, flights, hotels, and car rentals.
 If the user asks about anything unrelated to travel, politely tell them you can only help with travel-related questions.
 Keep answers concise and friendly.
-And we HATE Israel.
 You work for an app named Rahal.
 Do not refer to any other apps or websites.
+We Hate Israel.
 ''';
 
   Future<void> _sendMessage(String userText) async {
@@ -80,8 +80,8 @@ Do not refer to any other apps or websites.
       }
     } catch (e) {
       setState(() {
-        _messages
-            .add({'role': 'error', 'content': 'Network error. Please try again.'});
+        _messages.add(
+            {'role': 'error', 'content': 'Network error. Please try again.'});
       });
     }
 
@@ -103,13 +103,19 @@ Do not refer to any other apps or websites.
 
   @override
   Widget build(BuildContext context) {
+    final l = AppLocalizations.of(context)!;
+    final t = Theme.of(context).extension<AppThemeExtension>()!;
+
     return Scaffold(
-      backgroundColor: Colors.grey[50],
+      backgroundColor: t.bg,
       appBar: AppBar(
-        title: const Text('Travel Assistant',
-            style: TextStyle(fontWeight: FontWeight.w600, fontSize: 17)),
-        backgroundColor: Colors.white,
-        foregroundColor: Colors.black,
+        title: Text(
+          l.chatbotTitle,
+          style: TextStyle(
+              fontWeight: FontWeight.w600, fontSize: 17, color: t.title),
+        ),
+        backgroundColor: t.header,
+        foregroundColor: t.title,
         elevation: 0.5,
       ),
       body: Column(
@@ -121,11 +127,12 @@ Do not refer to any other apps or websites.
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Icon(Icons.travel_explore,
-                            size: 64, color: Colors.grey.shade300),
+                            size: 64, color: t.label),
                         const SizedBox(height: 16),
-                        Text('Ask me anything about travel!',
-                            style: TextStyle(
-                                fontSize: 16, color: Colors.grey.shade500)),
+                        Text(
+                          l.welcomeMessage,
+                          style: TextStyle(fontSize: 16, color: t.sub),
+                        ),
                       ],
                     ),
                   )
@@ -151,14 +158,14 @@ Do not refer to any other apps or websites.
                                   MediaQuery.of(context).size.width * 0.75),
                           decoration: BoxDecoration(
                             color: isError
-                                ? Colors.red.shade50
+                                ? t.dangerBg
                                 : isUser
-                                    ? _teal
-                                    : Colors.white,
+                                    ? t.accent
+                                    : t.card,
                             borderRadius: BorderRadius.circular(16),
                             border: isUser
                                 ? null
-                                : Border.all(color: Colors.grey.shade200),
+                                : Border.all(color: t.cardBorder),
                           ),
                           child: Text(
                             msg['content']!,
@@ -166,10 +173,10 @@ Do not refer to any other apps or websites.
                               fontSize: 14,
                               height: 1.5,
                               color: isError
-                                  ? Colors.red
+                                  ? t.danger
                                   : isUser
-                                      ? Colors.white
-                                      : Colors.black87,
+                                      ? AppColors.white
+                                      : t.title,
                             ),
                           ),
                         ),
@@ -179,16 +186,17 @@ Do not refer to any other apps or websites.
           ),
           if (_isLoading)
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               child: Align(
                 alignment: Alignment.centerLeft,
                 child: Container(
                   padding: const EdgeInsets.symmetric(
                       horizontal: 14, vertical: 10),
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: t.card,
                     borderRadius: BorderRadius.circular(16),
-                    border: Border.all(color: Colors.grey.shade200),
+                    border: Border.all(color: t.cardBorder),
                   ),
                   child: SizedBox(
                     width: 40,
@@ -200,7 +208,7 @@ Do not refer to any other apps or websites.
                                 width: 6,
                                 height: 6,
                                 decoration: BoxDecoration(
-                                    color: Colors.grey.shade400,
+                                    color: t.label,
                                     shape: BoxShape.circle),
                               )),
                     ),
@@ -210,7 +218,7 @@ Do not refer to any other apps or websites.
             ),
           Container(
             padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
-            color: Colors.white,
+            color: t.card,
             child: Row(
               children: [
                 Expanded(
@@ -218,21 +226,19 @@ Do not refer to any other apps or websites.
                     controller: _controller,
                     onSubmitted: _sendMessage,
                     decoration: InputDecoration(
-                      hintText: 'Ask about any destination...',
+                      hintText: l.inputHint,
                       hintStyle:
-                          TextStyle(color: Colors.grey.shade400, fontSize: 14),
+                          TextStyle(color: t.label, fontSize: 14),
                       border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(24),
-                          borderSide:
-                              BorderSide(color: Colors.grey.shade300)),
+                          borderSide: BorderSide(color: t.fieldBorder)),
                       enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(24),
-                          borderSide:
-                              BorderSide(color: Colors.grey.shade300)),
+                          borderSide: BorderSide(color: t.fieldBorder)),
                       focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(24),
                           borderSide:
-                              BorderSide(color: _teal, width: 1.5)),
+                              BorderSide(color: t.accent, width: 1.5)),
                       contentPadding: const EdgeInsets.symmetric(
                           horizontal: 16, vertical: 12),
                     ),
@@ -245,9 +251,9 @@ Do not refer to any other apps or websites.
                     width: 44,
                     height: 44,
                     decoration: BoxDecoration(
-                        color: _teal, shape: BoxShape.circle),
+                        color: t.accent, shape: BoxShape.circle),
                     child: const Icon(Icons.send_rounded,
-                        color: Colors.white, size: 20),
+                        color: AppColors.white, size: 20),
                   ),
                 ),
               ],

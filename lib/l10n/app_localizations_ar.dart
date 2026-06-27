@@ -1811,4 +1811,16 @@ class AppLocalizationsAr extends AppLocalizations {
   @override
   String get cashBannerBody =>
       'احجز الآن بدون بطاقة. فقط احضر وادفع نقداً عند وصولك.';
+
+  @override
+  String get inputHint => 'اسأل عن أي وجهة...';
+
+  @override
+  String get welcomeMessage => 'اسأل أي شيء عن السفر!';
+
+  @override
+  String get chatbotTitle => 'مساعد السفر';
+
+  @override
+  String get askRahal => 'اسأل رحّال';
 }

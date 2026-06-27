@@ -781,5 +781,9 @@
   "settingsCurrencySubtitle": "اختر عملتك المفضلة",
   "promoAlreadyUsed": "تم استخدام كود الخصم مسبقاً",
   "cashBannerTitle": "ادفع نقداً عند الوصول — رحلات وفنادق وسيارات",
-  "cashBannerBody": "احجز الآن بدون بطاقة. فقط احضر وادفع نقداً عند وصولك."
+  "cashBannerBody": "احجز الآن بدون بطاقة. فقط احضر وادفع نقداً عند وصولك.",
+  "inputHint": "اسأل عن أي وجهة...",
+  "welcomeMessage": "اسأل أي شيء عن السفر!",
+  "chatbotTitle": "مساعد السفر",
+  "askRahal": "اسأل رحّال"
 }
