@@ -42,6 +42,16 @@ class _FlightResultsState extends State<FlightResults> {
 
   bool get isRoundTrip => widget.tripType == 'Round trip';
 
+  double getClassMultiplier(String cabinClass, AppLocalizations l) {
+    final Map<String, double> multipliers = {
+      l.economy: 1.0,
+      l.premiumEconomy: 1.65,
+      l.business: 2.5,
+      l.firstClass: 5.0,
+    };
+    return multipliers[cabinClass] ?? 1.0;
+  }
+
   @override
   void initState() {
     super.initState();
@@ -228,7 +238,7 @@ class _FlightResultsState extends State<FlightResults> {
               padding: const EdgeInsets.all(16),
               itemCount: flights.length,
               itemBuilder: (context, index) =>
-                  _buildFlightCard(flights[index], l, t),
+                  _buildFlightCard(flights[index], l, t, widget.cabinClass),
             ),
     );
   }
@@ -274,7 +284,7 @@ class _FlightResultsState extends State<FlightResults> {
   }
 
   Widget _buildFlightCard(
-      Map<String, dynamic> flight, AppLocalizations l, AppThemeExtension t) {
+      Map<String, dynamic> flight, AppLocalizations l, AppThemeExtension t, String cabinClass) {
     String lang = Localizations.localeOf(context).languageCode;
     final bool hasLuggage = flight['hasLuggage'] ?? false;
     final String currency = lang == 'en'
@@ -284,6 +294,9 @@ class _FlightResultsState extends State<FlightResults> {
         ? FlightTranslationService.translateStops(flight['stops'] ?? 'مباشر')
         : (flight['stops'] ?? 'مباشر');
     final String returnTime = flight['returnTime'] ?? '';
+    final double classMultiplier = getClassMultiplier(cabinClass, l);
+    final num displayPrice = (flight['price'] as num) * classMultiplier;
+
 
     return GestureDetector(
       onTap: () => Navigator.push(
@@ -331,7 +344,7 @@ class _FlightResultsState extends State<FlightResults> {
                                   fontSize: 14,
                                   fontWeight: FontWeight.w600,
                                   color: t.title))),
-                      Text('$currency ${flight['price']}',
+                      Text('$displayPrice $currency',
                           style: TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.bold,

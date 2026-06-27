@@ -51,6 +51,16 @@ class _FlightBookingState extends State<FlightBooking> {
   String token = '';
   List<Map<String, dynamic>> passengerList = [];
 
+  double getClassMultiplier(String cabinClass, AppLocalizations l) {
+    final Map<String, double> multipliers = {
+      l.economy: 1.0,
+      l.premiumEconomy: 1.65,
+      l.business: 2.5,
+      l.firstClass: 5.0,
+    };
+    return multipliers[cabinClass] ?? 1.0;
+  }
+
   // Promo code state
   final _promoCtrl = TextEditingController();
   String? _appliedPromo;
@@ -146,7 +156,10 @@ class _FlightBookingState extends State<FlightBooking> {
     return '${date.day} ${months[date.month - 1]} ${date.year}';
   }
 
-  num get totalPrice => widget.price * widget.passengers;
+  num get totalPrice {
+    final double classMultiplier = getClassMultiplier(widget.flightClass, AppLocalizations.of(context)!);
+    return widget.price * classMultiplier * widget.passengers;
+  }
   num get discountedTotal => totalPrice - _discountAmount;
 
   String? _validateName(String val) {
@@ -348,7 +361,7 @@ class _FlightBookingState extends State<FlightBooking> {
                                   letterSpacing: 1.1,
                                   color: Colors.green)),
                           Text(
-                              '−${widget.currency} ${_discountAmount.toStringAsFixed(2)}',
+                              '−${_discountAmount.toStringAsFixed(2)} ${widget.currency}',
                               style: TextStyle(
                                   fontSize: 12, color: Colors.green.shade700)),
                         ]),
@@ -379,14 +392,14 @@ class _FlightBookingState extends State<FlightBooking> {
       child: Column(children: [
         Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
           Text(l.subtotal, style: TextStyle(color: t.label, fontSize: 13)),
-          Text('${widget.currency} $totalPrice',
+          Text('$totalPrice ${widget.currency}',
               style: TextStyle(color: t.title, fontSize: 13)),
         ]),
         const SizedBox(height: 6),
         Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
           Text(l.discountWithCode(_appliedPromo!),
               style: const TextStyle(color: Colors.green, fontSize: 13)),
-          Text('−${widget.currency} ${_discountAmount.toStringAsFixed(2)}',
+          Text('−${_discountAmount.toStringAsFixed(2)} ${widget.currency}',
               style: const TextStyle(color: Colors.green, fontSize: 13)),
         ]),
         Divider(color: t.divider, height: 16),
@@ -394,7 +407,7 @@ class _FlightBookingState extends State<FlightBooking> {
           Text('Total',
               style: TextStyle(
                   fontWeight: FontWeight.bold, fontSize: 15, color: t.title)),
-          Text('${widget.currency} ${discountedTotal.toStringAsFixed(2)}',
+          Text('${discountedTotal.toStringAsFixed(2)} ${widget.currency}',
               style: TextStyle(
                   fontWeight: FontWeight.bold, fontSize: 15, color: t.price)),
         ]),
@@ -617,13 +630,13 @@ class _FlightBookingState extends State<FlightBooking> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 PhoneCodeField(
-                                     t: t,
-                                     l: l,
+                                  t: t,
+                                  l: l,
                                   dialCode: countryCode,
                                   onSelected: (item) {
-                                 setSheet(() => countryCode = item.dialCode);
-                                        },
-                                      ),
+                                    setSheet(() => countryCode = item.dialCode);
+                                  },
+                                ),
                                 const SizedBox(width: 10),
                                 Expanded(
                                   child: _validatedField(
@@ -942,7 +955,7 @@ class _FlightBookingState extends State<FlightBooking> {
                                             color: t.title)),
                                     const SizedBox(height: 4),
                                     Text(
-                                        '${widget.currency} ${_appliedPromo != null ? discountedTotal.toStringAsFixed(2) : totalPrice}',
+                                        '${_appliedPromo != null ? discountedTotal.toStringAsFixed(2) : totalPrice} ${widget.currency}',
                                         style: TextStyle(
                                             fontSize: 16,
                                             fontWeight: FontWeight.bold,
@@ -985,51 +998,70 @@ class _FlightBookingState extends State<FlightBooking> {
                             _summaryRow(t, Icons.location_on_outlined, l.stops,
                                 widget.stops),
                             Divider(color: t.divider),
-                            const SizedBox(height: 6),
-                            Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(l.pricePerPerson,
-                                      style: TextStyle(
-                                          color: t.label, fontSize: 13)),
-                                  Text('${widget.currency} ${widget.price}',
-                                      style: TextStyle(
-                                          fontSize: 13, color: t.title)),
-                                ]),
-                            const SizedBox(height: 6),
-                            if (_appliedPromo != null) ...[
-                              Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(l.discountWithCode(_appliedPromo!),
-                                        style: const TextStyle(
-                                            color: Colors.green, fontSize: 13)),
-                                    Text(
-                                        '−${widget.currency} ${_discountAmount.toStringAsFixed(2)}',
-                                        style: const TextStyle(
-                                            color: Colors.green, fontSize: 13)),
-                                  ]),
-                              const SizedBox(height: 6),
-                            ],
-                            Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(l.total,
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 15,
-                                          color: t.title)),
-                                  Text(
-                                    '${widget.currency} ${_appliedPromo != null ? discountedTotal.toStringAsFixed(2) : totalPrice}',
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 15,
-                                        color: t.price),
-                                  ),
-                                ]),
+                            const SizedBox(height: 10),
+                            const SizedBox(height: 10),
+Row(
+    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    children: [
+      Text(l.baseFare,
+          style: TextStyle(color: t.label, fontSize: 13)),
+      Text('${widget.price} ${widget.currency}',
+          style: TextStyle(fontSize: 13, color: t.title)),
+    ]),
+const SizedBox(height: 6),
+Row(
+    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    children: [
+      Text(widget.flightClass,
+          style: TextStyle(color: t.label, fontSize: 13)),
+      Text(
+          '× ${getClassMultiplier(widget.flightClass, l)}x',
+          style: TextStyle(fontSize: 13, color: t.title)),
+    ]),
+const SizedBox(height: 6),
+Row(
+    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    children: [
+      Text(
+          '${widget.passengers} ${widget.passengers == 1 ? l.passenger : l.passengers}',
+          style: TextStyle(color: t.label, fontSize: 13)),
+      Text(
+          '× ${(widget.price * getClassMultiplier(widget.flightClass, l)).toStringAsFixed(2)} ${widget.currency}',
+          style: TextStyle(fontSize: 13, color: t.title)),
+    ]),
+if (_appliedPromo != null) ...[
+  const SizedBox(height: 6),
+  Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(l.discountWithCode(_appliedPromo!),
+            style: const TextStyle(
+                color: Colors.green, fontSize: 13)),
+        Text(
+            '−${_discountAmount.toStringAsFixed(2)} ${widget.currency}',
+            style: const TextStyle(
+                color: Colors.green, fontSize: 13)),
+      ]),
+],
+const SizedBox(height: 10),
+Divider(color: t.divider),
+const SizedBox(height: 10),
+Row(
+    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    children: [
+      Text(l.total,
+          style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 15,
+              color: t.title)),
+      Text(
+        '${_appliedPromo != null ? discountedTotal.toStringAsFixed(2) : totalPrice} ${widget.currency}',
+        style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 15,
+            color: t.price),
+      ),
+    ]),
                           ],
                         ],
                       ),

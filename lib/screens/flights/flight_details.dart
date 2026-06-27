@@ -21,6 +21,16 @@ class FlightDetails extends StatelessWidget {
       required this.returnDate,
       required this.cabinClass});
 
+  double getClassMultiplier(String cabinClass, AppLocalizations l) {
+    final Map<String, double> multipliers = {
+      l.economy: 1.0,
+      l.premiumEconomy: 1.65,
+      l.business: 2.5,
+      l.firstClass: 5.0,
+    };
+    return multipliers[cabinClass] ?? 1.0;
+  }
+
   String _calcArrival(String departTime, String duration) {
     try {
       final parts = departTime.split(':');
@@ -62,6 +72,9 @@ class FlightDetails extends StatelessWidget {
         ? FlightTranslationService.translateCurrency(flight['currency'])
         : (flight['currency']);
     final num price = flight['price'] ?? 0;
+    final double classMultiplier = getClassMultiplier(cabinClass, l);
+    final num classPrice = (flight['price'] as num) * classMultiplier;
+    final num totalPrice = classPrice * passengers;
     final bool hasLuggage = flight['hasLuggage'] ?? false;
     final String tripType = flight['tripType'] ?? '';
     final bool isRoundTrip = tripType == 'roundtrip';
@@ -289,7 +302,18 @@ class FlightDetails extends StatelessWidget {
                             children: [
                               Text(l.baseFare,
                                   style: TextStyle(color: t.accent)),
-                              Text('$currency $price',
+                              Text('$price $currency',
+                                  style: TextStyle(
+                                      color: t.accent,
+                                      fontWeight: FontWeight.w600)),
+                            ]),
+                        const SizedBox(height: 8),
+                        Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(cabinClass,
+                                  style: TextStyle(color: t.accent)),
+                              Text('× ${classMultiplier}',
                                   style: TextStyle(
                                       color: t.accent,
                                       fontWeight: FontWeight.w600)),
@@ -303,6 +327,18 @@ class FlightDetails extends StatelessWidget {
                               Text(l.included,
                                   style: TextStyle(color: t.accent)),
                             ]),
+                        const SizedBox(height: 8),
+                        Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                  '$passengers ${passengers == 1 ? l.passenger : l.passengers}',
+                                  style: TextStyle(color: t.accent)),
+                              Text('× $classPrice $currency',
+                                  style: TextStyle(
+                                      color: t.accent,
+                                      fontWeight: FontWeight.w600)),
+                            ]),
                         Divider(color: t.accent.withOpacity(0.2)),
                         Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -312,7 +348,7 @@ class FlightDetails extends StatelessWidget {
                                       fontWeight: FontWeight.bold,
                                       fontSize: 15,
                                       color: t.accent)),
-                              Text('$currency $price',
+                              Text('$totalPrice $currency',
                                   style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                       fontSize: 15,
@@ -390,7 +426,7 @@ class FlightDetails extends StatelessWidget {
                   children: [
                     Text(l.totalPrice,
                         style: TextStyle(fontSize: 12, color: t.label)),
-                    Text('$currency $price',
+                    Text('$totalPrice $currency',
                         style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
