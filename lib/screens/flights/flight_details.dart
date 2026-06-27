@@ -49,6 +49,30 @@ class FlightDetails extends StatelessWidget {
     }
   }
 
+  String _formatDuration(String arabicDuration, String lang) {
+    // Parse "7س 30د" format
+    final regex = RegExp(r'(\d+)س\s*(\d+)د');
+    final match = regex.firstMatch(arabicDuration);
+
+    if (match == null) return arabicDuration; // fallback if format changes
+
+    final hours = int.parse(match.group(1)!);
+    final minutes = int.parse(match.group(2)!);
+
+    if (lang == 'ar') {
+      return '${hours}س ${minutes}د';
+    }
+
+    // English format
+    if (minutes == 0) {
+      return hours == 1 ? '$hours hour' : '$hours hours';
+    }
+    if (hours == 0) {
+      return minutes == 1 ? '$minutes minute' : '$minutes minutes';
+    }
+    return '$hours h $minutes m';
+  }
+
   @override
   Widget build(BuildContext context) {
     final l = AppLocalizations.of(context)!;
@@ -79,21 +103,50 @@ class FlightDetails extends StatelessWidget {
     final String tripType = flight['tripType'] ?? '';
     final bool isRoundTrip = tripType == 'roundtrip';
 
-    List<String> months = [
-      'Jan',
-      'Feb',
-      'Mar',
-      'Apr',
-      'May',
-      'Jun',
-      'Jul',
-      'Aug',
-      'Sep',
-      'Oct',
-      'Nov',
-      'Dec'
-    ];
-    List<String> days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+    List<String> months;
+    List<String> days;
+
+    if (lang == 'ar') {
+      months = [
+        'يناير',
+        'فبراير',
+        'مارس',
+        'أبريل',
+        'مايو',
+        'يونيو',
+        'يوليو',
+        'أغسطس',
+        'سبتمبر',
+        'أكتوبر',
+        'نوفمبر',
+        'ديسمبر'
+      ];
+      days = [
+        'الاثنين',
+        'الثلاثاء',
+        'الأربعاء',
+        'الخميس',
+        'الجمعة',
+        'السبت',
+        'الأحد'
+      ];
+    } else {
+      months = [
+        'Jan',
+        'Feb',
+        'Mar',
+        'Apr',
+        'May',
+        'Jun',
+        'Jul',
+        'Aug',
+        'Sep',
+        'Oct',
+        'Nov',
+        'Dec'
+      ];
+      days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+    }
 
     String formattedDepartDate = '';
     String formattedReturnDate = '';
@@ -162,7 +215,7 @@ class FlightDetails extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(duration,
+                      Text(_formatDuration(duration, lang),
                           style: TextStyle(fontSize: 13, color: t.label)),
                       Text(formattedDepartDate,
                           style: TextStyle(fontSize: 13, color: t.label)),

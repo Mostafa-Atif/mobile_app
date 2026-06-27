@@ -28,6 +28,56 @@ Do not refer to any other apps or websites.
 We Hate Israel.
 ''';
 
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _sendGreeting();
+    });
+  }
+
+  Future<void> _sendGreeting() async {
+    setState(() => _isLoading = true);
+
+    try {
+      final response = await http.post(
+        Uri.parse(
+            'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${Config.geminiApiKey}'),
+        headers: {'Content-Type': 'application/json'},
+        body: json.encode({
+          'system_instruction': {
+            'parts': [
+              {'text': _systemPrompt}
+            ]
+          },
+          'contents': [
+            {
+              'role': 'user',
+              'parts': [
+                {
+                  'text':
+                      'Greet the user briefly and let them know what you can help with.'
+                }
+              ]
+            }
+          ],
+        }),
+      );
+
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+        final reply =
+            data['candidates'][0]['content']['parts'][0]['text'] as String;
+        setState(() {
+          _messages.add({'role': 'assistant', 'content': reply});
+        });
+      }
+    } catch (_) {}
+
+    setState(() => _isLoading = false);
+    _scrollToBottom();
+  }
+
   Future<void> _sendMessage(String userText) async {
     if (userText.trim().isEmpty) return;
 
@@ -126,8 +176,7 @@ We Hate Israel.
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        Icon(Icons.travel_explore,
-                            size: 64, color: t.label),
+                        Icon(Icons.travel_explore, size: 64, color: t.label),
                         const SizedBox(height: 16),
                         Text(
                           l.welcomeMessage,
@@ -163,9 +212,8 @@ We Hate Israel.
                                     ? t.accent
                                     : t.card,
                             borderRadius: BorderRadius.circular(16),
-                            border: isUser
-                                ? null
-                                : Border.all(color: t.cardBorder),
+                            border:
+                                isUser ? null : Border.all(color: t.cardBorder),
                           ),
                           child: Text(
                             msg['content']!,
@@ -186,13 +234,12 @@ We Hate Israel.
           ),
           if (_isLoading)
             Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               child: Align(
                 alignment: Alignment.centerLeft,
                 child: Container(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 14, vertical: 10),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
                   decoration: BoxDecoration(
                     color: t.card,
                     borderRadius: BorderRadius.circular(16),
@@ -208,8 +255,7 @@ We Hate Israel.
                                 width: 6,
                                 height: 6,
                                 decoration: BoxDecoration(
-                                    color: t.label,
-                                    shape: BoxShape.circle),
+                                    color: t.label, shape: BoxShape.circle),
                               )),
                     ),
                   ),
@@ -227,8 +273,7 @@ We Hate Israel.
                     onSubmitted: _sendMessage,
                     decoration: InputDecoration(
                       hintText: l.inputHint,
-                      hintStyle:
-                          TextStyle(color: t.label, fontSize: 14),
+                      hintStyle: TextStyle(color: t.label, fontSize: 14),
                       border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(24),
                           borderSide: BorderSide(color: t.fieldBorder)),
@@ -237,8 +282,7 @@ We Hate Israel.
                           borderSide: BorderSide(color: t.fieldBorder)),
                       focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(24),
-                          borderSide:
-                              BorderSide(color: t.accent, width: 1.5)),
+                          borderSide: BorderSide(color: t.accent, width: 1.5)),
                       contentPadding: const EdgeInsets.symmetric(
                           horizontal: 16, vertical: 12),
                     ),
@@ -250,8 +294,8 @@ We Hate Israel.
                   child: Container(
                     width: 44,
                     height: 44,
-                    decoration: BoxDecoration(
-                        color: t.accent, shape: BoxShape.circle),
+                    decoration:
+                        BoxDecoration(color: t.accent, shape: BoxShape.circle),
                     child: const Icon(Icons.send_rounded,
                         color: AppColors.white, size: 20),
                   ),

@@ -137,29 +137,53 @@ class _FlightBookingState extends State<FlightBooking> {
     setState(() => passengerList = list);
   }
 
-  String _formatDate(DateTime? date) {
-    if (date == null) return 'Select date';
-    List<String> months = [
-      'Jan',
-      'Feb',
-      'Mar',
-      'Apr',
-      'May',
-      'Jun',
-      'Jul',
-      'Aug',
-      'Sep',
-      'Oct',
-      'Nov',
-      'Dec'
-    ];
+  String _formatDate(DateTime? date, String lang) {
+    if (date == null) {
+      return lang == 'ar' ? 'اختر التاريخ' : 'Select date';
+    }
+
+    List<String> months;
+    if (lang == 'ar') {
+      months = [
+        'يناير',
+        'فبراير',
+        'مارس',
+        'أبريل',
+        'مايو',
+        'يونيو',
+        'يوليو',
+        'أغسطس',
+        'سبتمبر',
+        'أكتوبر',
+        'نوفمبر',
+        'ديسمبر'
+      ];
+    } else {
+      months = [
+        'Jan',
+        'Feb',
+        'Mar',
+        'Apr',
+        'May',
+        'Jun',
+        'Jul',
+        'Aug',
+        'Sep',
+        'Oct',
+        'Nov',
+        'Dec'
+      ];
+    }
+
     return '${date.day} ${months[date.month - 1]} ${date.year}';
   }
 
   num get totalPrice {
-    final double classMultiplier = getClassMultiplier(widget.flightClass, AppLocalizations.of(context)!);
+    final double classMultiplier =
+        getClassMultiplier(widget.flightClass, AppLocalizations.of(context)!);
     return widget.price * classMultiplier * widget.passengers;
   }
+
   num get discountedTotal => totalPrice - _discountAmount;
 
   String? _validateName(String val) {
@@ -890,7 +914,11 @@ class _FlightBookingState extends State<FlightBooking> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(value != null ? _formatDate(value) : label,
+            Text(
+                value != null
+                    ? _formatDate(
+                        value, Localizations.localeOf(context).languageCode)
+                    : label,
                 style: TextStyle(
                     fontSize: 14, color: value != null ? t.title : t.label)),
             Icon(Icons.calendar_today_outlined, size: 18, color: t.label),
@@ -898,6 +926,30 @@ class _FlightBookingState extends State<FlightBooking> {
         ),
       ),
     );
+  }
+
+  String _formatDuration(String arabicDuration, String lang) {
+    // Parse "7س 30د" format
+    final regex = RegExp(r'(\d+)س\s*(\d+)د');
+    final match = regex.firstMatch(arabicDuration);
+
+    if (match == null) return arabicDuration; // fallback if format changes
+
+    final hours = int.parse(match.group(1)!);
+    final minutes = int.parse(match.group(2)!);
+
+    if (lang == 'ar') {
+      return '${hours}س ${minutes}د';
+    }
+
+    // English format
+    if (minutes == 0) {
+      return hours == 1 ? '$hours hour' : '$hours hours';
+    }
+    if (hours == 0) {
+      return minutes == 1 ? '$minutes minute' : '$minutes minutes';
+    }
+    return '$hours h $minutes m';
   }
 
   @override
@@ -980,88 +1032,111 @@ class _FlightBookingState extends State<FlightBooking> {
                             const SizedBox(height: 14),
                             Divider(color: t.divider),
                             const SizedBox(height: 10),
-                            _summaryRow(t, Icons.calendar_today_outlined,
-                                l.departure, _formatDate(widget.departureDate)),
+                            _summaryRow(
+                                t,
+                                Icons.calendar_today_outlined,
+                                l.departure,
+                                _formatDate(widget.departureDate, lang)),
                             if (widget.returnDate != null)
-                              _summaryRow(t, Icons.calendar_today_outlined,
-                                  l.returnDate, _formatDate(widget.returnDate)),
+                              _summaryRow(
+                                  t,
+                                  Icons.calendar_today_outlined,
+                                  l.returnDate,
+                                  _formatDate(widget.returnDate, lang)),
                             _summaryRow(t, Icons.airline_seat_recline_normal,
                                 l.class_, widget.flightClass),
-                            _summaryRow(t, Icons.swap_calls, l.tripType,
-                                widget.tripType),
+                            _summaryRow(
+                              t,
+                              Icons.swap_calls,
+                              l.tripType,
+                              widget.tripType == 'One-way'
+                                  ? l.oneWay
+                                  : l.roundTrip,
+                            ),
                             _summaryRow(t, Icons.people_outline, l.passengers,
                                 '${widget.passengers}'),
                             _summaryRow(
                                 t, Icons.flight, l.airline, widget.airline),
                             _summaryRow(t, Icons.timer_outlined, l.duration,
-                                widget.duration),
+                                _formatDuration(widget.duration, lang)),
                             _summaryRow(t, Icons.location_on_outlined, l.stops,
                                 widget.stops),
                             Divider(color: t.divider),
                             const SizedBox(height: 10),
                             const SizedBox(height: 10),
-Row(
-    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-    children: [
-      Text(l.baseFare,
-          style: TextStyle(color: t.label, fontSize: 13)),
-      Text('${widget.price} ${widget.currency}',
-          style: TextStyle(fontSize: 13, color: t.title)),
-    ]),
-const SizedBox(height: 6),
-Row(
-    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-    children: [
-      Text(widget.flightClass,
-          style: TextStyle(color: t.label, fontSize: 13)),
-      Text(
-          '× ${getClassMultiplier(widget.flightClass, l)}x',
-          style: TextStyle(fontSize: 13, color: t.title)),
-    ]),
-const SizedBox(height: 6),
-Row(
-    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-    children: [
-      Text(
-          '${widget.passengers} ${widget.passengers == 1 ? l.passenger : l.passengers}',
-          style: TextStyle(color: t.label, fontSize: 13)),
-      Text(
-          '× ${(widget.price * getClassMultiplier(widget.flightClass, l)).toStringAsFixed(2)} ${widget.currency}',
-          style: TextStyle(fontSize: 13, color: t.title)),
-    ]),
-if (_appliedPromo != null) ...[
-  const SizedBox(height: 6),
-  Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(l.discountWithCode(_appliedPromo!),
-            style: const TextStyle(
-                color: Colors.green, fontSize: 13)),
-        Text(
-            '−${_discountAmount.toStringAsFixed(2)} ${widget.currency}',
-            style: const TextStyle(
-                color: Colors.green, fontSize: 13)),
-      ]),
-],
-const SizedBox(height: 10),
-Divider(color: t.divider),
-const SizedBox(height: 10),
-Row(
-    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-    children: [
-      Text(l.total,
-          style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 15,
-              color: t.title)),
-      Text(
-        '${_appliedPromo != null ? discountedTotal.toStringAsFixed(2) : totalPrice} ${widget.currency}',
-        style: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 15,
-            color: t.price),
-      ),
-    ]),
+                            Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(l.baseFare,
+                                      style: TextStyle(
+                                          color: t.label, fontSize: 13)),
+                                  Text('${widget.price} ${widget.currency}',
+                                      style: TextStyle(
+                                          fontSize: 13, color: t.title)),
+                                ]),
+                            const SizedBox(height: 6),
+                            Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(widget.flightClass,
+                                      style: TextStyle(
+                                          color: t.label, fontSize: 13)),
+                                  Text(
+                                      '× ${getClassMultiplier(widget.flightClass, l)}x',
+                                      style: TextStyle(
+                                          fontSize: 13, color: t.title)),
+                                ]),
+                            const SizedBox(height: 6),
+                            Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                      '${widget.passengers} ${widget.passengers == 1 ? l.passenger : l.passengers}',
+                                      style: TextStyle(
+                                          color: t.label, fontSize: 13)),
+                                  Text(
+                                      '× ${(widget.price * getClassMultiplier(widget.flightClass, l)).toStringAsFixed(2)} ${widget.currency}',
+                                      style: TextStyle(
+                                          fontSize: 13, color: t.title)),
+                                ]),
+                            if (_appliedPromo != null) ...[
+                              const SizedBox(height: 6),
+                              Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(l.discountWithCode(_appliedPromo!),
+                                        style: const TextStyle(
+                                            color: Colors.green, fontSize: 13)),
+                                    Text(
+                                        '−${_discountAmount.toStringAsFixed(2)} ${widget.currency}',
+                                        style: const TextStyle(
+                                            color: Colors.green, fontSize: 13)),
+                                  ]),
+                            ],
+                            const SizedBox(height: 10),
+                            Divider(color: t.divider),
+                            const SizedBox(height: 10),
+                            Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(l.total,
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 15,
+                                          color: t.title)),
+                                  Text(
+                                    '${_appliedPromo != null ? discountedTotal.toStringAsFixed(2) : totalPrice} ${widget.currency}',
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 15,
+                                        color: t.price),
+                                  ),
+                                ]),
                           ],
                         ],
                       ),

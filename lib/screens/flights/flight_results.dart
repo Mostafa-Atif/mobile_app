@@ -110,8 +110,8 @@ class _FlightResultsState extends State<FlightResults> {
     fetchFlights();
   }
 
-  String _formatDate(DateTime date) {
-    List<String> months = [
+  String _formatDate(DateTime date, String lang) {
+    List<String> enMonths = [
       'Jan',
       'Feb',
       'Mar',
@@ -125,8 +125,36 @@ class _FlightResultsState extends State<FlightResults> {
       'Nov',
       'Dec'
     ];
-    List<String> days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
-    return '${days[date.weekday - 1]}, ${date.day} ${months[date.month - 1]} ${date.year}';
+    List<String> enDays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+
+    List<String> arMonths = [
+      'يناير',
+      'فبراير',
+      'مارس',
+      'أبريل',
+      'مايو',
+      'يونيو',
+      'يوليو',
+      'أغسطس',
+      'سبتمبر',
+      'أكتوبر',
+      'نوفمبر',
+      'ديسمبر'
+    ];
+    List<String> arDays = [
+      'الاثنين',
+      'الثلاثاء',
+      'الأربعاء',
+      'الخميس',
+      'الجمعة',
+      'السبت',
+      'الأحد'
+    ];
+
+    if (lang == 'ar') {
+      return '${arDays[date.weekday - 1]}, ${date.day} ${arMonths[date.month - 1]} ${date.year}';
+    }
+    return '${enDays[date.weekday - 1]}, ${date.day} ${enMonths[date.month - 1]} ${date.year}';
   }
 
   String _calcArrival(String departTime, String duration) {
@@ -145,6 +173,30 @@ class _FlightResultsState extends State<FlightResults> {
     } catch (_) {
       return '--:--';
     }
+  }
+
+  String _formatDuration(String arabicDuration, String lang) {
+    // Parse "7س 30د" format
+    final regex = RegExp(r'(\d+)س\s*(\d+)د');
+    final match = regex.firstMatch(arabicDuration);
+
+    if (match == null) return arabicDuration; // fallback if format changes
+
+    final hours = int.parse(match.group(1)!);
+    final minutes = int.parse(match.group(2)!);
+
+    if (lang == 'ar') {
+      return '${hours}س ${minutes}د';
+    }
+
+    // English format
+    if (minutes == 0) {
+      return hours == 1 ? '$hours hour' : '$hours hours';
+    }
+    if (hours == 0) {
+      return minutes == 1 ? '$minutes minute' : '$minutes minutes';
+    }
+    return '$hours h $minutes m';
   }
 
   @override
@@ -196,7 +248,8 @@ class _FlightResultsState extends State<FlightResults> {
                       color: t.accentLight,
                       borderRadius: BorderRadius.circular(10),
                     ),
-                    child: Text('RT',
+                    child: Text(
+                        widget.tripType == 'One-way' ? l.oneWay : l.roundTrip,
                         style: TextStyle(
                             fontSize: 10,
                             color: t.accent,
@@ -207,8 +260,8 @@ class _FlightResultsState extends State<FlightResults> {
             ),
             Text(
               isRoundTrip
-                  ? '${_formatDate(widget.departureDate)} · ${widget.returnDate != null ? _formatDate(widget.returnDate!) : ''} · ${widget.passengers} pax'
-                  : '${widget.passengers} ${widget.passengers > 1 ? l.passengers : l.passenger} · ${widget.cabinClass} · ${_formatDate(widget.departureDate)}',
+                  ? '${_formatDate(widget.departureDate, lang)} · ${widget.returnDate != null ? _formatDate(widget.returnDate!, lang) : ''} · ${widget.passengers} ${widget.passengers > 1 ? l.passengers : l.passenger} · ${widget.cabinClass}'
+                  : '${_formatDate(widget.departureDate, lang)} · ${widget.passengers} ${widget.passengers > 1 ? l.passengers : l.passenger} · ${widget.cabinClass}',
               style: TextStyle(fontSize: 10, color: t.label),
             ),
           ],
@@ -283,8 +336,8 @@ class _FlightResultsState extends State<FlightResults> {
     );
   }
 
-  Widget _buildFlightCard(
-      Map<String, dynamic> flight, AppLocalizations l, AppThemeExtension t, String cabinClass) {
+  Widget _buildFlightCard(Map<String, dynamic> flight, AppLocalizations l,
+      AppThemeExtension t, String cabinClass) {
     String lang = Localizations.localeOf(context).languageCode;
     final bool hasLuggage = flight['hasLuggage'] ?? false;
     final String currency = lang == 'en'
@@ -296,7 +349,6 @@ class _FlightResultsState extends State<FlightResults> {
     final String returnTime = flight['returnTime'] ?? '';
     final double classMultiplier = getClassMultiplier(cabinClass, l);
     final num displayPrice = (flight['price'] as num) * classMultiplier;
-
 
     return GestureDetector(
       onTap: () => Navigator.push(
@@ -357,7 +409,7 @@ class _FlightResultsState extends State<FlightResults> {
                   _timesRow(
                     flight['departTime'] ?? '--:--',
                     flight['fromCode'] ?? flight['fromCity'] ?? '',
-                    flight['duration'] ?? '',
+                    _formatDuration(flight['duration'] ?? '', lang),
                     stops,
                     flight['arrivalTime'] ?? '--:--',
                     flight['toCode'] ?? flight['toCity'] ?? '',
@@ -382,7 +434,7 @@ class _FlightResultsState extends State<FlightResults> {
                     _timesRow(
                       returnTime,
                       flight['toCode'] ?? flight['toCity'] ?? '',
-                      flight['duration'] ?? '',
+                      _formatDuration(flight['duration'] ?? '', lang),
                       stops,
                       _calcArrival(returnTime, flight['duration'] ?? ''),
                       flight['fromCode'] ?? flight['fromCity'] ?? '',
