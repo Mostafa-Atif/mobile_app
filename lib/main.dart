@@ -28,11 +28,11 @@ void main() async {
 
   Widget startScreen;
   if (!onboardingDone) {
-    startScreen = const TempHome();
+    startScreen = const OnboardingScreen1();
   } else if (token.isNotEmpty) {
-    startScreen = const TempHome();
+    startScreen = const HomeScreen();
   } else {
-    startScreen = const TempHome();
+    startScreen = const SignIn();
   }
 
   runApp(

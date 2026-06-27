@@ -308,22 +308,27 @@ class _DotIndicator extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: isAr ? MainAxisAlignment.end : MainAxisAlignment.start,
-      children: List.generate(totalDots, (i) {
-        final active = i == dotIndex;
-        return AnimatedContainer(
-          duration: const Duration(milliseconds: 260),
-          curve: Curves.easeInOut,
-          margin: const EdgeInsetsDirectional.only(end: 6),
-          width: active ? 22 : 7,
-          height: 7,
-          decoration: BoxDecoration(
-            color: active ? t.accent : t.fieldBorder.withOpacity(0.45),
-            borderRadius: BorderRadius.circular(4),
-          ),
-        );
-      }),
+    return Center(
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        textDirection: isAr ? TextDirection.rtl : TextDirection.ltr,
+        children: List.generate(totalDots, (i) {
+          final active = i == dotIndex;
+          return AnimatedContainer(
+            duration: const Duration(milliseconds: 260),
+            curve: Curves.easeInOut,
+            margin: const EdgeInsets.symmetric(horizontal: 3),
+            width: active ? 22 : 7,
+            height: 7,
+            decoration: BoxDecoration(
+              color: active ? t.accent : t.fieldBorder.withOpacity(0.45),
+              borderRadius: BorderRadius.circular(4),
+            ),
+          );
+        }),
+      ),
     );
   }
 }
+
+

@@ -5,6 +5,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
+import 'package:mobile_app/Archive/temp_home.dart';
 import 'package:mobile_app/config.dart';
 import 'package:mobile_app/data/destinations_repository.dart';
 import 'package:mobile_app/l10n/app_localizations.dart';
@@ -720,250 +721,250 @@ class _HomeScreenState extends State<HomeScreen> {
 
   // ── Upcoming trip ─────────────────────────────────────────────────────────
 
-  Widget _buildUpcomingTrip(
-    BuildContext context,
-    AppThemeExtension t,
-    AppLocalizations l,
-  ) {
-    return FutureBuilder<_UpcomingBooking?>(
-      future: _upcomingFuture,
-      builder: (context, snapshot) {
-        // loading
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                l.upcomingTrip,
-                style: TextStyle(
-                  fontSize: 17,
-                  fontWeight: FontWeight.w800,
-                  color: t.title,
-                  fontFamily: 'DM Serif Display',
-                  letterSpacing: -0.2,
-                ),
-              ),
-              const SizedBox(height: 14),
-              Container(
-                height: 150,
-                decoration: BoxDecoration(
-                  color: t.card,
-                  borderRadius: BorderRadius.circular(18),
-                  border: Border.all(color: t.cardBorder.withOpacity(0.45)),
-                ),
-                child: Center(
-                  child: CircularProgressIndicator(
-                      color: t.accent, strokeWidth: 2),
-                ),
-              ),
-            ],
-          );
-        }
+  // Widget _buildUpcomingTrip(
+  //   BuildContext context,
+  //   AppThemeExtension t,
+  //   AppLocalizations l,
+  // ) {
+  //   return FutureBuilder<_UpcomingBooking?>(
+  //     future: _upcomingFuture,
+  //     builder: (context, snapshot) {
+  //       // loading
+  //       if (snapshot.connectionState == ConnectionState.waiting) {
+  //         return Column(
+  //           crossAxisAlignment: CrossAxisAlignment.start,
+  //           children: [
+  //             Text(
+  //               l.upcomingTrip,
+  //               style: TextStyle(
+  //                 fontSize: 17,
+  //                 fontWeight: FontWeight.w800,
+  //                 color: t.title,
+  //                 fontFamily: 'DM Serif Display',
+  //                 letterSpacing: -0.2,
+  //               ),
+  //             ),
+  //             const SizedBox(height: 14),
+  //             Container(
+  //               height: 150,
+  //               decoration: BoxDecoration(
+  //                 color: t.card,
+  //                 borderRadius: BorderRadius.circular(18),
+  //                 border: Border.all(color: t.cardBorder.withOpacity(0.45)),
+  //               ),
+  //               child: Center(
+  //                 child: CircularProgressIndicator(
+  //                     color: t.accent, strokeWidth: 2),
+  //               ),
+  //             ),
+  //           ],
+  //         );
+  //       }
 
-        // no upcoming booking → hide section entirely
-        if (snapshot.hasError || !snapshot.hasData || snapshot.data == null) {
-          return const SizedBox.shrink();
-        }
+  //       // no upcoming booking → hide section entirely
+  //       if (snapshot.hasError || !snapshot.hasData || snapshot.data == null) {
+  //         return const SizedBox.shrink();
+  //       }
 
-        final b = snapshot.data!;
-        final daysUntil = b.date.difference(DateTime.now()).inDays;
-        final isConfirmed = b.status == 'confirmed';
+  //       final b = snapshot.data!;
+  //       final daysUntil = b.date.difference(DateTime.now()).inDays;
+  //       final isConfirmed = b.status == 'confirmed';
 
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Section header
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  l.upcomingTrip,
-                  style: TextStyle(
-                    fontSize: 17,
-                    fontWeight: FontWeight.w800,
-                    color: t.title,
-                    fontFamily: 'DM Serif Display',
-                    letterSpacing: -0.2,
-                  ),
-                ),
-                GestureDetector(
-                  onTap: _openDashboard,
-                  child: Container(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
-                    decoration: BoxDecoration(
-                      color: t.accentLight,
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: Text(
-                      l.seeAll,
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: t.accent,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 14),
+  //       return Column(
+  //         crossAxisAlignment: CrossAxisAlignment.start,
+  //         children: [
+  //           // Section header
+  //           Row(
+  //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  //             children: [
+  //               Text(
+  //                 l.upcomingTrip,
+  //                 style: TextStyle(
+  //                   fontSize: 17,
+  //                   fontWeight: FontWeight.w800,
+  //                   color: t.title,
+  //                   fontFamily: 'DM Serif Display',
+  //                   letterSpacing: -0.2,
+  //                 ),
+  //               ),
+  //               GestureDetector(
+  //                 onTap: _openDashboard,
+  //                 child: Container(
+  //                   padding:
+  //                       const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
+  //                   decoration: BoxDecoration(
+  //                     color: t.accentLight,
+  //                     borderRadius: BorderRadius.circular(20),
+  //                   ),
+  //                   child: Text(
+  //                     l.seeAll,
+  //                     style: TextStyle(
+  //                       fontSize: 12,
+  //                       color: t.accent,
+  //                       fontWeight: FontWeight.w700,
+  //                     ),
+  //                   ),
+  //                 ),
+  //               ),
+  //             ],
+  //           ),
+  //           const SizedBox(height: 14),
 
-            // Card
-            Container(
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: t.card,
-                borderRadius: BorderRadius.circular(18),
-                border: Border.all(color: t.cardBorder.withOpacity(0.45)),
-                boxShadow: [
-                  BoxShadow(
-                    color: t.cardBorder.withOpacity(0.15),
-                    blurRadius: 12,
-                    offset: const Offset(0, 4),
-                  ),
-                ],
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // Type + status badge
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        b.typeLabel,
-                        style: TextStyle(
-                          fontSize: 11,
-                          color: t.title.withOpacity(0.45),
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 9, vertical: 3),
-                        decoration: BoxDecoration(
-                          color: isConfirmed
-                              ? const Color(0xFFDCFCE7)
-                              : const Color(0xFFFEF9C3),
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Icon(
-                              isConfirmed
-                                  ? Icons.check_circle_outline_rounded
-                                  : Icons.access_time_rounded,
-                              size: 11,
-                              color: isConfirmed
-                                  ? const Color(0xFF166534)
-                                  : const Color(0xFF854D0E),
-                            ),
-                            const SizedBox(width: 4),
-                            Text(
-                              isConfirmed ? 'Confirmed' : 'Pending',
-                              style: TextStyle(
-                                fontSize: 10,
-                                fontWeight: FontWeight.w700,
-                                color: isConfirmed
-                                    ? const Color(0xFF166534)
-                                    : const Color(0xFF854D0E),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 14),
+  //           // Card
+  //           Container(
+  //             padding: const EdgeInsets.all(16),
+  //             decoration: BoxDecoration(
+  //               color: t.card,
+  //               borderRadius: BorderRadius.circular(18),
+  //               border: Border.all(color: t.cardBorder.withOpacity(0.45)),
+  //               boxShadow: [
+  //                 BoxShadow(
+  //                   color: t.cardBorder.withOpacity(0.15),
+  //                   blurRadius: 12,
+  //                   offset: const Offset(0, 4),
+  //                 ),
+  //               ],
+  //             ),
+  //             child: Column(
+  //               crossAxisAlignment: CrossAxisAlignment.start,
+  //               children: [
+  //                 // Type + status badge
+  //                 Row(
+  //                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  //                   children: [
+  //                     Text(
+  //                       b.typeLabel,
+  //                       style: TextStyle(
+  //                         fontSize: 11,
+  //                         color: t.title.withOpacity(0.45),
+  //                         fontWeight: FontWeight.w500,
+  //                       ),
+  //                     ),
+  //                     Container(
+  //                       padding: const EdgeInsets.symmetric(
+  //                           horizontal: 9, vertical: 3),
+  //                       decoration: BoxDecoration(
+  //                         color: isConfirmed
+  //                             ? const Color(0xFFDCFCE7)
+  //                             : const Color(0xFFFEF9C3),
+  //                         borderRadius: BorderRadius.circular(20),
+  //                       ),
+  //                       child: Row(
+  //                         mainAxisSize: MainAxisSize.min,
+  //                         children: [
+  //                           Icon(
+  //                             isConfirmed
+  //                                 ? Icons.check_circle_outline_rounded
+  //                                 : Icons.access_time_rounded,
+  //                             size: 11,
+  //                             color: isConfirmed
+  //                                 ? const Color(0xFF166534)
+  //                                 : const Color(0xFF854D0E),
+  //                           ),
+  //                           const SizedBox(width: 4),
+  //                           Text(
+  //                             isConfirmed ? 'Confirmed' : 'Pending',
+  //                             style: TextStyle(
+  //                               fontSize: 10,
+  //                               fontWeight: FontWeight.w700,
+  //                               color: isConfirmed
+  //                                   ? const Color(0xFF166534)
+  //                                   : const Color(0xFF854D0E),
+  //                             ),
+  //                           ),
+  //                         ],
+  //                       ),
+  //                     ),
+  //                   ],
+  //                 ),
+  //                 const SizedBox(height: 14),
 
-                  // Title
-                  Text(
-                    b.title,
-                    style: TextStyle(
-                      fontSize: 22,
-                      fontWeight: FontWeight.w900,
-                      color: t.title,
-                      letterSpacing: -0.5,
-                    ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  const SizedBox(height: 14),
+  //                 // Title
+  //                 Text(
+  //                   b.title,
+  //                   style: TextStyle(
+  //                     fontSize: 22,
+  //                     fontWeight: FontWeight.w900,
+  //                     color: t.title,
+  //                     letterSpacing: -0.5,
+  //                   ),
+  //                   maxLines: 1,
+  //                   overflow: TextOverflow.ellipsis,
+  //                 ),
+  //                 const SizedBox(height: 14),
 
-                  // Meta row
-                  Row(
-                    children: [
-                      _TripMeta(label: b.line1Label, value: b.line1Value, t: t),
-                      const SizedBox(width: 18),
-                      _TripMeta(label: b.line2Label, value: b.line2Value, t: t),
-                      const SizedBox(width: 18),
-                      _TripMeta(label: b.line3Label, value: b.line3Value, t: t),
-                    ],
-                  ),
-                  const SizedBox(height: 14),
+  //                 // Meta row
+  //                 Row(
+  //                   children: [
+  //                     _TripMeta(label: b.line1Label, value: b.line1Value, t: t),
+  //                     const SizedBox(width: 18),
+  //                     _TripMeta(label: b.line2Label, value: b.line2Value, t: t),
+  //                     const SizedBox(width: 18),
+  //                     _TripMeta(label: b.line3Label, value: b.line3Value, t: t),
+  //                   ],
+  //                 ),
+  //                 const SizedBox(height: 14),
 
-                  // Footer
-                  Container(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 12, vertical: 9),
-                    decoration: BoxDecoration(
-                      color: t.bg,
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        RichText(
-                          text: TextSpan(
-                            style: TextStyle(
-                              fontSize: 11,
-                              color: t.title.withOpacity(0.55),
-                            ),
-                            children: [
-                              const TextSpan(text: 'In '),
-                              TextSpan(
-                                text: '$daysUntil days',
-                                style: TextStyle(
-                                  color: t.accent,
-                                  fontWeight: FontWeight.w700,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        GestureDetector(
-                          onTap: _openDashboard,
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 14, vertical: 5),
-                            decoration: BoxDecoration(
-                              border:
-                                  Border.all(color: t.accent.withOpacity(0.60)),
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                            child: Text(
-                              'Details',
-                              style: TextStyle(
-                                fontSize: 11,
-                                color: t.accent,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        );
-      },
-    );
-  }
+  //                 // Footer
+  //                 Container(
+  //                   padding:
+  //                       const EdgeInsets.symmetric(horizontal: 12, vertical: 9),
+  //                   decoration: BoxDecoration(
+  //                     color: t.bg,
+  //                     borderRadius: BorderRadius.circular(10),
+  //                   ),
+  //                   child: Row(
+  //                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  //                     children: [
+  //                       RichText(
+  //                         text: TextSpan(
+  //                           style: TextStyle(
+  //                             fontSize: 11,
+  //                             color: t.title.withOpacity(0.55),
+  //                           ),
+  //                           children: [
+  //                             const TextSpan(text: 'In '),
+  //                             TextSpan(
+  //                               text: '$daysUntil days',
+  //                               style: TextStyle(
+  //                                 color: t.accent,
+  //                                 fontWeight: FontWeight.w700,
+  //                               ),
+  //                             ),
+  //                           ],
+  //                         ),
+  //                       ),
+  //                       GestureDetector(
+  //                         onTap: _openDashboard,
+  //                         child: Container(
+  //                           padding: const EdgeInsets.symmetric(
+  //                               horizontal: 14, vertical: 5),
+  //                           decoration: BoxDecoration(
+  //                             border:
+  //                                 Border.all(color: t.accent.withOpacity(0.60)),
+  //                             borderRadius: BorderRadius.circular(20),
+  //                           ),
+  //                           child: Text(
+  //                             'Details',
+  //                             style: TextStyle(
+  //                               fontSize: 11,
+  //                               color: t.accent,
+  //                               fontWeight: FontWeight.w600,
+  //                             ),
+  //                           ),
+  //                         ),
+  //                       ),
+  //                     ],
+  //                   ),
+  //                 ),
+  //               ],
+  //             ),
+  //           ),
+  //         ],
+  //       );
+  //     },
+  //   );
+  // }
 
   // ── Special Offers / 20% promo banner ────────────────────────────────────
 
@@ -1580,6 +1581,23 @@ class _ProfileMenuOverlayState extends State<_ProfileMenuOverlay>
                             padding: const EdgeInsets.symmetric(vertical: 6),
                             child: Column(
                               children: [
+                                if (isAdmin)
+  _MenuRow(
+    icon: Icons.bug_report,
+    label: 'Dev Menu',
+    iconBg: iconBg,
+    iconColor: iconCol,
+    labelColor: labelCol,
+    chevronColor: chevronCol,
+    isDark: isDark,
+    onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const TempHome())),
+  ),
+                                if (isAdmin)
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 14, vertical: 3),
+                                    child: Divider(height: 1, color: dividerCol),
+                                  ),
                                 _MenuRow(
                                   icon: Icons.dashboard_outlined,
                                   label: isAdmin
