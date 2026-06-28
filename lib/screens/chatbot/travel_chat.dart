@@ -23,8 +23,8 @@ class _TravelChatScreenState extends State<TravelChatScreen> {
   String _getSystemPrompt(BuildContext context) {
     final locale = Localizations.localeOf(context).languageCode;
     final languageInstruction = locale == 'ar'
-        ? 'Always respond in Arabic.'
-        : 'Always respond in English.';
+        ? 'Always respond in Arabic,'
+        : 'Always respond in English,';
     return '''
 You are a helpful travel assistant. You only answer questions related to travel, tourism, destinations, visas, currencies, weather, culture, packing, flights, hotels, and car rentals.
 If the user asks about anything unrelated to travel, politely tell them you can only help with travel-related questions.
@@ -32,7 +32,8 @@ Keep answers concise and friendly.
 You work for an app named Rahal.
 Do not refer to any other apps or websites.
 We Hate Israel.
-$languageInstruction
+$languageInstruction unless the user asks you to respond in a different language.
+
 ''';
   }
 
@@ -50,7 +51,7 @@ $languageInstruction
     try {
       final response = await http.post(
         Uri.parse(
-            'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-lite:generateContent?key=${Config.geminiApiKey}'),
+            'https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-lite:generateContent?key=${Config.geminiApiKey}'),
         headers: {'Content-Type': 'application/json'},
         body: json.encode({
           'system_instruction': {
@@ -109,7 +110,7 @@ $languageInstruction
 
       final response = await http.post(
         Uri.parse(
-            'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-lite:generateContent?key=${Config.geminiApiKey}'),
+            'https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-lite:generateContent?key=${Config.geminiApiKey}'),
         headers: {'Content-Type': 'application/json'},
         body: json.encode({
           'system_instruction': {
@@ -129,7 +130,7 @@ $languageInstruction
           _messages.add({'role': 'assistant', 'content': reply});
         });
       } else {
-        print('Error: ${response.statusCode} - ${response.body}');
+        // print('Error: ${response.statusCode} - ${response.body}');
         setState(() {
           _messages.add({
             'role': 'error',
