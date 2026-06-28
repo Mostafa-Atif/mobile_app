@@ -5,23 +5,15 @@
   "homeGreetingWithName": "جاهز للإقلاع، {name}؟",
   "@homeGreetingWithName": {
     "placeholders": {
-      "name": { "type": "String" }
+      "name": {
+        "type": "String"
+      }
     }
   },
   "homeHeroTitle": "خطّط لمغامرتك القادمة",
-  "homeHeroSubtitle": "ابحث عن أماكن ملهمة، وقارن الأفكار، وافتح دليل الوجهة مباشرة من الصفحة الرئيسية.",
   "homeDestinationsTitle": "استكشف الوجهات",
-  "homeDestinationsSubtitle": "تصفّح مجموعة مختارة من الوجهات وافتح دليلًا سريعًا للمكان المناسب لرحلتك القادمة.",
   "homeSearchHint": "ابحث عن وجهات أو دول أو كلمات مفتاحية",
-  "homeExploreDestination": "افتح الدليل",
-  "homeBackToDestinations": "العودة إلى الوجهات",
-  "homeNoDestinationsTitle": "لم يتم العثور على وجهات",
-  "homeNoDestinationsSubtitle": "جرّب كلمة بحث مختلفة لاكتشاف مزيد من الأماكن.",
   "homeOfficialWebsite": "الموقع الرسمي",
-  "homeOfficialWebsiteHint": "استخدم هذا المصدر عندما تريد الصفحة الرسمية الخاصة بالوجهة.",
-  "homeOfficialSource": "المصدر الرسمي",
-  "homeTravelerGuide": "دليل المسافر",
-  "homeSearchReady": "جاهز للبحث",
   "seeAll": "عرض الكل",
   "allDestinationsTitle": "كل الوجهات",
   "popularDestinations": "الأشهر",
@@ -31,14 +23,18 @@
   "destinationBestTimeBody": "أفضل وقت لاكتشاف {name} يكون خلال المواسم المعتدلة حين تكون الجولات والأنشطة الخارجية أكثر راحة.",
   "@destinationBestTimeBody": {
     "placeholders": {
-      "name": { "type": "String" }
+      "name": {
+        "type": "String"
+      }
     }
   },
   "destinationCuisineTitle": "المأكولات المحلية",
   "destinationCuisineBody": "استكشف نكهات {name} المحلية وجرّب الأطباق المشهورة والأماكن المفضلة لدى السكان والأسواق الغذائية.",
   "@destinationCuisineBody": {
     "placeholders": {
-      "name": { "type": "String" }
+      "name": {
+        "type": "String"
+      }
     }
   },
   "destinationStayTitle": "أماكن الإقامة",
@@ -47,7 +43,9 @@
   "destinationAttractionsBody": "ابدأ بأشهر الأماكن في {name} ثم اترك وقتًا لاكتشاف الأحياء المحلية والزوايا المميزة.",
   "@destinationAttractionsBody": {
     "placeholders": {
-      "name": { "type": "String" }
+      "name": {
+        "type": "String"
+      }
     }
   },
   "devMenu": "قائمة المطور",
@@ -81,18 +79,15 @@
   "forgotPassword": "نسيت كلمة المرور؟",
   "noAccount": "ليس لديك حساب؟",
   "haveAccount": "لديك حساب بالفعل؟",
-  "passwordHint": "8 أحرف على الأقل، كبيرة وصغيرة وأرقام ورموز",
   "male": "ذكر",
   "female": "أنثى",
   "forgotPasswordTitle": "استعادة كلمة المرور",
   "forgotPasswordSubtitle": "أدخل بريدك الإلكتروني وسنرسل لك رابط إعادة التعيين",
   "sendResetLink": "إرسال رابط الاستعادة",
   "resetLinkSent": "تم إرسال الرابط! تحقق من بريدك.\nجارٍ التحويل لتسجيل الدخول...",
-  "errorFillFields": "يرجى ملء جميع الحقول",
   "errorValidEmail": "أدخل بريداً إلكترونياً صحيحاً",
   "errorPasswordLength": "كلمة المرور يجب أن تكون 8 أحرف على الأقل",
   "errorLettersOnly": "أحرف فقط",
-  "errorMustBe18": "يجب أن يكون عمرك 18 أو أكثر",
   "errorRequired": "مطلوب",
   "errorValidPhone": "أدخل رقم هاتف صحيح (7-15 رقماً)",
   "errorPasswordUppercase": "حرف كبير واحد على الأقل",
@@ -101,14 +96,8 @@
   "errorPasswordSpecial": "رمز خاص واحد على الأقل",
   "errorPasswordMinLength": "8 أحرف على الأقل",
   "carRentTitle": "تأجير السيارات",
-  "carRentSubtitle": "استأجر سيارتك بأفضل الأسعار",
-  "carRentHint": "اضغط على سيارة لاختيارها، ثم أكمل تفاصيل الحجز",
   "selected": "محدد",
-  "showMore": "عرض المزيد",
   "bookingDetails": "تفاصيل الحجز",
-  "selectCarFirst": "↑ اختر سيارة من القائمة أعلاه",
-  "pickupLocation": "موقع الاستلام",
-  "dropoffLocation": "موقع التسليم",
   "selectLocation": "اختر موقعاً",
   "pickupDateTime": "تاريخ ووقت الاستلام",
   "dropoffDateTime": "تاريخ ووقت التسليم",
@@ -116,25 +105,29 @@
   "totalDays": "الإجمالي: {days} يوم",
   "@totalDays": {
     "placeholders": {
-      "days": { "type": "int" }
+      "days": {
+        "type": "int"
+      }
     }
   },
   "privateDriver": "سائق خاص",
   "privateDriverExtra": "إضافي {amount}/يوم",
   "@privateDriverExtra": {
     "placeholders": {
-      "amount": {"type": "String"}
+      "amount": {
+        "type": "String"
+      }
     }
   },
   "carRentalDays": "تأجير السيارة ({days} أيام)",
   "@carRentalDays": {
     "placeholders": {
-      "days": { "type": "int" }
+      "days": {
+        "type": "int"
+      }
     }
   },
   "total": "الإجمالي",
-  "proceedToPayment": "انتقل إلى الدفع",
-  "bookingConfirmed": "تم الحجز بنجاح! 🎉",
   "bookingFailed": "فشل الحجز",
   "selectCarError": "يرجى اختيار سيارة أولاً",
   "selectLocationsError": "يرجى اختيار مواقع الاستلام والتسليم",
@@ -142,25 +135,15 @@
   "dropoffBeforePickup": "يجب أن يكون وقت التسليم بعد الاستلام",
   "signInFirst": "يرجى تسجيل الدخول أولاً",
   "perDay": "يومياً",
-  "perWeek": "أسبوعياً",
-  "vatIncluded": "*الأسعار شاملة ضريبة القيمة المضافة",
-  "noCarAvailable": "لا توجد سيارات متاحة",
-  "seats": "مقاعد",
-  "bags": "حقائب",
   "unableToConnect": "تعذّر الاتصال",
   "checkConnectionRetry": "يرجى التحقق من اتصالك والمحاولة مجدداً",
   "retry": "إعادة المحاولة",
-  "dateTimeAt": "{date} في {time}",
-  "@dateTimeAt": {
-    "placeholders": {
-      "date": { "type": "String" },
-      "time": { "type": "String" }
-    }
-  },
   "errorWithMessage": "خطأ: {message}",
   "@errorWithMessage": {
     "placeholders": {
-      "message": { "type": "String" }
+      "message": {
+        "type": "String"
+      }
     }
   },
   "searchStays": "البحث عن إقامة",
@@ -177,7 +160,9 @@
   "nights": "{count} ليلة",
   "@nights": {
     "placeholders": {
-      "count": { "type": "int" }
+      "count": {
+        "type": "int"
+      }
     }
   },
   "room": "غرفة",
@@ -190,8 +175,12 @@
   "propertiesFound": "{count} عقار في {destination}",
   "@propertiesFound": {
     "placeholders": {
-      "count": { "type": "int" },
-      "destination": { "type": "String" }
+      "count": {
+        "type": "int"
+      },
+      "destination": {
+        "type": "String"
+      }
     }
   },
   "sortBy": "ترتيب حسب",
@@ -210,15 +199,20 @@
   "views": "الإطلالات",
   "rooms": "الغرف",
   "roomsAndGuests": "الغرف والنزلاء",
-  "numberOfRooms": "عدد الغرف",
   "bookNow": "احجز الآن",
   "perNight": "/ ليلة",
   "totalNightsRooms": "{total} الإجمالي ({nights} ليلة، {rooms} غرفة)",
   "@totalNightsRooms": {
     "placeholders": {
-      "total": { "type": "String" },
-      "nights": { "type": "int" },
-      "rooms": { "type": "int" }
+      "total": {
+        "type": "String"
+      },
+      "nights": {
+        "type": "int"
+      },
+      "rooms": {
+        "type": "int"
+      }
     }
   },
   "guestDetails": "تفاصيل النزلاء",
@@ -229,11 +223,12 @@
   "saveGuest": "حفظ بيانات النزيل {number}",
   "@saveGuest": {
     "placeholders": {
-      "number": { "type": "int" }
+      "number": {
+        "type": "int"
+      }
     }
   },
   "fillGuestDetails": "يرجى إكمال تفاصيل جميع النزلاء المتبقين",
-  "hotelBookedSuccess": "تم حجز الفندق بنجاح! 🏨",
   "hotelSeeReviews": "عرض التقييمات",
   "hotelRatingExceptional": "استثنائي",
   "hotelRatingExcellent": "ممتاز",
@@ -274,7 +269,6 @@
   "selectArrivalCity": "اختر مدينة الوصول",
   "passenger": "راكب",
   "travellerDetails": "تفاصيل المسافر",
-  "nationality": "الجنسية",
   "passportNumber": "رقم جواز السفر",
   "passportExpiry": "تاريخ انتهاء جواز السفر",
   "dateOfBirth": "تاريخ الميلاد",
@@ -291,17 +285,20 @@
   "savePassenger": "حفظ الراكب {number}",
   "@savePassenger": {
     "placeholders": {
-      "number": { "type": "int" }
+      "number": {
+        "type": "int"
+      }
     }
   },
   "confirmBookings": "تأكيد {count} حجوزات",
   "@confirmBookings": {
     "placeholders": {
-      "count": { "type": "int" }
+      "count": {
+        "type": "int"
+      }
     }
   },
   "fillPassengerDetails": "يرجى إكمال تفاصيل جميع الركاب المتبقين",
-  "flightBookedSuccess": "تم حجز الرحلة بنجاح! ✈️",
   "someBookingsFailed": "فشل بعض الحجوزات. يرجى المحاولة مجدداً.",
   "reviewTrip": "مراجعة رحلتك",
   "flightDetails": "تفاصيل الرحلة",
@@ -319,7 +316,6 @@
   "airline": "شركة الطيران",
   "duration": "المدة",
   "stops": "التوقفات",
-  "pricePerPerson": "السعر لكل شخص",
   "outboundFlight": "رحلة الذهاب",
   "returnFlight": "رحلة العودة",
   "noFlightsFound": "لا توجد رحلات",
@@ -338,11 +334,12 @@
   "discountWithCode": "الخصم ({code})",
   "@discountWithCode": {
     "placeholders": {
-      "code": { "type": "String" }
+      "code": {
+        "type": "String"
+      }
     }
   },
   "invalidPromoCode": "كود الخصم غير صالح",
-  "promoValidateFailed": "تعذّر التحقق من الكود. حاول مرة أخرى.",
   "userDashboardTitle": "حجوزاتي",
   "userDashboardSubtitle": "كل حجوزاتك في مكان واحد",
   "userDashboardTotal": "الإجمالي",
@@ -387,25 +384,6 @@
   "statusCompleted": "مكتمل",
   "statusCancelled": "ملغي",
   "statusPending": "قيد الانتظار",
-  "aboutTitle": "من نحن",
-  "aboutMissionLabel": "مهمّتنا",
-  "aboutMissionBody": "رحّال هو رفيقك في كل رحلة. نؤمن بأن السفر يجب أن يكون سهلاً وممتعاً ومتاحاً للجميع. لذلك وفّرنا في مكان واحد كل ما تحتاجه - من حجز رحلات الطيران إلى الفنادق وتأجير السيارات - بأسعار منافسة وتجربة استخدام لا مثيل لها.",
-  "aboutOfferLabel": "ما نقدّمه",
-  "aboutContactLabel": "تواصل معنا",
-  "aboutHeadquarters": "المقر الرئيسي",
-  "aboutHeadquartersValue": "الرياض، المملكة العربية السعودية",
-  "aboutVersion": "الإصدار ١.٠.٠",
-  "aboutStatsHotels": "فندق",
-  "aboutStatsDestinations": "وجهة",
-  "aboutStatsTravelers": "عميل سعيد",
-  "aboutFeatureFlightsTitle": "حجز رحلات",
-  "aboutFeatureFlightsDesc": "ابحث عن أفضل الرحلات وأرخصها من مئات شركات الطيران حول العالم.",
-  "aboutFeatureHotelsTitle": "حجز فنادق",
-  "aboutFeatureHotelsDesc": "اختر من بين أكثر من مليون فندق وشقة فندقية في جميع أنحاء العالم.",
-  "aboutFeatureCarsTitle": "تأجير سيارات",
-  "aboutFeatureCarsDesc": "استأجر سيارتك المفضلة بأفضل الأسعار مع خيار السائق الخاص.",
-  "aboutFeatureSupportTitle": "دعم على مدار الساعة",
-  "aboutFeatureSupportDesc": "فريق دعم متاح دائماً لمساعدتك في أي وقت خلال رحلتك.",
   "menuDashboard": "حجوزاتي",
   "menuAdminDashboard": "إدارة الحجوزات",
   "menuSettings": "الإعدادات",
@@ -424,7 +402,6 @@
   "errorAge": "يجب أن يكون العمر بين 18 و 120",
   "errorNationalId": "يجب أن يكون من 8 إلى 20 حرفاً أو رقماً",
   "upcomingTrip": "رحلتك القادمة",
-  "specialOffers": "عروض خاصة",
   "specialOffer": "عرض خاص",
   "offerBadge": "حصري للتطبيق",
   "offerWelcomeGift": "هدية رحال.",
@@ -432,280 +409,42 @@
   "offerCodeLabel": "الكود",
   "offerCodeCopied": "تم نسخ الكود: RAHAL20",
   "offerCopyCode": "نسخ الكود",
-  "paymentTitle": "الدفع",
-  "paymentCreditCard": "بطاقة ائتمان",
-  "paymentDebitCard": "بطاقة مدين",
-  "paymentCardNumber": "رقم البطاقة",
-  "paymentCardholderName": "اسم حامل البطاقة",
-  "paymentCardholderHint": "الاسم على البطاقة",
-  "paymentExpiry": "تاريخ الانتهاء",
-  "paymentCvv": "CVV",
-  "paymentSaveCard": "حفظ البطاقة",
-  "paymentSaveCardSub": "لإتمام الدفع بشكل أسرع في المرة القادمة",
-  "paymentSecureNote": "بيانات الدفع محمية",
-  "paymentErrorCardNumberRequired": "أدخل رقم البطاقة",
-  "paymentErrorCardNumberInvalid": "أدخل رقم بطاقة صحيح",
-  "paymentErrorCardholderRequired": "أدخل اسم حامل البطاقة",
-  "paymentErrorCardholderInvalid": "أدخل اسمًا صحيحًا",
-  "paymentErrorExpiryRequired": "أدخل تاريخ الانتهاء",
-  "paymentErrorExpiryInvalid": "أدخل تاريخ انتهاء صحيح",
-  "paymentErrorExpiryExpired": "انتهت صلاحية هذه البطاقة",
-  "paymentErrorCvvRequired": "أدخل رمز CVV",
-  "paymentErrorCvvInvalid": "أدخل رمز CVV صحيح",
   "edit": "تعديل",
   "add": "إضافة",
-  "airport": "مطار",
-  "downtown": "وسط المدينة",
-  "trainStation": "محطة القطار",
-  "hotelDistrict": "منطقة الفنادق",
-  "shoppingDistrict": "منطقة التسوق",
-  "industrialZone": "المنطقة الصناعية",
-  "airportRoad": "طريق المطار",
-  "dubai": "دبي",
-  "abuDhabi": "أبو ظبي",
-  "sharjah": "الشارقة",
-  "riyadh": "الرياض",
-  "jeddah": "جدة",
-  "cairo": "القاهرة",
-  "alexandria": "الإسكندرية",
-  "giza": "الجيزة",
-  "aswan": "أسوان",
-  "doha": "الدوحة",
-  "alRayyan": "الريان",
-  "manama": "المنامة",
-  "muharraq": "المحرق",
-  "muscat": "مسقط",
-  "salalah": "صلالة",
-  "kuwaitCity": "مدينة الكويت",
-  "salmiya": "السالمية",
-  "amman": "عمّان",
-  "zarqa": "الزرقاء",
-  "beirut": "بيروت",
-  "tripoli": "طرابلس",
-  "istanbul": "إسطنبول",
-  "ankara": "أنقرة",
-  "izmir": "إزمير",
-  "london": "لندن",
-  "manchester": "مانشستر",
-  "birmingham": "برمنغهام",
-  "paris": "باريس",
-  "lyon": "ليون",
-  "marseille": "مارسيليا",
-  "madrid": "مدريد",
-  "barcelona": "برشلونة",
-  "seville": "إشبيلية",
-  "rome": "روما",
-  "milan": "ميلانو",
-  "venice": "البندقية",
-  "berlin": "برلين",
-  "munich": "ميونخ",
-  "hamburg": "هامبورغ",
-  "tokyo": "طوكيو",
-  "osaka": "أوساكا",
-  "kyoto": "كيوتو",
-  "singapore": "سنغافورة",
-  "bangkok": "بانكوك",
-  "phuket": "فوكيت",
-  "chiangMai": "تشيانغ ماي",
-  "delhi": "دلهي",
-  "mumbai": "مومباي",
-  "bangalore": "بنغالور",
-  "seoul": "سيول",
-  "busan": "بوسان",
-  "incheon": "إنشيون",
-  "newYork": "نيويورك",
-  "losAngeles": "لوس أنجلس",
-  "chicago": "شيكاغو",
-  "miami": "ميامي",
-  "lasVegas": "لاس فيغاس",
-  "toronto": "تورنتو",
-  "vancouver": "فانكوفر",
-  "montreal": "مونتريال",
-  "mexicoCity": "مدينة مكسيكو",
-  "cancun": "كانكون",
-  "playaDelCarmen": "بلايا ديل كارمن",
-  "saoPaulo": "ساو باولو",
-  "rioDeJaneiro": "ريو دي جانيرو",
-  "salvador": "سلفادور",
-  "sydney": "سيدني",
-  "melbourne": "ملبورن",
-  "brisbane": "بريسبان",
-  "uae": "الإمارات العربية المتحدة",
-  "saudiArabia": "المملكة العربية السعودية",
-  "egypt": "مصر",
-  "qatar": "قطر",
-  "bahrain": "البحرين",
-  "oman": "عمان",
-  "kuwait": "الكويت",
-  "jordan": "الأردن",
-  "lebanon": "لبنان",
-  "turkey": "تركيا",
-  "unitedKingdom": "المملكة المتحدة",
-  "france": "فرنسا",
-  "spain": "إسبانيا",
-  "italy": "إيطاليا",
-  "germany": "ألمانيا",
-  "japan": "اليابان",
-  "thailand": "تايلاند",
-  "india": "الهند",
-  "southKorea": "كوريا الجنوبية",
-  "unitedStates": "الولايات المتحدة",
-  "canada": "كندا",
-  "mexico": "المكسيك",
-  "brazil": "البرازيل",
-  "australia": "أستراليا",
   "selectCountry": "اختر الدولة",
   "selectCity": "اختر المدينة",
   "selectPickupLocation": "موقع الاستلام",
   "selectDropoffLocation": "موقع التسليم",
-  "sameCityAsPickup": "نفس مدينة الاستلام",
-  "airport": "المطار",
-  "downtown": "وسط المدينة",
-  "trainStation": "محطة القطار",
-  "hotelDistrict": "حي الفنادق",
-  "shoppingDistrict": "حي التسوق",
-  "industrialZone": "المنطقة الصناعية",
-  "airportRoad": "طريق المطار",
-  "uae": "الإمارات",
-  "dubai": "دبي",
-  "abuDhabi": "أبوظبي",
-  "sharjah": "الشارقة",
-  "saudiArabia": "المملكة العربية السعودية",
-  "riyadh": "الرياض",
-  "jeddah": "جدة",
-  "egypt": "مصر",
-  "cairo": "القاهرة",
-  "alexandria": "الإسكندرية",
-  "giza": "الجيزة",
-  "aswan": "أسوان",
-  "qatar": "قطر",
-  "doha": "الدوحة",
-  "alRayyan": "الريان",
-  "bahrain": "البحرين",
-  "manama": "المنامة",
-  "muharraq": "المحرق",
-  "oman": "عُمان",
-  "muscat": "مسقط",
-  "salalah": "صلالة",
-  "kuwait": "الكويت",
-  "kuwaitCity": "مدينة الكويت",
-  "salmiya": "السالمية",
-  "jordan": "الأردن",
-  "amman": "عمّان",
-  "zarqa": "الزرقاء",
-  "lebanon": "لبنان",
-  "beirut": "بيروت",
-  "tripoli": "طرابلس",
-  "turkey": "تركيا",
-  "istanbul": "إسطنبول",
-  "ankara": "أنقرة",
-  "izmir": "إزمير",
-  "unitedKingdom": "المملكة المتحدة",
-  "london": "لندن",
-  "manchester": "مانشستر",
-  "birmingham": "برمنغهام",
-  "france": "فرنسا",
-  "paris": "باريس",
-  "lyon": "ليون",
-  "marseille": "مرسيليا",
-  "spain": "إسبانيا",
-  "madrid": "مدريد",
-  "barcelona": "برشلونة",
-  "seville": "إشبيلية",
-  "italy": "إيطاليا",
-  "rome": "روما",
-  "milan": "ميلانو",
-  "venice": "البندقية",
-  "germany": "ألمانيا",
-  "berlin": "برلين",
-  "munich": "ميونخ",
-  "hamburg": "هامبورغ",
-  "japan": "اليابان",
-  "tokyo": "طوكيو",
-  "osaka": "أوساكا",
-  "kyoto": "كيوتو",
-  "singapore": "سنغافورة",
-  "thailand": "تايلاند",
-  "bangkok": "بانكوك",
-  "phuket": "فوكيت",
-  "chiangMai": "شيانغ ماي",
-  "india": "الهند",
-  "delhi": "دلهي",
-  "mumbai": "مومباي",
-  "bangalore": "بنغالور",
-  "southKorea": "كوريا الجنوبية",
-  "seoul": "سيول",
-  "busan": "بوسان",
-  "incheon": "إنتشون",
-  "unitedStates": "الولايات المتحدة",
-  "newYork": "نيويورك",
-  "losAngeles": "لوس أنجلوس",
-  "chicago": "شيكاغو",
-  "miami": "ميامي",
-  "lasVegas": "لاس فيغاس",
-  "canada": "كندا",
-  "toronto": "تورنتو",
-  "vancouver": "فانكوفر",
-  "montreal": "مونتريال",
-  "mexico": "المكسيك",
-  "mexicoCity": "مكسيكو سيتي",
-  "cancun": "كانكون",
-  "playaDelCarmen": "بلايا ديل كارمن",
-  "brazil": "البرازيل",
-  "saoPaulo": "ساو باولو",
-  "rioDeJaneiro": "ريو دي جانيرو",
-  "salvador": "سالفادور",
-  "australia": "أستراليا",
-  "sydney": "سيدني",
-  "melbourne": "ملبورن",
-  "brisbane": "بريزبن",
-  "selectCountry": "اختر الدولة",
-  "selectCity": "اختر المدينة",
   "stepOf": "الخطوة {step} من 4",
   "@stepOf": {
     "placeholders": {
-      "step": { "type": "int" }
+      "step": {
+        "type": "int"
+      }
     }
   },
   "tripDetails": "تفاصيل الرحلة",
   "yourInformation": "معلوماتك",
   "reviewAndConfirm": "المراجعة والتأكيد",
   "pickupAndDropoff": "الاستلام والتسليم",
-  "airportNotice": "الاستلام والتسليم دائماً في مطار المدينة",
-  "seats": "مقاعد",
-  "pricePerDayFilter": "السعر/يوم",
   "noCarsMatch": "لا توجد سيارات تطابق الفلاتر",
   "clearFilters": "مسح الفلاتر",
   "location": "الموقع",
-  "from": "من",
   "until": "حتى",
   "vehicle": "السيارة",
   "trip": "الرحلة",
   "priceBreakdown": "تفاصيل السعر",
   "continuee": "متابعة",
-  "retry": "إعادة المحاولة",
   "day": "يوم",
   "days": "أيام",
   "total2": "المجموع",
-  "included": "مشمول",
   "saved": "وفّرت",
-  "bags": "حقائب",
-  "sortBy": "ترتيب حسب",
   "sortPriceLow": "السعر: من الأقل",
   "sortPriceHigh": "السعر: من الأعلى",
   "sortNameAZ": "الاسم: أ إلى ي",
   "sortSeatsLow": "المقاعد: الأقل أولاً",
   "sortSeatsHigh": "المقاعد: الأكثر أولاً",
-  "cashOnlyTitle": "الدفع نقداً فقط",
-  "cashOnlyBody": "يتم تحصيل الدفع نقداً عند استلام السيارة. يرجى تجهيز المبلغ بالضبط.",
-  "searchCountry": "ابحث عن دولة...",
   "searchCity": "ابحث عن مدينة...",
-  "sortBy": "ترتيب حسب",
-  "sortPriceAsc": "السعر ↑",
-  "sortPriceDesc": "السعر ↓",
-  "sortNameAz": "أ–ي",
-  "cashOnlyTitle": "الدفع نقدًا فقط",
-  "cashOnlyBody": "لا ندعم الدفع الإلكتروني حاليًا. يُرجى تجهيز المبلغ نقدًا عند استلام السيارة.",
   "car": "السيارة",
   "info": "معلوماتك",
   "review": "مراجعة",
@@ -717,66 +456,11 @@
   "flightsCashPaymentBody": "احجز مقعدك الآن وادفع نقداً — بدون بطاقة، بدون نماذج إلكترونية، بدون تعقيد.",
   "hotelsCashPaymentTitle": "احجز الآن — وادفع عند الوصول",
   "hotelsCashPaymentBody": "احجز غرفتك الآن وادفع نقداً عند وصولك — بدون بطاقة، بدون نماذج إلكترونية، بدون تعقيد.",
-  "dubaiInternationalAirport": "مطار دبي الدولي",
-  "abuDhabiInternationalAirport": "مطار أبوظبي الدولي",
-  "sharjahInternationalAirport": "مطار الشارقة الدولي",
-  "kingKhalidInternationalAirport": "مطار الملك خالد الدولي",
-  "kingAbdulazizInternationalAirport": "مطار الملك عبدالعزيز الدولي",
-  "cairoInternationalAirport": "مطار القاهرة الدولي",
-  "elNouzhaAirport": "مطار النزهة",
-  "hamadInternationalAirport": "مطار حمد الدولي",
-  "bahrainInternationalAirport": "مطار البحرين الدولي",
-  "muscatInternationalAirport": "مطار مسقط الدولي",
-  "kuwaitInternationalAirport": "مطار الكويت الدولي",
-  "queenAliaInternationalAirport": "مطار الملكة علياء الدولي",
-  "beirutRaficHaririInternational": "مطار بيروت رفيق الحريري الدولي",
-  "istanbulAirport": "مطار إسطنبول",
-  "sabihaCokcentInternationalAirport": "مطار صبيحة كوكجن الدولي",
-  "adnanMenderesAirport": "مطار عدنان مندريس",
-  "ankaraEsenbogaAirport": "مطار أنقرة إسنبوغا",
-  "heathrowAirport": "مطار هيثرو",
-  "gatwickAirport": "مطار غاتويك",
-  "manchesterAirport": "مطار مانشستر",
-  "charlesDeGaulleAirport": "مطار شارل ديغول",
-  "parisOrlyAirport": "مطار باريس أورلي",
-  "adolfoSuarezMadridBarajasAirport": "مطار أدولفو سواريز مدريد باراخاس",
-  "barcelonaElPratAirport": "مطار برشلونة إل برات",
-  "leonardoDaVinciFiumicinoAirport": "مطار ليوناردو دا فينشي فيوميتشينو",
-  "milanMalpensaAirport": "مطار ميلانو مالبينسا",
-  "berlinBrandenburgAirport": "مطار برلين براندنبورغ",
-  "munichAirport": "مطار ميونخ",
-  "hamburgAirport": "مطار هامبورغ",
-  "tokyoHanedaAirport": "مطار طوكيو هانيدا",
-  "naritaInternationalAirport": "مطار ناريتا الدولي",
-  "kansaiInternationalAirport": "مطار كانساي الدولي",
-  "singaporeChangiAirport": "مطار سنغافورة تشانغي",
-  "suvarnabhumiAirport": "مطار سوفارنابهومي",
-  "phuketInternationalAirport": "مطار فوكيت الدولي",
-  "indiraGandhiInternationalAirport": "مطار إنديرا غاندي الدولي",
-  "chhatrapatiShivajiInternational": "مطار شاتراباتي شيفاجي الدولي",
-  "incheonInternationalAirport": "مطار إنتشون الدولي",
-  "gimpoInternationalAirport": "مطار غيمبو الدولي",
-  "johnFKennedyInternationalAirport": "مطار جون إف كينيدي الدولي",
-  "laGuardiaAirport": "مطار لاغوارديا",
-  "losAngelesInternationalAirport": "مطار لوس أنجلوس الدولي",
-  "ohareInternationalAirport": "مطار أوهير الدولي",
-  "miamiInternationalAirport": "مطار ميامي الدولي",
-  "harryReidInternationalAirport": "مطار هاري ريد الدولي",
-  "torontoPearsonInternationalAirport": "مطار تورنتو بيرسون الدولي",
-  "vancouverInternationalAirport": "مطار فانكوفر الدولي",
-  "mexicoCityInternationalAirport": "مطار مكسيكو سيتي الدولي",
-  "cancunInternationalAirport": "مطار كانكون الدولي",
-  "saoPauloGuarulhosInternational": "مطار ساو باولو غوارولهوس الدولي",
-  "rioDeJaneiroGaleaoInternational": "مطار ريو دي جانيرو غاليان الدولي",
-  "sydneyKingsfordSmithAirport": "مطار سيدني كينغسفورد سميث",
-  "melbourneAirport": "مطار ملبورن",
-  "brisbaneAirport": "مطار بريزبن",
   "all": "الكل",
   "economy": "اقتصادي",
   "premiumEconomy": "اقتصادي مميز",
   "business": "رجال الأعمال",
   "firstClass": "الدرجة الأولى",
-  "searchCity": "ابحث عن مدينة...",
   "settingsCurrencyTitle": "العملة",
   "settingsCurrencySubtitle": "اختر عملتك المفضلة",
   "promoAlreadyUsed": "تم استخدام كود الخصم مسبقاً",

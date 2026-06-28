@@ -23,47 +23,13 @@ class AppLocalizationsAr extends AppLocalizations {
   String get homeHeroTitle => 'خطّط لمغامرتك القادمة';
 
   @override
-  String get homeHeroSubtitle =>
-      'ابحث عن أماكن ملهمة، وقارن الأفكار، وافتح دليل الوجهة مباشرة من الصفحة الرئيسية.';
-
-  @override
   String get homeDestinationsTitle => 'استكشف الوجهات';
-
-  @override
-  String get homeDestinationsSubtitle =>
-      'تصفّح مجموعة مختارة من الوجهات وافتح دليلًا سريعًا للمكان المناسب لرحلتك القادمة.';
 
   @override
   String get homeSearchHint => 'ابحث عن وجهات أو دول أو كلمات مفتاحية';
 
   @override
-  String get homeExploreDestination => 'افتح الدليل';
-
-  @override
-  String get homeBackToDestinations => 'العودة إلى الوجهات';
-
-  @override
-  String get homeNoDestinationsTitle => 'لم يتم العثور على وجهات';
-
-  @override
-  String get homeNoDestinationsSubtitle =>
-      'جرّب كلمة بحث مختلفة لاكتشاف مزيد من الأماكن.';
-
-  @override
   String get homeOfficialWebsite => 'الموقع الرسمي';
-
-  @override
-  String get homeOfficialWebsiteHint =>
-      'استخدم هذا المصدر عندما تريد الصفحة الرسمية الخاصة بالوجهة.';
-
-  @override
-  String get homeOfficialSource => 'المصدر الرسمي';
-
-  @override
-  String get homeTravelerGuide => 'دليل المسافر';
-
-  @override
-  String get homeSearchReady => 'جاهز للبحث';
 
   @override
   String get seeAll => 'عرض الكل';
@@ -208,9 +174,6 @@ class AppLocalizationsAr extends AppLocalizations {
   String get haveAccount => 'لديك حساب بالفعل؟';
 
   @override
-  String get passwordHint => '8 أحرف على الأقل، كبيرة وصغيرة وأرقام ورموز';
-
-  @override
   String get male => 'ذكر';
 
   @override
@@ -231,9 +194,6 @@ class AppLocalizationsAr extends AppLocalizations {
       'تم إرسال الرابط! تحقق من بريدك.\nجارٍ التحويل لتسجيل الدخول...';
 
   @override
-  String get errorFillFields => 'يرجى ملء جميع الحقول';
-
-  @override
   String get errorValidEmail => 'أدخل بريداً إلكترونياً صحيحاً';
 
   @override
@@ -241,9 +201,6 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get errorLettersOnly => 'أحرف فقط';
-
-  @override
-  String get errorMustBe18 => 'يجب أن يكون عمرك 18 أو أكثر';
 
   @override
   String get errorRequired => 'مطلوب';
@@ -270,28 +227,10 @@ class AppLocalizationsAr extends AppLocalizations {
   String get carRentTitle => 'تأجير السيارات';
 
   @override
-  String get carRentSubtitle => 'استأجر سيارتك بأفضل الأسعار';
-
-  @override
-  String get carRentHint => 'اضغط على سيارة لاختيارها، ثم أكمل تفاصيل الحجز';
-
-  @override
   String get selected => 'محدد';
 
   @override
-  String get showMore => 'عرض المزيد';
-
-  @override
   String get bookingDetails => 'تفاصيل الحجز';
-
-  @override
-  String get selectCarFirst => '↑ اختر سيارة من القائمة أعلاه';
-
-  @override
-  String get pickupLocation => 'موقع الاستلام';
-
-  @override
-  String get dropoffLocation => 'موقع التسليم';
 
   @override
   String get selectLocation => 'اختر موقعاً';
@@ -327,12 +266,6 @@ class AppLocalizationsAr extends AppLocalizations {
   String get total => 'الإجمالي';
 
   @override
-  String get proceedToPayment => 'انتقل إلى الدفع';
-
-  @override
-  String get bookingConfirmed => 'تم الحجز بنجاح! 🎉';
-
-  @override
   String get bookingFailed => 'فشل الحجز';
 
   @override
@@ -354,21 +287,6 @@ class AppLocalizationsAr extends AppLocalizations {
   String get perDay => 'يومياً';
 
   @override
-  String get perWeek => 'أسبوعياً';
-
-  @override
-  String get vatIncluded => '*الأسعار شاملة ضريبة القيمة المضافة';
-
-  @override
-  String get noCarAvailable => 'لا توجد سيارات متاحة';
-
-  @override
-  String get seats => 'مقاعد';
-
-  @override
-  String get bags => 'حقائب';
-
-  @override
   String get unableToConnect => 'تعذّر الاتصال';
 
   @override
@@ -376,11 +294,6 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get retry => 'إعادة المحاولة';
-
-  @override
-  String dateTimeAt(String date, String time) {
-    return '$date في $time';
-  }
 
   @override
   String errorWithMessage(String message) {
@@ -500,9 +413,6 @@ class AppLocalizationsAr extends AppLocalizations {
   String get roomsAndGuests => 'الغرف والنزلاء';
 
   @override
-  String get numberOfRooms => 'عدد الغرف';
-
-  @override
   String get bookNow => 'احجز الآن';
 
   @override
@@ -535,9 +445,6 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get fillGuestDetails => 'يرجى إكمال تفاصيل جميع النزلاء المتبقين';
-
-  @override
-  String get hotelBookedSuccess => 'تم حجز الفندق بنجاح! 🏨';
 
   @override
   String get hotelSeeReviews => 'عرض التقييمات';
@@ -660,9 +567,6 @@ class AppLocalizationsAr extends AppLocalizations {
   String get travellerDetails => 'تفاصيل المسافر';
 
   @override
-  String get nationality => 'الجنسية';
-
-  @override
   String get passportNumber => 'رقم جواز السفر';
 
   @override
@@ -685,9 +589,6 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get selectNationality => 'اختر الجنسية';
-
-  @override
-  String get searchCountry => 'ابحث عن دولة...';
 
   @override
   String get noCountryFound => 'لا توجد دولة';
@@ -713,9 +614,6 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get fillPassengerDetails => 'يرجى إكمال تفاصيل جميع الركاب المتبقين';
-
-  @override
-  String get flightBookedSuccess => 'تم حجز الرحلة بنجاح! ✈️';
 
   @override
   String get someBookingsFailed => 'فشل بعض الحجوزات. يرجى المحاولة مجدداً.';
@@ -771,9 +669,6 @@ class AppLocalizationsAr extends AppLocalizations {
   String get stops => 'التوقفات';
 
   @override
-  String get pricePerPerson => 'السعر لكل شخص';
-
-  @override
   String get outboundFlight => 'رحلة الذهاب';
 
   @override
@@ -825,9 +720,6 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get invalidPromoCode => 'كود الخصم غير صالح';
-
-  @override
-  String get promoValidateFailed => 'تعذّر التحقق من الكود. حاول مرة أخرى.';
 
   @override
   String get userDashboardTitle => 'حجوزاتي';
@@ -965,68 +857,6 @@ class AppLocalizationsAr extends AppLocalizations {
   String get statusPending => 'قيد الانتظار';
 
   @override
-  String get aboutTitle => 'من نحن';
-
-  @override
-  String get aboutMissionLabel => 'مهمّتنا';
-
-  @override
-  String get aboutMissionBody =>
-      'رحّال هو رفيقك في كل رحلة. نؤمن بأن السفر يجب أن يكون سهلاً وممتعاً ومتاحاً للجميع. لذلك وفّرنا في مكان واحد كل ما تحتاجه - من حجز رحلات الطيران إلى الفنادق وتأجير السيارات - بأسعار منافسة وتجربة استخدام لا مثيل لها.';
-
-  @override
-  String get aboutOfferLabel => 'ما نقدّمه';
-
-  @override
-  String get aboutContactLabel => 'تواصل معنا';
-
-  @override
-  String get aboutHeadquarters => 'المقر الرئيسي';
-
-  @override
-  String get aboutHeadquartersValue => 'الرياض، المملكة العربية السعودية';
-
-  @override
-  String get aboutVersion => 'الإصدار ١.٠.٠';
-
-  @override
-  String get aboutStatsHotels => 'فندق';
-
-  @override
-  String get aboutStatsDestinations => 'وجهة';
-
-  @override
-  String get aboutStatsTravelers => 'عميل سعيد';
-
-  @override
-  String get aboutFeatureFlightsTitle => 'حجز رحلات';
-
-  @override
-  String get aboutFeatureFlightsDesc =>
-      'ابحث عن أفضل الرحلات وأرخصها من مئات شركات الطيران حول العالم.';
-
-  @override
-  String get aboutFeatureHotelsTitle => 'حجز فنادق';
-
-  @override
-  String get aboutFeatureHotelsDesc =>
-      'اختر من بين أكثر من مليون فندق وشقة فندقية في جميع أنحاء العالم.';
-
-  @override
-  String get aboutFeatureCarsTitle => 'تأجير سيارات';
-
-  @override
-  String get aboutFeatureCarsDesc =>
-      'استأجر سيارتك المفضلة بأفضل الأسعار مع خيار السائق الخاص.';
-
-  @override
-  String get aboutFeatureSupportTitle => 'دعم على مدار الساعة';
-
-  @override
-  String get aboutFeatureSupportDesc =>
-      'فريق دعم متاح دائماً لمساعدتك في أي وقت خلال رحلتك.';
-
-  @override
   String get menuDashboard => 'حجوزاتي';
 
   @override
@@ -1081,9 +911,6 @@ class AppLocalizationsAr extends AppLocalizations {
   String get upcomingTrip => 'رحلتك القادمة';
 
   @override
-  String get specialOffers => 'عروض خاصة';
-
-  @override
   String get specialOffer => 'عرض خاص';
 
   @override
@@ -1105,370 +932,10 @@ class AppLocalizationsAr extends AppLocalizations {
   String get offerCopyCode => 'نسخ الكود';
 
   @override
-  String get paymentTitle => 'الدفع';
-
-  @override
-  String get paymentCreditCard => 'بطاقة ائتمان';
-
-  @override
-  String get paymentDebitCard => 'بطاقة مدين';
-
-  @override
-  String get paymentCardNumber => 'رقم البطاقة';
-
-  @override
-  String get paymentCardholderName => 'اسم حامل البطاقة';
-
-  @override
-  String get paymentCardholderHint => 'الاسم على البطاقة';
-
-  @override
-  String get paymentExpiry => 'تاريخ الانتهاء';
-
-  @override
-  String get paymentCvv => 'CVV';
-
-  @override
-  String get paymentSaveCard => 'حفظ البطاقة';
-
-  @override
-  String get paymentSaveCardSub => 'لإتمام الدفع بشكل أسرع في المرة القادمة';
-
-  @override
-  String get paymentSecureNote => 'بيانات الدفع محمية';
-
-  @override
-  String get paymentErrorCardNumberRequired => 'أدخل رقم البطاقة';
-
-  @override
-  String get paymentErrorCardNumberInvalid => 'أدخل رقم بطاقة صحيح';
-
-  @override
-  String get paymentErrorCardholderRequired => 'أدخل اسم حامل البطاقة';
-
-  @override
-  String get paymentErrorCardholderInvalid => 'أدخل اسمًا صحيحًا';
-
-  @override
-  String get paymentErrorExpiryRequired => 'أدخل تاريخ الانتهاء';
-
-  @override
-  String get paymentErrorExpiryInvalid => 'أدخل تاريخ انتهاء صحيح';
-
-  @override
-  String get paymentErrorExpiryExpired => 'انتهت صلاحية هذه البطاقة';
-
-  @override
-  String get paymentErrorCvvRequired => 'أدخل رمز CVV';
-
-  @override
-  String get paymentErrorCvvInvalid => 'أدخل رمز CVV صحيح';
-
-  @override
   String get edit => 'تعديل';
 
   @override
   String get add => 'إضافة';
-
-  @override
-  String get airport => 'المطار';
-
-  @override
-  String get downtown => 'وسط المدينة';
-
-  @override
-  String get trainStation => 'محطة القطار';
-
-  @override
-  String get hotelDistrict => 'حي الفنادق';
-
-  @override
-  String get shoppingDistrict => 'حي التسوق';
-
-  @override
-  String get industrialZone => 'المنطقة الصناعية';
-
-  @override
-  String get airportRoad => 'طريق المطار';
-
-  @override
-  String get dubai => 'دبي';
-
-  @override
-  String get abuDhabi => 'أبوظبي';
-
-  @override
-  String get sharjah => 'الشارقة';
-
-  @override
-  String get riyadh => 'الرياض';
-
-  @override
-  String get jeddah => 'جدة';
-
-  @override
-  String get cairo => 'القاهرة';
-
-  @override
-  String get alexandria => 'الإسكندرية';
-
-  @override
-  String get giza => 'الجيزة';
-
-  @override
-  String get aswan => 'أسوان';
-
-  @override
-  String get doha => 'الدوحة';
-
-  @override
-  String get alRayyan => 'الريان';
-
-  @override
-  String get manama => 'المنامة';
-
-  @override
-  String get muharraq => 'المحرق';
-
-  @override
-  String get muscat => 'مسقط';
-
-  @override
-  String get salalah => 'صلالة';
-
-  @override
-  String get kuwaitCity => 'مدينة الكويت';
-
-  @override
-  String get salmiya => 'السالمية';
-
-  @override
-  String get amman => 'عمّان';
-
-  @override
-  String get zarqa => 'الزرقاء';
-
-  @override
-  String get beirut => 'بيروت';
-
-  @override
-  String get tripoli => 'طرابلس';
-
-  @override
-  String get istanbul => 'إسطنبول';
-
-  @override
-  String get ankara => 'أنقرة';
-
-  @override
-  String get izmir => 'إزمير';
-
-  @override
-  String get london => 'لندن';
-
-  @override
-  String get manchester => 'مانشستر';
-
-  @override
-  String get birmingham => 'برمنغهام';
-
-  @override
-  String get paris => 'باريس';
-
-  @override
-  String get lyon => 'ليون';
-
-  @override
-  String get marseille => 'مرسيليا';
-
-  @override
-  String get madrid => 'مدريد';
-
-  @override
-  String get barcelona => 'برشلونة';
-
-  @override
-  String get seville => 'إشبيلية';
-
-  @override
-  String get rome => 'روما';
-
-  @override
-  String get milan => 'ميلانو';
-
-  @override
-  String get venice => 'البندقية';
-
-  @override
-  String get berlin => 'برلين';
-
-  @override
-  String get munich => 'ميونخ';
-
-  @override
-  String get hamburg => 'هامبورغ';
-
-  @override
-  String get tokyo => 'طوكيو';
-
-  @override
-  String get osaka => 'أوساكا';
-
-  @override
-  String get kyoto => 'كيوتو';
-
-  @override
-  String get singapore => 'سنغافورة';
-
-  @override
-  String get bangkok => 'بانكوك';
-
-  @override
-  String get phuket => 'فوكيت';
-
-  @override
-  String get chiangMai => 'شيانغ ماي';
-
-  @override
-  String get delhi => 'دلهي';
-
-  @override
-  String get mumbai => 'مومباي';
-
-  @override
-  String get bangalore => 'بنغالور';
-
-  @override
-  String get seoul => 'سيول';
-
-  @override
-  String get busan => 'بوسان';
-
-  @override
-  String get incheon => 'إنتشون';
-
-  @override
-  String get newYork => 'نيويورك';
-
-  @override
-  String get losAngeles => 'لوس أنجلوس';
-
-  @override
-  String get chicago => 'شيكاغو';
-
-  @override
-  String get miami => 'ميامي';
-
-  @override
-  String get lasVegas => 'لاس فيغاس';
-
-  @override
-  String get toronto => 'تورنتو';
-
-  @override
-  String get vancouver => 'فانكوفر';
-
-  @override
-  String get montreal => 'مونتريال';
-
-  @override
-  String get mexicoCity => 'مكسيكو سيتي';
-
-  @override
-  String get cancun => 'كانكون';
-
-  @override
-  String get playaDelCarmen => 'بلايا ديل كارمن';
-
-  @override
-  String get saoPaulo => 'ساو باولو';
-
-  @override
-  String get rioDeJaneiro => 'ريو دي جانيرو';
-
-  @override
-  String get salvador => 'سالفادور';
-
-  @override
-  String get sydney => 'سيدني';
-
-  @override
-  String get melbourne => 'ملبورن';
-
-  @override
-  String get brisbane => 'بريزبن';
-
-  @override
-  String get uae => 'الإمارات';
-
-  @override
-  String get saudiArabia => 'المملكة العربية السعودية';
-
-  @override
-  String get egypt => 'مصر';
-
-  @override
-  String get qatar => 'قطر';
-
-  @override
-  String get bahrain => 'البحرين';
-
-  @override
-  String get oman => 'عُمان';
-
-  @override
-  String get kuwait => 'الكويت';
-
-  @override
-  String get jordan => 'الأردن';
-
-  @override
-  String get lebanon => 'لبنان';
-
-  @override
-  String get turkey => 'تركيا';
-
-  @override
-  String get unitedKingdom => 'المملكة المتحدة';
-
-  @override
-  String get france => 'فرنسا';
-
-  @override
-  String get spain => 'إسبانيا';
-
-  @override
-  String get italy => 'إيطاليا';
-
-  @override
-  String get germany => 'ألمانيا';
-
-  @override
-  String get japan => 'اليابان';
-
-  @override
-  String get thailand => 'تايلاند';
-
-  @override
-  String get india => 'الهند';
-
-  @override
-  String get southKorea => 'كوريا الجنوبية';
-
-  @override
-  String get unitedStates => 'الولايات المتحدة';
-
-  @override
-  String get canada => 'كندا';
-
-  @override
-  String get mexico => 'المكسيك';
-
-  @override
-  String get brazil => 'البرازيل';
-
-  @override
-  String get australia => 'أستراليا';
 
   @override
   String get selectCountry => 'اختر الدولة';
@@ -1481,9 +948,6 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get selectDropoffLocation => 'موقع التسليم';
-
-  @override
-  String get sameCityAsPickup => 'نفس مدينة الاستلام';
 
   @override
   String stepOf(int step) {
@@ -1501,12 +965,6 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get pickupAndDropoff => 'الاستلام والتسليم';
-
-  @override
-  String get airportNotice => 'الاستلام والتسليم دائماً في مطار المدينة';
-
-  @override
-  String get pricePerDayFilter => 'السعر/يوم';
 
   @override
   String get noCarsMatch => 'لا توجد سيارات تطابق الفلاتر';
@@ -1560,23 +1018,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get sortSeatsHigh => 'المقاعد: الأكثر أولاً';
 
   @override
-  String get cashOnlyTitle => 'الدفع نقدًا فقط';
-
-  @override
-  String get cashOnlyBody =>
-      'لا ندعم الدفع الإلكتروني حاليًا. يُرجى تجهيز المبلغ نقدًا عند استلام السيارة.';
-
-  @override
-  String get searchCity => 'ابحث عن مدينة...';
-
-  @override
-  String get sortPriceAsc => 'السعر ↑';
-
-  @override
-  String get sortPriceDesc => 'السعر ↓';
-
-  @override
-  String get sortNameAz => 'أ–ي';
+  String get searchCountry => 'ابحث عن دولة...';
 
   @override
   String get car => 'السيارة';
@@ -1616,172 +1058,6 @@ class AppLocalizationsAr extends AppLocalizations {
       'احجز غرفتك الآن وادفع نقداً عند وصولك — بدون بطاقة، بدون نماذج إلكترونية، بدون تعقيد.';
 
   @override
-  String get dubaiInternationalAirport => 'مطار دبي الدولي';
-
-  @override
-  String get abuDhabiInternationalAirport => 'مطار أبوظبي الدولي';
-
-  @override
-  String get sharjahInternationalAirport => 'مطار الشارقة الدولي';
-
-  @override
-  String get kingKhalidInternationalAirport => 'مطار الملك خالد الدولي';
-
-  @override
-  String get kingAbdulazizInternationalAirport => 'مطار الملك عبدالعزيز الدولي';
-
-  @override
-  String get cairoInternationalAirport => 'مطار القاهرة الدولي';
-
-  @override
-  String get elNouzhaAirport => 'مطار النزهة';
-
-  @override
-  String get hamadInternationalAirport => 'مطار حمد الدولي';
-
-  @override
-  String get bahrainInternationalAirport => 'مطار البحرين الدولي';
-
-  @override
-  String get muscatInternationalAirport => 'مطار مسقط الدولي';
-
-  @override
-  String get kuwaitInternationalAirport => 'مطار الكويت الدولي';
-
-  @override
-  String get queenAliaInternationalAirport => 'مطار الملكة علياء الدولي';
-
-  @override
-  String get beirutRaficHaririInternational => 'مطار بيروت رفيق الحريري الدولي';
-
-  @override
-  String get istanbulAirport => 'مطار إسطنبول';
-
-  @override
-  String get sabihaCokcentInternationalAirport => 'مطار صبيحة كوكجن الدولي';
-
-  @override
-  String get adnanMenderesAirport => 'مطار عدنان مندريس';
-
-  @override
-  String get ankaraEsenbogaAirport => 'مطار أنقرة إسنبوغا';
-
-  @override
-  String get heathrowAirport => 'مطار هيثرو';
-
-  @override
-  String get gatwickAirport => 'مطار غاتويك';
-
-  @override
-  String get manchesterAirport => 'مطار مانشستر';
-
-  @override
-  String get charlesDeGaulleAirport => 'مطار شارل ديغول';
-
-  @override
-  String get parisOrlyAirport => 'مطار باريس أورلي';
-
-  @override
-  String get adolfoSuarezMadridBarajasAirport =>
-      'مطار أدولفو سواريز مدريد باراخاس';
-
-  @override
-  String get barcelonaElPratAirport => 'مطار برشلونة إل برات';
-
-  @override
-  String get leonardoDaVinciFiumicinoAirport =>
-      'مطار ليوناردو دا فينشي فيوميتشينو';
-
-  @override
-  String get milanMalpensaAirport => 'مطار ميلانو مالبينسا';
-
-  @override
-  String get berlinBrandenburgAirport => 'مطار برلين براندنبورغ';
-
-  @override
-  String get munichAirport => 'مطار ميونخ';
-
-  @override
-  String get hamburgAirport => 'مطار هامبورغ';
-
-  @override
-  String get tokyoHanedaAirport => 'مطار طوكيو هانيدا';
-
-  @override
-  String get naritaInternationalAirport => 'مطار ناريتا الدولي';
-
-  @override
-  String get kansaiInternationalAirport => 'مطار كانساي الدولي';
-
-  @override
-  String get singaporeChangiAirport => 'مطار سنغافورة تشانغي';
-
-  @override
-  String get suvarnabhumiAirport => 'مطار سوفارنابهومي';
-
-  @override
-  String get phuketInternationalAirport => 'مطار فوكيت الدولي';
-
-  @override
-  String get indiraGandhiInternationalAirport => 'مطار إنديرا غاندي الدولي';
-
-  @override
-  String get chhatrapatiShivajiInternational => 'مطار شاتراباتي شيفاجي الدولي';
-
-  @override
-  String get incheonInternationalAirport => 'مطار إنتشون الدولي';
-
-  @override
-  String get gimpoInternationalAirport => 'مطار غيمبو الدولي';
-
-  @override
-  String get johnFKennedyInternationalAirport => 'مطار جون إف كينيدي الدولي';
-
-  @override
-  String get laGuardiaAirport => 'مطار لاغوارديا';
-
-  @override
-  String get losAngelesInternationalAirport => 'مطار لوس أنجلوس الدولي';
-
-  @override
-  String get ohareInternationalAirport => 'مطار أوهير الدولي';
-
-  @override
-  String get miamiInternationalAirport => 'مطار ميامي الدولي';
-
-  @override
-  String get harryReidInternationalAirport => 'مطار هاري ريد الدولي';
-
-  @override
-  String get torontoPearsonInternationalAirport => 'مطار تورنتو بيرسون الدولي';
-
-  @override
-  String get vancouverInternationalAirport => 'مطار فانكوفر الدولي';
-
-  @override
-  String get mexicoCityInternationalAirport => 'مطار مكسيكو سيتي الدولي';
-
-  @override
-  String get cancunInternationalAirport => 'مطار كانكون الدولي';
-
-  @override
-  String get saoPauloGuarulhosInternational =>
-      'مطار ساو باولو غوارولهوس الدولي';
-
-  @override
-  String get rioDeJaneiroGaleaoInternational =>
-      'مطار ريو دي جانيرو غاليان الدولي';
-
-  @override
-  String get sydneyKingsfordSmithAirport => 'مطار سيدني كينغسفورد سميث';
-
-  @override
-  String get melbourneAirport => 'مطار ملبورن';
-
-  @override
-  String get brisbaneAirport => 'مطار بريزبن';
-
-  @override
   String get all => 'الكل';
 
   @override
@@ -1795,6 +1071,9 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get firstClass => 'الدرجة الأولى';
+
+  @override
+  String get searchCity => 'ابحث عن مدينة...';
 
   @override
   String get settingsCurrencyTitle => 'العملة';

@@ -122,23 +122,11 @@ abstract class AppLocalizations {
   /// **'Plan your next adventure'**
   String get homeHeroTitle;
 
-  /// No description provided for @homeHeroSubtitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Search inspiring places, compare ideas, and open a destination guide without leaving the home screen.'**
-  String get homeHeroSubtitle;
-
   /// No description provided for @homeDestinationsTitle.
   ///
   /// In en, this message translates to:
   /// **'Explore destinations'**
   String get homeDestinationsTitle;
-
-  /// No description provided for @homeDestinationsSubtitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Browse a curated set of destinations and open a quick guide for the place that matches your next trip.'**
-  String get homeDestinationsSubtitle;
 
   /// No description provided for @homeSearchHint.
   ///
@@ -146,59 +134,11 @@ abstract class AppLocalizations {
   /// **'Search destinations, countries, or keywords'**
   String get homeSearchHint;
 
-  /// No description provided for @homeExploreDestination.
-  ///
-  /// In en, this message translates to:
-  /// **'Open guide'**
-  String get homeExploreDestination;
-
-  /// No description provided for @homeBackToDestinations.
-  ///
-  /// In en, this message translates to:
-  /// **'Back to destinations'**
-  String get homeBackToDestinations;
-
-  /// No description provided for @homeNoDestinationsTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'No destinations found'**
-  String get homeNoDestinationsTitle;
-
-  /// No description provided for @homeNoDestinationsSubtitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Try a different search term to explore more places.'**
-  String get homeNoDestinationsSubtitle;
-
   /// No description provided for @homeOfficialWebsite.
   ///
   /// In en, this message translates to:
   /// **'Official website'**
   String get homeOfficialWebsite;
-
-  /// No description provided for @homeOfficialWebsiteHint.
-  ///
-  /// In en, this message translates to:
-  /// **'Use this source when you want the destination\'s official travel page.'**
-  String get homeOfficialWebsiteHint;
-
-  /// No description provided for @homeOfficialSource.
-  ///
-  /// In en, this message translates to:
-  /// **'Official source'**
-  String get homeOfficialSource;
-
-  /// No description provided for @homeTravelerGuide.
-  ///
-  /// In en, this message translates to:
-  /// **'Traveler guide'**
-  String get homeTravelerGuide;
-
-  /// No description provided for @homeSearchReady.
-  ///
-  /// In en, this message translates to:
-  /// **'Search-ready'**
-  String get homeSearchReady;
 
   /// No description provided for @seeAll.
   ///
@@ -464,12 +404,6 @@ abstract class AppLocalizations {
   /// **'Already have an account?'**
   String get haveAccount;
 
-  /// No description provided for @passwordHint.
-  ///
-  /// In en, this message translates to:
-  /// **'Min 8 chars, upper, lower, number, special'**
-  String get passwordHint;
-
   /// No description provided for @male.
   ///
   /// In en, this message translates to:
@@ -506,12 +440,6 @@ abstract class AppLocalizations {
   /// **'Reset link sent! Check your inbox.\nRedirecting to sign in...'**
   String get resetLinkSent;
 
-  /// No description provided for @errorFillFields.
-  ///
-  /// In en, this message translates to:
-  /// **'Please fill in all fields'**
-  String get errorFillFields;
-
   /// No description provided for @errorValidEmail.
   ///
   /// In en, this message translates to:
@@ -529,12 +457,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Letters only'**
   String get errorLettersOnly;
-
-  /// No description provided for @errorMustBe18.
-  ///
-  /// In en, this message translates to:
-  /// **'Must be 18+'**
-  String get errorMustBe18;
 
   /// No description provided for @errorRequired.
   ///
@@ -584,53 +506,17 @@ abstract class AppLocalizations {
   /// **'Car Rent'**
   String get carRentTitle;
 
-  /// No description provided for @carRentSubtitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Rent a car at the best rates'**
-  String get carRentSubtitle;
-
-  /// No description provided for @carRentHint.
-  ///
-  /// In en, this message translates to:
-  /// **'Tap a car to select it, then fill in the details below'**
-  String get carRentHint;
-
   /// No description provided for @selected.
   ///
   /// In en, this message translates to:
   /// **'Selected'**
   String get selected;
 
-  /// No description provided for @showMore.
-  ///
-  /// In en, this message translates to:
-  /// **'Show more'**
-  String get showMore;
-
   /// No description provided for @bookingDetails.
   ///
   /// In en, this message translates to:
   /// **'Booking Details'**
   String get bookingDetails;
-
-  /// No description provided for @selectCarFirst.
-  ///
-  /// In en, this message translates to:
-  /// **'↑ Select a car from the list above'**
-  String get selectCarFirst;
-
-  /// No description provided for @pickupLocation.
-  ///
-  /// In en, this message translates to:
-  /// **'Pickup location'**
-  String get pickupLocation;
-
-  /// No description provided for @dropoffLocation.
-  ///
-  /// In en, this message translates to:
-  /// **'Dropoff location'**
-  String get dropoffLocation;
 
   /// No description provided for @selectLocation.
   ///
@@ -686,18 +572,6 @@ abstract class AppLocalizations {
   /// **'Total'**
   String get total;
 
-  /// No description provided for @proceedToPayment.
-  ///
-  /// In en, this message translates to:
-  /// **'Proceed To Payment'**
-  String get proceedToPayment;
-
-  /// No description provided for @bookingConfirmed.
-  ///
-  /// In en, this message translates to:
-  /// **'Booking confirmed! 🎉'**
-  String get bookingConfirmed;
-
   /// No description provided for @bookingFailed.
   ///
   /// In en, this message translates to:
@@ -740,36 +614,6 @@ abstract class AppLocalizations {
   /// **'Per day'**
   String get perDay;
 
-  /// No description provided for @perWeek.
-  ///
-  /// In en, this message translates to:
-  /// **'Per week'**
-  String get perWeek;
-
-  /// No description provided for @vatIncluded.
-  ///
-  /// In en, this message translates to:
-  /// **'*The prices are inclusive of VAT'**
-  String get vatIncluded;
-
-  /// No description provided for @noCarAvailable.
-  ///
-  /// In en, this message translates to:
-  /// **'No cars available'**
-  String get noCarAvailable;
-
-  /// No description provided for @seats.
-  ///
-  /// In en, this message translates to:
-  /// **'Seats'**
-  String get seats;
-
-  /// No description provided for @bags.
-  ///
-  /// In en, this message translates to:
-  /// **'Bags'**
-  String get bags;
-
   /// No description provided for @unableToConnect.
   ///
   /// In en, this message translates to:
@@ -787,12 +631,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Retry'**
   String get retry;
-
-  /// No description provided for @dateTimeAt.
-  ///
-  /// In en, this message translates to:
-  /// **'{date} at {time}'**
-  String dateTimeAt(String date, String time);
 
   /// No description provided for @errorWithMessage.
   ///
@@ -1016,12 +854,6 @@ abstract class AppLocalizations {
   /// **'Rooms & Guests'**
   String get roomsAndGuests;
 
-  /// No description provided for @numberOfRooms.
-  ///
-  /// In en, this message translates to:
-  /// **'Number of rooms'**
-  String get numberOfRooms;
-
   /// No description provided for @bookNow.
   ///
   /// In en, this message translates to:
@@ -1081,12 +913,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Please fill in details for all remaining guests'**
   String get fillGuestDetails;
-
-  /// No description provided for @hotelBookedSuccess.
-  ///
-  /// In en, this message translates to:
-  /// **'Hotel booked successfully! 🏨'**
-  String get hotelBookedSuccess;
 
   /// No description provided for @hotelSeeReviews.
   ///
@@ -1328,12 +1154,6 @@ abstract class AppLocalizations {
   /// **'Traveller details'**
   String get travellerDetails;
 
-  /// No description provided for @nationality.
-  ///
-  /// In en, this message translates to:
-  /// **'Nationality'**
-  String get nationality;
-
   /// No description provided for @passportNumber.
   ///
   /// In en, this message translates to:
@@ -1382,12 +1202,6 @@ abstract class AppLocalizations {
   /// **'Select Nationality'**
   String get selectNationality;
 
-  /// No description provided for @searchCountry.
-  ///
-  /// In en, this message translates to:
-  /// **'Search country...'**
-  String get searchCountry;
-
   /// No description provided for @noCountryFound.
   ///
   /// In en, this message translates to:
@@ -1429,12 +1243,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Please fill in details for all remaining passengers'**
   String get fillPassengerDetails;
-
-  /// No description provided for @flightBookedSuccess.
-  ///
-  /// In en, this message translates to:
-  /// **'Flight booked successfully! ✈️'**
-  String get flightBookedSuccess;
 
   /// No description provided for @someBookingsFailed.
   ///
@@ -1538,12 +1346,6 @@ abstract class AppLocalizations {
   /// **'Stops'**
   String get stops;
 
-  /// No description provided for @pricePerPerson.
-  ///
-  /// In en, this message translates to:
-  /// **'Price per person'**
-  String get pricePerPerson;
-
   /// No description provided for @outboundFlight.
   ///
   /// In en, this message translates to:
@@ -1645,12 +1447,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Invalid promo code'**
   String get invalidPromoCode;
-
-  /// No description provided for @promoValidateFailed.
-  ///
-  /// In en, this message translates to:
-  /// **'Could not validate code. Try again.'**
-  String get promoValidateFailed;
 
   /// No description provided for @userDashboardTitle.
   ///
@@ -1916,120 +1712,6 @@ abstract class AppLocalizations {
   /// **'Pending'**
   String get statusPending;
 
-  /// No description provided for @aboutTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'About Us'**
-  String get aboutTitle;
-
-  /// No description provided for @aboutMissionLabel.
-  ///
-  /// In en, this message translates to:
-  /// **'Our Mission'**
-  String get aboutMissionLabel;
-
-  /// No description provided for @aboutMissionBody.
-  ///
-  /// In en, this message translates to:
-  /// **'Rahal is your companion on every journey. We believe travel should be simple, enjoyable, and accessible to everyone. That\'s why we\'ve brought everything you need into one place - from flights and hotels to car rentals - at competitive prices with an unmatched experience.'**
-  String get aboutMissionBody;
-
-  /// No description provided for @aboutOfferLabel.
-  ///
-  /// In en, this message translates to:
-  /// **'What We Offer'**
-  String get aboutOfferLabel;
-
-  /// No description provided for @aboutContactLabel.
-  ///
-  /// In en, this message translates to:
-  /// **'Get In Touch'**
-  String get aboutContactLabel;
-
-  /// No description provided for @aboutHeadquarters.
-  ///
-  /// In en, this message translates to:
-  /// **'Headquarters'**
-  String get aboutHeadquarters;
-
-  /// No description provided for @aboutHeadquartersValue.
-  ///
-  /// In en, this message translates to:
-  /// **'Riyadh, Saudi Arabia'**
-  String get aboutHeadquartersValue;
-
-  /// No description provided for @aboutVersion.
-  ///
-  /// In en, this message translates to:
-  /// **'Version 1.0.0'**
-  String get aboutVersion;
-
-  /// No description provided for @aboutStatsHotels.
-  ///
-  /// In en, this message translates to:
-  /// **'Hotels'**
-  String get aboutStatsHotels;
-
-  /// No description provided for @aboutStatsDestinations.
-  ///
-  /// In en, this message translates to:
-  /// **'Destinations'**
-  String get aboutStatsDestinations;
-
-  /// No description provided for @aboutStatsTravelers.
-  ///
-  /// In en, this message translates to:
-  /// **'Happy Travelers'**
-  String get aboutStatsTravelers;
-
-  /// No description provided for @aboutFeatureFlightsTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Flight Booking'**
-  String get aboutFeatureFlightsTitle;
-
-  /// No description provided for @aboutFeatureFlightsDesc.
-  ///
-  /// In en, this message translates to:
-  /// **'Search and book the best flights from hundreds of airlines worldwide.'**
-  String get aboutFeatureFlightsDesc;
-
-  /// No description provided for @aboutFeatureHotelsTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Hotel Stays'**
-  String get aboutFeatureHotelsTitle;
-
-  /// No description provided for @aboutFeatureHotelsDesc.
-  ///
-  /// In en, this message translates to:
-  /// **'Choose from over 1M+ hotels and apartments across the globe.'**
-  String get aboutFeatureHotelsDesc;
-
-  /// No description provided for @aboutFeatureCarsTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Car Rentals'**
-  String get aboutFeatureCarsTitle;
-
-  /// No description provided for @aboutFeatureCarsDesc.
-  ///
-  /// In en, this message translates to:
-  /// **'Rent your preferred car at the best rates with an optional private driver.'**
-  String get aboutFeatureCarsDesc;
-
-  /// No description provided for @aboutFeatureSupportTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'24/7 Support'**
-  String get aboutFeatureSupportTitle;
-
-  /// No description provided for @aboutFeatureSupportDesc.
-  ///
-  /// In en, this message translates to:
-  /// **'Our support team is always available to assist you throughout your journey.'**
-  String get aboutFeatureSupportDesc;
-
   /// No description provided for @menuDashboard.
   ///
   /// In en, this message translates to:
@@ -2138,12 +1820,6 @@ abstract class AppLocalizations {
   /// **'Upcoming trip'**
   String get upcomingTrip;
 
-  /// No description provided for @specialOffers.
-  ///
-  /// In en, this message translates to:
-  /// **'Special offers'**
-  String get specialOffers;
-
   /// No description provided for @specialOffer.
   ///
   /// In en, this message translates to:
@@ -2186,126 +1862,6 @@ abstract class AppLocalizations {
   /// **'Copy Code'**
   String get offerCopyCode;
 
-  /// No description provided for @paymentTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Payment'**
-  String get paymentTitle;
-
-  /// No description provided for @paymentCreditCard.
-  ///
-  /// In en, this message translates to:
-  /// **'Credit card'**
-  String get paymentCreditCard;
-
-  /// No description provided for @paymentDebitCard.
-  ///
-  /// In en, this message translates to:
-  /// **'Debit card'**
-  String get paymentDebitCard;
-
-  /// No description provided for @paymentCardNumber.
-  ///
-  /// In en, this message translates to:
-  /// **'Card number'**
-  String get paymentCardNumber;
-
-  /// No description provided for @paymentCardholderName.
-  ///
-  /// In en, this message translates to:
-  /// **'Cardholder name'**
-  String get paymentCardholderName;
-
-  /// No description provided for @paymentCardholderHint.
-  ///
-  /// In en, this message translates to:
-  /// **'Name on card'**
-  String get paymentCardholderHint;
-
-  /// No description provided for @paymentExpiry.
-  ///
-  /// In en, this message translates to:
-  /// **'Expiry date'**
-  String get paymentExpiry;
-
-  /// No description provided for @paymentCvv.
-  ///
-  /// In en, this message translates to:
-  /// **'CVV'**
-  String get paymentCvv;
-
-  /// No description provided for @paymentSaveCard.
-  ///
-  /// In en, this message translates to:
-  /// **'Save card'**
-  String get paymentSaveCard;
-
-  /// No description provided for @paymentSaveCardSub.
-  ///
-  /// In en, this message translates to:
-  /// **'For faster checkout next time'**
-  String get paymentSaveCardSub;
-
-  /// No description provided for @paymentSecureNote.
-  ///
-  /// In en, this message translates to:
-  /// **'Your payment is secured'**
-  String get paymentSecureNote;
-
-  /// No description provided for @paymentErrorCardNumberRequired.
-  ///
-  /// In en, this message translates to:
-  /// **'Enter your card number'**
-  String get paymentErrorCardNumberRequired;
-
-  /// No description provided for @paymentErrorCardNumberInvalid.
-  ///
-  /// In en, this message translates to:
-  /// **'Enter a valid card number'**
-  String get paymentErrorCardNumberInvalid;
-
-  /// No description provided for @paymentErrorCardholderRequired.
-  ///
-  /// In en, this message translates to:
-  /// **'Enter the cardholder name'**
-  String get paymentErrorCardholderRequired;
-
-  /// No description provided for @paymentErrorCardholderInvalid.
-  ///
-  /// In en, this message translates to:
-  /// **'Enter a valid name'**
-  String get paymentErrorCardholderInvalid;
-
-  /// No description provided for @paymentErrorExpiryRequired.
-  ///
-  /// In en, this message translates to:
-  /// **'Enter the expiry date'**
-  String get paymentErrorExpiryRequired;
-
-  /// No description provided for @paymentErrorExpiryInvalid.
-  ///
-  /// In en, this message translates to:
-  /// **'Enter a valid expiry date'**
-  String get paymentErrorExpiryInvalid;
-
-  /// No description provided for @paymentErrorExpiryExpired.
-  ///
-  /// In en, this message translates to:
-  /// **'This card has expired'**
-  String get paymentErrorExpiryExpired;
-
-  /// No description provided for @paymentErrorCvvRequired.
-  ///
-  /// In en, this message translates to:
-  /// **'Enter the CVV'**
-  String get paymentErrorCvvRequired;
-
-  /// No description provided for @paymentErrorCvvInvalid.
-  ///
-  /// In en, this message translates to:
-  /// **'Enter a valid CVV'**
-  String get paymentErrorCvvInvalid;
-
   /// No description provided for @edit.
   ///
   /// In en, this message translates to:
@@ -2317,606 +1873,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Add'**
   String get add;
-
-  /// No description provided for @airport.
-  ///
-  /// In en, this message translates to:
-  /// **'Airport'**
-  String get airport;
-
-  /// No description provided for @downtown.
-  ///
-  /// In en, this message translates to:
-  /// **'Downtown'**
-  String get downtown;
-
-  /// No description provided for @trainStation.
-  ///
-  /// In en, this message translates to:
-  /// **'Train Station'**
-  String get trainStation;
-
-  /// No description provided for @hotelDistrict.
-  ///
-  /// In en, this message translates to:
-  /// **'Hotel District'**
-  String get hotelDistrict;
-
-  /// No description provided for @shoppingDistrict.
-  ///
-  /// In en, this message translates to:
-  /// **'Shopping District'**
-  String get shoppingDistrict;
-
-  /// No description provided for @industrialZone.
-  ///
-  /// In en, this message translates to:
-  /// **'Industrial Zone'**
-  String get industrialZone;
-
-  /// No description provided for @airportRoad.
-  ///
-  /// In en, this message translates to:
-  /// **'Airport Road'**
-  String get airportRoad;
-
-  /// No description provided for @dubai.
-  ///
-  /// In en, this message translates to:
-  /// **'Dubai'**
-  String get dubai;
-
-  /// No description provided for @abuDhabi.
-  ///
-  /// In en, this message translates to:
-  /// **'Abu Dhabi'**
-  String get abuDhabi;
-
-  /// No description provided for @sharjah.
-  ///
-  /// In en, this message translates to:
-  /// **'Sharjah'**
-  String get sharjah;
-
-  /// No description provided for @riyadh.
-  ///
-  /// In en, this message translates to:
-  /// **'Riyadh'**
-  String get riyadh;
-
-  /// No description provided for @jeddah.
-  ///
-  /// In en, this message translates to:
-  /// **'Jeddah'**
-  String get jeddah;
-
-  /// No description provided for @cairo.
-  ///
-  /// In en, this message translates to:
-  /// **'Cairo'**
-  String get cairo;
-
-  /// No description provided for @alexandria.
-  ///
-  /// In en, this message translates to:
-  /// **'Alexandria'**
-  String get alexandria;
-
-  /// No description provided for @giza.
-  ///
-  /// In en, this message translates to:
-  /// **'Giza'**
-  String get giza;
-
-  /// No description provided for @aswan.
-  ///
-  /// In en, this message translates to:
-  /// **'Aswan'**
-  String get aswan;
-
-  /// No description provided for @doha.
-  ///
-  /// In en, this message translates to:
-  /// **'Doha'**
-  String get doha;
-
-  /// No description provided for @alRayyan.
-  ///
-  /// In en, this message translates to:
-  /// **'Al Rayyan'**
-  String get alRayyan;
-
-  /// No description provided for @manama.
-  ///
-  /// In en, this message translates to:
-  /// **'Manama'**
-  String get manama;
-
-  /// No description provided for @muharraq.
-  ///
-  /// In en, this message translates to:
-  /// **'Muharraq'**
-  String get muharraq;
-
-  /// No description provided for @muscat.
-  ///
-  /// In en, this message translates to:
-  /// **'Muscat'**
-  String get muscat;
-
-  /// No description provided for @salalah.
-  ///
-  /// In en, this message translates to:
-  /// **'Salalah'**
-  String get salalah;
-
-  /// No description provided for @kuwaitCity.
-  ///
-  /// In en, this message translates to:
-  /// **'Kuwait City'**
-  String get kuwaitCity;
-
-  /// No description provided for @salmiya.
-  ///
-  /// In en, this message translates to:
-  /// **'Salmiya'**
-  String get salmiya;
-
-  /// No description provided for @amman.
-  ///
-  /// In en, this message translates to:
-  /// **'Amman'**
-  String get amman;
-
-  /// No description provided for @zarqa.
-  ///
-  /// In en, this message translates to:
-  /// **'Zarqa'**
-  String get zarqa;
-
-  /// No description provided for @beirut.
-  ///
-  /// In en, this message translates to:
-  /// **'Beirut'**
-  String get beirut;
-
-  /// No description provided for @tripoli.
-  ///
-  /// In en, this message translates to:
-  /// **'Tripoli'**
-  String get tripoli;
-
-  /// No description provided for @istanbul.
-  ///
-  /// In en, this message translates to:
-  /// **'Istanbul'**
-  String get istanbul;
-
-  /// No description provided for @ankara.
-  ///
-  /// In en, this message translates to:
-  /// **'Ankara'**
-  String get ankara;
-
-  /// No description provided for @izmir.
-  ///
-  /// In en, this message translates to:
-  /// **'Izmir'**
-  String get izmir;
-
-  /// No description provided for @london.
-  ///
-  /// In en, this message translates to:
-  /// **'London'**
-  String get london;
-
-  /// No description provided for @manchester.
-  ///
-  /// In en, this message translates to:
-  /// **'Manchester'**
-  String get manchester;
-
-  /// No description provided for @birmingham.
-  ///
-  /// In en, this message translates to:
-  /// **'Birmingham'**
-  String get birmingham;
-
-  /// No description provided for @paris.
-  ///
-  /// In en, this message translates to:
-  /// **'Paris'**
-  String get paris;
-
-  /// No description provided for @lyon.
-  ///
-  /// In en, this message translates to:
-  /// **'Lyon'**
-  String get lyon;
-
-  /// No description provided for @marseille.
-  ///
-  /// In en, this message translates to:
-  /// **'Marseille'**
-  String get marseille;
-
-  /// No description provided for @madrid.
-  ///
-  /// In en, this message translates to:
-  /// **'Madrid'**
-  String get madrid;
-
-  /// No description provided for @barcelona.
-  ///
-  /// In en, this message translates to:
-  /// **'Barcelona'**
-  String get barcelona;
-
-  /// No description provided for @seville.
-  ///
-  /// In en, this message translates to:
-  /// **'Seville'**
-  String get seville;
-
-  /// No description provided for @rome.
-  ///
-  /// In en, this message translates to:
-  /// **'Rome'**
-  String get rome;
-
-  /// No description provided for @milan.
-  ///
-  /// In en, this message translates to:
-  /// **'Milan'**
-  String get milan;
-
-  /// No description provided for @venice.
-  ///
-  /// In en, this message translates to:
-  /// **'Venice'**
-  String get venice;
-
-  /// No description provided for @berlin.
-  ///
-  /// In en, this message translates to:
-  /// **'Berlin'**
-  String get berlin;
-
-  /// No description provided for @munich.
-  ///
-  /// In en, this message translates to:
-  /// **'Munich'**
-  String get munich;
-
-  /// No description provided for @hamburg.
-  ///
-  /// In en, this message translates to:
-  /// **'Hamburg'**
-  String get hamburg;
-
-  /// No description provided for @tokyo.
-  ///
-  /// In en, this message translates to:
-  /// **'Tokyo'**
-  String get tokyo;
-
-  /// No description provided for @osaka.
-  ///
-  /// In en, this message translates to:
-  /// **'Osaka'**
-  String get osaka;
-
-  /// No description provided for @kyoto.
-  ///
-  /// In en, this message translates to:
-  /// **'Kyoto'**
-  String get kyoto;
-
-  /// No description provided for @singapore.
-  ///
-  /// In en, this message translates to:
-  /// **'Singapore'**
-  String get singapore;
-
-  /// No description provided for @bangkok.
-  ///
-  /// In en, this message translates to:
-  /// **'Bangkok'**
-  String get bangkok;
-
-  /// No description provided for @phuket.
-  ///
-  /// In en, this message translates to:
-  /// **'Phuket'**
-  String get phuket;
-
-  /// No description provided for @chiangMai.
-  ///
-  /// In en, this message translates to:
-  /// **'Chiang Mai'**
-  String get chiangMai;
-
-  /// No description provided for @delhi.
-  ///
-  /// In en, this message translates to:
-  /// **'Delhi'**
-  String get delhi;
-
-  /// No description provided for @mumbai.
-  ///
-  /// In en, this message translates to:
-  /// **'Mumbai'**
-  String get mumbai;
-
-  /// No description provided for @bangalore.
-  ///
-  /// In en, this message translates to:
-  /// **'Bangalore'**
-  String get bangalore;
-
-  /// No description provided for @seoul.
-  ///
-  /// In en, this message translates to:
-  /// **'Seoul'**
-  String get seoul;
-
-  /// No description provided for @busan.
-  ///
-  /// In en, this message translates to:
-  /// **'Busan'**
-  String get busan;
-
-  /// No description provided for @incheon.
-  ///
-  /// In en, this message translates to:
-  /// **'Incheon'**
-  String get incheon;
-
-  /// No description provided for @newYork.
-  ///
-  /// In en, this message translates to:
-  /// **'New York'**
-  String get newYork;
-
-  /// No description provided for @losAngeles.
-  ///
-  /// In en, this message translates to:
-  /// **'Los Angeles'**
-  String get losAngeles;
-
-  /// No description provided for @chicago.
-  ///
-  /// In en, this message translates to:
-  /// **'Chicago'**
-  String get chicago;
-
-  /// No description provided for @miami.
-  ///
-  /// In en, this message translates to:
-  /// **'Miami'**
-  String get miami;
-
-  /// No description provided for @lasVegas.
-  ///
-  /// In en, this message translates to:
-  /// **'Las Vegas'**
-  String get lasVegas;
-
-  /// No description provided for @toronto.
-  ///
-  /// In en, this message translates to:
-  /// **'Toronto'**
-  String get toronto;
-
-  /// No description provided for @vancouver.
-  ///
-  /// In en, this message translates to:
-  /// **'Vancouver'**
-  String get vancouver;
-
-  /// No description provided for @montreal.
-  ///
-  /// In en, this message translates to:
-  /// **'Montreal'**
-  String get montreal;
-
-  /// No description provided for @mexicoCity.
-  ///
-  /// In en, this message translates to:
-  /// **'Mexico City'**
-  String get mexicoCity;
-
-  /// No description provided for @cancun.
-  ///
-  /// In en, this message translates to:
-  /// **'Cancun'**
-  String get cancun;
-
-  /// No description provided for @playaDelCarmen.
-  ///
-  /// In en, this message translates to:
-  /// **'Playa del Carmen'**
-  String get playaDelCarmen;
-
-  /// No description provided for @saoPaulo.
-  ///
-  /// In en, this message translates to:
-  /// **'São Paulo'**
-  String get saoPaulo;
-
-  /// No description provided for @rioDeJaneiro.
-  ///
-  /// In en, this message translates to:
-  /// **'Rio de Janeiro'**
-  String get rioDeJaneiro;
-
-  /// No description provided for @salvador.
-  ///
-  /// In en, this message translates to:
-  /// **'Salvador'**
-  String get salvador;
-
-  /// No description provided for @sydney.
-  ///
-  /// In en, this message translates to:
-  /// **'Sydney'**
-  String get sydney;
-
-  /// No description provided for @melbourne.
-  ///
-  /// In en, this message translates to:
-  /// **'Melbourne'**
-  String get melbourne;
-
-  /// No description provided for @brisbane.
-  ///
-  /// In en, this message translates to:
-  /// **'Brisbane'**
-  String get brisbane;
-
-  /// No description provided for @uae.
-  ///
-  /// In en, this message translates to:
-  /// **'UAE'**
-  String get uae;
-
-  /// No description provided for @saudiArabia.
-  ///
-  /// In en, this message translates to:
-  /// **'Saudi Arabia'**
-  String get saudiArabia;
-
-  /// No description provided for @egypt.
-  ///
-  /// In en, this message translates to:
-  /// **'Egypt'**
-  String get egypt;
-
-  /// No description provided for @qatar.
-  ///
-  /// In en, this message translates to:
-  /// **'Qatar'**
-  String get qatar;
-
-  /// No description provided for @bahrain.
-  ///
-  /// In en, this message translates to:
-  /// **'Bahrain'**
-  String get bahrain;
-
-  /// No description provided for @oman.
-  ///
-  /// In en, this message translates to:
-  /// **'Oman'**
-  String get oman;
-
-  /// No description provided for @kuwait.
-  ///
-  /// In en, this message translates to:
-  /// **'Kuwait'**
-  String get kuwait;
-
-  /// No description provided for @jordan.
-  ///
-  /// In en, this message translates to:
-  /// **'Jordan'**
-  String get jordan;
-
-  /// No description provided for @lebanon.
-  ///
-  /// In en, this message translates to:
-  /// **'Lebanon'**
-  String get lebanon;
-
-  /// No description provided for @turkey.
-  ///
-  /// In en, this message translates to:
-  /// **'Turkey'**
-  String get turkey;
-
-  /// No description provided for @unitedKingdom.
-  ///
-  /// In en, this message translates to:
-  /// **'United Kingdom'**
-  String get unitedKingdom;
-
-  /// No description provided for @france.
-  ///
-  /// In en, this message translates to:
-  /// **'France'**
-  String get france;
-
-  /// No description provided for @spain.
-  ///
-  /// In en, this message translates to:
-  /// **'Spain'**
-  String get spain;
-
-  /// No description provided for @italy.
-  ///
-  /// In en, this message translates to:
-  /// **'Italy'**
-  String get italy;
-
-  /// No description provided for @germany.
-  ///
-  /// In en, this message translates to:
-  /// **'Germany'**
-  String get germany;
-
-  /// No description provided for @japan.
-  ///
-  /// In en, this message translates to:
-  /// **'Japan'**
-  String get japan;
-
-  /// No description provided for @thailand.
-  ///
-  /// In en, this message translates to:
-  /// **'Thailand'**
-  String get thailand;
-
-  /// No description provided for @india.
-  ///
-  /// In en, this message translates to:
-  /// **'India'**
-  String get india;
-
-  /// No description provided for @southKorea.
-  ///
-  /// In en, this message translates to:
-  /// **'South Korea'**
-  String get southKorea;
-
-  /// No description provided for @unitedStates.
-  ///
-  /// In en, this message translates to:
-  /// **'United States'**
-  String get unitedStates;
-
-  /// No description provided for @canada.
-  ///
-  /// In en, this message translates to:
-  /// **'Canada'**
-  String get canada;
-
-  /// No description provided for @mexico.
-  ///
-  /// In en, this message translates to:
-  /// **'Mexico'**
-  String get mexico;
-
-  /// No description provided for @brazil.
-  ///
-  /// In en, this message translates to:
-  /// **'Brazil'**
-  String get brazil;
-
-  /// No description provided for @australia.
-  ///
-  /// In en, this message translates to:
-  /// **'Australia'**
-  String get australia;
 
   /// No description provided for @selectCountry.
   ///
@@ -2941,12 +1897,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Dropoff Location'**
   String get selectDropoffLocation;
-
-  /// No description provided for @sameCityAsPickup.
-  ///
-  /// In en, this message translates to:
-  /// **'Same city as pickup'**
-  String get sameCityAsPickup;
 
   /// No description provided for @stepOf.
   ///
@@ -2977,18 +1927,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Pickup & Drop-off'**
   String get pickupAndDropoff;
-
-  /// No description provided for @airportNotice.
-  ///
-  /// In en, this message translates to:
-  /// **'Pickup and drop-off are always at the city airport'**
-  String get airportNotice;
-
-  /// No description provided for @pricePerDayFilter.
-  ///
-  /// In en, this message translates to:
-  /// **'Price/day'**
-  String get pricePerDayFilter;
 
   /// No description provided for @noCarsMatch.
   ///
@@ -3092,41 +2030,11 @@ abstract class AppLocalizations {
   /// **'Seats: Most First'**
   String get sortSeatsHigh;
 
-  /// No description provided for @cashOnlyTitle.
+  /// No description provided for @searchCountry.
   ///
   /// In en, this message translates to:
-  /// **'Cash Payment Only'**
-  String get cashOnlyTitle;
-
-  /// No description provided for @cashOnlyBody.
-  ///
-  /// In en, this message translates to:
-  /// **'We currently don\'t support online payments. Please prepare to pay in cash upon receiving the car.'**
-  String get cashOnlyBody;
-
-  /// No description provided for @searchCity.
-  ///
-  /// In en, this message translates to:
-  /// **'Search cities...'**
-  String get searchCity;
-
-  /// No description provided for @sortPriceAsc.
-  ///
-  /// In en, this message translates to:
-  /// **'Price ↑'**
-  String get sortPriceAsc;
-
-  /// No description provided for @sortPriceDesc.
-  ///
-  /// In en, this message translates to:
-  /// **'Price ↓'**
-  String get sortPriceDesc;
-
-  /// No description provided for @sortNameAz.
-  ///
-  /// In en, this message translates to:
-  /// **'A–Z'**
-  String get sortNameAz;
+  /// **'Search country...'**
+  String get searchCountry;
 
   /// No description provided for @car.
   ///
@@ -3194,330 +2102,6 @@ abstract class AppLocalizations {
   /// **'Reserve your room today and pay in cash at check-in — no card needed, no online forms, no hassle.'**
   String get hotelsCashPaymentBody;
 
-  /// No description provided for @dubaiInternationalAirport.
-  ///
-  /// In en, this message translates to:
-  /// **'Dubai International Airport'**
-  String get dubaiInternationalAirport;
-
-  /// No description provided for @abuDhabiInternationalAirport.
-  ///
-  /// In en, this message translates to:
-  /// **'Abu Dhabi International Airport'**
-  String get abuDhabiInternationalAirport;
-
-  /// No description provided for @sharjahInternationalAirport.
-  ///
-  /// In en, this message translates to:
-  /// **'Sharjah International Airport'**
-  String get sharjahInternationalAirport;
-
-  /// No description provided for @kingKhalidInternationalAirport.
-  ///
-  /// In en, this message translates to:
-  /// **'King Khalid International Airport'**
-  String get kingKhalidInternationalAirport;
-
-  /// No description provided for @kingAbdulazizInternationalAirport.
-  ///
-  /// In en, this message translates to:
-  /// **'King Abdulaziz International Airport'**
-  String get kingAbdulazizInternationalAirport;
-
-  /// No description provided for @cairoInternationalAirport.
-  ///
-  /// In en, this message translates to:
-  /// **'Cairo International Airport'**
-  String get cairoInternationalAirport;
-
-  /// No description provided for @elNouzhaAirport.
-  ///
-  /// In en, this message translates to:
-  /// **'El Nouzha Airport'**
-  String get elNouzhaAirport;
-
-  /// No description provided for @hamadInternationalAirport.
-  ///
-  /// In en, this message translates to:
-  /// **'Hamad International Airport'**
-  String get hamadInternationalAirport;
-
-  /// No description provided for @bahrainInternationalAirport.
-  ///
-  /// In en, this message translates to:
-  /// **'Bahrain International Airport'**
-  String get bahrainInternationalAirport;
-
-  /// No description provided for @muscatInternationalAirport.
-  ///
-  /// In en, this message translates to:
-  /// **'Muscat International Airport'**
-  String get muscatInternationalAirport;
-
-  /// No description provided for @kuwaitInternationalAirport.
-  ///
-  /// In en, this message translates to:
-  /// **'Kuwait International Airport'**
-  String get kuwaitInternationalAirport;
-
-  /// No description provided for @queenAliaInternationalAirport.
-  ///
-  /// In en, this message translates to:
-  /// **'Queen Alia International Airport'**
-  String get queenAliaInternationalAirport;
-
-  /// No description provided for @beirutRaficHaririInternational.
-  ///
-  /// In en, this message translates to:
-  /// **'Beirut–Rafic Hariri International'**
-  String get beirutRaficHaririInternational;
-
-  /// No description provided for @istanbulAirport.
-  ///
-  /// In en, this message translates to:
-  /// **'Istanbul Airport'**
-  String get istanbulAirport;
-
-  /// No description provided for @sabihaCokcentInternationalAirport.
-  ///
-  /// In en, this message translates to:
-  /// **'Sabiha Gökçen International Airport'**
-  String get sabihaCokcentInternationalAirport;
-
-  /// No description provided for @adnanMenderesAirport.
-  ///
-  /// In en, this message translates to:
-  /// **'Adnan Menderes Airport'**
-  String get adnanMenderesAirport;
-
-  /// No description provided for @ankaraEsenbogaAirport.
-  ///
-  /// In en, this message translates to:
-  /// **'Ankara Esenboğa Airport'**
-  String get ankaraEsenbogaAirport;
-
-  /// No description provided for @heathrowAirport.
-  ///
-  /// In en, this message translates to:
-  /// **'Heathrow Airport'**
-  String get heathrowAirport;
-
-  /// No description provided for @gatwickAirport.
-  ///
-  /// In en, this message translates to:
-  /// **'Gatwick Airport'**
-  String get gatwickAirport;
-
-  /// No description provided for @manchesterAirport.
-  ///
-  /// In en, this message translates to:
-  /// **'Manchester Airport'**
-  String get manchesterAirport;
-
-  /// No description provided for @charlesDeGaulleAirport.
-  ///
-  /// In en, this message translates to:
-  /// **'Charles de Gaulle Airport'**
-  String get charlesDeGaulleAirport;
-
-  /// No description provided for @parisOrlyAirport.
-  ///
-  /// In en, this message translates to:
-  /// **'Paris-Orly Airport'**
-  String get parisOrlyAirport;
-
-  /// No description provided for @adolfoSuarezMadridBarajasAirport.
-  ///
-  /// In en, this message translates to:
-  /// **'Adolfo Suárez Madrid–Barajas Airport'**
-  String get adolfoSuarezMadridBarajasAirport;
-
-  /// No description provided for @barcelonaElPratAirport.
-  ///
-  /// In en, this message translates to:
-  /// **'Barcelona–El Prat Airport'**
-  String get barcelonaElPratAirport;
-
-  /// No description provided for @leonardoDaVinciFiumicinoAirport.
-  ///
-  /// In en, this message translates to:
-  /// **'Leonardo da Vinci–Fiumicino Airport'**
-  String get leonardoDaVinciFiumicinoAirport;
-
-  /// No description provided for @milanMalpensaAirport.
-  ///
-  /// In en, this message translates to:
-  /// **'Milan Malpensa Airport'**
-  String get milanMalpensaAirport;
-
-  /// No description provided for @berlinBrandenburgAirport.
-  ///
-  /// In en, this message translates to:
-  /// **'Berlin Brandenburg Airport'**
-  String get berlinBrandenburgAirport;
-
-  /// No description provided for @munichAirport.
-  ///
-  /// In en, this message translates to:
-  /// **'Munich Airport'**
-  String get munichAirport;
-
-  /// No description provided for @hamburgAirport.
-  ///
-  /// In en, this message translates to:
-  /// **'Hamburg Airport'**
-  String get hamburgAirport;
-
-  /// No description provided for @tokyoHanedaAirport.
-  ///
-  /// In en, this message translates to:
-  /// **'Tokyo Haneda Airport'**
-  String get tokyoHanedaAirport;
-
-  /// No description provided for @naritaInternationalAirport.
-  ///
-  /// In en, this message translates to:
-  /// **'Narita International Airport'**
-  String get naritaInternationalAirport;
-
-  /// No description provided for @kansaiInternationalAirport.
-  ///
-  /// In en, this message translates to:
-  /// **'Kansai International Airport'**
-  String get kansaiInternationalAirport;
-
-  /// No description provided for @singaporeChangiAirport.
-  ///
-  /// In en, this message translates to:
-  /// **'Singapore Changi Airport'**
-  String get singaporeChangiAirport;
-
-  /// No description provided for @suvarnabhumiAirport.
-  ///
-  /// In en, this message translates to:
-  /// **'Suvarnabhumi Airport'**
-  String get suvarnabhumiAirport;
-
-  /// No description provided for @phuketInternationalAirport.
-  ///
-  /// In en, this message translates to:
-  /// **'Phuket International Airport'**
-  String get phuketInternationalAirport;
-
-  /// No description provided for @indiraGandhiInternationalAirport.
-  ///
-  /// In en, this message translates to:
-  /// **'Indira Gandhi International Airport'**
-  String get indiraGandhiInternationalAirport;
-
-  /// No description provided for @chhatrapatiShivajiInternational.
-  ///
-  /// In en, this message translates to:
-  /// **'Chhatrapati Shivaji International'**
-  String get chhatrapatiShivajiInternational;
-
-  /// No description provided for @incheonInternationalAirport.
-  ///
-  /// In en, this message translates to:
-  /// **'Incheon International Airport'**
-  String get incheonInternationalAirport;
-
-  /// No description provided for @gimpoInternationalAirport.
-  ///
-  /// In en, this message translates to:
-  /// **'Gimpo International Airport'**
-  String get gimpoInternationalAirport;
-
-  /// No description provided for @johnFKennedyInternationalAirport.
-  ///
-  /// In en, this message translates to:
-  /// **'John F. Kennedy International Airport'**
-  String get johnFKennedyInternationalAirport;
-
-  /// No description provided for @laGuardiaAirport.
-  ///
-  /// In en, this message translates to:
-  /// **'LaGuardia Airport'**
-  String get laGuardiaAirport;
-
-  /// No description provided for @losAngelesInternationalAirport.
-  ///
-  /// In en, this message translates to:
-  /// **'Los Angeles International Airport'**
-  String get losAngelesInternationalAirport;
-
-  /// No description provided for @ohareInternationalAirport.
-  ///
-  /// In en, this message translates to:
-  /// **'O\'Hare International Airport'**
-  String get ohareInternationalAirport;
-
-  /// No description provided for @miamiInternationalAirport.
-  ///
-  /// In en, this message translates to:
-  /// **'Miami International Airport'**
-  String get miamiInternationalAirport;
-
-  /// No description provided for @harryReidInternationalAirport.
-  ///
-  /// In en, this message translates to:
-  /// **'Harry Reid International Airport'**
-  String get harryReidInternationalAirport;
-
-  /// No description provided for @torontoPearsonInternationalAirport.
-  ///
-  /// In en, this message translates to:
-  /// **'Toronto Pearson International Airport'**
-  String get torontoPearsonInternationalAirport;
-
-  /// No description provided for @vancouverInternationalAirport.
-  ///
-  /// In en, this message translates to:
-  /// **'Vancouver International Airport'**
-  String get vancouverInternationalAirport;
-
-  /// No description provided for @mexicoCityInternationalAirport.
-  ///
-  /// In en, this message translates to:
-  /// **'Mexico City International Airport'**
-  String get mexicoCityInternationalAirport;
-
-  /// No description provided for @cancunInternationalAirport.
-  ///
-  /// In en, this message translates to:
-  /// **'Cancún International Airport'**
-  String get cancunInternationalAirport;
-
-  /// No description provided for @saoPauloGuarulhosInternational.
-  ///
-  /// In en, this message translates to:
-  /// **'São Paulo–Guarulhos International'**
-  String get saoPauloGuarulhosInternational;
-
-  /// No description provided for @rioDeJaneiroGaleaoInternational.
-  ///
-  /// In en, this message translates to:
-  /// **'Rio de Janeiro–Galeão International'**
-  String get rioDeJaneiroGaleaoInternational;
-
-  /// No description provided for @sydneyKingsfordSmithAirport.
-  ///
-  /// In en, this message translates to:
-  /// **'Sydney Kingsford Smith Airport'**
-  String get sydneyKingsfordSmithAirport;
-
-  /// No description provided for @melbourneAirport.
-  ///
-  /// In en, this message translates to:
-  /// **'Melbourne Airport'**
-  String get melbourneAirport;
-
-  /// No description provided for @brisbaneAirport.
-  ///
-  /// In en, this message translates to:
-  /// **'Brisbane Airport'**
-  String get brisbaneAirport;
-
   /// No description provided for @all.
   ///
   /// In en, this message translates to:
@@ -3547,6 +2131,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'First Class'**
   String get firstClass;
+
+  /// No description provided for @searchCity.
+  ///
+  /// In en, this message translates to:
+  /// **'Search cities...'**
+  String get searchCity;
 
   /// No description provided for @settingsCurrencyTitle.
   ///

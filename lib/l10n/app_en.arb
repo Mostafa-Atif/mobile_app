@@ -5,23 +5,15 @@
   "homeGreetingWithName": "Ready for takeoff, {name}?",
   "@homeGreetingWithName": {
     "placeholders": {
-      "name": { "type": "String" }
+      "name": {
+        "type": "String"
+      }
     }
   },
   "homeHeroTitle": "Plan your next adventure",
-  "homeHeroSubtitle": "Search inspiring places, compare ideas, and open a destination guide without leaving the home screen.",
   "homeDestinationsTitle": "Explore destinations",
-  "homeDestinationsSubtitle": "Browse a curated set of destinations and open a quick guide for the place that matches your next trip.",
   "homeSearchHint": "Search destinations, countries, or keywords",
-  "homeExploreDestination": "Open guide",
-  "homeBackToDestinations": "Back to destinations",
-  "homeNoDestinationsTitle": "No destinations found",
-  "homeNoDestinationsSubtitle": "Try a different search term to explore more places.",
   "homeOfficialWebsite": "Official website",
-  "homeOfficialWebsiteHint": "Use this source when you want the destination's official travel page.",
-  "homeOfficialSource": "Official source",
-  "homeTravelerGuide": "Traveler guide",
-  "homeSearchReady": "Search-ready",
   "seeAll": "See all",
   "allDestinationsTitle": "All Destinations",
   "popularDestinations": "Popular",
@@ -31,14 +23,18 @@
   "destinationBestTimeBody": "The ideal time to explore {name} is during the milder seasons when sightseeing and outdoor activities feel most comfortable.",
   "@destinationBestTimeBody": {
     "placeholders": {
-      "name": { "type": "String" }
+      "name": {
+        "type": "String"
+      }
     }
   },
   "destinationCuisineTitle": "Local Cuisine",
   "destinationCuisineBody": "Experience local flavors in {name} and explore signature dishes, neighborhood favorites, and food markets.",
   "@destinationCuisineBody": {
     "placeholders": {
-      "name": { "type": "String" }
+      "name": {
+        "type": "String"
+      }
     }
   },
   "destinationStayTitle": "Where to Stay",
@@ -47,7 +43,9 @@
   "destinationAttractionsBody": "Start with the best-known places in {name}, then leave room for local neighborhoods and hidden gems.",
   "@destinationAttractionsBody": {
     "placeholders": {
-      "name": { "type": "String" }
+      "name": {
+        "type": "String"
+      }
     }
   },
   "devMenu": "Dev Menu",
@@ -81,18 +79,15 @@
   "forgotPassword": "Forgot password?",
   "noAccount": "Don't have an account?",
   "haveAccount": "Already have an account?",
-  "passwordHint": "Min 8 chars, upper, lower, number, special",
   "male": "Male",
   "female": "Female",
   "forgotPasswordTitle": "Reset password",
   "forgotPasswordSubtitle": "Enter your email and we'll send you a reset link",
   "sendResetLink": "Send Reset Link",
   "resetLinkSent": "Reset link sent! Check your inbox.\nRedirecting to sign in...",
-  "errorFillFields": "Please fill in all fields",
   "errorValidEmail": "Enter a valid email",
   "errorPasswordLength": "Password must be at least 8 characters",
   "errorLettersOnly": "Letters only",
-  "errorMustBe18": "Must be 18+",
   "errorRequired": "Required",
   "errorValidPhone": "Enter a valid phone number (7-15 digits)",
   "errorPasswordUppercase": "At least 1 uppercase letter",
@@ -101,14 +96,8 @@
   "errorPasswordSpecial": "At least 1 special character",
   "errorPasswordMinLength": "At least 8 characters",
   "carRentTitle": "Car Rent",
-  "carRentSubtitle": "Rent a car at the best rates",
-  "carRentHint": "Tap a car to select it, then fill in the details below",
   "selected": "Selected",
-  "showMore": "Show more",
   "bookingDetails": "Booking Details",
-  "selectCarFirst": "↑ Select a car from the list above",
-  "pickupLocation": "Pickup location",
-  "dropoffLocation": "Dropoff location",
   "selectLocation": "Select location",
   "pickupDateTime": "Pickup date & time",
   "dropoffDateTime": "Dropoff date & time",
@@ -116,25 +105,29 @@
   "totalDays": "Total: {days} day(s)",
   "@totalDays": {
     "placeholders": {
-      "days": { "type": "int" }
+      "days": {
+        "type": "int"
+      }
     }
   },
   "privateDriver": "Private driver",
   "privateDriverExtra": "Extra {amount}/day",
   "@privateDriverExtra": {
     "placeholders": {
-      "amount": {"type": "String"}
+      "amount": {
+        "type": "String"
+      }
     }
   },
   "carRentalDays": "Car rental ({days} days)",
   "@carRentalDays": {
     "placeholders": {
-      "days": { "type": "int" }
+      "days": {
+        "type": "int"
+      }
     }
   },
   "total": "Total",
-  "proceedToPayment": "Proceed To Payment",
-  "bookingConfirmed": "Booking confirmed! 🎉",
   "bookingFailed": "Booking failed",
   "selectCarError": "Please select a car first",
   "selectLocationsError": "Please select pickup and dropoff locations",
@@ -142,25 +135,15 @@
   "dropoffBeforePickup": "Dropoff must be after pickup",
   "signInFirst": "Please sign in first",
   "perDay": "Per day",
-  "perWeek": "Per week",
-  "vatIncluded": "*The prices are inclusive of VAT",
-  "noCarAvailable": "No cars available",
-  "seats": "Seats",
-  "bags": "Bags",
   "unableToConnect": "Unable to connect",
   "checkConnectionRetry": "Please check your connection and try again",
   "retry": "Retry",
-  "dateTimeAt": "{date} at {time}",
-  "@dateTimeAt": {
-    "placeholders": {
-      "date": { "type": "String" },
-      "time": { "type": "String" }
-    }
-  },
   "errorWithMessage": "Error: {message}",
   "@errorWithMessage": {
     "placeholders": {
-      "message": { "type": "String" }
+      "message": {
+        "type": "String"
+      }
     }
   },
   "searchStays": "Search Stays",
@@ -177,7 +160,9 @@
   "nights": "{count} night(s)",
   "@nights": {
     "placeholders": {
-      "count": { "type": "int" }
+      "count": {
+        "type": "int"
+      }
     }
   },
   "room": "Room",
@@ -190,8 +175,12 @@
   "propertiesFound": "{count} properties found in {destination}",
   "@propertiesFound": {
     "placeholders": {
-      "count": { "type": "int" },
-      "destination": { "type": "String" }
+      "count": {
+        "type": "int"
+      },
+      "destination": {
+        "type": "String"
+      }
     }
   },
   "sortBy": "Sort by",
@@ -210,15 +199,20 @@
   "views": "Views",
   "rooms": "Rooms",
   "roomsAndGuests": "Rooms & Guests",
-  "numberOfRooms": "Number of rooms",
   "bookNow": "Book Now",
   "perNight": "/ night",
   "totalNightsRooms": "{total} ({nights} nights, {rooms} room(s))",
   "@totalNightsRooms": {
     "placeholders": {
-      "total": { "type": "String" },
-      "nights": { "type": "int" },
-      "rooms": { "type": "int" }
+      "total": {
+        "type": "String"
+      },
+      "nights": {
+        "type": "int"
+      },
+      "rooms": {
+        "type": "int"
+      }
     }
   },
   "guestDetails": "Guest details",
@@ -229,11 +223,12 @@
   "saveGuest": "Save Guest {number}",
   "@saveGuest": {
     "placeholders": {
-      "number": { "type": "int" }
+      "number": {
+        "type": "int"
+      }
     }
   },
   "fillGuestDetails": "Please fill in details for all remaining guests",
-  "hotelBookedSuccess": "Hotel booked successfully! 🏨",
   "hotelSeeReviews": "See reviews",
   "hotelRatingExceptional": "Exceptional",
   "hotelRatingExcellent": "Excellent",
@@ -274,7 +269,6 @@
   "selectArrivalCity": "Select Arrival City",
   "passenger": "Passenger",
   "travellerDetails": "Traveller details",
-  "nationality": "Nationality",
   "passportNumber": "Passport number",
   "passportExpiry": "Passport expiry date",
   "dateOfBirth": "Date of birth",
@@ -283,7 +277,6 @@
   "contactDetails": "Contact details",
   "nationalityLabel": "Nationality *",
   "selectNationality": "Select Nationality",
-  "searchCountry": "Search country…",
   "noCountryFound": "No country found",
   "selectCountryCode": "Select Country Code",
   "searchCountryOrCode": "Search country or code…",
@@ -291,17 +284,20 @@
   "savePassenger": "Save Passenger {number}",
   "@savePassenger": {
     "placeholders": {
-      "number": { "type": "int" }
+      "number": {
+        "type": "int"
+      }
     }
   },
   "confirmBookings": "Confirm {count} Bookings",
   "@confirmBookings": {
     "placeholders": {
-      "count": { "type": "int" }
+      "count": {
+        "type": "int"
+      }
     }
   },
   "fillPassengerDetails": "Please fill in details for all remaining passengers",
-  "flightBookedSuccess": "Flight booked successfully! ✈️",
   "someBookingsFailed": "Some bookings failed. Please try again.",
   "reviewTrip": "Review your trip",
   "flightDetails": "Flight Details",
@@ -319,7 +315,6 @@
   "airline": "Airline",
   "duration": "Duration",
   "stops": "Stops",
-  "pricePerPerson": "Price per person",
   "outboundFlight": "Outbound Flight",
   "returnFlight": "Return Flight",
   "noFlightsFound": "No flights found",
@@ -338,11 +333,12 @@
   "discountWithCode": "Discount ({code})",
   "@discountWithCode": {
     "placeholders": {
-      "code": { "type": "String" }
+      "code": {
+        "type": "String"
+      }
     }
   },
   "invalidPromoCode": "Invalid promo code",
-  "promoValidateFailed": "Could not validate code. Try again.",
   "userDashboardTitle": "My Bookings",
   "userDashboardSubtitle": "All your travel bookings in one place",
   "userDashboardTotal": "Total",
@@ -387,25 +383,6 @@
   "statusCompleted": "Completed",
   "statusCancelled": "Cancelled",
   "statusPending": "Pending",
-  "aboutTitle": "About Us",
-  "aboutMissionLabel": "Our Mission",
-  "aboutMissionBody": "Rahal is your companion on every journey. We believe travel should be simple, enjoyable, and accessible to everyone. That's why we've brought everything you need into one place - from flights and hotels to car rentals - at competitive prices with an unmatched experience.",
-  "aboutOfferLabel": "What We Offer",
-  "aboutContactLabel": "Get In Touch",
-  "aboutHeadquarters": "Headquarters",
-  "aboutHeadquartersValue": "Riyadh, Saudi Arabia",
-  "aboutVersion": "Version 1.0.0",
-  "aboutStatsHotels": "Hotels",
-  "aboutStatsDestinations": "Destinations",
-  "aboutStatsTravelers": "Happy Travelers",
-  "aboutFeatureFlightsTitle": "Flight Booking",
-  "aboutFeatureFlightsDesc": "Search and book the best flights from hundreds of airlines worldwide.",
-  "aboutFeatureHotelsTitle": "Hotel Stays",
-  "aboutFeatureHotelsDesc": "Choose from over 1M+ hotels and apartments across the globe.",
-  "aboutFeatureCarsTitle": "Car Rentals",
-  "aboutFeatureCarsDesc": "Rent your preferred car at the best rates with an optional private driver.",
-  "aboutFeatureSupportTitle": "24/7 Support",
-  "aboutFeatureSupportDesc": "Our support team is always available to assist you throughout your journey.",
   "menuDashboard": "My Bookings",
   "menuAdminDashboard": "Admin Dashboard",
   "menuSettings": "Settings",
@@ -424,7 +401,6 @@
   "errorAge": "Must be between 18 and 120",
   "errorNationalId": "Must be 8–20 alphanumeric characters",
   "upcomingTrip": "Upcoming trip",
-  "specialOffers": "Special offers",
   "specialOffer": "Special Offer",
   "offerBadge": "APP EXCLUSIVE",
   "offerWelcomeGift": "Your welcome gift.",
@@ -432,280 +408,42 @@
   "offerCodeLabel": "Code",
   "offerCodeCopied": "Code copied: RAHAL20",
   "offerCopyCode": "Copy Code",
-  "paymentTitle": "Payment",
-  "paymentCreditCard": "Credit card",
-  "paymentDebitCard": "Debit card",
-  "paymentCardNumber": "Card number",
-  "paymentCardholderName": "Cardholder name",
-  "paymentCardholderHint": "Name on card",
-  "paymentExpiry": "Expiry date",
-  "paymentCvv": "CVV",
-  "paymentSaveCard": "Save card",
-  "paymentSaveCardSub": "For faster checkout next time",
-  "paymentSecureNote": "Your payment is secured",
-  "paymentErrorCardNumberRequired": "Enter your card number",
-  "paymentErrorCardNumberInvalid": "Enter a valid card number",
-  "paymentErrorCardholderRequired": "Enter the cardholder name",
-  "paymentErrorCardholderInvalid": "Enter a valid name",
-  "paymentErrorExpiryRequired": "Enter the expiry date",
-  "paymentErrorExpiryInvalid": "Enter a valid expiry date",
-  "paymentErrorExpiryExpired": "This card has expired",
-  "paymentErrorCvvRequired": "Enter the CVV",
-  "paymentErrorCvvInvalid": "Enter a valid CVV",
   "edit": "Edit",
   "add": "Add",
-  "airport": "Airport",
-  "downtown": "Downtown",
-  "trainStation": "Train Station",
-  "hotelDistrict": "Hotel District",
-  "shoppingDistrict": "Shopping District",
-  "industrialZone": "Industrial Zone",
-  "airportRoad": "Airport Road",
-  "dubai": "Dubai",
-  "abuDhabi": "Abu Dhabi",
-  "sharjah": "Sharjah",
-  "riyadh": "Riyadh",
-  "jeddah": "Jeddah",
-  "cairo": "Cairo",
-  "alexandria": "Alexandria",
-  "giza": "Giza",
-  "aswan": "Aswan",
-  "doha": "Doha",
-  "alRayyan": "Al Rayyan",
-  "manama": "Manama",
-  "muharraq": "Muharraq",
-  "muscat": "Muscat",
-  "salalah": "Salalah",
-  "kuwaitCity": "Kuwait City",
-  "salmiya": "Salmiya",
-  "amman": "Amman",
-  "zarqa": "Zarqa",
-  "beirut": "Beirut",
-  "tripoli": "Tripoli",
-  "istanbul": "Istanbul",
-  "ankara": "Ankara",
-  "izmir": "Izmir",
-  "london": "London",
-  "manchester": "Manchester",
-  "birmingham": "Birmingham",
-  "paris": "Paris",
-  "lyon": "Lyon",
-  "marseille": "Marseille",
-  "madrid": "Madrid",
-  "barcelona": "Barcelona",
-  "seville": "Seville",
-  "rome": "Rome",
-  "milan": "Milan",
-  "venice": "Venice",
-  "berlin": "Berlin",
-  "munich": "Munich",
-  "hamburg": "Hamburg",
-  "tokyo": "Tokyo",
-  "osaka": "Osaka",
-  "kyoto": "Kyoto",
-  "singapore": "Singapore",
-  "bangkok": "Bangkok",
-  "phuket": "Phuket",
-  "chiangMai": "Chiang Mai",
-  "delhi": "Delhi",
-  "mumbai": "Mumbai",
-  "bangalore": "Bangalore",
-  "seoul": "Seoul",
-  "busan": "Busan",
-  "incheon": "Incheon",
-  "newYork": "New York",
-  "losAngeles": "Los Angeles",
-  "chicago": "Chicago",
-  "miami": "Miami",
-  "lasVegas": "Las Vegas",
-  "toronto": "Toronto",
-  "vancouver": "Vancouver",
-  "montreal": "Montreal",
-  "mexicoCity": "Mexico City",
-  "cancun": "Cancun",
-  "playaDelCarmen": "Playa del Carmen",
-  "saoPaulo": "São Paulo",
-  "rioDeJaneiro": "Rio de Janeiro",
-  "salvador": "Salvador",
-  "sydney": "Sydney",
-  "melbourne": "Melbourne",
-  "brisbane": "Brisbane",
-  "uae": "UAE",
-  "saudiArabia": "Saudi Arabia",
-  "egypt": "Egypt",
-  "qatar": "Qatar",
-  "bahrain": "Bahrain",
-  "oman": "Oman",
-  "kuwait": "Kuwait",
-  "jordan": "Jordan",
-  "lebanon": "Lebanon",
-  "turkey": "Turkey",
-  "unitedKingdom": "United Kingdom",
-  "france": "France",
-  "spain": "Spain",
-  "italy": "Italy",
-  "germany": "Germany",
-  "japan": "Japan",
-  "thailand": "Thailand",
-  "india": "India",
-  "southKorea": "South Korea",
-  "unitedStates": "United States",
-  "canada": "Canada",
-  "mexico": "Mexico",
-  "brazil": "Brazil",
-  "australia": "Australia",
   "selectCountry": "Select Country",
   "selectCity": "Select City",
   "selectPickupLocation": "Pickup Location",
   "selectDropoffLocation": "Dropoff Location",
-  "sameCityAsPickup": "Same city as pickup",
-  "airport": "Airport",
-  "downtown": "Downtown",
-  "trainStation": "Train Station",
-  "hotelDistrict": "Hotel District",
-  "shoppingDistrict": "Shopping District",
-  "industrialZone": "Industrial Zone",
-  "airportRoad": "Airport Road",
-  "uae": "UAE",
-  "dubai": "Dubai",
-  "abuDhabi": "Abu Dhabi",
-  "sharjah": "Sharjah",
-  "saudiArabia": "Saudi Arabia",
-  "riyadh": "Riyadh",
-  "jeddah": "Jeddah",
-  "egypt": "Egypt",
-  "cairo": "Cairo",
-  "alexandria": "Alexandria",
-  "giza": "Giza",
-  "aswan": "Aswan",
-  "qatar": "Qatar",
-  "doha": "Doha",
-  "alRayyan": "Al Rayyan",
-  "bahrain": "Bahrain",
-  "manama": "Manama",
-  "muharraq": "Muharraq",
-  "oman": "Oman",
-  "muscat": "Muscat",
-  "salalah": "Salalah",
-  "kuwait": "Kuwait",
-  "kuwaitCity": "Kuwait City",
-  "salmiya": "Salmiya",
-  "jordan": "Jordan",
-  "amman": "Amman",
-  "zarqa": "Zarqa",
-  "lebanon": "Lebanon",
-  "beirut": "Beirut",
-  "tripoli": "Tripoli",
-  "turkey": "Turkey",
-  "istanbul": "Istanbul",
-  "ankara": "Ankara",
-  "izmir": "Izmir",
-  "unitedKingdom": "United Kingdom",
-  "london": "London",
-  "manchester": "Manchester",
-  "birmingham": "Birmingham",
-  "france": "France",
-  "paris": "Paris",
-  "lyon": "Lyon",
-  "marseille": "Marseille",
-  "spain": "Spain",
-  "madrid": "Madrid",
-  "barcelona": "Barcelona",
-  "seville": "Seville",
-  "italy": "Italy",
-  "rome": "Rome",
-  "milan": "Milan",
-  "venice": "Venice",
-  "germany": "Germany",
-  "berlin": "Berlin",
-  "munich": "Munich",
-  "hamburg": "Hamburg",
-  "japan": "Japan",
-  "tokyo": "Tokyo",
-  "osaka": "Osaka",
-  "kyoto": "Kyoto",
-  "singapore": "Singapore",
-  "thailand": "Thailand",
-  "bangkok": "Bangkok",
-  "phuket": "Phuket",
-  "chiangMai": "Chiang Mai",
-  "india": "India",
-  "delhi": "Delhi",
-  "mumbai": "Mumbai",
-  "bangalore": "Bangalore",
-  "southKorea": "South Korea",
-  "seoul": "Seoul",
-  "busan": "Busan",
-  "incheon": "Incheon",
-  "unitedStates": "United States",
-  "newYork": "New York",
-  "losAngeles": "Los Angeles",
-  "chicago": "Chicago",
-  "miami": "Miami",
-  "lasVegas": "Las Vegas",
-  "canada": "Canada",
-  "toronto": "Toronto",
-  "vancouver": "Vancouver",
-  "montreal": "Montreal",
-  "mexico": "Mexico",
-  "mexicoCity": "Mexico City",
-  "cancun": "Cancun",
-  "playaDelCarmen": "Playa del Carmen",
-  "brazil": "Brazil",
-  "saoPaulo": "São Paulo",
-  "rioDeJaneiro": "Rio de Janeiro",
-  "salvador": "Salvador",
-  "australia": "Australia",
-  "sydney": "Sydney",
-  "melbourne": "Melbourne",
-  "brisbane": "Brisbane",
-  "selectCountry": "Select Country",
-  "selectCity": "Select City",
   "stepOf": "Step {step} of 4",
   "@stepOf": {
     "placeholders": {
-      "step": { "type": "int" }
+      "step": {
+        "type": "int"
+      }
     }
   },
   "tripDetails": "Trip Details",
   "yourInformation": "Your Information",
   "reviewAndConfirm": "Review & Confirm",
   "pickupAndDropoff": "Pickup & Drop-off",
-  "airportNotice": "Pickup and drop-off are always at the city airport",
-  "seats": "Seats",
-  "pricePerDayFilter": "Price/day",
   "noCarsMatch": "No cars match your filters",
   "clearFilters": "Clear filters",
   "location": "Location",
-  "from": "From",
   "until": "Until",
   "vehicle": "Vehicle",
   "trip": "Trip",
   "priceBreakdown": "Price Breakdown",
   "continuee": "Continue",
-  "retry": "Retry",
   "day": "day",
   "days": "days",
   "total2": "total",
-  "included": "Included",
   "saved": "saved",
-  "bags": "Bags",
-  "sortBy": "Sort by",
   "sortPriceLow": "Price: Low to High",
   "sortPriceHigh": "Price: High to Low",
   "sortNameAZ": "Name: A to Z",
   "sortSeatsLow": "Seats: Fewest First",
   "sortSeatsHigh": "Seats: Most First",
-  "cashOnlyTitle": "Cash Payment Only",
-  "cashOnlyBody": "Payment is collected in cash upon vehicle pickup. Please have the exact amount ready.",
   "searchCountry": "Search country...",
-  "searchCity": "Search city...",
-  "sortBy": "Sort by",
-  "sortPriceAsc": "Price ↑",
-  "sortPriceDesc": "Price ↓",
-  "sortNameAz": "A–Z",
-  "cashOnlyTitle": "Cash Payment Only",
-  "cashOnlyBody": "We currently don't support online payments. Please prepare to pay in cash upon receiving the car.",
   "car": "Car",
   "info": "Your Info",
   "review": "Review",
@@ -717,60 +455,6 @@
   "flightsCashPaymentBody": "Reserve your seat today and pay in cash — no card needed, no online forms, no hassle.",
   "hotelsCashPaymentTitle": "Book Now — Pay at Check-In",
   "hotelsCashPaymentBody": "Reserve your room today and pay in cash at check-in — no card needed, no online forms, no hassle.",
-  "dubaiInternationalAirport": "Dubai International Airport",
-  "abuDhabiInternationalAirport": "Abu Dhabi International Airport",
-  "sharjahInternationalAirport": "Sharjah International Airport",
-  "kingKhalidInternationalAirport": "King Khalid International Airport",
-  "kingAbdulazizInternationalAirport": "King Abdulaziz International Airport",
-  "cairoInternationalAirport": "Cairo International Airport",
-  "elNouzhaAirport": "El Nouzha Airport",
-  "hamadInternationalAirport": "Hamad International Airport",
-  "bahrainInternationalAirport": "Bahrain International Airport",
-  "muscatInternationalAirport": "Muscat International Airport",
-  "kuwaitInternationalAirport": "Kuwait International Airport",
-  "queenAliaInternationalAirport": "Queen Alia International Airport",
-  "beirutRaficHaririInternational": "Beirut–Rafic Hariri International",
-  "istanbulAirport": "Istanbul Airport",
-  "sabihaCokcentInternationalAirport": "Sabiha Gökçen International Airport",
-  "adnanMenderesAirport": "Adnan Menderes Airport",
-  "ankaraEsenbogaAirport": "Ankara Esenboğa Airport",
-  "heathrowAirport": "Heathrow Airport",
-  "gatwickAirport": "Gatwick Airport",
-  "manchesterAirport": "Manchester Airport",
-  "charlesDeGaulleAirport": "Charles de Gaulle Airport",
-  "parisOrlyAirport": "Paris-Orly Airport",
-  "adolfoSuarezMadridBarajasAirport": "Adolfo Suárez Madrid–Barajas Airport",
-  "barcelonaElPratAirport": "Barcelona–El Prat Airport",
-  "leonardoDaVinciFiumicinoAirport": "Leonardo da Vinci–Fiumicino Airport",
-  "milanMalpensaAirport": "Milan Malpensa Airport",
-  "berlinBrandenburgAirport": "Berlin Brandenburg Airport",
-  "munichAirport": "Munich Airport",
-  "hamburgAirport": "Hamburg Airport",
-  "tokyoHanedaAirport": "Tokyo Haneda Airport",
-  "naritaInternationalAirport": "Narita International Airport",
-  "kansaiInternationalAirport": "Kansai International Airport",
-  "singaporeChangiAirport": "Singapore Changi Airport",
-  "suvarnabhumiAirport": "Suvarnabhumi Airport",
-  "phuketInternationalAirport": "Phuket International Airport",
-  "indiraGandhiInternationalAirport": "Indira Gandhi International Airport",
-  "chhatrapatiShivajiInternational": "Chhatrapati Shivaji International",
-  "incheonInternationalAirport": "Incheon International Airport",
-  "gimpoInternationalAirport": "Gimpo International Airport",
-  "johnFKennedyInternationalAirport": "John F. Kennedy International Airport",
-  "laGuardiaAirport": "LaGuardia Airport",
-  "losAngelesInternationalAirport": "Los Angeles International Airport",
-  "ohareInternationalAirport": "O'Hare International Airport",
-  "miamiInternationalAirport": "Miami International Airport",
-  "harryReidInternationalAirport": "Harry Reid International Airport",
-  "torontoPearsonInternationalAirport": "Toronto Pearson International Airport",
-  "vancouverInternationalAirport": "Vancouver International Airport",
-  "mexicoCityInternationalAirport": "Mexico City International Airport",
-  "cancunInternationalAirport": "Cancún International Airport",
-  "saoPauloGuarulhosInternational": "São Paulo–Guarulhos International",
-  "rioDeJaneiroGaleaoInternational": "Rio de Janeiro–Galeão International",
-  "sydneyKingsfordSmithAirport": "Sydney Kingsford Smith Airport",
-  "melbourneAirport": "Melbourne Airport",
-  "brisbaneAirport": "Brisbane Airport",
   "all": "all",
   "economy": "Economy",
   "premiumEconomy": "Premium Economy",

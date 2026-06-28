@@ -283,6 +283,7 @@ $languageInstruction unless the user asks you to respond in a different language
                   child: TextField(
                     controller: _controller,
                     onSubmitted: _sendMessage,
+                    maxLines: null,
                     decoration: InputDecoration(
                       hintText: l.inputHint,
                       hintStyle: TextStyle(color: t.label, fontSize: 14),

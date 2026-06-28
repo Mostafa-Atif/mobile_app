@@ -86,7 +86,7 @@ class _FlightSearchState extends State<FlightSearch> {
 
   void _buildFlightCityMap() async {
     String lang = Localizations.localeOf(context).languageCode;
-    final jsonString = await rootBundle.loadString('data/countries.json');
+    final jsonString = await rootBundle.loadString('assets/data/countries.json');
     final json = jsonDecode(jsonString);
 
     flightCtryCityMap.clear();

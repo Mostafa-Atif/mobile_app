@@ -23,47 +23,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get homeHeroTitle => 'Plan your next adventure';
 
   @override
-  String get homeHeroSubtitle =>
-      'Search inspiring places, compare ideas, and open a destination guide without leaving the home screen.';
-
-  @override
   String get homeDestinationsTitle => 'Explore destinations';
-
-  @override
-  String get homeDestinationsSubtitle =>
-      'Browse a curated set of destinations and open a quick guide for the place that matches your next trip.';
 
   @override
   String get homeSearchHint => 'Search destinations, countries, or keywords';
 
   @override
-  String get homeExploreDestination => 'Open guide';
-
-  @override
-  String get homeBackToDestinations => 'Back to destinations';
-
-  @override
-  String get homeNoDestinationsTitle => 'No destinations found';
-
-  @override
-  String get homeNoDestinationsSubtitle =>
-      'Try a different search term to explore more places.';
-
-  @override
   String get homeOfficialWebsite => 'Official website';
-
-  @override
-  String get homeOfficialWebsiteHint =>
-      'Use this source when you want the destination\'s official travel page.';
-
-  @override
-  String get homeOfficialSource => 'Official source';
-
-  @override
-  String get homeTravelerGuide => 'Traveler guide';
-
-  @override
-  String get homeSearchReady => 'Search-ready';
 
   @override
   String get seeAll => 'See all';
@@ -208,9 +174,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get haveAccount => 'Already have an account?';
 
   @override
-  String get passwordHint => 'Min 8 chars, upper, lower, number, special';
-
-  @override
   String get male => 'Male';
 
   @override
@@ -231,9 +194,6 @@ class AppLocalizationsEn extends AppLocalizations {
       'Reset link sent! Check your inbox.\nRedirecting to sign in...';
 
   @override
-  String get errorFillFields => 'Please fill in all fields';
-
-  @override
   String get errorValidEmail => 'Enter a valid email';
 
   @override
@@ -241,9 +201,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get errorLettersOnly => 'Letters only';
-
-  @override
-  String get errorMustBe18 => 'Must be 18+';
 
   @override
   String get errorRequired => 'Required';
@@ -270,29 +227,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get carRentTitle => 'Car Rent';
 
   @override
-  String get carRentSubtitle => 'Rent a car at the best rates';
-
-  @override
-  String get carRentHint =>
-      'Tap a car to select it, then fill in the details below';
-
-  @override
   String get selected => 'Selected';
 
   @override
-  String get showMore => 'Show more';
-
-  @override
   String get bookingDetails => 'Booking Details';
-
-  @override
-  String get selectCarFirst => '↑ Select a car from the list above';
-
-  @override
-  String get pickupLocation => 'Pickup location';
-
-  @override
-  String get dropoffLocation => 'Dropoff location';
 
   @override
   String get selectLocation => 'Select location';
@@ -328,12 +266,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get total => 'Total';
 
   @override
-  String get proceedToPayment => 'Proceed To Payment';
-
-  @override
-  String get bookingConfirmed => 'Booking confirmed! 🎉';
-
-  @override
   String get bookingFailed => 'Booking failed';
 
   @override
@@ -356,21 +288,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get perDay => 'Per day';
 
   @override
-  String get perWeek => 'Per week';
-
-  @override
-  String get vatIncluded => '*The prices are inclusive of VAT';
-
-  @override
-  String get noCarAvailable => 'No cars available';
-
-  @override
-  String get seats => 'Seats';
-
-  @override
-  String get bags => 'Bags';
-
-  @override
   String get unableToConnect => 'Unable to connect';
 
   @override
@@ -379,11 +296,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get retry => 'Retry';
-
-  @override
-  String dateTimeAt(String date, String time) {
-    return '$date at $time';
-  }
 
   @override
   String errorWithMessage(String message) {
@@ -504,9 +416,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get roomsAndGuests => 'Rooms & Guests';
 
   @override
-  String get numberOfRooms => 'Number of rooms';
-
-  @override
   String get bookNow => 'Book Now';
 
   @override
@@ -540,9 +449,6 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get fillGuestDetails =>
       'Please fill in details for all remaining guests';
-
-  @override
-  String get hotelBookedSuccess => 'Hotel booked successfully! 🏨';
 
   @override
   String get hotelSeeReviews => 'See reviews';
@@ -665,9 +571,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get travellerDetails => 'Traveller details';
 
   @override
-  String get nationality => 'Nationality';
-
-  @override
   String get passportNumber => 'Passport number';
 
   @override
@@ -690,9 +593,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get selectNationality => 'Select Nationality';
-
-  @override
-  String get searchCountry => 'Search country...';
 
   @override
   String get noCountryFound => 'No country found';
@@ -719,9 +619,6 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get fillPassengerDetails =>
       'Please fill in details for all remaining passengers';
-
-  @override
-  String get flightBookedSuccess => 'Flight booked successfully! ✈️';
 
   @override
   String get someBookingsFailed => 'Some bookings failed. Please try again.';
@@ -777,9 +674,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get stops => 'Stops';
 
   @override
-  String get pricePerPerson => 'Price per person';
-
-  @override
   String get outboundFlight => 'Outbound Flight';
 
   @override
@@ -831,9 +725,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get invalidPromoCode => 'Invalid promo code';
-
-  @override
-  String get promoValidateFailed => 'Could not validate code. Try again.';
 
   @override
   String get userDashboardTitle => 'My Bookings';
@@ -973,68 +864,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get statusPending => 'Pending';
 
   @override
-  String get aboutTitle => 'About Us';
-
-  @override
-  String get aboutMissionLabel => 'Our Mission';
-
-  @override
-  String get aboutMissionBody =>
-      'Rahal is your companion on every journey. We believe travel should be simple, enjoyable, and accessible to everyone. That\'s why we\'ve brought everything you need into one place - from flights and hotels to car rentals - at competitive prices with an unmatched experience.';
-
-  @override
-  String get aboutOfferLabel => 'What We Offer';
-
-  @override
-  String get aboutContactLabel => 'Get In Touch';
-
-  @override
-  String get aboutHeadquarters => 'Headquarters';
-
-  @override
-  String get aboutHeadquartersValue => 'Riyadh, Saudi Arabia';
-
-  @override
-  String get aboutVersion => 'Version 1.0.0';
-
-  @override
-  String get aboutStatsHotels => 'Hotels';
-
-  @override
-  String get aboutStatsDestinations => 'Destinations';
-
-  @override
-  String get aboutStatsTravelers => 'Happy Travelers';
-
-  @override
-  String get aboutFeatureFlightsTitle => 'Flight Booking';
-
-  @override
-  String get aboutFeatureFlightsDesc =>
-      'Search and book the best flights from hundreds of airlines worldwide.';
-
-  @override
-  String get aboutFeatureHotelsTitle => 'Hotel Stays';
-
-  @override
-  String get aboutFeatureHotelsDesc =>
-      'Choose from over 1M+ hotels and apartments across the globe.';
-
-  @override
-  String get aboutFeatureCarsTitle => 'Car Rentals';
-
-  @override
-  String get aboutFeatureCarsDesc =>
-      'Rent your preferred car at the best rates with an optional private driver.';
-
-  @override
-  String get aboutFeatureSupportTitle => '24/7 Support';
-
-  @override
-  String get aboutFeatureSupportDesc =>
-      'Our support team is always available to assist you throughout your journey.';
-
-  @override
   String get menuDashboard => 'My Bookings';
 
   @override
@@ -1089,9 +918,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get upcomingTrip => 'Upcoming trip';
 
   @override
-  String get specialOffers => 'Special offers';
-
-  @override
   String get specialOffer => 'Special Offer';
 
   @override
@@ -1113,370 +939,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get offerCopyCode => 'Copy Code';
 
   @override
-  String get paymentTitle => 'Payment';
-
-  @override
-  String get paymentCreditCard => 'Credit card';
-
-  @override
-  String get paymentDebitCard => 'Debit card';
-
-  @override
-  String get paymentCardNumber => 'Card number';
-
-  @override
-  String get paymentCardholderName => 'Cardholder name';
-
-  @override
-  String get paymentCardholderHint => 'Name on card';
-
-  @override
-  String get paymentExpiry => 'Expiry date';
-
-  @override
-  String get paymentCvv => 'CVV';
-
-  @override
-  String get paymentSaveCard => 'Save card';
-
-  @override
-  String get paymentSaveCardSub => 'For faster checkout next time';
-
-  @override
-  String get paymentSecureNote => 'Your payment is secured';
-
-  @override
-  String get paymentErrorCardNumberRequired => 'Enter your card number';
-
-  @override
-  String get paymentErrorCardNumberInvalid => 'Enter a valid card number';
-
-  @override
-  String get paymentErrorCardholderRequired => 'Enter the cardholder name';
-
-  @override
-  String get paymentErrorCardholderInvalid => 'Enter a valid name';
-
-  @override
-  String get paymentErrorExpiryRequired => 'Enter the expiry date';
-
-  @override
-  String get paymentErrorExpiryInvalid => 'Enter a valid expiry date';
-
-  @override
-  String get paymentErrorExpiryExpired => 'This card has expired';
-
-  @override
-  String get paymentErrorCvvRequired => 'Enter the CVV';
-
-  @override
-  String get paymentErrorCvvInvalid => 'Enter a valid CVV';
-
-  @override
   String get edit => 'Edit';
 
   @override
   String get add => 'Add';
-
-  @override
-  String get airport => 'Airport';
-
-  @override
-  String get downtown => 'Downtown';
-
-  @override
-  String get trainStation => 'Train Station';
-
-  @override
-  String get hotelDistrict => 'Hotel District';
-
-  @override
-  String get shoppingDistrict => 'Shopping District';
-
-  @override
-  String get industrialZone => 'Industrial Zone';
-
-  @override
-  String get airportRoad => 'Airport Road';
-
-  @override
-  String get dubai => 'Dubai';
-
-  @override
-  String get abuDhabi => 'Abu Dhabi';
-
-  @override
-  String get sharjah => 'Sharjah';
-
-  @override
-  String get riyadh => 'Riyadh';
-
-  @override
-  String get jeddah => 'Jeddah';
-
-  @override
-  String get cairo => 'Cairo';
-
-  @override
-  String get alexandria => 'Alexandria';
-
-  @override
-  String get giza => 'Giza';
-
-  @override
-  String get aswan => 'Aswan';
-
-  @override
-  String get doha => 'Doha';
-
-  @override
-  String get alRayyan => 'Al Rayyan';
-
-  @override
-  String get manama => 'Manama';
-
-  @override
-  String get muharraq => 'Muharraq';
-
-  @override
-  String get muscat => 'Muscat';
-
-  @override
-  String get salalah => 'Salalah';
-
-  @override
-  String get kuwaitCity => 'Kuwait City';
-
-  @override
-  String get salmiya => 'Salmiya';
-
-  @override
-  String get amman => 'Amman';
-
-  @override
-  String get zarqa => 'Zarqa';
-
-  @override
-  String get beirut => 'Beirut';
-
-  @override
-  String get tripoli => 'Tripoli';
-
-  @override
-  String get istanbul => 'Istanbul';
-
-  @override
-  String get ankara => 'Ankara';
-
-  @override
-  String get izmir => 'Izmir';
-
-  @override
-  String get london => 'London';
-
-  @override
-  String get manchester => 'Manchester';
-
-  @override
-  String get birmingham => 'Birmingham';
-
-  @override
-  String get paris => 'Paris';
-
-  @override
-  String get lyon => 'Lyon';
-
-  @override
-  String get marseille => 'Marseille';
-
-  @override
-  String get madrid => 'Madrid';
-
-  @override
-  String get barcelona => 'Barcelona';
-
-  @override
-  String get seville => 'Seville';
-
-  @override
-  String get rome => 'Rome';
-
-  @override
-  String get milan => 'Milan';
-
-  @override
-  String get venice => 'Venice';
-
-  @override
-  String get berlin => 'Berlin';
-
-  @override
-  String get munich => 'Munich';
-
-  @override
-  String get hamburg => 'Hamburg';
-
-  @override
-  String get tokyo => 'Tokyo';
-
-  @override
-  String get osaka => 'Osaka';
-
-  @override
-  String get kyoto => 'Kyoto';
-
-  @override
-  String get singapore => 'Singapore';
-
-  @override
-  String get bangkok => 'Bangkok';
-
-  @override
-  String get phuket => 'Phuket';
-
-  @override
-  String get chiangMai => 'Chiang Mai';
-
-  @override
-  String get delhi => 'Delhi';
-
-  @override
-  String get mumbai => 'Mumbai';
-
-  @override
-  String get bangalore => 'Bangalore';
-
-  @override
-  String get seoul => 'Seoul';
-
-  @override
-  String get busan => 'Busan';
-
-  @override
-  String get incheon => 'Incheon';
-
-  @override
-  String get newYork => 'New York';
-
-  @override
-  String get losAngeles => 'Los Angeles';
-
-  @override
-  String get chicago => 'Chicago';
-
-  @override
-  String get miami => 'Miami';
-
-  @override
-  String get lasVegas => 'Las Vegas';
-
-  @override
-  String get toronto => 'Toronto';
-
-  @override
-  String get vancouver => 'Vancouver';
-
-  @override
-  String get montreal => 'Montreal';
-
-  @override
-  String get mexicoCity => 'Mexico City';
-
-  @override
-  String get cancun => 'Cancun';
-
-  @override
-  String get playaDelCarmen => 'Playa del Carmen';
-
-  @override
-  String get saoPaulo => 'São Paulo';
-
-  @override
-  String get rioDeJaneiro => 'Rio de Janeiro';
-
-  @override
-  String get salvador => 'Salvador';
-
-  @override
-  String get sydney => 'Sydney';
-
-  @override
-  String get melbourne => 'Melbourne';
-
-  @override
-  String get brisbane => 'Brisbane';
-
-  @override
-  String get uae => 'UAE';
-
-  @override
-  String get saudiArabia => 'Saudi Arabia';
-
-  @override
-  String get egypt => 'Egypt';
-
-  @override
-  String get qatar => 'Qatar';
-
-  @override
-  String get bahrain => 'Bahrain';
-
-  @override
-  String get oman => 'Oman';
-
-  @override
-  String get kuwait => 'Kuwait';
-
-  @override
-  String get jordan => 'Jordan';
-
-  @override
-  String get lebanon => 'Lebanon';
-
-  @override
-  String get turkey => 'Turkey';
-
-  @override
-  String get unitedKingdom => 'United Kingdom';
-
-  @override
-  String get france => 'France';
-
-  @override
-  String get spain => 'Spain';
-
-  @override
-  String get italy => 'Italy';
-
-  @override
-  String get germany => 'Germany';
-
-  @override
-  String get japan => 'Japan';
-
-  @override
-  String get thailand => 'Thailand';
-
-  @override
-  String get india => 'India';
-
-  @override
-  String get southKorea => 'South Korea';
-
-  @override
-  String get unitedStates => 'United States';
-
-  @override
-  String get canada => 'Canada';
-
-  @override
-  String get mexico => 'Mexico';
-
-  @override
-  String get brazil => 'Brazil';
-
-  @override
-  String get australia => 'Australia';
 
   @override
   String get selectCountry => 'Select Country';
@@ -1489,9 +955,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get selectDropoffLocation => 'Dropoff Location';
-
-  @override
-  String get sameCityAsPickup => 'Same city as pickup';
 
   @override
   String stepOf(int step) {
@@ -1509,13 +972,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get pickupAndDropoff => 'Pickup & Drop-off';
-
-  @override
-  String get airportNotice =>
-      'Pickup and drop-off are always at the city airport';
-
-  @override
-  String get pricePerDayFilter => 'Price/day';
 
   @override
   String get noCarsMatch => 'No cars match your filters';
@@ -1569,23 +1025,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get sortSeatsHigh => 'Seats: Most First';
 
   @override
-  String get cashOnlyTitle => 'Cash Payment Only';
-
-  @override
-  String get cashOnlyBody =>
-      'We currently don\'t support online payments. Please prepare to pay in cash upon receiving the car.';
-
-  @override
-  String get searchCity => 'Search cities...';
-
-  @override
-  String get sortPriceAsc => 'Price ↑';
-
-  @override
-  String get sortPriceDesc => 'Price ↓';
-
-  @override
-  String get sortNameAz => 'A–Z';
+  String get searchCountry => 'Search country...';
 
   @override
   String get car => 'Car';
@@ -1625,184 +1065,6 @@ class AppLocalizationsEn extends AppLocalizations {
       'Reserve your room today and pay in cash at check-in — no card needed, no online forms, no hassle.';
 
   @override
-  String get dubaiInternationalAirport => 'Dubai International Airport';
-
-  @override
-  String get abuDhabiInternationalAirport => 'Abu Dhabi International Airport';
-
-  @override
-  String get sharjahInternationalAirport => 'Sharjah International Airport';
-
-  @override
-  String get kingKhalidInternationalAirport =>
-      'King Khalid International Airport';
-
-  @override
-  String get kingAbdulazizInternationalAirport =>
-      'King Abdulaziz International Airport';
-
-  @override
-  String get cairoInternationalAirport => 'Cairo International Airport';
-
-  @override
-  String get elNouzhaAirport => 'El Nouzha Airport';
-
-  @override
-  String get hamadInternationalAirport => 'Hamad International Airport';
-
-  @override
-  String get bahrainInternationalAirport => 'Bahrain International Airport';
-
-  @override
-  String get muscatInternationalAirport => 'Muscat International Airport';
-
-  @override
-  String get kuwaitInternationalAirport => 'Kuwait International Airport';
-
-  @override
-  String get queenAliaInternationalAirport =>
-      'Queen Alia International Airport';
-
-  @override
-  String get beirutRaficHaririInternational =>
-      'Beirut–Rafic Hariri International';
-
-  @override
-  String get istanbulAirport => 'Istanbul Airport';
-
-  @override
-  String get sabihaCokcentInternationalAirport =>
-      'Sabiha Gökçen International Airport';
-
-  @override
-  String get adnanMenderesAirport => 'Adnan Menderes Airport';
-
-  @override
-  String get ankaraEsenbogaAirport => 'Ankara Esenboğa Airport';
-
-  @override
-  String get heathrowAirport => 'Heathrow Airport';
-
-  @override
-  String get gatwickAirport => 'Gatwick Airport';
-
-  @override
-  String get manchesterAirport => 'Manchester Airport';
-
-  @override
-  String get charlesDeGaulleAirport => 'Charles de Gaulle Airport';
-
-  @override
-  String get parisOrlyAirport => 'Paris-Orly Airport';
-
-  @override
-  String get adolfoSuarezMadridBarajasAirport =>
-      'Adolfo Suárez Madrid–Barajas Airport';
-
-  @override
-  String get barcelonaElPratAirport => 'Barcelona–El Prat Airport';
-
-  @override
-  String get leonardoDaVinciFiumicinoAirport =>
-      'Leonardo da Vinci–Fiumicino Airport';
-
-  @override
-  String get milanMalpensaAirport => 'Milan Malpensa Airport';
-
-  @override
-  String get berlinBrandenburgAirport => 'Berlin Brandenburg Airport';
-
-  @override
-  String get munichAirport => 'Munich Airport';
-
-  @override
-  String get hamburgAirport => 'Hamburg Airport';
-
-  @override
-  String get tokyoHanedaAirport => 'Tokyo Haneda Airport';
-
-  @override
-  String get naritaInternationalAirport => 'Narita International Airport';
-
-  @override
-  String get kansaiInternationalAirport => 'Kansai International Airport';
-
-  @override
-  String get singaporeChangiAirport => 'Singapore Changi Airport';
-
-  @override
-  String get suvarnabhumiAirport => 'Suvarnabhumi Airport';
-
-  @override
-  String get phuketInternationalAirport => 'Phuket International Airport';
-
-  @override
-  String get indiraGandhiInternationalAirport =>
-      'Indira Gandhi International Airport';
-
-  @override
-  String get chhatrapatiShivajiInternational =>
-      'Chhatrapati Shivaji International';
-
-  @override
-  String get incheonInternationalAirport => 'Incheon International Airport';
-
-  @override
-  String get gimpoInternationalAirport => 'Gimpo International Airport';
-
-  @override
-  String get johnFKennedyInternationalAirport =>
-      'John F. Kennedy International Airport';
-
-  @override
-  String get laGuardiaAirport => 'LaGuardia Airport';
-
-  @override
-  String get losAngelesInternationalAirport =>
-      'Los Angeles International Airport';
-
-  @override
-  String get ohareInternationalAirport => 'O\'Hare International Airport';
-
-  @override
-  String get miamiInternationalAirport => 'Miami International Airport';
-
-  @override
-  String get harryReidInternationalAirport =>
-      'Harry Reid International Airport';
-
-  @override
-  String get torontoPearsonInternationalAirport =>
-      'Toronto Pearson International Airport';
-
-  @override
-  String get vancouverInternationalAirport => 'Vancouver International Airport';
-
-  @override
-  String get mexicoCityInternationalAirport =>
-      'Mexico City International Airport';
-
-  @override
-  String get cancunInternationalAirport => 'Cancún International Airport';
-
-  @override
-  String get saoPauloGuarulhosInternational =>
-      'São Paulo–Guarulhos International';
-
-  @override
-  String get rioDeJaneiroGaleaoInternational =>
-      'Rio de Janeiro–Galeão International';
-
-  @override
-  String get sydneyKingsfordSmithAirport => 'Sydney Kingsford Smith Airport';
-
-  @override
-  String get melbourneAirport => 'Melbourne Airport';
-
-  @override
-  String get brisbaneAirport => 'Brisbane Airport';
-
-  @override
   String get all => 'all';
 
   @override
@@ -1816,6 +1078,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get firstClass => 'First Class';
+
+  @override
+  String get searchCity => 'Search cities...';
 
   @override
   String get settingsCurrencyTitle => 'Currency';
