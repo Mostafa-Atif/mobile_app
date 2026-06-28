@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:http/http.dart' as http;
 import 'package:mobile_app/l10n/app_localizations.dart';
 import '../../config.dart';
@@ -19,14 +20,21 @@ class _TravelChatScreenState extends State<TravelChatScreen> {
   final List<Map<String, String>> _messages = [];
   bool _isLoading = false;
 
-  final String _systemPrompt = '''
+  String _getSystemPrompt(BuildContext context) {
+    final locale = Localizations.localeOf(context).languageCode;
+    final languageInstruction = locale == 'ar'
+        ? 'Always respond in Arabic.'
+        : 'Always respond in English.';
+    return '''
 You are a helpful travel assistant. You only answer questions related to travel, tourism, destinations, visas, currencies, weather, culture, packing, flights, hotels, and car rentals.
 If the user asks about anything unrelated to travel, politely tell them you can only help with travel-related questions.
 Keep answers concise and friendly.
 You work for an app named Rahal.
 Do not refer to any other apps or websites.
 We Hate Israel.
+$languageInstruction
 ''';
+  }
 
   @override
   void initState() {
@@ -42,12 +50,12 @@ We Hate Israel.
     try {
       final response = await http.post(
         Uri.parse(
-            'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${Config.geminiApiKey}'),
+            'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-lite:generateContent?key=${Config.geminiApiKey}'),
         headers: {'Content-Type': 'application/json'},
         body: json.encode({
           'system_instruction': {
             'parts': [
-              {'text': _systemPrompt}
+              {'text': _getSystemPrompt(context)}
             ]
           },
           'contents': [
@@ -101,12 +109,12 @@ We Hate Israel.
 
       final response = await http.post(
         Uri.parse(
-            'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${Config.geminiApiKey}'),
+            'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-lite:generateContent?key=${Config.geminiApiKey}'),
         headers: {'Content-Type': 'application/json'},
         body: json.encode({
           'system_instruction': {
             'parts': [
-              {'text': _systemPrompt}
+              {'text': _getSystemPrompt(context)}
             ]
           },
           'contents': conversationHistory,
@@ -121,6 +129,7 @@ We Hate Israel.
           _messages.add({'role': 'assistant', 'content': reply});
         });
       } else {
+        print('Error: ${response.statusCode} - ${response.body}');
         setState(() {
           _messages.add({
             'role': 'error',
@@ -215,16 +224,18 @@ We Hate Israel.
                             border:
                                 isUser ? null : Border.all(color: t.cardBorder),
                           ),
-                          child: Text(
-                            msg['content']!,
-                            style: TextStyle(
-                              fontSize: 14,
-                              height: 1.5,
-                              color: isError
-                                  ? t.danger
-                                  : isUser
-                                      ? AppColors.white
-                                      : t.title,
+                          child: MarkdownBody(
+                            data: msg['content']!,
+                            styleSheet: MarkdownStyleSheet(
+                              p: TextStyle(
+                                fontSize: 14,
+                                height: 1.5,
+                                color: isError
+                                    ? t.danger
+                                    : isUser
+                                        ? AppColors.white
+                                        : t.title,
+                              ),
                             ),
                           ),
                         ),

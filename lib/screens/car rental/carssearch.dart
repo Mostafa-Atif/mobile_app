@@ -773,7 +773,7 @@ class _CarsSearchState extends State<CarsSearch> with TickerProviderStateMixin {
                     TileLayer(
                       urlTemplate:
                           'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-                      userAgentPackageName: 'com.example.app',
+                      userAgentPackageName: 'com.example.mobile_app',
                     ),
                     MarkerLayer(markers: [
                       Marker(

@@ -43,7 +43,12 @@ class _HotelMapWidgetState extends State<HotelMapWidget> {
         'https://nominatim.openstreetmap.org/search?q=$query&format=json&limit=1',
       );
 
-      final response = await http.get(url);
+      final response = await http.get(
+        url,
+        headers: {
+          'User-Agent': 'com.example.mobile_app',
+        },
+      );
 
       if (response.statusCode == 200) {
         final List<dynamic> results = jsonDecode(response.body);
@@ -129,7 +134,7 @@ class _HotelMapWidgetState extends State<HotelMapWidget> {
               children: [
                 TileLayer(
                   urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-                  userAgentPackageName: 'com.example.app',
+                  userAgentPackageName: 'com.example.mobile_app',
                 ),
                 MarkerLayer(
                   markers: [

@@ -4,5 +4,5 @@ class Config {
       // 'http://192.168.1.3:5000';
       'https://final-pro-lgyf.onrender.com';
 
-  static const String geminiApiKey = 'AIzaSyAIzHRoFpFIDPmkSblHx0C9cbJNon7p3UM';
+  static const String geminiApiKey = 'YOUR_GEMINI_API_KEY';
 }
